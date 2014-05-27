@@ -64,9 +64,9 @@ public class MainActivity extends Activity {
 	}
 	
 	private void addDrawerItem(){
-		itemList.add(new DrawerItem("Home"));
-		itemList.add(new DrawerItem("History"));
-		itemList.add(new DrawerItem("Setting"));
+		itemList.add(new DrawerItem(getString(R.string.action_home)));
+		itemList.add(new DrawerItem(getString(R.string.action_history)));
+		itemList.add(new DrawerItem(getString(R.string.action_settings)));
 	}
 	
 	public void selectItem(int position){
