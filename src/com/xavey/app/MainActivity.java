@@ -68,8 +68,6 @@ public class MainActivity extends Activity {
 		
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.drawable.ic_drawer,R.string.drawer_open,R.string.drawer_close);
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		
-		
 	}
 	
 	private void addDrawerItem(){
@@ -94,10 +92,11 @@ public class MainActivity extends Activity {
 		case 2:
 			fragment = new SettingFragment();
 			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
+			break;
 		case 3:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-			alertDialogBuilder.setTitle("Confirm..!");
-			alertDialogBuilder.setMessage("Are you sure ?");
+			alertDialogBuilder.setTitle("Confirm");
+			alertDialogBuilder.setMessage("Are you sure to logout?");
 			alertDialogBuilder.setCancelable(false);
 			alertDialogBuilder.setPositiveButton("Yes", new OnClickListener() {
 				
@@ -118,6 +117,7 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
+		
 		if(args!=null){
 			fragment.setArguments(args);
 			FragmentManager frgManager = getFragmentManager();
@@ -154,9 +154,9 @@ public class MainActivity extends Activity {
 		else{
 			switch (item.getItemId()) {
 			case R.id.app_menuRefresh:
-				//doSomething();
+
 				setRefreshActionButtonState(true);
-				Toast.makeText(getApplicationContext(), "Refreshing...", 5000).show();
+				Toast.makeText(getApplicationContext(), "Syncing...", Toast.LENGTH_LONG).show();
 				
 				return true;
 

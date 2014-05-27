@@ -52,9 +52,9 @@ public class LoginActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		width = dm.widthPixels;
 		height = dm.heightPixels;
-		xaveyLogo = (ImageView) findViewById(R.id.imgView_xaveyLogo);
-		xaveyLogo.setMinimumWidth(width/2-100);
-		xaveyLogo.setMinimumHeight(height/2-50);
+//		xaveyLogo = (ImageView) findViewById(R.id.imgView_xaveyLogo);
+//		xaveyLogo.setMinimumWidth(width/2-100);
+//		xaveyLogo.setMinimumHeight(height/2-50);
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		edtUserName = (EditText) findViewById(R.id.edtName);
 		edtPassword = (EditText) findViewById(R.id.edtPwd);
