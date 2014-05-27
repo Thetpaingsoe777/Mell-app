@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -64,9 +65,10 @@ public class MainActivity extends Activity {
 	}
 	
 	private void addDrawerItem(){
-		itemList.add(new DrawerItem(getString(R.string.action_home)));
-		itemList.add(new DrawerItem(getString(R.string.action_history)));
+		itemList.add(new DrawerItem(getString(R.string.str_home)));
+		itemList.add(new DrawerItem(getString(R.string.str_history)));
 		itemList.add(new DrawerItem(getString(R.string.action_settings)));
+		itemList.add(new DrawerItem(getString(R.string.str_logout)));
 	}
 	
 	public void selectItem(int position){
@@ -84,14 +86,17 @@ public class MainActivity extends Activity {
 		case 2:
 			fragment = new SettingFragment();
 			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
+		case 3:
+			//TODO: kill the main activity and bring the login activity
 		default:
 			break;
 		}
+		
 		fragment.setArguments(args);
 		FragmentManager frgManager = getFragmentManager();
 		frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 		mDrawerList.setItemChecked(position, true);
-		//setTitle(itemList.get(position).getItemName());
+		setTitle(itemList.get(position).getItemName());
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
