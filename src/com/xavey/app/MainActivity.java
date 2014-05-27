@@ -5,15 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -28,6 +34,8 @@ public class MainActivity extends Activity {
 	private CharSequence mDrawerTitle;
 	CustomDrawerAdapter adapter;
 	List<DrawerItem> itemList;
+	
+	private Menu optionMenu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +95,40 @@ public class MainActivity extends Activity {
 			fragment = new SettingFragment();
 			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
 		case 3:
-			//TODO: kill the main activity and bring the login activity
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			alertDialogBuilder.setTitle("Confirm..!");
+			alertDialogBuilder.setMessage("Are you sure ?");
+			alertDialogBuilder.setCancelable(false);
+			alertDialogBuilder.setPositiveButton("Yes", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					startActivity(new Intent(getApplicationContext(),LoginActivity.class));
+				}
+			});
+			alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					// if this button is clicked, just close
+					// the dialog box and do nothing
+					dialog.cancel();
+				}
+			});
+			alertDialogBuilder.create().show();
+			args = null;
 		default:
 			break;
 		}
-		
-		fragment.setArguments(args);
-		FragmentManager frgManager = getFragmentManager();
-		frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-		mDrawerList.setItemChecked(position, true);
-		setTitle(itemList.get(position).getItemName());
-		mDrawerLayout.closeDrawer(mDrawerList);
+		if(args!=null){
+			fragment.setArguments(args);
+			FragmentManager frgManager = getFragmentManager();
+			frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+			mDrawerList.setItemChecked(position, true);
+			setTitle(itemList.get(position).getItemName());
+			mDrawerLayout.closeDrawer(mDrawerList);
+		}
 	}
+	
+
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -107,14 +137,48 @@ public class MainActivity extends Activity {
 		mDrawerToggle.syncState();
 	}
 	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		this.optionMenu = menu;
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.app_menu, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// The action bar home/up action should open or close the drawer.
 		// ActionBarDrawerToggle will take care of this.
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
+		else{
+			switch (item.getItemId()) {
+			case R.id.app_menuRefresh:
+				//doSomething();
+				setRefreshActionButtonState(true);
+				Toast.makeText(getApplicationContext(), "Refreshing...", 5000).show();
+				
+				return true;
 
+			default:
+				break;
+			}
+		}
 		return false;
+	}
+	// use it for refresh
+	public void setRefreshActionButtonState(final boolean refreshing) {
+	    if (optionMenu != null) {
+	        final MenuItem refreshItem = optionMenu
+	            .findItem(R.id.app_menuRefresh);
+	        if (refreshItem != null) {
+	            if (refreshing) {
+	                refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+	            } else {
+	                refreshItem.setActionView(null);
+	            }
+	        }
+	    }
 	}
 	
 }
