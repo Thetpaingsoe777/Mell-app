@@ -39,7 +39,6 @@ public class LoginActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_screen);
 		loadUI();
@@ -62,14 +61,15 @@ public class LoginActivity extends Activity {
 	
 	public void btnLoginClick(View view){
 		if(edtUserName.getText().toString().length()==0 && edtPassword.getText().toString().length()==0){
-			Toast.makeText(getApplicationContext(), "username & password required", 1000).show();
+			Toast.makeText(getApplicationContext(), "Email and password required.", Toast.LENGTH_SHORT).show();
 		}
-		if(edtUserName.getText().toString().equals("xavey")&&edtPassword.getText().toString().equals("xavey")){
+		else if(edtUserName.getText().toString().equals("x") &&
+				edtPassword.getText().toString().equals("x")){
 			Intent i = new Intent(this,MainActivity.class);
 			startActivity(i);
 		}
 		else{
-			Toast.makeText(getApplicationContext(), "Wrong Information..!", 1000).show();
+			Toast.makeText(getApplicationContext(), "Wrong email or password.", Toast.LENGTH_SHORT).show();
 		}
 
 	}

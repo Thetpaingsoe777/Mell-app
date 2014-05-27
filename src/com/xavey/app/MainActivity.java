@@ -84,19 +84,22 @@ public class MainActivity extends Activity {
 		case 0:
 			fragment = new HomeFragment();
 			args.putString(HomeFragment.ITEM_NAME, itemList.get(position).getItemName());
+			setTitle("Xavey Pte Ltd");
 			break;
 		case 1:
 			fragment = new HistoryFragment();
 			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position).getItemName());
+			setTitle(itemList.get(position).getItemName());
 			break;
 		case 2:
 			fragment = new SettingFragment();
 			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
+			setTitle(itemList.get(position).getItemName());
 			break;
 		case 3:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setTitle("Confirm");
-			alertDialogBuilder.setMessage("Are you sure to logout?");
+			alertDialogBuilder.setMessage("Are you sure to sign out?");
 			alertDialogBuilder.setCancelable(false);
 			alertDialogBuilder.setPositiveButton("Yes", new OnClickListener() {
 				
@@ -123,7 +126,6 @@ public class MainActivity extends Activity {
 			FragmentManager frgManager = getFragmentManager();
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			mDrawerList.setItemChecked(position, true);
-			setTitle(itemList.get(position).getItemName());
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}
