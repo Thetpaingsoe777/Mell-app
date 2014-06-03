@@ -1,17 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="#abcdef"
+    android:padding="30dp"
      >
+
+    <TextView
+        android:id="@+id/tvSettingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/action_settings"
+        android:textSize="20sp" />
+    
+    <View 
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#8A92A1"
+        android:layout_below="@id/tvSettingTitle"
+        android:layout_marginTop="3dp"
+        />
+
+    <TextView
+        android:id="@+id/tvServerIPAddress_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSettingTitle"
+        android:text="Server IP Address :"
+        android:layout_marginTop="60dp"
+        android:layout_alignBaseline="@+id/etServerIpAddress"
+        android:textSize="15sp" />
+    
+    <EditText 
+            android:id="@id/etServerIpAddress"
+            android:layout_below="@id/tvSettingTitle"
+            android:layout_toRightOf="@id/tvServerIPAddress_setting"
+            android:textSize="15sp"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="60dp"
+            android:background="@android:color/background_light"
+            android:labelFor="@id/etServerIpAddress"
+            android:inputType="text"
+            android:ems="16"
+            android:padding="5dp"
+            />
     
     <TextView 
-	    android:text="@string/action_settings"
-	    android:textSize="30sp"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    />
+        android:id="@+id/tvErrorMsg"
+        android:text=""
+        android:layout_below="@id/etServerIpAddress"
+        android:layout_toRightOf="@id/tvServerIPAddress_setting"
+        android:textSize="13sp"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        />
+    
+    <Button
+        android:id="@+id/btnSaveIP_Setting"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@id/etServerIpAddress"
+        android:layout_marginTop="25dp"
+        android:text="Save"
+         />
 
-</LinearLayout>
+</RelativeLayout>

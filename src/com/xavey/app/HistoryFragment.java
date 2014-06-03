@@ -1,6 +1,6 @@
 package com.xavey.app;
 
-import com.xavey.app.R;
+
 
 import android.app.Fragment;
 import android.os.Bundle;

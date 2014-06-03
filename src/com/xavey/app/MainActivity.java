@@ -19,12 +19,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.xavey.app.R;
 import com.xavey.app.adapter.CustomDrawerAdapter;
+import com.xavey.app.util.SessionManager;
 
 public class MainActivity extends Activity {
 	
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 	private CharSequence mDrawerTitle;
 	CustomDrawerAdapter adapter;
 	List<DrawerItem> itemList;
-	
+	SessionManager session;
 	private Menu optionMenu;
 	
 	@Override
@@ -43,12 +43,14 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		initializeUI();
+		session.checkLogin();
 		if(savedInstanceState == null){
 			selectItem(0);
 		}
 	}
 	
 	private void initializeUI(){
+		session = new SessionManager(getApplicationContext());
 		itemList = new ArrayList<DrawerItem>();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -94,6 +96,7 @@ public class MainActivity extends Activity {
 		case 2:
 			fragment = new SettingFragment();
 			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
+			break;
 		case 3:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setTitle("Confirm..!");
@@ -124,8 +127,8 @@ public class MainActivity extends Activity {
 			frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 			mDrawerList.setItemChecked(position, true);
 			setTitle(itemList.get(position).getItemName());
-			mDrawerLayout.closeDrawer(mDrawerList);
 		}
+			mDrawerLayout.closeDrawer(mDrawerList);
 	}
 	
 
