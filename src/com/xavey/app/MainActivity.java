@@ -165,12 +165,9 @@ public class MainActivity extends Activity {
 				R.string.drawer_close);
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-<<<<<<< HEAD
 		// formFieldList = new ArrayList<HashMap<String, String>>();
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		toastManager = new ToastManager(this);
-=======
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 	}
 
 	private void addDrawerItem() {
@@ -192,7 +189,6 @@ public class MainActivity extends Activity {
 		switch (position) {
 		case 0:
 			fragment = new HomeFragment();
-<<<<<<< HEAD
 			args.putString(HomeFragment.ITEM_NAME, itemList.get(position)
 					.getItemName());
 			setTitle("Xavey Pte Ltd");
@@ -218,23 +214,6 @@ public class MainActivity extends Activity {
 		case 4:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
-=======
-			args.putString(HomeFragment.ITEM_NAME, itemList.get(position).getItemName());
-			setTitle("Xavey Pte Ltd");
-			break;
-		case 1:
-			fragment = new HistoryFragment();
-			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position).getItemName());
-			setTitle(itemList.get(position).getItemName());
-			break;
-		case 2:
-			fragment = new SettingFragment();
-			args.putString(SettingFragment.ITEM_NAME, itemList.get(position).getItemName());
-			setTitle(itemList.get(position).getItemName());
-			break;
-		case 3:
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 			alertDialogBuilder.setTitle("Confirm");
 			alertDialogBuilder.setMessage("Are you sure to sign out?");
 			alertDialogBuilder.setCancelable(false);
@@ -261,7 +240,6 @@ public class MainActivity extends Activity {
 		default:
 			break;
 		}
-<<<<<<< HEAD
 		if (args != null) {
 			fragment.setArguments(args);
 			try{
@@ -275,15 +253,6 @@ public class MainActivity extends Activity {
 			catch(IllegalStateException e){
 				
 			}
-=======
-		
-		if(args!=null){
-			fragment.setArguments(args);
-			FragmentManager frgManager = getFragmentManager();
-			frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-			mDrawerList.setItemChecked(position, true);
-			mDrawerLayout.closeDrawer(mDrawerList);
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 		}
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
@@ -311,7 +280,6 @@ public class MainActivity extends Activity {
 		} else {
 			switch (item.getItemId()) {
 			case R.id.app_menuRefresh:
-<<<<<<< HEAD
 				setRefreshActionButtonState(true);
 				ConnectionDetector detector = new ConnectionDetector(this);
 				if (detector.isConnectingToInternet()) {
@@ -347,12 +315,6 @@ public class MainActivity extends Activity {
 							.show();
 					setRefreshActionButtonState(false);
 				}
-=======
-
-				setRefreshActionButtonState(true);
-				Toast.makeText(getApplicationContext(), "Syncing...", Toast.LENGTH_LONG).show();
-				
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 				return true;
 			default:
 				break;

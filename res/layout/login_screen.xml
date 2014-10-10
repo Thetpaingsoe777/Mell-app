@@ -17,7 +17,6 @@
         android:layout_marginTop="8dp"
         android:hint="Password"
         android:inputType="textPassword" />
-<<<<<<< HEAD
 
     <TextView
         android:id="@+id/textView1"
@@ -33,30 +32,10 @@
 
     <TextView
         android:id="@+id/TextView01"
-=======
-
-    <TextView
-        android:id="@+id/textView1"
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/edtName"
         android:layout_alignRight="@+id/edtName"
-<<<<<<< HEAD
-=======
-        android:gravity="center"
-        android:text="Xavey"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="62sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/TextView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/edtName"
-        android:layout_alignRight="@+id/edtName"
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
         android:layout_below="@+id/textView1"
         android:gravity="center"
         android:text="enabling mobile workforce"
@@ -77,7 +56,6 @@
 
         <requestFocus />
     </EditText>
-<<<<<<< HEAD
     
     <TextView
         android:id="@+id/tvErrorMsg"
@@ -93,26 +71,17 @@
         android:textStyle="italic"
         android:textColor="#d7432d"
          />
-=======
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 
     <Button
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignLeft="@+id/edtPwd"
-<<<<<<< HEAD
         android:layout_below="@id/tvErrorMsg"
         android:layout_marginTop="15dp"
         android:onClick="btnLoginClick"
         android:text="@string/str_login" 
         android:background="@drawable/button_border"
         />
-=======
-        android:layout_below="@+id/edtPwd"
-        android:layout_marginTop="15dp"
-        android:onClick="btnLoginClick"
-        android:text="@string/str_login" />
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 
 </RelativeLayout>

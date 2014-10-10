@@ -153,12 +153,6 @@ public class LoginActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		width = dm.widthPixels;
 		height = dm.heightPixels;
-<<<<<<< HEAD
-=======
-//		xaveyLogo = (ImageView) findViewById(R.id.imgView_xaveyLogo);
-//		xaveyLogo.setMinimumWidth(width/2-100);
-//		xaveyLogo.setMinimumHeight(height/2-50);
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 		btnLogin = (Button) findViewById(R.id.btnLogin);
 		txtMsg = (TextView) findViewById(R.id.tvErrorMsg);
 		edtUserName = (EditText) findViewById(R.id.edtName);
@@ -166,7 +160,6 @@ public class LoginActivity extends Activity {
 		edtPassword = (EditText) findViewById(R.id.edtPwd);
 		edtPassword.setBackgroundResource(R.drawable.rounded_edittext);
 	}
-<<<<<<< HEAD
 
 // test mode only
 //	 public void btnLoginClick(View view) {
@@ -235,20 +228,6 @@ public class LoginActivity extends Activity {
 					return true;
 			}
 			return false;
-=======
-	
-	public void btnLoginClick(View view){
-		if(edtUserName.getText().toString().length()==0 && edtPassword.getText().toString().length()==0){
-			Toast.makeText(getApplicationContext(), "Email and password required.", Toast.LENGTH_SHORT).show();
-		}
-		else if(edtUserName.getText().toString().equals("x") &&
-				edtPassword.getText().toString().equals("x")){
-			Intent i = new Intent(this,MainActivity.class);
-			startActivity(i);
-		}
-		else{
-			Toast.makeText(getApplicationContext(), "Wrong email or password.", Toast.LENGTH_SHORT).show();
->>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
 		}
 
 		@Override
