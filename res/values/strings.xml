@@ -4,7 +4,10 @@
     <string name="str_about">About</string>
     <string name="str_history">History</string>
     <string name="str_home">Home</string>
+<<<<<<< HEAD
     <string name="str_export_csv">Export CSV</string>
+=======
+>>>>>>> edb6fa1b25de474fb992564fab01ec368919d8aa
     <string name="str_login">Sign in</string>
     <string name="str_logout">Sign out</string>
     <string name="hintName">Username</string>
