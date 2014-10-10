@@ -24,25 +24,26 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 
-import android.util.Log;
+import com.xavey.app.ApplicationValues;
+
 
 public class RestClient {
 
 	private ArrayList<NameValuePair> params;
 	private ArrayList<NameValuePair> headers;
 	private Object obj;
-
+	private JSONArray jsonArray;
 	private String url;
-
 	private int responseCode;
 	private String message;
-
 	private String response;
+	private String filePath;	
 
 	public String getResponse() {
 		return response;
@@ -58,6 +59,8 @@ public class RestClient {
 
 	public RestClient(String url) {
 		this.url = url;
+		this.jsonArray = null;
+		this.filePath = null;
 		params = new ArrayList<NameValuePair>();
 		headers = new ArrayList<NameValuePair>();
 	}
@@ -65,6 +68,22 @@ public class RestClient {
 	public RestClient(String url, Object obj) {
 		this.url = url;
 		this.obj = obj;
+		params = new ArrayList<NameValuePair>();
+		headers = new ArrayList<NameValuePair>();
+	}
+	
+	public RestClient(String url, String filepath) {
+		this.url = url;
+		this.filePath = filepath;
+		params = new ArrayList<NameValuePair>();
+		headers = new ArrayList<NameValuePair>();
+	}
+
+	public RestClient(String url, JSONArray jsonArray) {
+		this.url = url;
+		this.jsonArray = jsonArray;
+		params = new ArrayList<NameValuePair>();
+		headers = new ArrayList<NameValuePair>();
 	}
 
 	public void AddParam(String name, String value) {
@@ -81,10 +100,13 @@ public class RestClient {
 			// add parameters
 			String combinedParams = "";
 			if (!params.isEmpty()) {
-				combinedParams += "?";
+				//combinedParams += "?";
 				for (NameValuePair p : params) {
-					String paramString = p.getName() + "="
-							+ URLEncoder.encode(p.getValue(), "UTF-8");
+					String value = p.getValue();
+					// server မှလက်ခံသည့် ပုံစံနှင့်ကိုက်ညီအောင်ပြောင်းလိုက်ပါသည်... ၂၆-၉-၂၀၁၄
+//					String paramString = p.getName() + "="
+//							+ URLEncoder.encode(value, "UTF-8");
+					String paramString = URLEncoder.encode(value,"UTF-8");
 					if (combinedParams.length() > 1) {
 						combinedParams += "&" + paramString;
 					} else {
@@ -104,18 +126,38 @@ public class RestClient {
 			break;
 		}
 		case POST: {
-			HttpPost request = new HttpPost(url);
+			if( this.filePath != null){ //Checking image			
+				upload();				
+			} else {
+				HttpPost request = new HttpPost(url);
+				if (getJsonArray()!= null) { //Checking JSON			
 
-			// add headers
-			for (NameValuePair h : headers) {
-				request.addHeader(h.getName(), h.getValue());
+					String json = getJsonArray().toString();
+					StringEntity se = new StringEntity(json,"UTF-8");
+					request.setEntity(se);
+					request.setHeader("Accept", "application/json");
+					request.setHeader("Content-type", "application/json");
+					
+					for(NameValuePair pair: headers){
+						request.setHeader(pair.getName(), pair.getValue());
+					}
+
+				} else {
+					// add headers
+					for (NameValuePair h : headers) {
+						String name = h.getName();
+						String value = h.getValue();
+						request.addHeader(name, value);
+					}
+
+					if (!params.isEmpty()) {
+						request.setEntity(new UrlEncodedFormEntity(params,
+							HTTP.UTF_8));
+					}
+				}
+				executeRequest(request, url);
 			}
-
-			if (!params.isEmpty()) {
-				request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-			}
-
-			executeRequest(request, url);
+			
 			break;
 		}
 		case PUT: {
@@ -164,8 +206,123 @@ public class RestClient {
 		}
 		}
 	}
-
 	
+	private void upload() {
+		
+		BufferedReader reader = null;
+        HttpURLConnection conn = null;
+        DataOutputStream dos = null; 
+        String lineEnd = "\r\n";
+        String twoHyphens = "--";
+        String boundary = "*****";
+        String filePath = getFilePath();
+        String[] str = filePath.split("/");
+		String fileName = str[str.length - 1];
+        int bytesRead, bytesAvailable, bufferSize;
+        byte[] buffer;
+        int maxBufferSize = 1 * 1024 * 1024;
+        File sourceFile = new File(filePath);
+         
+        if (!sourceFile.isFile()) {
+            
+        	message = "Source file is not found!";
+             
+        }else {        	
+            
+			try {                  
+                   // open a URL connection to the Servlet
+                 FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                 URL mURL = new URL(url);
+                 
+                 
+                 // Open a HTTP  connection to  the URL
+                 conn = (HttpURLConnection) mURL.openConnection();
+                 conn.setDoInput(true); // Allow Inputs
+                 conn.setDoOutput(true); // Allow Outputs
+                 conn.setUseCaches(false); // Don't use a Cached Copy
+                 conn.setRequestMethod("POST");
+                 conn.setRequestProperty("Connection", "Keep-Alive");
+                 conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                 conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                 
+                 conn.setRequestProperty("x-access-token", ApplicationValues.loginUser.getToken());
+
+                 conn.setRequestProperty("uploaded_file", fileName );
+
+                 dos = new DataOutputStream(conn.getOutputStream());
+        
+                 dos.writeBytes(twoHyphens + boundary + lineEnd);
+                 dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
+                                           + fileName + "\"" + lineEnd);
+                 dos.writeBytes("Content-Type:image/jpeg"+lineEnd); 
+                 dos.writeBytes(lineEnd);
+
+                 // create a buffer of  maximum size
+                 bytesAvailable = fileInputStream.available();
+        
+                 bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                 buffer = new byte[bufferSize];
+        
+                 // read file and write it into form...
+                 bytesRead = fileInputStream.read(buffer, 0, bufferSize); 
+                    
+                 while (bytesRead > 0) {
+                      
+                   dos.write(buffer, 0, bufferSize);
+                   bytesAvailable = fileInputStream.available();
+                   bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                   bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+                    
+                  }
+        
+                 // send multipart form data necesssary after file data...
+                 dos.writeBytes(lineEnd);
+                 dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                 fileInputStream.close();
+                 dos.flush();
+                 dos.close();
+
+			}catch (MalformedURLException ex) {
+				
+				 message = "MalformedURLException Exception : check url.";
+				 
+           }catch (IOException ioe) {
+        	   message = ioe.getMessage();
+           }
+                 
+			// Get the server response
+			try {
+				InputStream inputStream = conn.getInputStream();
+				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+				reader = new BufferedReader(inputStreamReader);
+				StringBuilder sb = new StringBuilder();
+				String line = null;
+
+				// Read Server Response
+				while ((line = reader.readLine()) != null) {
+					// Append server response in string
+					sb.append(line + "");
+				}
+
+				// Append Server Response To Content String
+				response = sb.toString();
+			} catch (Exception ex) {
+				message = ex.getMessage();
+			}
+				finally {
+			
+				try {
+
+					reader.close();
+				}
+
+				catch (Exception ex) {
+					message = ex.getMessage();
+				}
+			}
+		}                  
+    }
+
 	private void executeRequest(HttpUriRequest request, String url) {
 		HttpClient client = new DefaultHttpClient();
 
@@ -225,4 +382,22 @@ public class RestClient {
 	public void setObj(Object obj) {
 		this.obj = obj;
 	}
+
+	public JSONArray getJsonArray() {
+		return jsonArray;
+	}
+
+	public void setJsonArray(JSONArray jsonArray) {
+		this.jsonArray = jsonArray;
+	}
+	
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+	
+	
 }

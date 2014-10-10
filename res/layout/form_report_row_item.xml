@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerItemLayout"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@android:color/transparent">
+
+    <ImageView
+        android:id="@+id/imgViewDrawerItemIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/form_icon_small" 
+        android:contentDescription="img"
+        android:layout_alignParentLeft="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearLayout_history"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_toRightOf="@id/imgViewDrawerItemIcon"
+        android:layout_marginLeft="10dp"
+        android:baselineAligned="@id/imgViewDrawerItemIcon"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/tv_history_form_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="18sp"
+            android:text="Form Name"
+             />
+        
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnExport_form_report_row_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="export csv"
+        android:textSize="9sp"
+        android:layout_marginRight="5dp"
+        android:baselineAligned="@id/imgViewDrawerItemIcon"
+        android:layout_alignParentRight="true"
+        
+        />
+    
+
+
+</RelativeLayout>

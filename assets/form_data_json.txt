@@ -1,0 +1,23 @@
+{
+	"form_name" 	: "Ideas",
+	"form_title"	: "My Ideas",
+	"form_fields" : [
+		{
+			"field_name": "idea_name",
+            "field_type": "text",
+            "field_hint": "Enter idea name",
+            "form_list_title": true,
+            "form_list_subtitle": false,
+            "field_required": true
+		}, 
+		{
+			"field_name": "idea_name",
+            "field_type": "text",
+            "field_hint": "Enter idea name",
+            "form_list_title": true,
+            "form_list_subtitle": false,
+            "field_required": true
+		}
+		
+	]
+}

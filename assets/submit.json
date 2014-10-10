@@ -1,0 +1,19 @@
+{
+    "worker": {
+        "id": 123, 
+        "name":"ZWH" //worker name who submitted this doc
+    },
+    "form":{
+        "id": 123,
+        "title":"My Ideas" //form name
+    },
+    "org_name":"Idea Inc Co., Ltd.",
+    "timestamp":1404801425, //current timestamp of the submission
+    "data": {
+        "idea_name": "Great idea",
+        "idea_desc": "mobile solutions for businesses",
+        "idea_cost": "1000 usd",
+        "idea_potential": "Million dollar business",
+        "new_field":"Blah blah blah"
+    }
+}

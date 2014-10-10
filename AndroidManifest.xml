@@ -5,8 +5,35 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="17"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
+    
+    <!-- Internet Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- SyncAdapter Permissions -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    
+    <!-- GPS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- External Storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
+    <!-- Device ID -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="true"
@@ -22,39 +49,36 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name="com.xavey.app.LoginActivity" 
-            android:label="User Login"/>
-        <activity android:name="com.xavey.app.FormDetailActivity"
-            />
-        
-        <!-- <provider
+        <activity
+            android:name="com.xavey.app.LoginActivity"
+            android:label="User Login" />
+        <activity android:name="com.xavey.app.DocumentInputActivity" />
+        <activity android:name="com.xavey.app.ShowDocumentDetailActivity" />
+        <activity android:name="com.xavey.app.SignatureActivity" />
+        <activity android:name="com.xavey.app.testing.TestActivity" />
+		<activity android:name="com.xavey.app.util.DrawSignature" />
+		<activity android:name="com.xavey.app.OneQuestionOneView" />
+        <!--
+             <provider
                 android:name=".provider.FeedProviderx"
                 android:authorities="com.xavey.app"
-                android:exported="false" /> -->
-        
-         <service
-                android:name="com.xavey.app.service.SyncService"
-                android:exported="true"
-                android:process=":sync">
+                android:exported="false" />
+        -->
+
+        <service
+            android:name="com.xavey.app.service.SyncService"
+            android:exported="true"
+            android:process=":sync" >
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
-                    android:resource="@xml/syncadapter" />
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
         </service>
     </application>
 
-    <!-- Internet Permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    	
 
-	<!-- SyncAdapter Permissions -->
-	<uses-permission
-            android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission
-            android:name="android.permission.WRITE_SYNC_SETTINGS"/>
-    <uses-permission
-            android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
-	
 </manifest>
