@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.xavey.app.adapter;
 
 import java.util.List;
@@ -63,4 +64,71 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 		TextView ItemName;
 		ImageView ImgView;
 	}
+=======
+package com.xavey.app.adapter;
+
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.xavey.app.R;
+import com.xavey.app.DrawerItem;
+
+public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
+
+	Context context;
+	List<DrawerItem> drawerItemList;
+	int layoutResID;
+
+	public CustomDrawerAdapter(Context context, int layoutResourceID,
+			List<DrawerItem> listItems) {
+		super(context, layoutResourceID, listItems);
+		this.context = context;
+		this.drawerItemList = listItems;
+		this.layoutResID = layoutResourceID;
+
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+
+		DrawerItemHolder drawerHolder;
+		View view = convertView;
+
+		if (view == null) {
+			LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+			drawerHolder = new DrawerItemHolder();
+
+			view = inflater.inflate(layoutResID, parent, false);
+			drawerHolder.ItemName = (TextView) view
+					.findViewById(R.id.drawer_itemName);
+			drawerHolder.ImgView = (ImageView) view.findViewById(R.id.imgViewDrawerItemIcon);
+			//drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
+
+			view.setTag(drawerHolder);
+
+		} else {
+			drawerHolder = (DrawerItemHolder) view.getTag();
+
+		}
+
+		DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
+
+		drawerHolder.ItemName.setText(dItem.getItemName());
+		drawerHolder.ImgView.setImageResource(dItem.getImageId());
+		return view;
+	}
+
+	private static class DrawerItemHolder {
+		TextView ItemName;
+		ImageView ImgView;
+	}
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 }

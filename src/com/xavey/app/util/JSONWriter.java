@@ -122,12 +122,16 @@ public class JSONWriter {
 		JSONArray document_array;
 		String documentJSON_To_Submit="";
 		try {
+<<<<<<< HEAD
 			//document_array = jsonReader.getJSONArrayToSubmit(document, form);
 			
 			document_array = new JSONArray();
 			JSONObject obj = new JSONObject(document.getDocument_json_to_submit());
 			document_array.put(obj);
 			
+=======
+			document_array = jsonReader.getJSONArrayToSubmit(document, form);
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			documentJSON_To_Submit = document_array.getJSONObject(0).toString();
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block

@@ -10,6 +10,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+<<<<<<< HEAD
+=======
+import android.widget.LinearLayout.LayoutParams;
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;

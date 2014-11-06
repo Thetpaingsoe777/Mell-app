@@ -13,17 +13,23 @@ public class XaveyProperties {
 	final String SERVER_FORM_DOWNLOAD = "serverFormDownload";
 	final String SERVER_IMAGE_UPLOAD = "serverImageUpload";
 	final String SERVER_DOCUMENT_UPLOAD = "serverDocumentUpload";
+<<<<<<< HEAD
 	final String ZAWGYI_FONT = "zawgyiFont";
 	final String LOCAL_FORM_DOWNLOAD = "localFormDownload";
 	final String LOCAL_AUTHENTICATE = "localAuthenticate";
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	
 	private String authenticateURL;
 	private String serverFormDownloadURL;
 	private String serverImageUploadURL;
 	private String serverDocumentUploadURL;
+<<<<<<< HEAD
 	private String zawgyi_font;
 	private String localFormDownload;
 	private String localAuthenticate;
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	
 	public XaveyProperties() {
 		Properties xaveyProperties = new Properties();
@@ -34,9 +40,12 @@ public class XaveyProperties {
 			serverFormDownloadURL = xaveyProperties.getProperty(SERVER_FORM_DOWNLOAD);
 			serverImageUploadURL = xaveyProperties.getProperty(SERVER_IMAGE_UPLOAD);
 			serverDocumentUploadURL = xaveyProperties.getProperty(SERVER_DOCUMENT_UPLOAD);
+<<<<<<< HEAD
 			zawgyi_font = xaveyProperties.getProperty(ZAWGYI_FONT);
 			localFormDownload = xaveyProperties.getProperty(LOCAL_FORM_DOWNLOAD);
 			localAuthenticate = xaveyProperties.getProperty(LOCAL_AUTHENTICATE);
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,6 +71,7 @@ public class XaveyProperties {
 		return serverDocumentUploadURL;
 	}
 
+<<<<<<< HEAD
 	public String getZawgyiFontStatus(){
 		return zawgyi_font;
 	}
@@ -73,4 +83,6 @@ public class XaveyProperties {
 	public String getLocalAuthenticateURL(){
 		return localAuthenticate;
 	}
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 }

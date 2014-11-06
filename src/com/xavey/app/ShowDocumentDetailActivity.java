@@ -81,7 +81,11 @@ public class ShowDocumentDetailActivity extends Activity {
 		/*LayoutParams params = new LayoutParams(screenWidth - 10,
 				screenWidth - 20);
 		lL.setLayoutParams(params);*/
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		//lL.setPadding(10, 10, 10, 10);
 		lL.setGravity(Gravity.CENTER_HORIZONTAL);
 

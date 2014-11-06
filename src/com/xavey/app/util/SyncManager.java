@@ -116,7 +116,11 @@ public class SyncManager {
 
 		JSONArray mainArray = jsonReader.getJSONArrayToSubmit(document, form);
 		// following two lines should be actually written only after submit success
+<<<<<<< HEAD
 		document.setDocument_json_to_submit(mainArray.getJSONObject(0).toString());
+=======
+		document.setDocument_json(mainArray.getJSONObject(0).toString());
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		document.setSubmitted("1");
 
 		setDocumentToSubmit(document);
@@ -132,13 +136,22 @@ public class SyncManager {
 	}
 
 	private class DocumentSubmitTask extends AsyncTask<JSONArray, Void, String> {
+<<<<<<< HEAD
 		private ProgressDialog Dialog = new ProgressDialog(context.getApplicationContext());
+=======
+		private ProgressDialog Dialog = new ProgressDialog(context);
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		XaveyProperties xavey_properties;
 		String documentUploadURL = "";
 		
 		protected void onPreExecute() {
+<<<<<<< HEAD
 //			 Dialog.setMessage("Submitting document ...");
 //			 Dialog.show();
+=======
+			// Dialog.setMessage("Submitting..");
+			// Dialog.show();
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			xavey_properties = new XaveyProperties();
 			documentUploadURL = xavey_properties.getServerDocumentUploadURL();
 		}
@@ -233,7 +246,11 @@ public class SyncManager {
 			// update token first here
 			String userName = ApplicationValues.loginUser.getUser_name();
 			String password = ApplicationValues.loginUser.getPwd();
+<<<<<<< HEAD
 			updateToken(userName,password);
+=======
+			updateToken(userName,password, getDeviceUniqueID(activity_));
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 			if (params[0].size()>0) {
 				// upload image and collect ids
@@ -352,8 +369,12 @@ public class SyncManager {
 	}*/
 
 	@SuppressWarnings("unchecked")
+<<<<<<< HEAD
 	public void updateToken(String userName, String password){
 		String deviceID = getDeviceUniqueID(activity_);
+=======
+	public void updateToken(String userName, String password, String deviceID){
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		HashMap<String, String> authenMap = new HashMap<String, String>();
 		authenMap.put("username", userName);
 		authenMap.put("password", password);

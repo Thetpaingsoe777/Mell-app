@@ -27,10 +27,13 @@
     <!-- Device ID -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     
+<<<<<<< HEAD
     <!-- Recording -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     
     
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"

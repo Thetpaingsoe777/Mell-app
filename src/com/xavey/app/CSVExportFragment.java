@@ -1,11 +1,24 @@
 package com.xavey.app;
 
+<<<<<<< HEAD
+=======
+import java.lang.reflect.Array;
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+<<<<<<< HEAD
+=======
+import com.xavey.app.db.XaveyDBHelper;
+import com.xavey.app.model.Document;
+import com.xavey.app.model.Form;
+import com.xavey.app.util.CSVExportManager;
+import com.xavey.app.util.JSONReader;
+
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,12 +32,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+<<<<<<< HEAD
 import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Document;
 import com.xavey.app.model.Form;
 import com.xavey.app.util.CSVExportManager;
 import com.xavey.app.util.JSONReader;
 
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 // referenced from http://theopentutorials.com/tutorials/android/listview/android-multiple-selection-listview/
 public class CSVExportFragment extends Fragment {
@@ -57,7 +73,11 @@ public class CSVExportFragment extends Fragment {
 		listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		listView.setAdapter(adapter);
 		btnExport.setOnClickListener(new OnClickListener() {
+<<<<<<< HEAD
 
+=======
+			
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			@Override
 			public void onClick(View v) {
 				 SparseBooleanArray checked = listView.getCheckedItemPositions();
@@ -70,7 +90,11 @@ public class CSVExportFragment extends Fragment {
 			                selectedItems.add(adapter.getItem(position));*/
 			            selectedFormsList.add(formList.get(position));
 			        }
+<<<<<<< HEAD
 
+=======
+			        
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			        for(int i=0; i<selectedFormsList.size(); i++){
 			        	Form selectedForm = selectedFormsList.get(i);
 			        	ArrayList<String> headerList = jsonReader.getHeaderList(selectedForm.getForm_json());
@@ -87,6 +111,10 @@ public class CSVExportFragment extends Fragment {
 			        	}
 			        }
 			}
+<<<<<<< HEAD
+=======
+			
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		});
 		
 		refreshData();

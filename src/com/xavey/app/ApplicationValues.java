@@ -25,7 +25,10 @@ public class ApplicationValues {
 	public static String VIEW_ID_TMP = "";
 	public static String IMAGE_PATH_TMP = "";
 	public static String PHOTO_NAME_TMP = "";
+<<<<<<< HEAD
 	
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 	public static String getDeviceID(Activity activity) {
 		TelephonyManager telephonyManager = (TelephonyManager) activity

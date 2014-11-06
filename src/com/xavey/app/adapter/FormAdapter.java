@@ -2,7 +2,10 @@ package com.xavey.app.adapter;
 
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 import android.app.Activity;
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
@@ -14,8 +17,11 @@ import android.widget.TextView;
 
 import com.xavey.app.R;
 import com.xavey.app.model.Form;
+<<<<<<< HEAD
 import com.xavey.app.util.TypeFaceManager;
 import com.xavey.app.util.XaveyProperties;
+=======
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 public class FormAdapter extends BaseAdapter {
 
@@ -26,9 +32,15 @@ public class FormAdapter extends BaseAdapter {
 	int deviceWidth;
 	int deviceHeight;
 	int formImage = R.drawable.form_icon_1;
+<<<<<<< HEAD
 
 	ArrayList<Form> formList;
 
+=======
+	
+	ArrayList<Form> formList;
+	
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	public FormAdapter(Context a, ArrayList<Form> formList){
 		activity = a;
 		this.formList = formList;
@@ -77,6 +89,7 @@ public class FormAdapter extends BaseAdapter {
 		}
 		Form form = formList.get(position);
 		holder.formTitle.setText(form.getForm_title()); // subtitle = name , need to change it after confirmed
+<<<<<<< HEAD
 		XaveyProperties xaveyProperties = new XaveyProperties();
 		String zawGyiFontStatus = xaveyProperties.getZawgyiFontStatus();
 		TypeFaceManager tfManager=new TypeFaceManager((Activity) activity);
@@ -86,4 +99,10 @@ public class FormAdapter extends BaseAdapter {
 		holder.formID = form.getForm_id();
 		return convertView;
 	}
+=======
+		holder.formID = form.getForm_id();
+		return convertView;
+	}
+
+>>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 }
