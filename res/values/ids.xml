@@ -1,0 +1,24 @@
+<resources>
+    <item type="id" name="layout_id"/>
+    <item type="id" name="field_id"/>
+    <item type="id" name="field_name_id"/>
+    <item type="id" name="field_required_id"/>
+    <item type="id" name="field_label_id"/>
+    <item type="id" name="field_max_value"/>
+    <item type="id" name="field_min_value"/>
+    <item type="id" name="field_default_value"/>
+    <item type="id" name="field_err_msg"/>
+	<item type="id" name="field_ref"/>
+    <item type="id" name="next_cond"/>
+    <item type="id" name="field_skip"/> <!-- just for radio (yet) -->
+    <item type="id" name="radio_value"/>
+    <item type="id" name="extra"/> <!-- just for radio (yet) -->
+    <item type="id" name="extra_value"/>
+    <item type="id" name="extra_status"/>
+    <item type="id" name="is_radiobutton_selected"/>
+    <item type="id" name="radio_random_value"/>
+    
+    <!-- for photos and drawings tag -->
+    <item type="id" name="available_state"/>
+    <item type="id" name="image_path_on_device"/>
+</resources>

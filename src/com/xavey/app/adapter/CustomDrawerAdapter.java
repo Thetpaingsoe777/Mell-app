@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xavey.app.R;
@@ -41,6 +42,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 			view = inflater.inflate(layoutResID, parent, false);
 			drawerHolder.ItemName = (TextView) view
 					.findViewById(R.id.drawer_itemName);
+			drawerHolder.ImgView = (ImageView) view.findViewById(R.id.imgViewDrawerItemIcon);
 			//drawerHolder.icon = (ImageView) view.findViewById(R.id.drawer_icon);
 
 			view.setTag(drawerHolder);
@@ -53,11 +55,12 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 		DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);
 
 		drawerHolder.ItemName.setText(dItem.getItemName());
-
+		drawerHolder.ImgView.setImageResource(dItem.getImageId());
 		return view;
 	}
 
 	private static class DrawerItemHolder {
 		TextView ItemName;
+		ImageView ImgView;
 	}
 }

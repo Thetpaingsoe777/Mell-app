@@ -1,5 +1,9 @@
 package com.xavey.app;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 import com.xavey.app.util.IPManager;
 
 import android.app.Fragment;
@@ -30,6 +34,9 @@ public class SettingFragment extends Fragment {
 		View view = inflater.inflate(R.layout.setting_fragment, container,
 				false);
 		loadUI(view);
+		getActivity().getActionBar().setIcon(R.drawable.setting);
+		getActivity().getActionBar().setTitle("Setting");
+		
 		etServerIPAddress.setText(ipManager.getServerIPAddress());
 		
 		btnSave.setOnClickListener(new OnClickListener() {
@@ -45,6 +52,15 @@ public class SettingFragment extends Fragment {
 					ipManager.saveServerIPAddress(ipAddress);
 					errorMsg.setTextColor(Color.parseColor("#3B7AED"));
 					errorMsg.setText("successfully saved");
+					Properties prop = new Properties();
+					InputStream in = getClass().getResourceAsStream("/com/xavey/app/util/xavey_properties.properties");
+					try {
+						prop.load(in);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					prop.setProperty("serverIP", ipAddress);
 				}
 			}
 		});
@@ -56,6 +72,14 @@ public class SettingFragment extends Fragment {
 		btnSave = (Button) v.findViewById(R.id.btnSaveIP_Setting);
 		errorMsg = (TextView) v.findViewById(R.id.tvErrorMsg);
 		ipManager = new IPManager(getActivity().getApplicationContext());
+		MainActivity.optionMenu.getItem(0).setVisible(false);
+	}
+	
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		MainActivity.optionMenu.getItem(0).setVisible(true);
 	}
 	
 }

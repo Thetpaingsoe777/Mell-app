@@ -1,0 +1,12 @@
+{
+    "document_json": [
+        {
+            "field_name": "idea_name",
+            "field_value": "my greatest idea"
+        },
+        {
+            "field_name": "idea_cost",
+            "field_value": "2000"
+        }
+    ]
+}
