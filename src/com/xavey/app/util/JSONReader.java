@@ -19,10 +19,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-<<<<<<< HEAD
-=======
-import android.graphics.Typeface;
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.net.Uri;
 import android.os.Environment;
@@ -39,7 +35,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-<<<<<<< HEAD
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -52,24 +47,6 @@ import com.xavey.app.ApplicationValues;
 import com.xavey.app.R;
 import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Document;
-=======
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.TimePicker;
-
-import com.xavey.app.ApplicationValues;
-import com.xavey.app.MainActivity;
-import com.xavey.app.R;
-import com.xavey.app.R.drawable;
-import com.xavey.app.R.layout;
-import com.xavey.app.db.XaveyDBHelper;
-import com.xavey.app.model.Document;
-import com.xavey.app.model.Field;
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import com.xavey.app.model.Form;
 import com.xavey.app.model.User;
 
@@ -84,13 +61,10 @@ public class JSONReader {
 	GPSTracker gps;
 	TypeFaceManager typeface;
 	DisplayManager displayManager;
-<<<<<<< HEAD
 	XaveyProperties xaveyProperties;
 	String zawGyiFontStatus;
 	ToastManager xaveyToast;
 	AudioRecordingManager recordingManager;
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 	public JSONReader(Activity activity) {
 		this.activity = activity;
@@ -98,13 +72,10 @@ public class JSONReader {
 		gps = new GPSTracker(activity);
 		typeface = new TypeFaceManager(activity);
 		displayManager = new DisplayManager(this.activity);
-<<<<<<< HEAD
 		xaveyProperties = new XaveyProperties();
 		zawGyiFontStatus = xaveyProperties.getZawgyiFontStatus();
 		xaveyToast = new ToastManager(this.activity);
 		recordingManager = new AudioRecordingManager(activity);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	}
 
 	// Layout setting here
@@ -485,11 +456,7 @@ public class JSONReader {
 		ArrayList<HashMap<String, Object>> formFields = getFormFields(form
 				.getForm_json());
 
-<<<<<<< HEAD
 		int upLayoutHeight = displayManager.getHeigth(6);
-=======
-		int upLayoutHeight = displayManager.getHeigth(10);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		int LayoutWidth = displayManager.getWidth(95);
 		int LayoutHeight = displayManager.getHeigth(45);
 		int editTextLayoutHeight = displayManager.getHeigth(6);
@@ -506,7 +473,6 @@ public class JSONReader {
 				LayoutParams.MATCH_PARENT, editTextLayoutHeight);
 		editTextLayoutParams.setMargins(15, 10, 15, 10);
 
-<<<<<<< HEAD
 		final LayoutParams extraValueLayoutParamsAppear = new LayoutParams(
 				LayoutParams.MATCH_PARENT, editTextLayoutHeight);
 		extraValueLayoutParamsAppear.setMargins(25, 0, 25, 5);
@@ -524,11 +490,6 @@ public class JSONReader {
 		
 		float labelTextSize = 18;
 		
-=======
-		LayoutParams errorMsgLayoutParams = new LayoutParams(
-				LayoutParams.MATCH_PARENT, 150);
-		errorMsgLayoutParams.setMargins(10, 10, 10, 0);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		// -------------------------------------------------------------
 
 		for (int i = 0; i < formFields.size(); i++) {
@@ -562,13 +523,8 @@ public class JSONReader {
 
 						LinearLayout textLayout = new LinearLayout(activity);
 						textLayout.setLayoutParams(innerLayoutParams);
-<<<<<<< HEAD
 //						textLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						textLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						textLayout.setOrientation(LinearLayout.VERTICAL);
 						textLayout.setTag(R.id.layout_id, "textLayout");
 						textLayout
@@ -579,7 +535,6 @@ public class JSONReader {
 								fields.get("field_required"));
 						textLayout.setTag(R.id.field_label_id,
 								fields.get("field_label"));
-<<<<<<< HEAD
 						textLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						textLayout.setTag(R.id.next_cond, fields.get("next_cond"));
 						String textLabel = fields.get("field_label").toString();
@@ -603,18 +558,6 @@ public class JSONReader {
 						
 						EditText ed1 = new EditText(activity);
 						ed1.setTextSize(16);
-=======
-						String textLabel = fields.get("field_label").toString();
-						TextView tvLabel = new TextView(activity);
-						tvLabel.setPadding(10, 0, 0, 0);
-						tvLabel.setTag("label");
-						tvLabel.setText(textLabel);
-						tvLabel.setLayoutParams(labelLayoutParams);
-						textLayout.addView(tvLabel);
-
-						EditText ed1 = new EditText(activity);
-						ed1.setTextSize(12);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						ed1.setTypeface(typeface.getMyanmar3TypeFace());
 						String fieldName = fields.get("field_name").toString();
 						String fieldHelp = "-";
@@ -626,7 +569,6 @@ public class JSONReader {
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(ed1);
 						textLayout.addView(ed1);
 						
@@ -634,18 +576,10 @@ public class JSONReader {
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
 						setZawGyiTypeFace(errorMsg);
-=======
-						textLayout.addView(ed1);
-
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						errorMsg.setGravity(Gravity.CENTER_VERTICAL);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						textLayout.addView(errorMsg);
-<<<<<<< HEAD
 
 						// audio stuff
 						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
@@ -656,8 +590,6 @@ public class JSONReader {
 							parentLayout.addView(recordingLayout);
 						}
 
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						parentLayout.addView(textLayout);
 						layoutList.add(parentLayout);
 					}
@@ -690,13 +622,8 @@ public class JSONReader {
 
 						LinearLayout numberLayout = new LinearLayout(activity);
 						numberLayout.setLayoutParams(innerLayoutParams);
-<<<<<<< HEAD
 //						numberLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						numberLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						numberLayout.setOrientation(LinearLayout.VERTICAL);
 						numberLayout.setTag(R.id.layout_id, "numberLayout");
 						numberLayout.setTag(R.id.field_id,
@@ -715,18 +642,12 @@ public class JSONReader {
 								fields.get("field_default_value"));
 						numberLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
-<<<<<<< HEAD
 						numberLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						numberLayout.setTag(R.id.next_cond, fields.get("next_cond"));
 						String textLabel = fields.get("field_label").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(textLabel);
 						tvLabel.setTextSize(labelTextSize);
-=======
-						String textLabel = fields.get("field_label").toString();
-						TextView tvLabel = new TextView(activity);
-						tvLabel.setText(textLabel);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						tvLabel.setTag("label");
 						tvLabel.setTag(R.id.field_name_id,
 								fields.get("field_name"));
@@ -734,7 +655,6 @@ public class JSONReader {
 								isFieldRequired(fields.get("field_required")));
 						tvLabel.setTag(R.id.field_label_id, textLabel);
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						numberLayout.addView(tvLabel);
 
@@ -749,12 +669,6 @@ public class JSONReader {
 
 						EditText ed1 = new EditText(activity);
 						ed1.setTextSize(16);
-=======
-						numberLayout.addView(tvLabel);
-
-						EditText ed1 = new EditText(activity);
-						ed1.setTextSize(12);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						ed1.setTypeface(typeface.getMyanmar3TypeFace());
 						String fieldName = fields.get("field_name").toString();
 						String fieldHelp = "-";
@@ -767,10 +681,7 @@ public class JSONReader {
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(ed1);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						// ed1.setEms(50);
 						ed1.setInputType(InputType.TYPE_CLASS_NUMBER);
 						ed1.setKeyListener(DigitsKeyListener
@@ -780,10 +691,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(errorMsg);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						numberLayout.addView(errorMsg);
@@ -840,23 +748,17 @@ public class JSONReader {
 								fields.get("field_label"));
 						String dateTimeLabel = fields.get("field_label")
 								.toString();
-<<<<<<< HEAD
 						datetimeLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						datetimeLayout.setTag(R.id.next_cond, fields.get("next_cond"));
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(dateTimeLabel);
 						tvLabel.setTextSize(labelTextSize);
-=======
-						TextView tvLabel = new TextView(activity);
-						tvLabel.setText(dateTimeLabel);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String fieldName = fields.get("field_name").toString();
 						String fieldRequired = fields.get("field_required")
 								.toString();
 						tvLabel.setTag(R.id.field_name_id, fieldName);
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						datetimeLayout.addView(tvLabel);
 						
@@ -868,9 +770,6 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setZawGyiTypeFace(tvLabel);
 						datetimeLayout.addView(tvdescription);
-=======
-						datetimeLayout.addView(tvLabel);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 						// date
 						DatePicker datePicker = new DatePicker(activity);
@@ -922,13 +821,8 @@ public class JSONReader {
 						// radioLayoutParams.setMargins(0, 25, 0, 25);
 						// radioLayout.setLayoutParams(radioLayoutParams);
 						radioLayout.setLayoutParams(innerLayoutParams);
-<<<<<<< HEAD
 //						radioLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						radioLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						radioLayout.setOrientation(LinearLayout.VERTICAL);
 						radioLayout.setTag(R.id.layout_id, "radioLayout");
 						radioLayout.setTag(R.id.field_id,
@@ -939,7 +833,6 @@ public class JSONReader {
 								fields.get("field_required"));
 						radioLayout.setTag(R.id.field_label_id,
 								fields.get("field_label"));
-<<<<<<< HEAD
 						radioLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						radioLayout.setTag(R.id.next_cond, fields.get("next_cond"));
 						String field_default_value = fields.get("field_default_value").toString();
@@ -949,29 +842,16 @@ public class JSONReader {
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(radioLabel);
 						tvLabel.setTextSize(labelTextSize);
-=======
-						String radioLabel = fields.get("field_label")
-								.toString();
-						TextView tvLabel = new TextView(activity);
-						tvLabel.setPadding(0, 0, 0, 10);
-						tvLabel.setText(radioLabel);
-						tvLabel.setTextSize(15);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String fieldName = fields.get("field_name").toString();
 						String fieldRequired = fields.get("field_required")
 								.toString();
 						String fieldLabel = fields.get("field_required")
 								.toString();
-<<<<<<< HEAD
-=======
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						tvLabel.setTag(R.id.field_name_id, fieldName);
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setGravity(Gravity.CENTER_VERTICAL);
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						radioLayout.addView(tvLabel);
 						
@@ -989,14 +869,6 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						radioGroupParams.setMargins(15, 0, 15, 0);
-=======
-						radioLayout.addView(tvLabel);
-
-						RadioGroup rg = new RadioGroup(activity);
-						LayoutParams radioGroupParams = new LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						rg.setLayoutParams(radioGroupParams);
 
 						JSONArray dataset = (JSONArray) fields
@@ -1011,7 +883,6 @@ public class JSONReader {
 							String text = obj.getString("label");
 							String tag = obj.getString("value");
 							String skip = obj.getString("field_skip");
-<<<<<<< HEAD
 							boolean extra = obj.getBoolean("extra"); // thinking there is always extra , true and false
 							
 							RadioButton radioButton = new RadioButton(activity);
@@ -1167,26 +1038,6 @@ public class JSONReader {
 							parentLayout.addView(recordingLayout);
 						}
 						
-=======
-							RadioButton radioButton = new RadioButton(activity);
-							radioButton.setId(View.generateViewId());
-							radioButton.setText(text);
-							radioButton.setTextSize(13);
-							radioButton.setTag(R.id.radio_value, tag);
-							radioButton.setTag(R.id.field_skip, skip);
-							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
-									RadioGroup.LayoutParams.MATCH_PARENT,
-									RadioGroup.LayoutParams.WRAP_CONTENT);
-							layoutParams.setMargins(0, 15, 0, 15);
-							if (default_value == (j + 1)) {
-								radioButton.setChecked(true);
-							}
-							rg.addView(radioButton, j, layoutParams);
-						}
-						radioLayout.addView(rg);
-						radioLayout.setGravity(Gravity.CENTER);
-						parentLayout.addView(radioLayout);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("checklist")) {
 						LinearLayout parentLayout = new LinearLayout(activity);
@@ -1220,13 +1071,8 @@ public class JSONReader {
 						// cbLayoutParams.setMargins(0, 25, 0, 25);
 						// checkBoxLayout.setLayoutParams(cbLayoutParams);
 						checkBoxLayout.setLayoutParams(innerLayoutParams);
-<<<<<<< HEAD
 //						checkBoxLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						checkBoxLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						checkBoxLayout.setOrientation(LinearLayout.VERTICAL);
 						checkBoxLayout.setTag(R.id.layout_id, "checkBoxLayout");
 						checkBoxLayout.setTag(R.id.field_id,
@@ -1239,11 +1085,8 @@ public class JSONReader {
 								fields.get("field_label"));
 						checkBoxLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
-<<<<<<< HEAD
 						checkBoxLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						checkBoxLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String checkLabel = fields.get("field_label")
 								.toString();
 						TextView tvLabel = new TextView(activity);
@@ -1261,7 +1104,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setGravity(Gravity.CENTER_VERTICAL);
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						checkBoxLayout.addView(tvLabel);
 						
@@ -1274,9 +1116,6 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setZawGyiTypeFace(tvLabel);
 						checkBoxLayout.addView(tvdescription);
-=======
-						checkBoxLayout.addView(tvLabel);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 						JSONArray dataset = (JSONArray) fields
 								.get("dataset_values");
@@ -1298,10 +1137,7 @@ public class JSONReader {
 									LayoutParams.WRAP_CONTENT);
 							cbParams.setMargins(0, 15, 0, 15);
 							cb.setLayoutParams(cbParams);
-<<<<<<< HEAD
 							setZawGyiTypeFace(cb);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 							if (default_value == (j + 1)) {
 								cb.setChecked(true);
 							}
@@ -1310,10 +1146,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(errorMsg);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						checkBoxLayout.setGravity(Gravity.CENTER);
@@ -1354,13 +1187,8 @@ public class JSONReader {
 						// locationLayout.setLayoutParams(locationLayoutParams);
 						locationLayout.setLayoutParams(innerLayoutParams);
 						locationLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-<<<<<<< HEAD
 //						locationLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						locationLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						locationLayout.setOrientation(LinearLayout.VERTICAL);
 						locationLayout.setPadding(0, 10, 0, 0);
 						locationLayout.setTag(R.id.layout_id, "locationLayout");
@@ -1374,11 +1202,8 @@ public class JSONReader {
 								fields.get("field_label"));
 						locationLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
-<<<<<<< HEAD
 						locationLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						locationLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String field_label = fields.get("field_label")
 								.toString();
 						String field_name = fields.get("field_name").toString();
@@ -1393,7 +1218,6 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						locationLayout.addView(tvLabel);
 
@@ -1412,13 +1236,6 @@ public class JSONReader {
 						LayoutParams editTextLayoutParam = new LayoutParams(
 								LayoutParams.MATCH_PARENT, sevenPercentHeight);
 						editTextLayoutParam.setMargins(10, 5, 10, 15);
-=======
-						locationLayout.addView(tvLabel);
-
-						LayoutParams editTextLayoutParam = new LayoutParams(
-								LayoutParams.MATCH_PARENT, 50);
-						editTextLayoutParam.setMargins(0, 5, 0, 5);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						final EditText edtLat = new EditText(activity);
 						edtLat.setEnabled(false);
 						edtLat.setHint("Latitude");
@@ -1430,7 +1247,6 @@ public class JSONReader {
 						edtLong.setHint("Longitude");
 						edtLong.setPadding(5, 0, 0, 0);
 						edtLong.setLayoutParams(editTextLayoutParam); //
-<<<<<<< HEAD
 						setZawGyiTypeFace(edtLat);
 						setZawGyiTypeFace(edtLong);
 						edtLong.setBackgroundResource(R.drawable.edittext_style);
@@ -1442,15 +1258,6 @@ public class JSONReader {
 						buttonLayoutParams.setMargins(30, 20, 30, 20);
 						Button btnGPS = new Button(activity);
 						btnGPS.setLayoutParams(buttonLayoutParams);
-=======
-						edtLong.setBackgroundResource(R.drawable.edittext_style);
-						locationLayout.addView(edtLat);
-						locationLayout.addView(edtLong);
-						Button btnGPS = new Button(activity);
-						btnGPS.setLayoutParams(new LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT));
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						btnGPS.setText("Get Location");
 						btnGPS.setBackgroundResource(R.drawable.button_border);
 						btnGPS.setOnClickListener(new OnClickListener() {
@@ -1469,7 +1276,6 @@ public class JSONReader {
 								}
 							}
 						});
-<<<<<<< HEAD
 						setZawGyiTypeFace(btnGPS);
 						
 						// error msg
@@ -1480,15 +1286,6 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						locationLayout.addView(errorMsg);
 						locationLayout.addView(btnGPS);
-=======
-						locationLayout.addView(btnGPS);
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(labelLayoutParams);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						locationLayout.addView(errorMsg);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						parentLayout.addView(locationLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("drawing")) {
@@ -1526,13 +1323,8 @@ public class JSONReader {
 						drawingLayoutParams.setMargins(5, 20, 5, 0);
 						drawingLayout.setLayoutParams(drawingLayoutParams);
 						drawingLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-<<<<<<< HEAD
 //						drawingLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						drawingLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						drawingLayout.setOrientation(LinearLayout.VERTICAL);
 						drawingLayout.setPadding(0, 10, 0, 0);
 						drawingLayout.setTag(R.id.layout_id, "drawingLayout");
@@ -1546,11 +1338,8 @@ public class JSONReader {
 								fields.get("field_label"));
 						drawingLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
-<<<<<<< HEAD
 						drawingLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						drawingLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String field_label = fields.get("field_label")
 								.toString();
 						String field_name = fields.get("field_name").toString();
@@ -1566,7 +1355,6 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
 						drawingLayout.addView(tvLabel);
 						
@@ -1579,9 +1367,6 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setZawGyiTypeFace(tvLabel);
 						drawingLayout.addView(tvdescription);
-=======
-						drawingLayout.addView(tvLabel);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 						ImageView imgView = new ImageView(
 								activity.getBaseContext());
@@ -1598,10 +1383,7 @@ public class JSONReader {
 						int sevenPerscentHeight = displayManager.getHeigth(7);
 						LayoutParams buttonLayoutParams = new LayoutParams(
 								LayoutParams.MATCH_PARENT, sevenPerscentHeight);
-<<<<<<< HEAD
 						setZawGyiTypeFace(button);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						buttonLayoutParams.setMargins(30, 20, 30, 20);
 						button.setLayoutParams(buttonLayoutParams);
 						button.setText("Add");
@@ -1634,10 +1416,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-<<<<<<< HEAD
 						setZawGyiTypeFace(errorMsg);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						drawingLayout.addView(errorMsg);
@@ -1679,13 +1458,8 @@ public class JSONReader {
 						photoLayoutParams.setMargins(5, 20, 5, 0);
 						photoLayout.setLayoutParams(photoLayoutParams);
 						photoLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-<<<<<<< HEAD
 //						photoLayout
 //								.setBackgroundResource(R.drawable.linear_layout_ui);
-=======
-						photoLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						photoLayout.setOrientation(LinearLayout.VERTICAL);
 						photoLayout.setPadding(0, 10, 0, 10);
 						photoLayout.setTag(R.id.layout_id, "photoLayout");
@@ -1699,11 +1473,8 @@ public class JSONReader {
 								fields.get("field_label"));
 						photoLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
-<<<<<<< HEAD
 						photoLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						photoLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						String field_label = fields.get("field_label")
 								.toString();
 						String field_name = fields.get("field_name").toString();
@@ -1718,10 +1489,7 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-<<<<<<< HEAD
 						setZawGyiTypeFace(tvLabel);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						photoLayout.addView(tvLabel);
 
 						ImageView photoPreView = new ImageView(
@@ -1740,10 +1508,7 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								sevenPerscentHeight);
 						buttonLayoutParams.setMargins(30, 20, 30, 10);
-<<<<<<< HEAD
 						setZawGyiTypeFace(button);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						button.setLayoutParams(buttonLayoutParams);
 						button.setText("Select Photo");
 						button.setBackgroundResource(R.drawable.button_border);
@@ -1769,17 +1534,13 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-<<<<<<< HEAD
 						setZawGyiTypeFace(errorMsg);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						photoLayout.addView(errorMsg);
 						photoLayout.addView(button);
 						parentLayout.addView(photoLayout);
 						layoutList.add(parentLayout);
-<<<<<<< HEAD
 					}
 					else if(fields.get(key).equals("matrix_option_single")){
 						LinearLayout parentLayout = new LinearLayout(activity);
@@ -1860,15 +1621,12 @@ public class JSONReader {
 						matrixOptionSingleLayout.addView(errorMsg);
 						parentLayout.addView(matrixOptionSingleLayout);
 						layoutList.add(parentLayout);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					}
 				}
 			}
 		}
 		// lL.addView(signatureView);
 		return layoutList;
-<<<<<<< HEAD
 	}
 
 	private String isFieldRequired(Object field_required) {
@@ -1877,16 +1635,6 @@ public class JSONReader {
 		return "false";
 	}
 
-=======
-	}
-
-	private String isFieldRequired(Object field_required) {
-		if (field_required.toString().equals("true"))
-			return "true";
-		return "false";
-	}
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	public ArrayList<HashMap<String, String>> getDataFromDocumentJSON(
 			JSONObject document_json) {
 		ArrayList<HashMap<String, String>> dataJson = new ArrayList<HashMap<String, String>>();
@@ -1948,11 +1696,8 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_help", jChild.getString("field_help"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
@@ -1969,13 +1714,10 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_help", jChild.getString("field_help"));
-<<<<<<< HEAD
 					String field_ref = jChild.getString("field_ref");
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
 					fields.put("field_audio_required", jChild.getBoolean("field_audio_required"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
@@ -2001,11 +1743,8 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_help", jChild.getString("field_help"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
@@ -2049,11 +1788,8 @@ public class JSONReader {
 							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_label", jChild.getString("field_label"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 				} else if (field_type.equals("drawing")) {
 					if (jChild.getString("field_default_value").length() > 0)
 						fields.put("field_default_value",
@@ -2070,11 +1806,8 @@ public class JSONReader {
 							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_label", jChild.getString("field_label"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 				} else if (field_type.equals("photo")) {
 					if (jChild.getString("field_default_value").length() > 0)
 						fields.put("field_default_value",
@@ -2091,11 +1824,8 @@ public class JSONReader {
 							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_label", jChild.getString("field_label"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 				} else if (field_type.equals("number")) {
 					fields.put("field_name", jChild.getString("field_name"));
 					String field_desc = jChild.getString("field_desc");
@@ -2117,11 +1847,8 @@ public class JSONReader {
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_max_value",
 							jChild.getString("field_max_value"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 				}
 				// else if (jChild.isNull("field_dataset")) {
 				else if (field_type.equals("text")) {
@@ -2133,10 +1860,7 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_type", jChild.getString("field_type"));
-<<<<<<< HEAD
 					fields.put("field_audio_required", jChild.getBoolean("field_audio_required"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					fields.put("field_required",
 							jChild.getString("field_required"));
 					if (jChild.getString("field_help").length() > 0)
@@ -2145,17 +1869,13 @@ public class JSONReader {
 						fields.put("field_default_value",
 								jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
-<<<<<<< HEAD
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 					if (jChild.has("field_multiline")
 							&& jChild.getString("field_multiline").length() > 0)
 						fields.put("field_multiline",
 								jChild.getString("field_multiline"));
 				}
-<<<<<<< HEAD
 				
 				else if (field_type.equals("matrix_option_single")) {
 					fields.put("field_id", jChild.getString("field_id"));
@@ -2192,17 +1912,12 @@ public class JSONReader {
 					xaveyToast.xaveyToast(null, "Matrix checklist not available yet.., sorry..");
 				}
 				
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 				fieldList.add(fields);
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
-<<<<<<< HEAD
 			ToastManager xaveyToast = new ToastManager(activity);
 			xaveyToast.xaveyToast(null, e.getMessage());
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 		}
 		return fieldList;
 	}
@@ -2245,7 +1960,6 @@ public class JSONReader {
 		data_json = data_json.replace("\"[", "[");
 		data_json = data_json.replace("]\"", "]");
 		return data_json;
-<<<<<<< HEAD
 	}
 
 	public ArrayList<HashMap<String, String>> getUserInfo(String data_json) {
@@ -2627,190 +2341,6 @@ public class JSONReader {
 		return selectedButton;
 	}
 
-=======
-	}
-
-	public ArrayList<HashMap<String, String>> getUserInfo(String data_json) {
-
-		return null;
-	}
-
-	public Form prepareForm(String form_id, String create_date,
-			String data_json, boolean isSynced) throws JSONException {
-		JSONObject obj = new JSONObject(data_json);
-
-		return null;
-	}
-
-	public static int randInt(int min, int max) {
-		// NOTE: Usually this should be a field rather than a method
-		// variable so that it is not re-seeded every call.
-		Random rand = new Random();
-		// nextInt is normally exclusive of the top value,
-		// so add 1 to make it inclusive
-		int randomNum = rand.nextInt((max - min) + 1) + min;
-		return randomNum;
-	}
-
-	private void selectImage(final String field_name, final String field_type,
-			final String field_help, final String view_id) {
-		final CharSequence[] items = { "Take Photo", "Choose from Library",
-				"Cancel" };
-
-		ApplicationValues.FIELD_NAME_TMP = field_name;
-		ApplicationValues.FIELD_TYPE_TMP = field_type;
-		ApplicationValues.FIELD_HELP_TMP = field_help;
-		ApplicationValues.VIEW_ID_TMP = view_id;
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setTitle("Add Photo!");
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int item) {
-				if (items[item].equals("Take Photo")) {
-					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					String root = Environment.getExternalStorageDirectory()
-							.toString();
-					File myDir = new File(root, "/temp");
-					myDir.mkdirs();
-					String photoName = "_photo" + System.currentTimeMillis()
-							+ ".jpeg";
-					File f = new File(myDir, photoName);
-
-					intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-					// putting extra like following line is f**king useless
-					// intent.putExtra("photo_path", myDir+"/"+photoName);
-					activity.startActivityForResult(intent,
-							ApplicationValues.REQUEST_CAMERA);
-					ApplicationValues.IMAGE_PATH_TMP = myDir + "/" + photoName;
-					ApplicationValues.PHOTO_NAME_TMP = photoName;
-				} else if (items[item].equals("Choose from Library")) {
-					Intent intent = new Intent(
-							Intent.ACTION_PICK,
-							android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-					intent.setType("image/*");
-					activity.startActivityForResult(
-							Intent.createChooser(intent, "Select File"),
-							ApplicationValues.SELECT_FILE);
-					// I think it doesn't need to make
-					// ApplicationValues.IMAGE_PATH_TMP = myDir+"/"+photoName;
-					// because image path can be retrieved from data.getData()
-					// in onActivityResult()
-				} else if (items[item].equals("Cancel")) {
-					dialog.dismiss();
-				}
-			}
-		});
-		builder.show();
-	}
-
-	// following two methods' purpose is just for exporting CSV
-	public ArrayList<String> getHeaderList(String form_json) {
-		ArrayList<String> fieldNameList = new ArrayList<String>();
-		try {
-			JSONObject json = new JSONObject(
-					convertStandardJSONString(form_json));
-			JSONArray form_fields = json.getJSONArray("form_fields");
-			for (int i = 0; i < form_fields.length(); i++) {
-				JSONObject jChild = form_fields.getJSONObject(i);
-				String field_label = jChild.getString("field_label");
-				fieldNameList.add(field_label);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return fieldNameList;
-	}
-
-	public ArrayList<HashMap<String, String>> getDataList(
-			ArrayList<Document> documentList) {
-
-		ArrayList<HashMap<String, String>> dataList = new ArrayList<HashMap<String, String>>();
-		try {
-			for (int z = 0; z < documentList.size(); z++) {
-				String document_json = documentList.get(z).getDocument_json();
-				JSONObject json = new JSONObject(
-						convertStandardJSONString(document_json));
-				JSONArray jsonArray = json.getJSONArray("document_json");
-				HashMap<String, String> nameAndValue = new HashMap<String, String>();
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject child = (JSONObject) jsonArray.get(i);
-					String fieldLabel = child.getString("field_label");
-					String fieldValue = child.getString("field_value");
-					nameAndValue.put(fieldLabel, fieldValue);
-				}
-				dataList.add(nameAndValue);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return dataList;
-	}
-
-	public JSONArray getJSONArrayToSubmit(Document document, Form form)
-			throws JSONException {
-
-		SessionManager session = new SessionManager(activity);
-		HashMap<String, String> userInfo = session.getUserDetails();
-		String worker_id = userInfo.get(SessionManager.USER_ID);
-		User loginUser = dbHelper.getUserByUserID(worker_id);
-		// String timestamp = Calendar.getInstance().get(Calendar.MILLISECOND)
-		// + "";
-
-		long timestamp = uniqueCurrentTimeMS();
-
-		// ဒီအောက်ကအတိုင်းလုပ်လို့ရရင် ကောင်းတယ်.. document.getID() ကအလု်ဖြစ်ရင်
-		// လုပ်လို့ရပြီ....
-		// So the form parameter won't be needed anymore
-		// form = dbHelper.getFormByFormID(document.getId());
-
-		JSONObject document_json = new JSONObject();
-		// (1) worker child node
-		JSONObject workerChildNode = new JSONObject();
-		workerChildNode.put("id", Integer.parseInt(loginUser.getUser_id()));
-		workerChildNode.put("name", loginUser.getUser_name());
-		// -------------------------------------------------------------
-		// (2) form child node
-		JSONObject formChildNode = new JSONObject();
-		formChildNode.put("id", Integer.parseInt(form.getForm_id()));
-		formChildNode.put("title", form.getForm_title());
-
-		// (3) org child node
-		JSONObject orgChildNode = new JSONObject();
-		orgChildNode.put("id", Integer.parseInt(form.getOrg_auto_id()));
-		orgChildNode.put("org_name", form.getOrg_name());
-		// (4) data child node
-		String document_JSON = document.getDocument_json();
-		ArrayList<HashMap<String, String>> fieldList = getDocumentFields(
-				document_JSON, "document_json");
-		/*
-		 * ArrayList<HashMap<String, String>> fieldList = jsonReader
-		 * .getDocumentFields(document_JSON, "data");
-		 */
-		JSONArray dataArray = new JSONArray();
-		for (int i = 0; i < fieldList.size(); i++) {
-			HashMap<String, String> map = fieldList.get(i);
-			JSONObject fieldNode = new JSONObject();
-			fieldNode.put("field_label", map.get("field_label"));
-			fieldNode.put("field_name", map.get("field_name"));
-			fieldNode.put("field_value", map.get("field_value"));
-			dataArray.put(fieldNode);
-		}
-
-		document_json.put("data", dataArray);
-		document_json.put("timestamp", timestamp);
-		document_json.put("org", orgChildNode);
-		document_json.put("form", formChildNode);
-		document_json.put("worker", workerChildNode);
-
-		JSONArray mainArray = new JSONArray();
-		mainArray.put(document_json);
-		return mainArray;
-	}
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 	private static final AtomicLong UNIQUE_TIMESTAMP = new AtomicLong();
 
 	private long uniqueCurrentTimeMS() {

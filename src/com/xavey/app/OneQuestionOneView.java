@@ -12,10 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-<<<<<<< HEAD
 import android.content.Context;
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,10 +30,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-<<<<<<< HEAD
 import android.view.inputmethod.InputMethodManager;
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -61,10 +55,7 @@ import com.xavey.app.util.JSONReader;
 import com.xavey.app.util.JSONWriter;
 import com.xavey.app.util.LinearLayoutManager;
 import com.xavey.app.util.SyncManager;
-<<<<<<< HEAD
 import com.xavey.app.util.ToastManager;
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 import com.xavey.app.util.TypeFaceManager;
 import com.xavey.app.util.UUIDGenerator;
 
@@ -137,10 +128,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			int index = 0;
 
 			LinearLayout currentLayout = null;
-<<<<<<< HEAD
 			LinearLayout nextLayout = null;
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			RelativeLayout currentUpperLayout = null;
 			int currentPosition = 0;
 
@@ -156,13 +144,10 @@ public class OneQuestionOneView extends FragmentActivity {
 			// just for testing
 			String currentLayoutID = "";
 			String currentFieldName = "";
-<<<<<<< HEAD
 			String currentFieldRef = "";
 			JSONArray currentNextCond;
 
 			ToastManager toast = new ToastManager(OneQuestionOneView.this);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 			@Override
 			public void onPageSelected(int newPosition) {
@@ -185,11 +170,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					Object obj = currentParentLayout.getChildAt(i);
 					if (obj.getClass().getName()
 							.equals("android.widget.LinearLayout")
-<<<<<<< HEAD
 							&& view.getTag(R.id.layout_id) != null && !view.getTag(R.id.layout_id).toString().equals("recordingLayout")) {
-=======
-							&& view.getTag(R.id.layout_id) != null) {
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						currentLayout = (LinearLayout) view;
 					}
 					if (obj.getClass().getName()
@@ -198,7 +179,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 
-<<<<<<< HEAD
 				nextLayout = layoutList.get(currentPosition);
 				LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
 				// if next layout is submit or not
@@ -217,15 +197,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				
-=======
-				// currentLayout = layoutList.get(newPosition);
-				if (currentLayout.getTag(R.id.layout_id) != null) {
-					currentLayoutID = currentLayout.getTag(R.id.layout_id)
-							.toString();
-					currentFieldName = currentLayout.getTag(R.id.field_name_id)
-							.toString();
-				}
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 				/*
 				 * String toast_text = "Current Position : " + currentPosition +
@@ -249,7 +220,6 @@ public class OneQuestionOneView extends FragmentActivity {
 				TextView errorMsg = lLManager
 						.getErrorMsgTextView(currentLayout);
 
-<<<<<<< HEAD
 				 LayoutParams errorMsgLayoutOpen = new LayoutParams(
 				 LayoutParams.MATCH_PARENT,
 				 30);
@@ -258,16 +228,6 @@ public class OneQuestionOneView extends FragmentActivity {
 				 LayoutParams errorMsgLayoutHide = new LayoutParams(
 				 LayoutParams.MATCH_PARENT, 0);
 				 errorMsgLayoutHide.setMargins(10, 20, 10, 20);
-=======
-				// LayoutParams errorMsgLayoutOpen = new LayoutParams(
-				// LayoutParams.MATCH_PARENT,
-				// 30);
-				// errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
-				//
-				// LayoutParams errorMsgLayoutHide = new LayoutParams(
-				// LayoutParams.MATCH_PARENT, 0);
-				// errorMsgLayoutHide.setMargins(10, 20, 10, 20);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 				if (!isNeedToValid) {
 					HashMap<String, String> test = lLManager
@@ -319,7 +279,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								// in range
 								// pass
 								if (direction.equals(LEFT_TO_RIGHT)) {
-<<<<<<< HEAD
 									
 									// logic testing
 									// reverse
@@ -335,8 +294,6 @@ public class OneQuestionOneView extends FragmentActivity {
 									}*/
 									//------------------------------------------------------
 									newPosition = getNextRoute(newPosition);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 									int range = newPosition - currentPosition;
 									if (range != 0)
 										navigator.addLast(range);
@@ -344,13 +301,10 @@ public class OneQuestionOneView extends FragmentActivity {
 									vPager.setCurrentItem(newPosition);
 									currentPosition = newPosition;
 									previousIndex = currentPosition;
-<<<<<<< HEAD
 									// hide keyboard
 									LinearLayout nextLayout_ = layoutList.get(newPosition);
 									if(!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 								} else { // RIGHT_TO_LEFT
 									int last_range = navigator.getLast();
 									newPosition = currentPosition - last_range;
@@ -358,13 +312,10 @@ public class OneQuestionOneView extends FragmentActivity {
 									currentPosition = newPosition;
 									navigator.removeLast();
 									used_field_names.removeLast();
-<<<<<<< HEAD
 									// hide keyboard
 									LinearLayout nextLayout_ = layoutList.get(newPosition);
 									if(!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 								}
 								if (errorMsg != null)
 									errorMsg.setText("");
@@ -374,7 +325,6 @@ public class OneQuestionOneView extends FragmentActivity {
 							// so no need validation let them go
 
 							if (direction.equals(LEFT_TO_RIGHT)) {
-<<<<<<< HEAD
 								
 								// logic testing
 								// reverse
@@ -390,8 +340,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								}*/
 								//----------------------------------------------------------
 								newPosition = getNextRoute(newPosition);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 								int range = newPosition - currentPosition;
 								if (range != 0)
 									navigator.addLast(range);
@@ -399,13 +347,10 @@ public class OneQuestionOneView extends FragmentActivity {
 								vPager.setCurrentItem(newPosition);
 								currentPosition = newPosition;
 								previousIndex = currentPosition;
-<<<<<<< HEAD
 								// hide keyboard
 								LinearLayout nextLayout_ = layoutList.get(newPosition);
 								if(!isSubmitLayout(nextLayout_))
 									hideKeyboard(nextLayout_);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 							} else { // RIGHT_TO_LEFT
 								int last_range = navigator.getLast();
 								newPosition = currentPosition - last_range;
@@ -413,13 +358,10 @@ public class OneQuestionOneView extends FragmentActivity {
 								currentPosition = newPosition;
 								navigator.removeLast();
 								used_field_names.removeLast();
-<<<<<<< HEAD
 								// hide keyboard
 								LinearLayout nextLayout_ = layoutList.get(newPosition);
 								if(!isSubmitLayout(nextLayout_))
 									hideKeyboard(nextLayout_);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 							}
 							if (errorMsg != null)
 								errorMsg.setText("");
@@ -459,21 +401,13 @@ public class OneQuestionOneView extends FragmentActivity {
 								// radio
 								RadioGroup radioGroup = (RadioGroup) currentLayout
 										.getChildAt(i);
-<<<<<<< HEAD
 								
 								RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-=======
-								int selectedID = radioGroup
-										.getCheckedRadioButtonId();
-								RadioButton selectedButton = (RadioButton) radioGroup
-										.findViewById(selectedID);
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 								if (direction.equals(LEFT_TO_RIGHT)) {
 									String field_skip = selectedButton.getTag(
 											R.id.field_skip).toString();
 									if (field_skip.length() > 0) {
-<<<<<<< HEAD
 										if(field_skip.equals("submit")){
 											//go to submit
 											ToastManager tm = new ToastManager(OneQuestionOneView.this);
@@ -527,41 +461,17 @@ public class OneQuestionOneView extends FragmentActivity {
 											newPosition++;
 										}*/
 										newPosition = getNextRoute(newPosition);
-=======
-										//that's condition is new logic for skip_id="" case
-										skipID = Integer.parseInt(field_skip);
-										newPosition = skipID - 1;
-										previousIndex = currentPosition;
-										int range = newPosition
-												- currentPosition;
-										if (range != 0) // <-- don't know why
-														// but a
-														// zero came sometimes,
-														// so i
-														// filtered
-											navigator.addLast(range);
-										used_field_names
-												.addLast(currentFieldName);
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-									}else{
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 										int range = newPosition-currentPosition;
 										navigator.addLast(range);
 										used_field_names.addLast(currentFieldName);
 										vPager.setCurrentItem(newPosition);
 										currentPosition = newPosition;
 										previousIndex = currentPosition;
-<<<<<<< HEAD
 										// hide keyboard
 										LinearLayout nextLayout_ = layoutList.get(newPosition);
 										if(!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									}
-=======
-									}
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 								} else { // RIGHT_TO_LEFT
 									int last_range = navigator.getLast();
 									newPosition = currentPosition - last_range;
@@ -569,14 +479,10 @@ public class OneQuestionOneView extends FragmentActivity {
 									currentPosition = newPosition;
 									navigator.removeLast();
 									used_field_names.removeLast();
-<<<<<<< HEAD
 									// hide keyboard
 									LinearLayout nextLayout_ = layoutList.get(newPosition);
 									if(!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
-=======
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 								}
 								if (errorMsg != null)
 									errorMsg.setLayoutParams(new LayoutParams(
@@ -588,7 +494,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						// no need validation
 
 						if (direction.equals(LEFT_TO_RIGHT)) {
-<<<<<<< HEAD
 							
 							// logic testing
 							// reverse
@@ -616,14 +521,6 @@ public class OneQuestionOneView extends FragmentActivity {
 							LinearLayout nextLayout_ = layoutList.get(newPosition);
 							if(!isSubmitLayout(nextLayout_))
 								hideKeyboard(nextLayout_);
-=======
-							int range = newPosition - currentPosition;
-							navigator.addLast(range);
-							used_field_names.addLast(currentFieldName);
-							vPager.setCurrentItem(newPosition);
-							currentPosition = newPosition;
-							previousIndex = currentPosition;
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 						} else { // RIGHT_TO_LEFT
 							int last_range = navigator.getLast();
@@ -634,13 +531,10 @@ public class OneQuestionOneView extends FragmentActivity {
 							}
 							vPager.setCurrentItem(newPosition);
 							currentPosition = newPosition;
-<<<<<<< HEAD
 							// hide keyboard
 							LinearLayout nextLayout_ = layoutList.get(newPosition);
 							if(isSubmitLayout(nextLayout_))
 								hideKeyboard(nextLayout_);
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						}
 						if (errorMsg != null)
 							errorMsg.setText("");
@@ -648,7 +542,6 @@ public class OneQuestionOneView extends FragmentActivity {
 				}
 			}
 
-<<<<<<< HEAD
 			
 
 			private int getNextRoute(int newPosition){
@@ -807,8 +700,6 @@ public class OneQuestionOneView extends FragmentActivity {
 				return isNeedToSkip;
 			}
 
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 			private void previous(int newPosition) {
 				int last_range = navigator.getLast();
 				vPager.setCurrentItem(newPosition - last_range);
@@ -1137,10 +1028,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						// later
 						document.setSubmitted("0");
 					} catch (JSONException e) {
-<<<<<<< HEAD
-=======
-						// TODO Auto-generated catch block
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						e.printStackTrace();
 					}
 				}
@@ -1257,7 +1144,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						// radio
 						RadioGroup radioGroup = (RadioGroup) linearLayout
 								.getChildAt(y);
-<<<<<<< HEAD
 						RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 						String value = selectedButton.getTag(R.id.radio_value)
 								.toString();
@@ -1281,13 +1167,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								value = value + ":" + childEditText.getText().toString();
 							}
 						}
-=======
-						int selectedID = radioGroup.getCheckedRadioButtonId();
-						RadioButton selectedButton = (RadioButton) radioGroup
-								.findViewById(selectedID);
-						String value = selectedButton.getTag(R.id.radio_value)
-								.toString();
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 						map.put(key, value);
 					}
 				}
@@ -1448,7 +1327,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return map;
 	}
-<<<<<<< HEAD
 	
 	private RadioButton getSelectedRadioButtonMyRadioGroup(
 			RadioGroup radioGroup) {
@@ -1477,8 +1355,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return selectedButton;
 	}
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 	private void loadUI() {
 		getScreenInfo();
@@ -1503,7 +1379,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
 	}
-<<<<<<< HEAD
 	
 	private void hideKeyboard(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;
@@ -1532,8 +1407,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		
 	    
 	}
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

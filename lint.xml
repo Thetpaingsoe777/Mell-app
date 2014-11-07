@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="NewApi" severity="ignore" />
-<<<<<<< HEAD
     <issue id="ShowToast" severity="ignore" />
-=======
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 </lint>

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawerItemLayout"
@@ -29,36 +28,4 @@
 
 
 
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/drawerItemLayout"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="#31394A"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-     >
-
-	<ImageView 
-	    android:id="@+id/imgViewDrawerItemIcon"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="10dp"
-	    android:layout_marginRight="10dp"
-	    />
-    
-    <TextView
-        android:id="@+id/drawer_itemName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:textSize="18sp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white"
-         />
-
-
-
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 </LinearLayout>

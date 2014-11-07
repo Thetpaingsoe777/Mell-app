@@ -8,7 +8,6 @@
     <item type="id" name="field_min_value"/>
     <item type="id" name="field_default_value"/>
     <item type="id" name="field_err_msg"/>
-<<<<<<< HEAD
 	<item type="id" name="field_ref"/>
     <item type="id" name="next_cond"/>
     <item type="id" name="field_skip"/> <!-- just for radio (yet) -->
@@ -18,10 +17,6 @@
     <item type="id" name="extra_status"/>
     <item type="id" name="is_radiobutton_selected"/>
     <item type="id" name="radio_random_value"/>
-=======
-    <item type="id" name="field_skip"/> <!-- just for radio (yet) -->
-    <item type="id" name="radio_value"/>
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
     
     <!-- for photos and drawings tag -->
     <item type="id" name="available_state"/>

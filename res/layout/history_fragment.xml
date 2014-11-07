@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -12,19 +11,4 @@
         android:choiceMode="singleChoice"
         ></ListView>
     
-=======
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ListView 
-        android:id="@+id/history_form_listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:choiceMode="singleChoice"
-        ></ListView>
-    
->>>>>>> ce4c53483e36d66116a944fa419f4f5c31caf09c
 </LinearLayout>
