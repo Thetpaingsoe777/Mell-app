@@ -19,7 +19,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -41,7 +40,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.xavey.app.ApplicationValues;
 import com.xavey.app.R;
@@ -65,6 +63,8 @@ public class JSONReader {
 	String zawGyiFontStatus;
 	ToastManager xaveyToast;
 	AudioRecordingManager recordingManager;
+	
+	private String currentDocumentID;
 
 	public JSONReader(Activity activity) {
 		this.activity = activity;
@@ -584,7 +584,7 @@ public class JSONReader {
 						// audio stuff
 						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
 						if(!isAudioRequired){
-							recordingManager.setFileName(fieldName);
+							recordingManager.setFileName(fieldName+" - "+getCurrentDocumentID());
 							LinearLayout recordingLayout =  recordingManager.getRecordingLayout();
 							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
 							parentLayout.addView(recordingLayout);
@@ -1032,7 +1032,7 @@ public class JSONReader {
 						//String audiorequired = fields.get("field_audio_required").toString();
 						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
 						if(isAudioRequired){
-							recordingManager.setFileName(fieldName);
+							recordingManager.setFileName(fieldName+" - "+getCurrentDocumentID());
 							LinearLayout recordingLayout =  recordingManager.getRecordingLayout();
 							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
 							parentLayout.addView(recordingLayout);
@@ -2353,6 +2353,15 @@ public class JSONReader {
 			if (UNIQUE_TIMESTAMP.compareAndSet(lastTime, now))
 				return now;
 		}
+	}
+
+	public String getCurrentDocumentID() {
+		
+		return currentDocumentID.substring(0, 5);
+	}
+
+	public void setCurrentDocumentID(String currentDocumentID) {
+		this.currentDocumentID = currentDocumentID;
 	}
 
 }

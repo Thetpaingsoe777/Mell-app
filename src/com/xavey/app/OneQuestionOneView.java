@@ -95,12 +95,15 @@ public class OneQuestionOneView extends FragmentActivity {
 	LinkedList<Integer> navigator = new LinkedList<Integer>();
 	LinkedList<String> used_field_names = new LinkedList<String>();
 
+	String currentDocumentID="";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_slide);
 		loadUI();
-
+		currentDocumentID = UUIDGenerator.getUUIDForDocument();
+		jsonReader.setCurrentDocumentID(currentDocumentID);
 		vPager = (ViewPager) findViewById(R.id.pager);
 		try {
 			layoutList = jsonReader.readForm2(currentForm);
@@ -494,7 +497,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						// no need validation
 
 						if (direction.equals(LEFT_TO_RIGHT)) {
-							
+
 							// logic testing
 							// reverse
 //							LinearLayout nextLayout_ = layoutList.get(newPosition);
@@ -513,7 +516,7 @@ public class OneQuestionOneView extends FragmentActivity {
 							int range = newPosition - currentPosition;
 							navigator.addLast(range);
 							used_field_names.addLast(currentFieldName);
-							
+
 							vPager.setCurrentItem(newPosition);
 							currentPosition = newPosition;
 							previousIndex = currentPosition;
@@ -968,7 +971,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				try {
 					// document json start here
 					document_json.put("document_json", jsonArray);
-					document.setDocument_id(UUIDGenerator.getUUIDForDocument());
+					document.setDocument_id(currentDocumentID);
 					document.setDocument_name(currentForm.getForm_title() + "-"
 							+ getCurrentDateTime());
 					document.setCreated_at(getCurrentDateTime());
