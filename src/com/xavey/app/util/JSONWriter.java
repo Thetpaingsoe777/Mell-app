@@ -118,16 +118,14 @@ public class JSONWriter {
 	}*/
 
 	public LinearLayout writeDocument(Document document, Form form) {
-		
+
 		JSONArray document_array;
 		String documentJSON_To_Submit="";
 		try {
 			//document_array = jsonReader.getJSONArrayToSubmit(document, form);
-			
 			document_array = new JSONArray();
 			JSONObject obj = new JSONObject(document.getDocument_json_to_submit());
 			document_array.put(obj);
-			
 			documentJSON_To_Submit = document_array.getJSONObject(0).toString();
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
@@ -153,7 +151,6 @@ public class JSONWriter {
 //----------------------------------------------------------------
 
 		LinearLayout documentNameLayout = produceVerticalLinearLayout();
-		
 		TextView tvDocumentName = new TextView(activity);
 		tvDocumentName.setText("Document Name");
 		tvDocumentName.setTextSize(15);
@@ -176,7 +173,6 @@ public class JSONWriter {
 		documentNameLayout.addView(produceALine(40, Color.TRANSPARENT)); //just white spacing
 
 		lL.addView(documentNameLayout);
-
 		LinearLayout horizontalLayout;
 		//Typeface zawGyiTypeface = new TypeFaceManager(activity).getZawGyiTypeFace();
 		ArrayList<HashMap<String, Object>> formFields = jsonReader
@@ -190,8 +186,8 @@ public class JSONWriter {
 		// field_value = zin win htet
 		// field_label - enter customer name
 
-		LinkedList<String> used_field_names = getFieldNames(documentFields); // collect user typed field_names from document
-		formFields = filterFormFieldsByUsedFieldNames(formFields, used_field_names); // then filter the form fields by above
+		LinkedList<String> used_field_ids = getFieldIDs(documentFields); // collect user typed field_names from document
+		formFields = filterFormFieldsByUsedFieldIDs(formFields, used_field_ids); // then filter the form fields by above
 		
 		for (int i = 0; i < formFields.size(); i++) {
 			HashMap<String, Object> fields = formFields.get(i);
@@ -206,8 +202,7 @@ public class JSONWriter {
 					else if (fields.get(key).equals("date")) {
 						horizontalLayout = new LinearLayout(activity);
 						horizontalLayout.setBackgroundColor(Color.WHITE);
-						horizontalLayout
-								.setOrientation(LinearLayout.HORIZONTAL);
+						horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
 
 						String fieldName = fields.get("field_name").toString();
 						// String docName = docFields.get("field_name");
@@ -276,7 +271,7 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if (fields.get(key).equals("options")) {
+					else if (fields.get(key).equals("options") || fields.get(key).equals("checklist")) {
 						/*horizontalLayout = new LinearLayout(activity);
 						horizontalLayout.setBackgroundColor(Color.WHITE);
 						horizontalLayout
@@ -311,12 +306,12 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if (fields.get(key).equals("checklist")) {
+					else if (fields.get(key).equals("checklistxxx")) {
 						horizontalLayout = new LinearLayout(activity);
 						horizontalLayout.setBackgroundColor(Color.WHITE);
 						horizontalLayout
 								.setOrientation(LinearLayout.HORIZONTAL);
-						String fieldName = fields.get("field_name").toString();
+						String fieldName = fields.get("field_name").toString(); // < --
 						String fieldValue = "";
 						// String docName = docFields.get("field_name");
 						JSONArray valueArray;
@@ -385,20 +380,30 @@ public class JSONWriter {
 	}
 	
 	// this method remove fields that are not used (skipped)
-	private ArrayList<HashMap<String, Object>> filterFormFieldsByUsedFieldNames(
+	private ArrayList<HashMap<String, Object>> filterFormFieldsByUsedFieldIDs(
 			ArrayList<HashMap<String, Object>> formFields,
-			LinkedList<String> used_field_names) {
+			LinkedList<String> used_field_ids) {
 		
 		ArrayList<HashMap<String, Object>> filteredFormFields = new ArrayList<HashMap<String,Object>>();;
 		
 		for(int i=0; i<formFields.size(); i++){
 			HashMap<String, Object> fieldMap = formFields.get(i);
-			String field_name = fieldMap.get("field_name").toString();
-			if(used_field_names.contains(field_name)){
+			String field_id = fieldMap.get("field_id").toString();
+			if(used_field_ids.contains(field_id)){
 				filteredFormFields.add(fieldMap);
 			}
 		}
 		return filteredFormFields;
+	}
+	
+	private LinkedList<String> getFieldIDs(
+			ArrayList<HashMap<String, String>> documentFields) {
+		LinkedList<String> field_ids = new LinkedList<String>();
+		for(HashMap<String, String> fieldMap: documentFields){
+			String field_id = fieldMap.get("field_id");
+			field_ids.addLast(field_id);
+		}
+		return field_ids;
 	}
 
 	private LinkedList<String> getFieldNames(

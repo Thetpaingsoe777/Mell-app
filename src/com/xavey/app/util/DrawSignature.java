@@ -50,7 +50,7 @@ public class DrawSignature extends Activity {
 		mPaint.setDither(true);
 		mPaint.setColor(Color.GREEN);
 		mPaint.setStyle(Paint.Style.STROKE);
-		mPaint.setStrokeJoin(Paint.Join.ROUND);
+		mPaint.setStrokeJoin(Paint.Join.BEVEL);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(12);
 		
@@ -88,8 +88,7 @@ public class DrawSignature extends Activity {
 			circlePaint.setColor(Color.BLUE);
 			circlePaint.setStyle(Paint.Style.STROKE);
 			circlePaint.setStrokeJoin(Paint.Join.MITER);
-			circlePaint.setStrokeWidth(4f);
-
+			circlePaint.setStrokeWidth(5);
 		}
 
 		@Override
@@ -131,7 +130,7 @@ public class DrawSignature extends Activity {
 				mY = y;
 
 				circlePath.reset();
-				circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
+				circlePath.addCircle(mX, mY, 25, Path.Direction.CW); // <- radius is circle size
 			}
 		}
 
@@ -227,7 +226,7 @@ public class DrawSignature extends Activity {
 //				Log.i("SUCCESS", "SUCCESS fully save");
 //			}
 			
-			
+
 			i.putExtra("signPath", imagePath);
 			setResult(2,i);
 			finish();

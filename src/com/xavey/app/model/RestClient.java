@@ -30,7 +30,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 
+import android.app.Activity;
+
 import com.xavey.app.ApplicationValues;
+import com.xavey.app.util.ToastManager;
 
 
 public class RestClient {
@@ -43,7 +46,10 @@ public class RestClient {
 	private int responseCode;
 	private String message;
 	private String response;
-	private String filePath;	
+	private String filePath;
+	
+	private Activity main_activity;
+	
 
 	public String getResponse() {
 		return response;
@@ -325,7 +331,6 @@ public class RestClient {
 
 	private void executeRequest(HttpUriRequest request, String url) {
 		HttpClient client = new DefaultHttpClient();
-
 		HttpResponse httpResponse;
 
 		try {
@@ -336,7 +341,6 @@ public class RestClient {
 			HttpEntity entity = httpResponse.getEntity();
 
 			if (entity != null) {
-
 				InputStream instream = entity.getContent();
 				response = convertStreamToString(instream);
 
@@ -350,6 +354,8 @@ public class RestClient {
 		} catch (IOException e) {
 			client.getConnectionManager().shutdown();
 			e.printStackTrace();
+			ToastManager toast = new ToastManager(getMainActivity());
+			toast.xaveyToast(null, e.getMessage());
 		}
 	}
 
@@ -397,6 +403,14 @@ public class RestClient {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public Activity getMainActivity() {
+		return main_activity;
+	}
+
+	public void setMainActivity(Activity main_activity) {
+		this.main_activity = main_activity;
 	}
 	
 	

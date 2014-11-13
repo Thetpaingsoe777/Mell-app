@@ -73,7 +73,7 @@ public class HistoryFragment extends Fragment {
 		ArrayList<Document> document_list;
 		String selectedFormName="";
 		String selectedFormTitle="";
-		
+
 		public DocumentPagerAdapter(Activity act, int resource, ArrayList<Document> document_list) {
 			super(act, resource, document_list);
 			this.activity = act;
@@ -81,7 +81,7 @@ public class HistoryFragment extends Fragment {
 			this.document_list = document_list;
 			notifyDataSetChanged();
 		}
-		
+
 		@Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			View row = convertView;
@@ -101,6 +101,7 @@ public class HistoryFragment extends Fragment {
 			}
 			document = document_list.get(position);
 			holder.document_name.setText(document.getDocument_name());
+			holder.created_date.setText(document.getCreated_at());
 			if(document.getSubmitted().equals("1")){
 				holder.imgVCheck.setImageResource(R.drawable.checked);
 			}

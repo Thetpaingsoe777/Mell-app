@@ -1,12 +1,10 @@
 package com.xavey.app;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -28,11 +26,9 @@ import com.xavey.app.model.Document;
 import com.xavey.app.model.Form;
 import com.xavey.app.model.RequestMethod;
 import com.xavey.app.model.RestClient;
-import com.xavey.app.model.User;
 import com.xavey.app.util.ConnectionDetector;
 import com.xavey.app.util.JSONReader;
 import com.xavey.app.util.JSONWriter;
-import com.xavey.app.util.SessionManager;
 import com.xavey.app.util.SyncManager;
 
 public class ShowDocumentDetailActivity extends Activity {
@@ -78,6 +74,7 @@ public class ShowDocumentDetailActivity extends Activity {
 
 		LinearLayout lL = jsonWriter
 				.writeDocument(currentDocument, currentForm);
+
 		/*LayoutParams params = new LayoutParams(screenWidth - 10,
 				screenWidth - 20);
 		lL.setLayoutParams(params);*/
@@ -92,7 +89,7 @@ public class ShowDocumentDetailActivity extends Activity {
 			btnSubmit.setText("Submitted");
 			btnSubmit.setEnabled(false);
 		}
-		
+
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

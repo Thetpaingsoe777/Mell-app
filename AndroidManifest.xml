@@ -46,7 +46,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.xavey.app.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -54,13 +56,33 @@
         </activity>
         <activity
             android:name="com.xavey.app.LoginActivity"
-            android:label="User Login" />
-        <activity android:name="com.xavey.app.DocumentInputActivity" />
-        <activity android:name="com.xavey.app.ShowDocumentDetailActivity" />
-        <activity android:name="com.xavey.app.SignatureActivity" />
-        <activity android:name="com.xavey.app.testing.TestActivity" />
-		<activity android:name="com.xavey.app.util.DrawSignature" />
-		<activity android:name="com.xavey.app.OneQuestionOneView" />
+            android:label="User Login" 
+            android:screenOrientation="portrait"
+            />
+        <activity 
+            android:name="com.xavey.app.DocumentInputActivity" 
+            android:screenOrientation="portrait"
+            />
+        <activity 
+            android:name="com.xavey.app.ShowDocumentDetailActivity" 
+            android:screenOrientation="portrait"
+            />
+        <activity 
+            android:name="com.xavey.app.SignatureActivity" 
+            android:screenOrientation="portrait"
+            />
+        <activity 
+            android:name="com.xavey.app.testing.TestActivity" 
+            android:screenOrientation="portrait"
+            />
+		<activity 
+		    android:name="com.xavey.app.util.DrawSignature" 
+		    android:screenOrientation="portrait"
+		    />
+		<activity 
+		    android:name="com.xavey.app.OneQuestionOneView" 
+		    android:screenOrientation="portrait"
+		    />
         <!--
              <provider
                 android:name=".provider.FeedProviderx"

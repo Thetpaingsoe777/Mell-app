@@ -3,8 +3,10 @@ package com.xavey.app.util;
 import java.io.File;
 import java.io.IOException;
 
+import com.xavey.app.db.XaveyDBHelper;
+import com.xavey.app.model.Audio;
+
 import android.app.Activity;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.view.View;
@@ -26,6 +28,8 @@ public class AudioRecordingManager {
 			MediaRecorder.OutputFormat.THREE_GPP };
 	private String file_exts[] = { AUDIO_RECORDER_FILE_EXT_MP4,
 			AUDIO_RECORDER_FILE_EXT_3GP };
+	
+	XaveyDBHelper dbHelper = new XaveyDBHelper(activity_);
 	
 	
 	public AudioRecordingManager(Activity activity){
@@ -66,6 +70,7 @@ public class AudioRecordingManager {
 		});
 		LinearLayout recordingLayout = new LinearLayout(activity_);
 		LayoutParams recordingLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		recordingLayoutParams.setMargins(30, 10, 10, 10);
 		recordingLayout.setLayoutParams(recordingLayoutParams);
 		recordingLayout.setOrientation(LinearLayout.HORIZONTAL);
 		recordingLayout.addView(btnStart);
@@ -117,16 +122,32 @@ public class AudioRecordingManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void stopRecording() {
+		//boolean isAudioAlreadyExist = dbHelper.isAudioAlreadyExistInDB(getAudioInfo().getAudio_path());
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
 			recorder.release();
 			recorder = null;
+//			if(!isAudioAlreadyExist){
+//				dbHelper.addNewAudio(getAudioInfo());
+//			}
+//			else{
+//				dbHelper.updateAudioByPath(getAudioInfo());
+//			}
 		}
 	}
-	
+
+	public Audio getAudioInfo() {
+		audioInfo.setAudio_path(getFilename());
+		return audioInfo;
+	}
+
+	public void setAudioInfo(Audio audioInfo) {
+		this.audioInfo = audioInfo;
+	}
+
 	private MediaRecorder.OnErrorListener errorListener = new MediaRecorder.OnErrorListener() {
 		@Override
 		public void onError(MediaRecorder mr, int what, int extra) {
@@ -143,5 +164,7 @@ public class AudioRecordingManager {
 					.show();
 		}
 	};
+	
+	private Audio audioInfo;
 	
 }

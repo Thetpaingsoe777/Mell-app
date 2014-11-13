@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.xavey.app.model.Audio;
 import com.xavey.app.model.Document;
 import com.xavey.app.model.Form;
 import com.xavey.app.model.Image;
@@ -79,6 +80,12 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private static final String IMAGE_PATH = "image_path";
 	private static final String IMAGE_ID = "image_id";
 	private static final String DOC_ID = "doc_id";
+	
+	// Audio TABLE
+		private static final String AUDIO_TABLE = "audio";
+		private static final String AUDIO_NAME = "audio_name";
+		private static final String AUDIO_PATH = "audio_path";
+		private static final String AUDIO_ID = "audio_id";
 
 	public XaveyDBHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -125,12 +132,22 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				+ IMAGE_ID + " INTEGER," 
 				+ DOC_ID + " INTEGER"
 				+ ")";
+		
+		String CREATE_AUDIO_TABLE = "CREATE TABLE " + AUDIO_TABLE +
+									"(" + 
+									ID + " INTEGER PRIMARY KEY," +
+									AUDIO_NAME + " TEXT," +
+									AUDIO_PATH + " TEXT," +
+									AUDIO_ID + " TEXT," +
+									DOC_ID + " TEXT" +
+									")";
 
 		db.execSQL(CREATE_FORM_TABLE);
 		db.execSQL(CREATE_USER_TABLE);
 		db.execSQL(CREATE_WORKER_FORM_TABLE);
 		db.execSQL(CREATE_DOCUMENT_TABLE);
 		db.execSQL(CREATE_IMAGE_TABLE);
+		db.execSQL(CREATE_AUDIO_TABLE);
 	}
 
 	@Override
@@ -835,5 +852,36 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	}
 
 	
+	
+	
+	// AUDIO
+	
+	public void addNewAudio(Audio audio) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(AUDIO_ID, audio.getAudio_id());
+		values.put(AUDIO_NAME, audio.getAudio_name());
+		values.put(AUDIO_PATH, audio.getAudio_path());
+		values.put(DOC_ID, audio.getDoc_id());
+		db.insert(AUDIO_TABLE, null, values);
+		db.close();
+	}
 
+	public boolean isAudioAlreadyExistInDB(String audioPath){
+		SQLiteDatabase db = this.getReadableDatabase();
+		String query = "select * from " + AUDIO_TABLE + " where " + AUDIO_PATH + "=?";
+		Cursor cursor = db.rawQuery(query, new String[]{audioPath});
+		if(cursor.getCount()==0)
+			return false;
+		else
+			return true;
+	}
+
+	public int updateAudioByPath(Audio audio){
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(IMAGE_ID, audio.getAudio_id());
+		return db.update(AUDIO_TABLE, values, AUDIO_PATH+"=?", new String[]{audio.getAudio_path()});
+	}
+	
 }

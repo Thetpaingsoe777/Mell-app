@@ -31,7 +31,7 @@ public class LinearLayoutManager {
 		return errMsg;
 	}
 	
-	public String getFieldNameFromLayout(LinearLayout linearLayout){
+	public String getFieldIDFromLayout(LinearLayout linearLayout){
 		LinearLayout targetLayout = null;
 		for(int i=0; i<linearLayout.getChildCount();i++){
 			View view = linearLayout.getChildAt(i);
@@ -40,8 +40,8 @@ public class LinearLayoutManager {
 			}
 		}
 		if(targetLayout!=null){
-			if(targetLayout.getTag(R.id.field_name_id)!=null)
-				return targetLayout.getTag(R.id.field_name_id).toString();
+			if(targetLayout.getTag(R.id.field_id)!=null)
+				return targetLayout.getTag(R.id.field_id).toString();
 			else
 				return "noTag";
 		}
@@ -65,7 +65,6 @@ public class LinearLayoutManager {
 		HashMap<String, String> map = new HashMap<String, String>();
 		String layoutID = linearLayout.getTag(R.id.layout_id).toString();
 		String fieldName = linearLayout.getTag(R.id.field_name_id).toString();
-		String fieldRequired = linearLayout.getTag(R.id.field_required_id).toString();
 		String fieldLabel = linearLayout.getTag(R.id.field_label_id).toString();
 
 		String userTypedValue = "";
@@ -158,7 +157,11 @@ public class LinearLayoutManager {
 		}
 		map.put("field_name", fieldName);
 		map.put("field_label", fieldLabel);
-		map.put("field_required", fieldRequired);
+		
+		if(linearLayout.getTag(R.id.field_required_id)!=null){
+			map.put("field_required", linearLayout.getTag(R.id.field_required_id).toString());
+		}
+		
 		return map;
 	}
 	

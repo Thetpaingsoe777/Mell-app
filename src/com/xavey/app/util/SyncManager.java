@@ -34,6 +34,8 @@ public class SyncManager {
 	Document documentToSubmit;
 	Form formToSubmit;
 	// Form formToSubmit;
+	
+	ToastManager toast = null;
 
 	JSONArray documentArrayToSubmit;
 	HashMap<String, Object> incompleteMap = new HashMap<String, Object>();
@@ -46,6 +48,7 @@ public class SyncManager {
 		this.activity_ = activity;
 		dbHelper = new XaveyDBHelper(context);
 		jsonReader = new JSONReader(activity_);
+		toast = new ToastManager(activity);
 	}
 
 	// getJSONArrayToSubmit(Document document, Form form)
@@ -117,7 +120,7 @@ public class SyncManager {
 		JSONArray mainArray = jsonReader.getJSONArrayToSubmit(document, form);
 		// following two lines should be actually written only after submit success
 		document.setDocument_json_to_submit(mainArray.getJSONObject(0).toString());
-		document.setSubmitted("1");
+//		document.setSubmitted("1");
 
 		setDocumentToSubmit(document);
 		setFormToSubmit(form);
@@ -135,7 +138,7 @@ public class SyncManager {
 		private ProgressDialog Dialog = new ProgressDialog(context.getApplicationContext());
 		XaveyProperties xavey_properties;
 		String documentUploadURL = "";
-		
+
 		protected void onPreExecute() {
 //			 Dialog.setMessage("Submitting document ...");
 //			 Dialog.show();
@@ -148,13 +151,14 @@ public class SyncManager {
 			JSONArray jsonArray = params[0];
 			String response = "";
 			RestClient c = new RestClient(documentUploadURL, jsonArray);
+			c.setMainActivity(ApplicationValues.mainActivity);
 			try {
 				String token = ApplicationValues.loginUser.getToken();
 				c.AddHeader("x-access-token", token);
 				c.Execute(RequestMethod.POST);
-				Log.i("document submit errorMsg : ", c.getErrorMessage());
-				Log.i("document submit responseCode : ", c.getResponseCode()
-						+ "");
+//				Log.i("document submit errorMsg : ", c.getErrorMessage());
+//				Log.i("document submit responseCode : ", c.getResponseCode()
+//						+ "");
 				response = c.getResponse();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -168,9 +172,13 @@ public class SyncManager {
 			// Dialog.setMessage("Done..");
 			// Dialog.dismiss();
 			Document document = getDocumentToSubmit();
-			dbHelper.updateDocument(document);
-			dbHelper.updateDocumentSubmittedByJSON(document, "1");
-			// update document
+			if(result.length()>0 || result.equals("null")){
+				dbHelper.updateDocument(document);
+				dbHelper.updateDocumentSubmittedByJSON(document, "1");
+				// update document
+			}else{
+				dbHelper.updateDocumentSubmittedByJSON(document, "0");
+			}
 		}
 	}
 
@@ -427,20 +435,41 @@ public class SyncManager {
 //			Dialog.setMessage("authentication done..");
 //			Dialog.show();
 			String user_id = result.get("user_id");
-			int responseCode = Integer.parseInt(result.get("response_code"));
-			String token = result.get("token");
-			if(responseCode==200){
-//				Dialog.setMessage("Token is now updated..");
-//				Dialog.show();
-				//Toast.makeText(activity_, "token is now updated", 1000).show();
-				
-				dbHelper.updateTokenByUserID(user_id, token);
-			}else{
-//				Dialog.setMessage("Authentication failed..! responseCode : "+responseCode);
-//				Dialog.show();
+			String responseCode_ = result.get("response_code");
+			
+			if(isNumeric(responseCode_)){
+				int responseCode = Integer.parseInt(result.get("response_code"));
+				String token = result.get("token");
+				if(responseCode==200){
+//					Dialog.setMessage("Token is now updated..");
+//					Dialog.show();
+					//Toast.makeText(activity_, "token is now updated", 1000).show();
+					
+					dbHelper.updateTokenByUserID(user_id, token);
+				}else{
+					toast.xaveyToast(null, "Authentication failed..!" + "\nResponse Code : "+responseCode);
+//					Dialog.setMessage("Authentication failed..! responseCode : "+responseCode);
+//					Dialog.show();
+				}
+			}
+			else{
+				toast.xaveyToast(null, "Authentication failed..!" + "\nServer is not responding.");
 			}
 		}
 
+	}
+
+	public static boolean isNumeric(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    int sz = str.length();
+	    for (int i = 0; i < sz; i++) {
+	        if (Character.isDigit(str.charAt(i)) == false) {
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 	
 	private class AuthenticateTask extends AsyncTask<User, Void, HashMap<String, String>> {

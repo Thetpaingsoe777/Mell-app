@@ -25,7 +25,7 @@ public class ToastManager {
 		tv.setText(msg);
 		Toast toast = new Toast(act_);
 		toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,100);
-		toast.setDuration(4000);
+		toast.setDuration(5000);
 		toast.setView(layout);
 		toast.show();
 	}

@@ -3,7 +3,6 @@ package com.xavey.app;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +14,7 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.pm.ActivityInfo;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -64,9 +64,12 @@ public class MainActivity extends Activity {
 	ToastManager toastManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated meth	od stub
 		super.onCreate(savedInstanceState);
+//		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
+		ApplicationValues.appContext = getApplicationContext();
+		ApplicationValues.mainActivity = this;
 		initializeUI();
 		session.checkLogin();
 		dbHelper = new XaveyDBHelper(this);

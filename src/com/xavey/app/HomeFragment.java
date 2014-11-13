@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	private void setWelcomeText(){
 		session = new SessionManager(activity.getApplicationContext());
 		HashMap<String, String> user = session.getUserDetails();
-		welcomeText.setText("Welcome "+user.get(SessionManager.KEY_NAME)+"!");
+		welcomeText.setText(""+user.get(SessionManager.KEY_NAME));
 	}
 
 	@Override
