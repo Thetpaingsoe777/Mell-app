@@ -3,6 +3,7 @@ package com.xavey.app.util;
 import java.io.File;
 import java.io.IOException;
 
+import com.xavey.app.ApplicationValues;
 import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Audio;
 
@@ -28,9 +29,7 @@ public class AudioRecordingManager {
 			MediaRecorder.OutputFormat.THREE_GPP };
 	private String file_exts[] = { AUDIO_RECORDER_FILE_EXT_MP4,
 			AUDIO_RECORDER_FILE_EXT_3GP };
-	
 	XaveyDBHelper dbHelper = new XaveyDBHelper(activity_);
-	
 	
 	public AudioRecordingManager(Activity activity){
 		activity_ = activity;
@@ -81,14 +80,13 @@ public class AudioRecordingManager {
 	private void enableButton(Button button, boolean isEnable){
 		button.setEnabled(isEnable);
 	}
-	
+
 	private void enableButtons(boolean isRecording){
 		
 	}
-	
+
 	private String getFilename() {
-		String filepath = Environment.getExternalStorageDirectory().getPath();
-		File file = new File(filepath, AUDIO_RECORDER_FOLDER);
+		File file = new File(ApplicationValues.XAVEY_DIRECTORY, AUDIO_RECORDER_FOLDER);
 
 		if (!file.exists()) {
 			file.mkdirs();

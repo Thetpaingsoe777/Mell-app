@@ -7,6 +7,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.xavey.app.ApplicationValues;
+
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -15,8 +17,8 @@ import android.util.Log;
 public class CSVExportManager {
 
 	Context context;
-	protected static final File XAVEY_DIRECTORY = new File(
-			Environment.getExternalStorageDirectory(), "Xavey CSV");
+	protected static final File CSV_DIRECTORY = new File(
+			ApplicationValues.XAVEY_DIRECTORY, "CSV");
 
 	protected static final File DATABASE_DIRECTORY = new File(
 			Environment.getExternalStorageDirectory(), "ImportExport");
@@ -35,11 +37,11 @@ public class CSVExportManager {
 		try {
 			Log.e("export fun:file name : ", outFileName);
 
-			if (!XAVEY_DIRECTORY.exists()) {
-				XAVEY_DIRECTORY.mkdirs();
+			if (!CSV_DIRECTORY.exists()) {
+				CSV_DIRECTORY.mkdirs();
 			}
 
-			File outFile = new File(XAVEY_DIRECTORY, outFileName);
+			File outFile = new File(CSV_DIRECTORY, outFileName);
 			FileWriter fileWriter = new FileWriter(outFile);
 			BufferedWriter out = new BufferedWriter(fileWriter);
 			for (String header : headerList) {

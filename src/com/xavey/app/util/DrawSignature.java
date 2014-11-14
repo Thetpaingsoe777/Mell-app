@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xavey.app.ApplicationValues;
 import com.xavey.app.R;
 
 public class DrawSignature extends Activity {
@@ -53,7 +54,7 @@ public class DrawSignature extends Activity {
 		mPaint.setStrokeJoin(Paint.Join.BEVEL);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
 		mPaint.setStrokeWidth(12);
-		
+
 		Intent i = getIntent();
 		String field_help = i.getStringExtra("field_help");
 /*		Toast toast = Toast.makeText(this, field_help, Toast.LENGTH_LONG);
@@ -240,7 +241,7 @@ public class DrawSignature extends Activity {
 
 	private String saveImageToLocalStore(Bitmap finalBitmap) { 
         root = Environment.getExternalStorageDirectory().toString();
-		myDir = new File(root + "/temp");
+		myDir = new File(ApplicationValues.XAVEY_DIRECTORY + "/Drawing");
         //myDir = new File("mnt/sdcard" + "/temp");
        myDir.mkdirs(); 
         fname = "_image"+ System.currentTimeMillis() +".jpeg";

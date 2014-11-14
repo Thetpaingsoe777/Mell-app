@@ -1,11 +1,11 @@
 package com.xavey.app;
 
+import java.io.File;
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
-
 import com.xavey.app.model.Form;
 import com.xavey.app.model.User;
 
@@ -13,9 +13,7 @@ public class ApplicationValues {
 	public static int numberOfForm = 0;
 	public static ArrayList<Form> userFormList = new ArrayList<Form>();
 	public static User loginUser = new User();
-
 	public static String documentName = "";
-
 	public static int REQUEST_DRAWING = 100;
 	public static int REQUEST_CAMERA = 101;
 	public static int SELECT_FILE = 102;
@@ -25,11 +23,13 @@ public class ApplicationValues {
 	public static String VIEW_ID_TMP = "";
 	public static String IMAGE_PATH_TMP = "";
 	public static String PHOTO_NAME_TMP = "";
-	
+
 	public static Context appContext = null;
 	public static Activity mainActivity = null;
-	
 
+	public static File XAVEY_DIRECTORY = null; 
+	
+	
 	public static String getDeviceID(Activity activity) {
 		TelephonyManager telephonyManager = (TelephonyManager) activity
 				.getSystemService(Context.TELEPHONY_SERVICE);

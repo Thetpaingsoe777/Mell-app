@@ -47,7 +47,6 @@ public class LinearLayoutManager {
 		}
 		else
 			return "noTag";
-			
 	}
 
 	public boolean isViewErrorMsg(View view){

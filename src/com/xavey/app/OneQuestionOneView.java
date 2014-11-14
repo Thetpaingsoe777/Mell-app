@@ -111,7 +111,6 @@ public class OneQuestionOneView extends FragmentActivity {
 			layoutList = jsonReader.readForm2(currentForm);
 			layoutList.add(produceSubmitLayout());
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -1060,6 +1059,44 @@ public class OneQuestionOneView extends FragmentActivity {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				// just put this outside....
+				// if internet avaliable or not.., it will store locally first
+				//---------------------------------------------------------
+				
+				// offline mode
+				document.setSubmitted("0");
+				// save image too.
+				String docID = document.getDocument_id();
+				for (HashMap<String, String> image_map : imagesToSubmit) {
+					String image_name = image_map.get("field_name");
+					String image_path = image_map.get("imagePath");
+					Image image = new Image();
+					image.setDoc_id(docID);
+					image.setImage_name(image_name);
+					image.setImage_path(image_path);
+					dbHelper.addNewImage(image);
+				}
+				SyncManager syncManager = new SyncManager(
+						OneQuestionOneView.this);
+
+				// document_json(structure) is needed everytime before
+				// upload
+				try {
+					JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
+							document, currentForm);
+					// here.. may be shock
+					document.setDocument_json_to_submit(mainArray
+							.getJSONObject(0).toString());
+					// following line won't be needed , but not sure..., fix
+					// later
+					document.setSubmitted("0");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				
+				
+				//---------------------------------------------------------
+				
 
 				// -----
 				isInternetAvailable = connectionDetector
@@ -1067,7 +1104,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				if (isInternetAvailable) {
 
 					try {
-						SyncManager syncManager = new SyncManager(
+						syncManager = new SyncManager(
 								OneQuestionOneView.this);
 
 						if (imagesToSubmit.size() > 0) {
@@ -1079,7 +1116,11 @@ public class OneQuestionOneView extends FragmentActivity {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-				} else { // offline mode
+				} else {
+					
+					// -------------------------------------------------------------------
+					
+					/*// offline mode
 					document.setSubmitted("0");
 					// save image too.
 					String docID = document.getDocument_id();
@@ -1108,7 +1149,9 @@ public class OneQuestionOneView extends FragmentActivity {
 						document.setSubmitted("0");
 					} catch (JSONException e) {
 						e.printStackTrace();
-					}
+					}*/
+					
+					// -----------------------------------------------------------
 				}
 				dbHelper.addNewDocument(document);
 				finish();

@@ -289,9 +289,7 @@ public class RestClient {
                  dos.close();
 
 			}catch (MalformedURLException ex) {
-				
 				 message = "MalformedURLException Exception : check url.";
-				 
            }catch (IOException ioe) {
         	   message = ioe.getMessage();
            }
@@ -343,7 +341,6 @@ public class RestClient {
 			if (entity != null) {
 				InputStream instream = entity.getContent();
 				response = convertStreamToString(instream);
-
 				// Closing the input stream will trigger connection release
 				instream.close();
 			}

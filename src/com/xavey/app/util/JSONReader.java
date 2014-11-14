@@ -1737,9 +1737,7 @@ public class JSONReader {
 			public void onClick(DialogInterface dialog, int item) {
 				if (items[item].equals("Take Photo")) {
 					Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					String root = Environment.getExternalStorageDirectory()
-							.toString();
-					File myDir = new File(root, "/temp");
+					File myDir = new File(ApplicationValues.XAVEY_DIRECTORY, "/Photos");
 					myDir.mkdirs();
 					String photoName = "_photo" + System.currentTimeMillis()
 							+ ".jpeg";

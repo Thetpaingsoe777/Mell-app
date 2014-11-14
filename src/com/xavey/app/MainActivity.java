@@ -1,5 +1,6 @@
 package com.xavey.app;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import android.content.pm.ActivityInfo;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -62,12 +64,15 @@ public class MainActivity extends Activity {
 
 	private Handler customHandler = new Handler();;
 	ToastManager toastManager;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated meth	od stub
+		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 //		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
+		String root = Environment.getExternalStorageDirectory().toString();
+		ApplicationValues.XAVEY_DIRECTORY = new File(root, "/Xavey");
 		ApplicationValues.appContext = getApplicationContext();
 		ApplicationValues.mainActivity = this;
 		initializeUI();
