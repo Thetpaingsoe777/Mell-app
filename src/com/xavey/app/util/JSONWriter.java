@@ -188,7 +188,7 @@ public class JSONWriter {
 
 		LinkedList<String> used_field_ids = getFieldIDs(documentFields); // collect user typed field_names from document
 		formFields = filterFormFieldsByUsedFieldIDs(formFields, used_field_ids); // then filter the form fields by above
-		
+
 		for (int i = 0; i < formFields.size(); i++) {
 			HashMap<String, Object> fields = formFields.get(i);
 			HashMap<String, String> docFields = documentFields.get(i);
