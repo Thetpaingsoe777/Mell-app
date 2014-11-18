@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.xavey.app.ApplicationValues;
+import com.xavey.app.R;
 import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Audio;
 
@@ -44,30 +45,35 @@ public class AudioRecordingManager {
 		btnStart.setLayoutParams(params);
 		btnStop.setLayoutParams(params);
 		final ToastManager xToast = new ToastManager(activity_);
+		
+		final LinearLayout recordingLayout = new LinearLayout(activity_);
+		
 		btnStart.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				xToast.xaveyToast(null, "Start Recording");
+				xToast.xaveyToast(null, "Start Recording....");
 				enableButtons(true);
 				boolean isRecording = true;
 				btnStart.setEnabled(!isRecording);
 				btnStop.setEnabled(isRecording);
 				startRecording();
+				String audio_path = getFilename();
+				recordingLayout.setTag(R.id.audio_path, audio_path);
 			}
 		});
 		btnStop.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				xToast.xaveyToast(null, "Stop Recording");
+				xToast.xaveyToast(null, "Recording is stopped..");
 				boolean isRecording = false;
 				btnStart.setEnabled(!isRecording);
 				btnStop.setEnabled(isRecording);
 				stopRecording();
 			}
 		});
-		LinearLayout recordingLayout = new LinearLayout(activity_);
+		
 		LayoutParams recordingLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		recordingLayoutParams.setMargins(30, 10, 10, 10);
 		recordingLayout.setLayoutParams(recordingLayoutParams);
@@ -84,7 +90,7 @@ public class AudioRecordingManager {
 	private void enableButtons(boolean isRecording){
 		
 	}
-
+	
 	private String getFilename() {
 		File file = new File(ApplicationValues.XAVEY_DIRECTORY, AUDIO_RECORDER_FOLDER);
 
@@ -93,6 +99,16 @@ public class AudioRecordingManager {
 		}
 
 		return (file.getAbsolutePath() + "/" + fileName + file_exts[currentFormat]);
+	}
+
+	public String getFilename(String fileName_) {
+		File file = new File(ApplicationValues.XAVEY_DIRECTORY, AUDIO_RECORDER_FOLDER);
+
+		if (!file.exists()) {
+			file.mkdirs();
+		}
+
+		return (file.getAbsolutePath() + "/" + fileName_ + file_exts[currentFormat]);
 	}
 	
 	String fileName="xxx";
@@ -107,7 +123,6 @@ public class AudioRecordingManager {
 		recorder.setOutputFormat(output_formats[currentFormat]);
 		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 		recorder.setOutputFile(getFilename());
-
 		recorder.setOnErrorListener(errorListener);
 		recorder.setOnInfoListener(infoListener);
 

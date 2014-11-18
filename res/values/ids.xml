@@ -1,4 +1,5 @@
 <resources>
+    
     <item type="id" name="layout_id"/>
     <item type="id" name="field_id"/>
     <item type="id" name="field_name_id"/>
@@ -22,4 +23,8 @@
     <!-- for photos and drawings tag -->
     <item type="id" name="available_state"/>
     <item type="id" name="image_path_on_device"/>
+    
+    <!-- for audio -->
+    <item type="id" name="audio_path"/>
+    
 </resources>

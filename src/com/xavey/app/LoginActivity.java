@@ -204,7 +204,7 @@ public class LoginActivity extends Activity {
 		}
 
 		protected HashMap<String, String> doInBackground(User... params) {
-			HashMap<String, String> result = null;
+			HashMap<String, String> result = new HashMap<String, String>();
 			try {
 				RestClient c = new RestClient(authenticateURL);
 //				RestClient c = new RestClient(localAuthenticate);
@@ -214,8 +214,10 @@ public class LoginActivity extends Activity {
 				c.AddParam("device", deviceID);
 				c.Execute(RequestMethod.POST);
 				int userResponseCode = c.getResponseCode();
-				result = parseJSON(c.getResponse());
-				result.put("password", params[0].getPwd());
+				if(userResponseCode==200){
+					result = parseJSON(c.getResponse());
+					result.put("password", params[0].getPwd());
+				}
 				result.put("response_code", userResponseCode+"");
 			}
 			catch(Exception e){

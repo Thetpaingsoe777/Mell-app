@@ -1,5 +1,6 @@
 package com.xavey.app;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Document;
 import com.xavey.app.model.Form;
 import com.xavey.app.model.Image;
+import com.xavey.app.util.AudioRecordingManager;
 import com.xavey.app.util.ConnectionDetector;
 import com.xavey.app.util.ImageSavingManager;
 import com.xavey.app.util.JSONReader;
@@ -97,6 +99,8 @@ public class OneQuestionOneView extends FragmentActivity {
 	LinkedList<String> used_field_ids = new LinkedList<String>();
 
 	String currentDocumentID="";
+	
+	AudioRecordingManager recordingManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -1027,6 +1031,20 @@ public class OneQuestionOneView extends FragmentActivity {
 						String fieldID = map.get("field_id").toString();
 						String fieldLabel = map.get("field_label").toString();
 						String fieldName = map.get("field_name").toString();
+						String fieldValueAudio = "";
+						boolean is_audio_required = false;
+						if(map.containsKey("field_audio_required")){
+							is_audio_required = Boolean.parseBoolean(map.get("field_audio_required").toString());
+						}
+
+						if(is_audio_required){
+							String audio_file = recordingManager.getFilename(fieldName+" - "+currentDocumentID);
+							File file = new File(audio_file);
+							if (file.exists()) {
+								fieldValueAudio = audio_file;
+							}
+						}
+						
 						String userTypedValue = "";
 						if (incompleteMap.containsKey(fieldID)) { // <--
 																	// filter
@@ -1038,6 +1056,9 @@ public class OneQuestionOneView extends FragmentActivity {
 								child.put("field_name", fieldName);
 								child.put("field_value", userTypedValue);
 								child.put("field_label", fieldLabel);
+								if(fieldValueAudio.length()>0){
+									child.put("field_value_audio", fieldValueAudio);
+								}
 								jsonArray.put(child);
 							} catch (JSONException e) {
 								e.printStackTrace();
@@ -1062,7 +1083,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				// just put this outside....
 				// if internet avaliable or not.., it will store locally first
 				//---------------------------------------------------------
-				
+
 				// offline mode
 				document.setSubmitted("0");
 				// save image too.
@@ -1093,20 +1114,16 @@ public class OneQuestionOneView extends FragmentActivity {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
-				
+
 				//---------------------------------------------------------
-				
 
 				// -----
 				isInternetAvailable = connectionDetector
 						.isConnectingToInternet();
 				if (isInternetAvailable) {
-
 					try {
 						syncManager = new SyncManager(
 								OneQuestionOneView.this);
-
 						if (imagesToSubmit.size() > 0) {
 							syncManager.submitDocument2(document, currentForm,
 									imagesToSubmit); // <--
@@ -1197,16 +1214,18 @@ public class OneQuestionOneView extends FragmentActivity {
 	private HashMap<String, Object> getValuesFromEachLayout(
 			ArrayList<LinearLayout> layoutList) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		for (int i = 0; i < layoutList.size() - 1; i++) {
+		for (int i = 0; i < layoutList.size(); i++) {
 			// -1 don't care the last room cuz the last room is submitLayout
+			
 			LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
 			LinearLayout linearLayout = null;
 			for (int p = 0; p < parentLayout.getChildCount(); p++) {
 				View child = parentLayout.getChildAt(p);
 				if (child.getTag(R.id.layout_id) != null
 						&& child.getClass().getName()
-								.equals("android.widget.LinearLayout")) {
-					linearLayout = (LinearLayout) parentLayout.getChildAt(p);
+								.equals("android.widget.LinearLayout") ) {
+					if(!child.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+						linearLayout = (LinearLayout) parentLayout.getChildAt(p);
 				}
 			}
 			parentLayout.getChildAt(1);
@@ -1494,6 +1513,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		currentForm = dbHelper.getFormByFormID(intent.getStringExtra("formID"));
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
+		recordingManager = new AudioRecordingManager(this);
 	}
 
 	private void getScreenInfo() {

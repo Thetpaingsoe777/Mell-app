@@ -230,6 +230,7 @@ public class JSONReader {
 						if(isAudioRequired){
 							Audio audioinfo = new Audio();
 							audioinfo.setAudio_name(fieldName);
+							recordingManager = new AudioRecordingManager(activity);
 							recordingManager.setAudioInfo(audioinfo);
 							recordingManager.setFileName(fieldName+" - "+getCurrentDocumentID());
 							LinearLayout recordingLayout =  recordingManager.getRecordingLayout();
@@ -377,10 +378,6 @@ public class JSONReader {
 						// datetimeLayoutParam.setMargins(0, 30, 0, 0);
 						// datetimeLayout.setLayoutParams(datetimeLayoutParam);
 						datetimeLayout.setLayoutParams(innerLayoutParams);
-						datetimeLayout
-								.setBackgroundResource(R.drawable.linear_layout_ui);
-						datetimeLayout.setBackgroundColor(Color
-								.parseColor("#5E5C5E"));
 						// datetimeLayout.setBackgroundColor(activity.getResources().getColor(android.R.color.holo_blue_light));
 						// datetimeLayout.setBackgroundResource(R.drawable.datetime_background);
 						datetimeLayout.setOrientation(LinearLayout.VERTICAL);
@@ -686,6 +683,7 @@ public class JSONReader {
 						if(isAudioRequired){
 							Audio audioinfo = new Audio();
 							audioinfo.setAudio_name(fieldName);
+							recordingManager = new AudioRecordingManager(activity);
 							recordingManager.setAudioInfo(audioinfo);
 							recordingManager.setFileName(fieldName+" - "+getCurrentDocumentID());
 							LinearLayout recordingLayout =  recordingManager.getRecordingLayout();
@@ -1672,6 +1670,9 @@ public class JSONReader {
 				fields.put("field_name", jChild.getString("field_name"));
 				fields.put("field_value", jChild.getString("field_value"));
 				fields.put("field_label", jChild.getString("field_label"));
+				if(jChild.has("field_value_audio")){
+					fields.put("field_value_audio", jChild.getString("field_value_audio"));
+				}
 				fieldList.add(fields);
 			}
 
@@ -1863,6 +1864,9 @@ public class JSONReader {
 			fieldNode.put("field_label", map.get("field_label"));
 			fieldNode.put("field_name", map.get("field_name"));
 			fieldNode.put("field_value", map.get("field_value"));
+			if(map.containsKey("field_value_audio")){
+				fieldNode.put("field_value_audio", map.get("field_value_audio"));
+			}
 			dataArray.put(fieldNode);
 		}
 
@@ -2091,8 +2095,7 @@ public class JSONReader {
 	}
 
 	public String getCurrentDocumentID() {
-		
-		return currentDocumentID.substring(0, 5);
+		return currentDocumentID;
 	}
 
 	public void setCurrentDocumentID(String currentDocumentID) {

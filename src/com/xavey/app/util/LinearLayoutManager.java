@@ -36,12 +36,16 @@ public class LinearLayoutManager {
 		for(int i=0; i<linearLayout.getChildCount();i++){
 			View view = linearLayout.getChildAt(i);
 			if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id)!=null){
-				targetLayout = (LinearLayout) view;
+				if(!view.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+					targetLayout = (LinearLayout) view;
 			}
 		}
 		if(targetLayout!=null){
 			if(targetLayout.getTag(R.id.field_id)!=null)
-				return targetLayout.getTag(R.id.field_id).toString();
+				if(!targetLayout.getTag(R.id.layout_id).toString().equals("noteLayout"))
+					return targetLayout.getTag(R.id.field_id).toString();
+				else
+					return "noTag";
 			else
 				return "noTag";
 		}
