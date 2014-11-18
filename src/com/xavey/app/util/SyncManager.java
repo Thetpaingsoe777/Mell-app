@@ -134,7 +134,7 @@ public class SyncManager {
 		// ဟိုထဲရောက်ရင် getDocumentToSubmit ပြန်ခေါ်ယုံပဲ...
 	}
 
-	private class DocumentSubmitTask extends AsyncTask<JSONArray, Void, String> {
+	private class DocumentSubmitTask extends AsyncTask<JSONArray, Void, RestClient> {
 		private ProgressDialog Dialog = new ProgressDialog(context.getApplicationContext());
 		XaveyProperties xavey_properties;
 		String documentUploadURL = "";
@@ -147,37 +147,39 @@ public class SyncManager {
 		}
 
 		@Override
-		protected String doInBackground(JSONArray... params) {
+		protected RestClient doInBackground(JSONArray... params) {
 			JSONArray jsonArray = params[0];
-			String response = "";
 			RestClient c = new RestClient(documentUploadURL, jsonArray);
 			c.setMainActivity(ApplicationValues.mainActivity);
 			try {
 				String token = ApplicationValues.loginUser.getToken();
 				c.AddHeader("x-access-token", token);
 				c.Execute(RequestMethod.POST);
-//				Log.i("document submit errorMsg : ", c.getErrorMessage());
-//				Log.i("document submit responseCode : ", c.getResponseCode()
-//						+ "");
-				response = c.getResponse();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return response;
+			return c;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			// Dialog.setMessage("Done..");
-			// Dialog.dismiss();
-			Document document = getDocumentToSubmit();
-			if(result.length()>0 || result.equals("null")){
-				dbHelper.updateDocument(document);
-				dbHelper.updateDocumentSubmittedByJSON(document, "1");
-				// update document
-			}else{
-				dbHelper.updateDocumentSubmittedByJSON(document, "0");
+		protected void onPostExecute(RestClient rc) {
+			if(rc.getResponseCode()==200){
+				String result = rc.getResponse();
+				Document document = getDocumentToSubmit();
+				if(result.length()>0){
+					try {
+			            JSONArray jsonDoc = (new JSONArray(result));
+			            String _id = jsonDoc.getJSONObject(0).getString("_id"); //the id generated from mongo insert()
+			            if(_id.length()>0){
+			            	dbHelper.updateDocument(document);
+							dbHelper.updateDocumentSubmittedByJSON(document, "1");
+			            }
+			        } catch (JSONException e) {
+			            e.printStackTrace();
+			        }
+				}else{
+					dbHelper.updateDocumentSubmittedByJSON(document, "0");
+				}
 			}
 		}
 	}
