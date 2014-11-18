@@ -9,7 +9,7 @@ public class TypeFaceManager {
 	
 	public TypeFaceManager(Activity act){
 		activity_ = act;
-		zawgyiTypeFace = Typeface.createFromAsset(activity_.getAssets(), "fonts/zawgyi.ttf");
+		zawgyiTypeFace = Typeface.createFromAsset(activity_.getAssets(), "fonts/zawgyione2008.ttf");
 		myanmar3TypeFace = Typeface.createFromAsset(activity_.getAssets(), "fonts/myanmar3.ttf");
 	}
 	

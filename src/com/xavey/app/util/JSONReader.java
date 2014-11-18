@@ -510,7 +510,7 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
-						setZawGyiTypeFace(tvdescription);
+						//setZawGyiTypeFace(tvdescription);
 						radioLayout.addView(tvdescription);
 
 						final RadioGroup rg = new RadioGroup(activity);
@@ -535,7 +535,7 @@ public class JSONReader {
 							boolean extra = obj.getBoolean("extra"); // thinking there is always extra , true and false
 							
 							RadioButton radioButton = new RadioButton(activity);
-							radioButton.setId(View.generateViewId());
+							radioButton.setId(Utils.generateViewId()); //View.generateViewId(); <= only support for lvl17 n above
 							radioButton.setText(text);
 							radioButton.setTextSize(radioButtonTextSize);
 							radioButton.setTag(R.id.radio_value, tag);
@@ -1245,7 +1245,7 @@ public class JSONReader {
 						tvLabel.setText(textLabel);
 						tvLabel.setTextSize(labelTextSize);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						//setZawGyiTypeFace(tvLabel);
 						noteLayout.addView(tvLabel);
 
 						// adding description
@@ -1254,7 +1254,7 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvdescription);
+						//setZawGyiTypeFace(tvdescription);
 						noteLayout.addView(tvdescription);
 
 						parentLayout.addView(noteLayout);
@@ -1885,23 +1885,23 @@ public class JSONReader {
 		String status = zawGyiFontStatus;
 		if(v.getClass().getName().toString().equals("android.widget.TextView") && status.equals("on")){
 			TextView tv = (TextView) v;
-			tv.setTypeface(typeface.getZawGyiTypeFace());
+			//tv.setTypeface(typeface.getZawGyiTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.EditText") && status.equals("on")){
 			EditText edt = (EditText) v;
-			edt.setTypeface(typeface.getZawGyiTypeFace());
+			//edt.setTypeface(typeface.getZawGyiTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.RadioButton") && status.equals("on")){
 			RadioButton rdButton = (RadioButton) v;
-			rdButton.setTypeface(typeface.getZawGyiTypeFace());
+			//rdButton.setTypeface(typeface.getZawGyiTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.CheckBox") && status.equals("on")){
 			CheckBox chkBox = (CheckBox) v;
-			chkBox.setTypeface(typeface.getZawGyiTypeFace());
+			//chkBox.setTypeface(typeface.getZawGyiTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.Button") && status.equals("on")){
 			Button button = (Button) v;
-			button.setTypeface(typeface.getZawGyiTypeFace());
+			//button.setTypeface(typeface.getZawGyiTypeFace());
 		}
 	}
 	
