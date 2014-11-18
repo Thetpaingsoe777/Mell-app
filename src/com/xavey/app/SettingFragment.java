@@ -1,31 +1,20 @@
 package com.xavey.app;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import com.xavey.app.util.IPManager;
-
 import android.app.Fragment;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.RadioButton;
+
+import com.xavey.app.model.FONT;
 
 public class SettingFragment extends Fragment {
 
 	public static final String ITEM_NAME = "Setting_";
 	
-	TextView errorMsg;
-	EditText etServerIPAddress;
-	Button btnSave;
-	IPManager ipManager;
+	RadioButton rb_default, rb_zawgyi, rb_myanmar3;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,44 +26,56 @@ public class SettingFragment extends Fragment {
 		getActivity().getActionBar().setIcon(R.drawable.setting);
 		getActivity().getActionBar().setTitle("Setting");
 		
-		etServerIPAddress.setText(ipManager.getServerIPAddress());
-		
-		btnSave.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				String ipAddress = etServerIPAddress.getText().toString();
-				if(ipAddress.trim().length()==0){
-					errorMsg.setTextColor(Color.parseColor("#E61C1F"));
-					errorMsg.setText("IP address could not be blank!!");
-				}
-				else{
-					ipManager.saveServerIPAddress(ipAddress);
-					errorMsg.setTextColor(Color.parseColor("#3B7AED"));
-					errorMsg.setText("successfully saved");
-					Properties prop = new Properties();
-					InputStream in = getClass().getResourceAsStream("/com/xavey/app/util/xavey_properties.properties");
-					try {
-						prop.load(in);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					prop.setProperty("serverIP", ipAddress);
-				}
-			}
-		});
 		return view;
 	}
 	
 	private void loadUI(View v){
-		etServerIPAddress = (EditText) v.findViewById(R.id.etServerIpAddress);
-		btnSave = (Button) v.findViewById(R.id.btnSaveIP_Setting);
-		errorMsg = (TextView) v.findViewById(R.id.tvErrorMsg);
-		ipManager = new IPManager(getActivity().getApplicationContext());
+		loadFontSetting(v);
 		MainActivity.optionMenu.getItem(0).setVisible(false);
 	}
 	
+	private void loadFontSetting(View v){
+		rb_default = (RadioButton) v.findViewById(R.id.rb_default);
+		rb_zawgyi = (RadioButton) v.findViewById(R.id.rb_zawgyi);
+		rb_myanmar3 = (RadioButton) v.findViewById(R.id.rb_myanmar3);
+		
+		switch (ApplicationValues.CURRENT_FONT) {
+		case DEFAULT_:
+			rb_default.setChecked(true);
+			break;
+		case ZAWGYI:
+			rb_zawgyi.setChecked(true);
+			break;
+		case MYANMAR3:
+			rb_myanmar3.setChecked(true);
+			break;
+		default:
+			break;
+		}
+		
+		rb_default.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ApplicationValues.CURRENT_FONT = FONT.DEFAULT_;
+			}
+		});
+
+		rb_zawgyi.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ApplicationValues.CURRENT_FONT = FONT.ZAWGYI;
+			}
+		});
+		rb_myanmar3.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				ApplicationValues.CURRENT_FONT = FONT.MYANMAR3;
+			}
+		});
+	}
 
 	@Override
 	public void onDestroyView() {

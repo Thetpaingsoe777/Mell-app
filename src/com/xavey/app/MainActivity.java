@@ -7,16 +7,17 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.content.pm.ActivityInfo;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -69,6 +70,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		sharedPreferences = getSharedPreferences("XaveyFONTPref", Context.MODE_PRIVATE);
+		editor = sharedPreferences.edit();
 //		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
 		String root = Environment.getExternalStorageDirectory().toString();
@@ -148,6 +151,31 @@ public class MainActivity extends Activity {
 			customHandler.postDelayed(this, 1000 * 30);
 		}
 	};
+	
+	SharedPreferences sharedPreferences = null;
+	Editor editor=null; 
+
+	protected void onStop() {
+		super.onStop();
+		switch (ApplicationValues.CURRENT_FONT) {
+		case DEFAULT_:
+			editor.putString("font", "DEFAULT_");
+			editor.commit();
+			break;
+		case ZAWGYI:
+			editor.putString("font", "ZAWGYI");
+			editor.commit();
+			break;
+		case MYANMAR3:
+			editor.putString("font", "MYANMAR3");
+			editor.commit();
+			break;
+		default:
+			break;
+		}
+	};
+	
+	
 
 	private void initializeUI() {
 		session = new SessionManager(getApplicationContext());
@@ -179,16 +207,12 @@ public class MainActivity extends Activity {
 	}
 
 	private void addDrawerItem() {
-		itemList.add(new DrawerItem(getString(R.string.str_home),
-				R.drawable.orkut));
-		itemList.add(new DrawerItem(getString(R.string.str_export_csv),
-				R.drawable.orkut));
-		itemList.add(new DrawerItem(getString(R.string.str_history),
-				R.drawable.orkut));
-		itemList.add(new DrawerItem(getString(R.string.str_about),
-				R.drawable.orkut));
-		itemList.add(new DrawerItem(getString(R.string.str_logout),
-				R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.str_home),R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.str_export_csv),	R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.str_history),R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.action_settings), R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.str_about),	R.drawable.orkut));
+		itemList.add(new DrawerItem(getString(R.string.str_logout),	R.drawable.orkut));
 	}
 
 	public void selectItem(int position) {
@@ -214,12 +238,19 @@ public class MainActivity extends Activity {
 			setTitle(itemList.get(position).getItemName());
 			break;
 		case 3:
-			fragment = new AboutFragment();
-			args.putString("About", itemList.get(position)
+			fragment = new SettingFragment();
+			args.putString("Setting", itemList.get(position)
 					.getItemName());
 			setTitle(itemList.get(position).getItemName());
 			break;
 		case 4:
+			fragment = new AboutFragment();
+			args.putString("About", itemList.get(position)
+					.getItemName());
+			String itemName = itemList.get(position).getItemName();
+			setTitle(itemName);
+			break;
+		case 5:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 			alertDialogBuilder.setTitle("Confirm");

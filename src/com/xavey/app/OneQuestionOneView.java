@@ -16,10 +16,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
@@ -70,8 +68,6 @@ public class OneQuestionOneView extends FragmentActivity {
 	ViewPager vPager;
 	int pageTotal;
 
-	Typeface zawGyiTypeFace;
-	Typeface myanmarTypeFace;
 
 	Intent intent;
 	JSONReader jsonReader;
@@ -1081,7 +1077,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					e.printStackTrace();
 				}
 				// just put this outside....
-				// if internet avaliable or not.., it will store locally first
+				// whatever internet's avaliable or not.., it will store in local first
 				//---------------------------------------------------------
 
 				// offline mode
@@ -1454,7 +1450,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						// if that's label or error message
 						if (!textView.getTag().toString().equals("errorMsg")) {
 							// this is label
-
 						}
 					} else if (subClass.getName().equals(
 							"android.widget.ImageView")) {
@@ -1469,7 +1464,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return map;
 	}
-	
+
 	private RadioButton getSelectedRadioButtonMyRadioGroup(
 			RadioGroup radioGroup) {
 		RadioButton selectedButton = null;
@@ -1501,8 +1496,6 @@ public class OneQuestionOneView extends FragmentActivity {
 	private void loadUI() {
 		getScreenInfo();
 		TypeFaceManager tfManager = new TypeFaceManager(this);
-		zawGyiTypeFace = tfManager.getZawGyiTypeFace();
-		myanmarTypeFace = tfManager.getMyanmar3TypeFace();
 		getActionBar().setIcon(R.drawable.home);
 		getActionBar().setTitle("Home");
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -1522,7 +1515,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		screenWidth = dm.widthPixels;
 		screenHeight = dm.heightPixels;
 	}
-	
+
 	private void hideKeyboard(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;
 		int childCount = parrentLayout.getChildCount();
@@ -1547,8 +1540,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 			    }
 		}
-		
-	    
+
 	}
 
 	@Override

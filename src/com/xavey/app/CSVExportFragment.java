@@ -45,7 +45,7 @@ public class CSVExportFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.csv_export_fragment,
 				container, false);
-		getActivity().getActionBar().setIcon(R.drawable.csv_large_icon);
+		getActivity().getActionBar().setIcon(R.drawable.csv);
 		getActivity().getActionBar().setTitle("CSV Export");
 		loadUI(rootView);
 

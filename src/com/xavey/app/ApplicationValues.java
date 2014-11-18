@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+
+import com.xavey.app.model.FONT;
 import com.xavey.app.model.Form;
 import com.xavey.app.model.User;
 
@@ -28,6 +30,8 @@ public class ApplicationValues {
 	public static Activity mainActivity = null;
 
 	public static File XAVEY_DIRECTORY = null; 
+	
+	public static FONT CURRENT_FONT = FONT.DEFAULT_;
 	
 	
 	public static String getDeviceID(Activity activity) {

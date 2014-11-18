@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#abcdef"
     android:padding="30dp"
      >
 
@@ -22,51 +21,56 @@
         android:layout_marginTop="3dp"
         />
 
-    <TextView
-        android:id="@+id/tvServerIPAddress_setting"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvSettingTitle"
-        android:text="Server IP Address :"
-        android:layout_marginTop="60dp"
-        android:layout_alignBaseline="@+id/etServerIpAddress"
-        android:textSize="15sp" />
-    
-    <EditText 
-            android:id="@id/etServerIpAddress"
-            android:layout_below="@id/tvSettingTitle"
-            android:layout_toRightOf="@id/tvServerIPAddress_setting"
-            android:textSize="15sp"
-            android:layout_width="150dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="60dp"
-            android:background="@android:color/background_light"
-            android:labelFor="@id/etServerIpAddress"
-            android:inputType="text"
-            android:ems="16"
-            android:padding="5dp"
-            />
-    
-    <TextView 
-        android:id="@+id/tvErrorMsg"
-        android:text=""
-        android:layout_below="@id/etServerIpAddress"
-        android:layout_toRightOf="@id/tvServerIPAddress_setting"
-        android:textSize="13sp"
-        android:layout_marginTop="2dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        />
-    
-    <Button
-        android:id="@+id/btnSaveIP_Setting"
+    <LinearLayout 
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_below="@id/etServerIpAddress"
-        android:layout_marginTop="25dp"
-        android:text="Save"
-         />
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical"
+       	android:layout_below="@id/tvSettingTitle"
+       	android:layout_marginTop="5dp"
+        >
+        
+        
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Font Setting"
+        android:textSize="16sp" />
+
+    <RadioGroup
+        android:id="@+id/fontRadioGroupSetting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="5dp"
+        >
+
+        <RadioButton
+            android:id="@+id/rb_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Default" 
+            android:textSize="14sp"
+            />
+
+        <RadioButton
+            android:id="@+id/rb_zawgyi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zawgyi" 
+            android:textSize="14sp"
+            />
+
+        <RadioButton
+            android:id="@+id/rb_myanmar3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Myanmar3" 
+            android:textSize="14sp"
+            />
+    </RadioGroup>
+        
+    </LinearLayout>
+    
+    
 
 </RelativeLayout>

@@ -1,24 +1,34 @@
 package com.xavey.app.util;
 
+import com.xavey.app.ApplicationValues;
+import com.xavey.app.model.FONT;
+
 import android.app.Activity;
 import android.graphics.Typeface;
 
 public class TypeFaceManager {
 	Typeface zawgyiTypeFace, myanmar3TypeFace;
 	Activity activity_;
-	
-	public TypeFaceManager(Activity act){
+
+	public TypeFaceManager(Activity act) {
 		activity_ = act;
-		zawgyiTypeFace = Typeface.createFromAsset(activity_.getAssets(), "fonts/zawgyione2008.ttf");
-		myanmar3TypeFace = Typeface.createFromAsset(activity_.getAssets(), "fonts/myanmar3.ttf");
+		zawgyiTypeFace = Typeface.createFromAsset(activity_.getAssets(),
+				"fonts/zawgyione2008.ttf");
+		myanmar3TypeFace = Typeface.createFromAsset(activity_.getAssets(),
+				"fonts/myanmar3.ttf");
 	}
-	
-	public Typeface getZawGyiTypeFace(){
-		return zawgyiTypeFace;
+
+	public Typeface getTypeFace() {
+		switch (ApplicationValues.CURRENT_FONT) {
+		case DEFAULT_:
+			return null;
+		case ZAWGYI:
+			return zawgyiTypeFace;
+		case MYANMAR3:
+			return myanmar3TypeFace;
+		default:
+			return null;
+		}
 	}
-	
-	public Typeface getMyanmar3TypeFace(){
-		return myanmar3TypeFace;
-	}
-	
+
 }

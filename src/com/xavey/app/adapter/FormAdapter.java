@@ -81,7 +81,7 @@ public class FormAdapter extends BaseAdapter {
 		String zawGyiFontStatus = xaveyProperties.getZawgyiFontStatus();
 		TypeFaceManager tfManager=new TypeFaceManager((Activity) activity);
 		if(xaveyProperties.getZawgyiFontStatus().equals("on")){
-			holder.formTitle.setTypeface(tfManager.getZawGyiTypeFace());
+			holder.formTitle.setTypeface(tfManager.getTypeFace());
 		}
 		holder.formID = form.getForm_id();
 		return convertView;

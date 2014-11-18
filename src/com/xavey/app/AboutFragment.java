@@ -17,7 +17,6 @@ public class AboutFragment extends Fragment {
 	String about_text = "";
 //	TextView text;
 	
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -25,6 +24,8 @@ public class AboutFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.about_fragment, container, false);
 //		text = (TextView) rootView.findViewById(R.id.tvAboutText);
 //		text.setText(about_text);
+		getActivity().getActionBar().setIcon(R.drawable.about);
+		getActivity().getActionBar().setTitle("About");
 		return rootView;
 	}
 

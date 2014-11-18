@@ -99,11 +99,13 @@ public class JSONReader {
 		LayoutParams labelLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		//labelLayoutParams.setMargins(10, 10, 10, 60);
-		labelLayoutParams.setMargins(10, 0, 10, 10);
+		//labelLayoutParams.height = 30;
+		labelLayoutParams.setMargins(10, 10, 10, 10);
 
 		LayoutParams descriptionLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-		descriptionLayoutParams.setMargins(10, 0, 10, 10);
+		//descriptionLayoutParams.height = 30;
+		descriptionLayoutParams.setMargins(10, 10, 10, 10);
 
 		LayoutParams innerLayoutParams = new LayoutParams(LayoutWidth,
 				LayoutParams.WRAP_CONTENT);
@@ -186,7 +188,8 @@ public class JSONReader {
 						tvLabel.setText(textLabel);
 						tvLabel.setTextSize(labelTextSize);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvLabel.setPadding(0, 5, 0, 5);
+						setTypeFace(tvLabel);
 						textLayout.addView(tvLabel);
 
 						// adding description
@@ -196,12 +199,14 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvdescription.setPadding(0, 5, 0, 5);
+						tvdescription.setGravity(Gravity.CENTER_VERTICAL);
+						setTypeFace(tvdescription);
 						textLayout.addView(tvdescription);
 						
 						EditText ed1 = new EditText(activity);
 						ed1.setTextSize(16);
-						ed1.setTypeface(typeface.getMyanmar3TypeFace());
+						ed1.setTypeface(typeface.getTypeFace());
 						String fieldName = fields.get("field_name").toString();
 						String fieldHelp = "-";
 						if (fields.containsKey("field_help"))
@@ -212,13 +217,14 @@ public class JSONReader {
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
-						setZawGyiTypeFace(ed1);
+						setTypeFace(ed1);
 						textLayout.addView(ed1);
 						
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setZawGyiTypeFace(errorMsg);
+						errorMsg.setPadding(0, 5, 0, 5);
+						setTypeFace(errorMsg);
 						errorMsg.setGravity(Gravity.CENTER_VERTICAL);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
@@ -303,21 +309,22 @@ public class JSONReader {
 								isFieldRequired(fields.get("field_required")));
 						tvLabel.setTag(R.id.field_label_id, textLabel);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvLabel.setPadding(0, 5, 0, 5);
+						setTypeFace(tvLabel);
 						numberLayout.addView(tvLabel);
 
 						// adding description
 						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
-						tvLabel.setText(description);
-						tvLabel.setTextSize(18);
-						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(18);
+						tvdescription.setLayoutParams(labelLayoutParams);
+						tvdescription.setPadding(0, 5, 0, 5);
+						setTypeFace(tvdescription);
 						numberLayout.addView(tvdescription);
 
 						EditText ed1 = new EditText(activity);
 						ed1.setTextSize(16);
-						ed1.setTypeface(typeface.getMyanmar3TypeFace());
 						String fieldName = fields.get("field_name").toString();
 						String fieldHelp = "-";
 						if (fields.containsKey("field_help"))
@@ -329,7 +336,7 @@ public class JSONReader {
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
-						setZawGyiTypeFace(ed1);
+						setTypeFace(ed1);
 						// ed1.setEms(50);
 						ed1.setInputType(InputType.TYPE_CLASS_NUMBER);
 						ed1.setKeyListener(DigitsKeyListener
@@ -339,7 +346,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						numberLayout.addView(errorMsg);
@@ -404,16 +411,18 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_name_id, fieldName);
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvLabel.setPadding(0, 5, 0, 5);
+						setTypeFace(tvLabel);
 						datetimeLayout.addView(tvLabel);
 						
 						// adding description
 						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
-						tvLabel.setText(description);
-						tvLabel.setTextSize(18);
-						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(18);
+						tvdescription.setLayoutParams(labelLayoutParams);
+						tvdescription.setPadding(0, 5, 0, 5);
+						setTypeFace(tvdescription);
 						datetimeLayout.addView(tvdescription);
 
 						// date
@@ -501,7 +510,8 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setGravity(Gravity.CENTER_VERTICAL);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvLabel.setPadding(0, 5, 0, 5);
+						setTypeFace(tvLabel);
 						radioLayout.addView(tvLabel);
 						
 						// adding description
@@ -510,7 +520,8 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
-						//setZawGyiTypeFace(tvdescription);
+						tvdescription.setPadding(0, 5, 0, 5);
+						setTypeFace(tvdescription);
 						radioLayout.addView(tvdescription);
 
 						final RadioGroup rg = new RadioGroup(activity);
@@ -544,6 +555,7 @@ public class JSONReader {
 							radioButton.setTag(R.id.is_radiobutton_selected, false);
 							radioButton.setSelected(true);
 							
+							
 							if(!tag.equals(field_default_value)){
 								radioButton.setSelected(false);
 							}
@@ -559,7 +571,7 @@ public class JSONReader {
 							if (default_value == (j + 1)) {
 								radioButton.setChecked(true);
 							}
-							setZawGyiTypeFace(radioButton);
+							setTypeFace(radioButton);
 							
 							//rg.addView(radioButton, j, layoutParams);\
 							LinearLayout radioButtonLine = new LinearLayout(activity);
@@ -759,7 +771,7 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						checkBoxLayout.addView(tvLabel);
 						
 						// adding description
@@ -768,7 +780,7 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvdescription);
 						checkBoxLayout.addView(tvdescription);
 
 						JSONArray dataset = (JSONArray) fields
@@ -792,7 +804,7 @@ public class JSONReader {
 									LayoutParams.WRAP_CONTENT);
 							cbParams.setMargins(15, 5, 15, 5);
 							cb.setLayoutParams(cbParams);
-							setZawGyiTypeFace(cb);
+							setTypeFace(cb);
 							if (default_value == (j + 1)) {
 								cb.setChecked(true);
 							}
@@ -802,7 +814,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						checkBoxLayout.addView(errorMsg);
@@ -874,17 +886,17 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						locationLayout.addView(tvLabel);
 
 						// adding description
 						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
-						tvLabel.setPadding(10, 0, 0, 0);
-						tvLabel.setText(description);
-						tvLabel.setTextSize(18);
-						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvdescription.setPadding(10, 0, 0, 0);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(18);
+						tvdescription.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvdescription);
 						locationLayout.addView(tvdescription);
 						
 						int sevenPercentHeight = displayManager.getHeigth(7);
@@ -903,8 +915,8 @@ public class JSONReader {
 						edtLong.setHint("Longitude");
 						edtLong.setPadding(5, 0, 0, 0);
 						edtLong.setLayoutParams(editTextLayoutParam); //
-						setZawGyiTypeFace(edtLat);
-						setZawGyiTypeFace(edtLong);
+						setTypeFace(edtLat);
+						setTypeFace(edtLong);
 						edtLong.setBackgroundResource(R.drawable.edittext_style);
 						locationLayout.addView(edtLat);
 						locationLayout.addView(edtLong);
@@ -932,12 +944,12 @@ public class JSONReader {
 								}
 							}
 						});
-						setZawGyiTypeFace(btnGPS);
+						setTypeFace(btnGPS);
 						
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						locationLayout.addView(errorMsg);
@@ -1012,17 +1024,17 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						drawingLayout.addView(tvLabel);
 						
 						// adding description
 						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
-						tvLabel.setPadding(10, 0, 0, 0);
-						tvLabel.setText(description);
-						tvLabel.setTextSize(18);
-						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						tvdescription.setPadding(10, 0, 0, 0);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(18);
+						tvdescription.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvdescription);
 						drawingLayout.addView(tvdescription);
 
 						ImageView imgView = new ImageView(
@@ -1040,7 +1052,7 @@ public class JSONReader {
 						int sevenPerscentHeight = displayManager.getHeigth(7);
 						LayoutParams buttonLayoutParams = new LayoutParams(
 								LayoutParams.MATCH_PARENT, sevenPerscentHeight);
-						setZawGyiTypeFace(button);
+						setTypeFace(button);
 						buttonLayoutParams.setMargins(30, 20, 30, 20);
 						button.setLayoutParams(buttonLayoutParams);
 						button.setText("Add");
@@ -1073,7 +1085,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						drawingLayout.addView(errorMsg);
@@ -1147,7 +1159,7 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						photoLayout.addView(tvLabel);
 
 						ImageView photoPreView = new ImageView(
@@ -1166,7 +1178,7 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								sevenPerscentHeight);
 						buttonLayoutParams.setMargins(30, 20, 30, 10);
-						setZawGyiTypeFace(button);
+						setTypeFace(button);
 						button.setLayoutParams(buttonLayoutParams);
 						button.setText("Select Photo");
 						button.setBackgroundResource(R.drawable.button_border);
@@ -1192,7 +1204,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						photoLayout.addView(errorMsg);
@@ -1245,7 +1257,7 @@ public class JSONReader {
 						tvLabel.setText(textLabel);
 						tvLabel.setTextSize(labelTextSize);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						//setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						noteLayout.addView(tvLabel);
 
 						// adding description
@@ -1254,7 +1266,7 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(labelLayoutParams);
-						//setZawGyiTypeFace(tvdescription);
+						setTypeFace(tvdescription);
 						noteLayout.addView(tvdescription);
 
 						parentLayout.addView(noteLayout);
@@ -1326,7 +1338,7 @@ public class JSONReader {
 						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
-						setZawGyiTypeFace(tvLabel);
+						setTypeFace(tvLabel);
 						matrixOptionSingleLayout.addView(tvLabel);
 						
 						
@@ -1334,7 +1346,7 @@ public class JSONReader {
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setZawGyiTypeFace(errorMsg);
+						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						matrixOptionSingleLayout.addView(errorMsg);
@@ -1875,36 +1887,42 @@ public class JSONReader {
 		document_json.put("org", orgChildNode);
 		document_json.put("form", formChildNode);
 		document_json.put("worker", workerChildNode);
+		document_json.put("document_id", document.getDocument_id());
 
 		JSONArray mainArray = new JSONArray();
 		mainArray.put(document_json);
 		return mainArray;
 	}
 
-	private void setZawGyiTypeFace(View v){
+	private void setTypeFace(View v){
 		String status = zawGyiFontStatus;
 		if(v.getClass().getName().toString().equals("android.widget.TextView") && status.equals("on")){
 			TextView tv = (TextView) v;
-			//tv.setTypeface(typeface.getZawGyiTypeFace());
+			if(typeface.getTypeFace()!=null)
+				tv.setTypeface(typeface.getTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.EditText") && status.equals("on")){
 			EditText edt = (EditText) v;
-			//edt.setTypeface(typeface.getZawGyiTypeFace());
+			if(typeface.getTypeFace()!=null)
+				edt.setTypeface(typeface.getTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.RadioButton") && status.equals("on")){
 			RadioButton rdButton = (RadioButton) v;
-			//rdButton.setTypeface(typeface.getZawGyiTypeFace());
+			if(typeface.getTypeFace()!=null)
+				rdButton.setTypeface(typeface.getTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.CheckBox") && status.equals("on")){
 			CheckBox chkBox = (CheckBox) v;
-			//chkBox.setTypeface(typeface.getZawGyiTypeFace());
+			if(typeface.getTypeFace()!=null)
+				chkBox.setTypeface(typeface.getTypeFace());
 		}
 		else if(v.getClass().getName().toString().equals("android.widget.Button") && status.equals("on")){
 			Button button = (Button) v;
-			//button.setTypeface(typeface.getZawGyiTypeFace());
+			if(typeface.getTypeFace()!=null)
+				button.setTypeface(typeface.getTypeFace());
 		}
 	}
-	
+
 	public String readValueFromLayout(
 			LinearLayout parentLayout) {
 			// -1 don't care the last room cuz the last room is submitLayout
