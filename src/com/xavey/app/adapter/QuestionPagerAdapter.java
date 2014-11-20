@@ -41,6 +41,7 @@ public class QuestionPagerAdapter extends SmartFragmentStatePagerAdapter {
 				if(className.equals("android.widget.RelativeLayout")){
 					RelativeLayout upperLayout = (RelativeLayout) view;
 					for(int z=0; z<upperLayout.getChildCount(); z++){
+						if(upperLayout.getChildAt(z).getTag()!=null)
 						if(upperLayout.getChildAt(z).getTag().equals("index")){
 							TextView index = (TextView) upperLayout.getChildAt(z);
 							index.setText(i+1+"/"+numberOfPages);

@@ -50,8 +50,7 @@
         android:layout_alignLeft="@+id/edtPwd"
         android:layout_below="@+id/TextView01"
         android:layout_marginTop="17dp"
-        android:ems="10"
-        android:hint="Email"
+        android:hint="User name"
         android:inputType="text" >
 
         <requestFocus />

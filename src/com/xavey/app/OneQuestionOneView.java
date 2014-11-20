@@ -42,6 +42,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -170,13 +171,13 @@ public class OneQuestionOneView extends FragmentActivity {
 						.get(currentPosition);
 				for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
 					View view = currentParentLayout.getChildAt(i);
-					Object obj = currentParentLayout.getChildAt(i);
-					if (obj.getClass().getName()
-							.equals("android.widget.LinearLayout")
-							&& view.getTag(R.id.layout_id) != null && !view.getTag(R.id.layout_id).toString().equals("recordingLayout")) {
-						currentLayout = (LinearLayout) view;
+					if (view.getClass().getName().equals("android.widget.ScrollView")) {
+						ScrollView scroll = (ScrollView) view;
+						LinearLayout linearLayout = (LinearLayout) scroll.getChildAt(0);
+						if(linearLayout.getTag(R.id.layout_id) != null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+							currentLayout = linearLayout;
 					}
-					if (obj.getClass().getName()
+					if (view.getClass().getName()
 							.equals("android.widget.RelativeLayout")) {
 						currentUpperLayout = (RelativeLayout) view;
 					}
@@ -684,9 +685,10 @@ public class OneQuestionOneView extends FragmentActivity {
 					String className = nextLayout.getChildAt(i).getClass().getName();
 					View v = nextLayout.getChildAt(i);
 					
-					if(className.equals("android.widget.LinearLayout")){
-						innerLayout = (LinearLayout) nextLayout.getChildAt(i);
-						String layoutID = v.getTag(R.id.layout_id).toString();
+					if(className.equals("android.widget.ScrollView")){
+						ScrollView scroll = (ScrollView) v;
+						innerLayout = (LinearLayout) scroll.getChildAt(0);
+						String layoutID = innerLayout.getTag(R.id.layout_id).toString();
 						if(innerLayout.getTag(R.id.layout_id)!=null && !layoutID.equals("recordingLayout")){
 							return innerLayout;
 						}
@@ -1521,8 +1523,9 @@ public class OneQuestionOneView extends FragmentActivity {
 		int childCount = parrentLayout.getChildCount();
 		for(int i=0; i<parrentLayout.getChildCount(); i++){
 			String className = parrentLayout.getChildAt(i).getClass().getName().toString();
-			if(className.equals("android.widget.LinearLayout")){
-				innerLayout = (LinearLayout) parrentLayout.getChildAt(i);
+			if(className.equals("android.widget.ScrollView")){
+				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
+				innerLayout = (LinearLayout) scroll.getChildAt(0);
 			}
 		}
 		String innerLayoutID = innerLayout.getTag(R.id.layout_id).toString();

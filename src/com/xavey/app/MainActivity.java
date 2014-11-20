@@ -175,8 +175,6 @@ public class MainActivity extends Activity {
 		}
 	};
 	
-	
-
 	private void initializeUI() {
 		session = new SessionManager(getApplicationContext());
 		itemList = new ArrayList<DrawerItem>();
@@ -543,9 +541,15 @@ public class MainActivity extends Activity {
 			selectItem(0); // this is like refreshing ;)
 			setRefreshActionButtonState(false);
 		}
-
-		
-
+	}
+	
+	
+	@Override
+	public void onBackPressed() {
+		Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+    	homeIntent.addCategory( Intent.CATEGORY_HOME );
+    	homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    	startActivity(homeIntent);
 	}
 
 }

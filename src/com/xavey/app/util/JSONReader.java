@@ -34,6 +34,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -105,7 +106,7 @@ public class JSONReader {
 		LayoutParams descriptionLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		//descriptionLayoutParams.height = 30;
-		descriptionLayoutParams.setMargins(10, 10, 10, 10);
+		descriptionLayoutParams.setMargins(10, 10, 5, 10);
 
 		LayoutParams innerLayoutParams = new LayoutParams(LayoutWidth,
 				LayoutParams.WRAP_CONTENT);
@@ -121,17 +122,19 @@ public class JSONReader {
 				0, 0);
 		extraValueLayoutParamsDisappear.setMargins(25, 0, 25, 5);
 		editTextLayoutParams.setMargins(15, 10, 15, 10);
-		
+
 		LayoutParams errorMsgLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		errorMsgLayoutParams.setMargins(10, 10, 10, 0);
-		
+
 		LayoutParams radioButtonLineLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT);
 		radioButtonLineLayoutParams.setMargins(15, 10, 15, 5);
-		
+
 		float labelTextSize = 18;
 		float descriptionTextSize = 18;
 		float radioButtonTextSize = 16;
+		
+		String lineColor = "#76C4F5";
 		
 		// -------------------------------------------------------------
 
@@ -140,6 +143,10 @@ public class JSONReader {
 			for (Object key : fields.keySet()) {
 				if (key.equals("field_type")) {
 					if (fields.get(key).equals("text")) {
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
+						                                             LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -163,6 +170,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout textLayout = new LinearLayout(activity);
@@ -201,6 +209,7 @@ public class JSONReader {
 						tvdescription.setLayoutParams(descriptionLayoutParams);
 						tvdescription.setPadding(0, 5, 0, 5);
 						tvdescription.setGravity(Gravity.CENTER_VERTICAL);
+						tvdescription.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
 						setTypeFace(tvdescription);
 						textLayout.addView(tvdescription);
 						
@@ -229,7 +238,9 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						textLayout.addView(errorMsg);
-						parentLayout.addView(textLayout);
+						
+						scroll.addView(textLayout);
+						parentLayout.addView(scroll);
 						
 						// audio stuff
 						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
@@ -243,10 +254,14 @@ public class JSONReader {
 							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
 							parentLayout.addView(recordingLayout);
 						}
-						
+
 						layoutList.add(parentLayout);
 					}
 					if (fields.get(key).equals("number")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -272,6 +287,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout numberLayout = new LinearLayout(activity);
@@ -343,6 +359,7 @@ public class JSONReader {
 								.getInstance("0123456789."));
 						numberLayout.addView(ed1);
 
+						
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
@@ -350,9 +367,15 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						numberLayout.addView(errorMsg);
-						parentLayout.addView(numberLayout);
+						
+						scroll.addView(numberLayout);
+						parentLayout.addView(scroll);
+						
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("datetime")) {
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -376,6 +399,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout datetimeLayout = new LinearLayout(activity);
@@ -441,14 +465,17 @@ public class JSONReader {
 						lp.setMargins(0, 0, 0, 0);
 						timePicker.setLayoutParams(lp);
 						datetimeLayout.addView(timePicker);
-						parentLayout.addView(datetimeLayout);
+						
+						scroll.addView(datetimeLayout);
+						parentLayout.addView(scroll);
+
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("options")) {
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						LayoutParams parentLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT);
+						LayoutParams parentLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 						RelativeLayout upLayout = new RelativeLayout(activity);
@@ -467,6 +494,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+//						upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout radioLayout = new LinearLayout(activity);
@@ -544,7 +572,7 @@ public class JSONReader {
 							String tag = obj.getString("value");
 							String skip = obj.getString("field_skip");
 							boolean extra = obj.getBoolean("extra"); // thinking there is always extra , true and false
-							
+
 							RadioButton radioButton = new RadioButton(activity);
 							radioButton.setId(Utils.generateViewId()); //View.generateViewId(); <= only support for lvl17 n above
 							radioButton.setText(text);
@@ -554,8 +582,7 @@ public class JSONReader {
 							radioButton.setTag(R.id.extra, extra);
 							radioButton.setTag(R.id.is_radiobutton_selected, false);
 							radioButton.setSelected(true);
-							
-							
+
 							if(!tag.equals(field_default_value)){
 								radioButton.setSelected(false);
 							}
@@ -687,7 +714,10 @@ public class JSONReader {
 //						radioLayout.addView(radiobuttonLayout);
 						radioLayout.addView(rg);
 						radioLayout.setGravity(Gravity.CENTER);
-						parentLayout.addView(radioLayout);
+						
+						scroll.addView(radioLayout);
+						
+						parentLayout.addView(scroll);
 						
 						// audio stuff
 						//String audiorequired = fields.get("field_audio_required").toString();
@@ -705,6 +735,10 @@ public class JSONReader {
 						
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("checklist")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -730,6 +764,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout checkBoxLayout = new LinearLayout(activity);
@@ -799,6 +834,7 @@ public class JSONReader {
 							cb.setText(text);
 							cb.setTextSize(radioButtonTextSize); // same as radio
 							cb.setTag(tag);
+							cb.setTypeface(typeface.getTypeFace());
 							LayoutParams cbParams = new LayoutParams(
 									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
@@ -818,9 +854,15 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						checkBoxLayout.addView(errorMsg);
-						parentLayout.addView(checkBoxLayout);
+						
+						scroll.addView(checkBoxLayout);
+						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("location")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -844,6 +886,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						final LinearLayout locationLayout = new LinearLayout(
@@ -855,8 +898,7 @@ public class JSONReader {
 						// locationLayout.setLayoutParams(locationLayoutParams);
 						locationLayout.setLayoutParams(innerLayoutParams);
 						locationLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-//						locationLayout
-//								.setBackgroundResource(R.drawable.linear_layout_ui);
+//						locationLayout.setBackgroundResource(R.drawable.linear_layout_ui);
 						locationLayout.setOrientation(LinearLayout.VERTICAL);
 						locationLayout.setPadding(0, 10, 0, 0);
 						locationLayout.setTag(R.id.layout_id, "locationLayout");
@@ -954,9 +996,16 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						locationLayout.addView(errorMsg);
 						locationLayout.addView(btnGPS);
-						parentLayout.addView(locationLayout);
+						
+						scroll.addView(locationLayout);
+						parentLayout.addView(scroll);
+
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("drawing")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -982,6 +1031,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						final LinearLayout drawingLayout = new LinearLayout(
@@ -1090,9 +1140,16 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						drawingLayout.addView(errorMsg);
 						drawingLayout.addView(button);
-						parentLayout.addView(drawingLayout);
+						
+						scroll.addView(drawingLayout);
+						parentLayout.addView(scroll);
+						
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("photo")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1118,6 +1175,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						final LinearLayout photoLayout = new LinearLayout(
@@ -1209,10 +1267,18 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						photoLayout.addView(errorMsg);
 						photoLayout.addView(button);
-						parentLayout.addView(photoLayout);
+						
+						scroll.addView(photoLayout);
+						
+						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
 					else if (fields.get(key).equals("note")) {
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
+						
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1232,12 +1298,12 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
 						LinearLayout noteLayout = new LinearLayout(activity);
@@ -1265,14 +1331,21 @@ public class JSONReader {
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
-						tvdescription.setLayoutParams(labelLayoutParams);
+						tvdescription.setLayoutParams(descriptionLayoutParams);
+//						tvdescription.setTextScaleX(1.1f);
+						
+
 						setTypeFace(tvdescription);
 						noteLayout.addView(tvdescription);
-
-						parentLayout.addView(noteLayout);
+						
+						scroll.addView(noteLayout);
+						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
 					else if(fields.get(key).equals("matrix_option_single")){
+						
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1298,6 +1371,7 @@ public class JSONReader {
 						index.setText("index/index");
 						index.setTag("index");
 						upLayout.addView(index);
+						//upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 						
 						LinearLayout matrixOptionSingleLayout = new LinearLayout(activity);
@@ -1340,9 +1414,7 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
 						matrixOptionSingleLayout.addView(tvLabel);
-						
-						
-						
+
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
@@ -1350,7 +1422,10 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						matrixOptionSingleLayout.addView(errorMsg);
-						parentLayout.addView(matrixOptionSingleLayout);
+
+						scroll.addView(matrixOptionSingleLayout);
+						parentLayout.addView(scroll);
+
 						layoutList.add(parentLayout);
 					}
 				}
@@ -2118,6 +2193,17 @@ public class JSONReader {
 
 	public void setCurrentDocumentID(String currentDocumentID) {
 		this.currentDocumentID = currentDocumentID;
+	}
+	
+	private View getLine(String colorCode){
+		int color = Color.parseColor(colorCode);
+		android.widget.RelativeLayout.LayoutParams lineParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, 1);
+		lineParams.setMargins(10, 0, 10, 4);
+		lineParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		View line = new View(activity);
+		line.setLayoutParams(lineParams);
+		line.setBackgroundColor(color);
+		return line;
 	}
 
 }

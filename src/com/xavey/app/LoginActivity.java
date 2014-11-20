@@ -78,6 +78,9 @@ public class LoginActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				
+				txtMsg.setText("");
+				
 				ConnectionDetector detector = new ConnectionDetector(
 						getApplicationContext());
 				boolean isConnecting = detector.isConnectingToInternet();
