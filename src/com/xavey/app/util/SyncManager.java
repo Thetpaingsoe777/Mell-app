@@ -155,7 +155,7 @@ public class SyncManager {
 				String token = ApplicationValues.loginUser.getToken();
 				c.AddHeader("x-access-token", token);
 				c.Execute(RequestMethod.POST);
-			} catch (Exception e) {
+			}catch (Exception e) {
 				e.printStackTrace();
 			}
 			return c;
@@ -377,11 +377,14 @@ public class SyncManager {
 
 		// properties
 		Properties properties;
+		
+		ToastManager xToast;
 
 //		private ProgressDialog Dialog;
 
 		public RetrieveAndUpdateTokenTask(Activity activity) {
 			activity_ = activity;
+			//xToast = new ToastManager(activity_);
 //			Dialog = new ProgressDialog(activity_);
 		}
 
@@ -392,6 +395,7 @@ public class SyncManager {
 //			Dialog.show();
 			String info = "starting authentication";
 			Log.i("updateTokenThread", info);
+			//xToast.xaveyToast(null, info);
 		}
 		
 		@Override
@@ -408,7 +412,7 @@ public class SyncManager {
 			
 			XaveyProperties xavey_properties = new XaveyProperties();
 			String authenticateURL = xavey_properties.getAuthenticateURL();
-			
+
 			try {
 				//RestClient c = new RestClient(authenticate);
 				RestClient c = new RestClient(authenticateURL);

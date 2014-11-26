@@ -30,6 +30,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private static final String FORM_TITLE = "form_title";
 	private static final String FORM_SUBTITLE = "form_subtitle";
 	private static final String FORM_DESC = "form_desc";
+	private static final String FORM_LOCATION_REQUIRED = "form_location_required";
 	private static final String FORM_VERSION = "form_version";
 	private static final String FORM_JSON = "form_json";
 	private static final String ORG_AUTO_ID = "org_auto_id";
@@ -97,6 +98,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		String CREATE_FORM_TABLE = "CREATE TABLE " + FORM_TABLE + "(" + ID
 				+ " INTEGER PRIMARY KEY," + FORM_ID + " INTEGER," + FORM_TITLE
 				+ " TEXT," + FORM_SUBTITLE + " TEXT," + FORM_DESC + " TEXT,"
+				+ FORM_LOCATION_REQUIRED + " TEXT,"
 				+ FORM_VERSION + " TEXT," + FORM_JSON + " TEXT," + ORG_AUTO_ID
 				+ " TEXT," + ORG_GIVEN_ID + " TEXT," + ORG_NAME + " TEXT,"
 				+ CREATOR_ID + " TEXT," + CREATOR_EMAIL + " TEXT," + CREATOR_NAME
@@ -168,6 +170,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(FORM_TITLE, form.getForm_title());
 		values.put(FORM_SUBTITLE, form.getForm_subtitle());
 		values.put(FORM_DESC, form.getForm_desc());
+		values.put(FORM_LOCATION_REQUIRED, form.isForm_location_required()+"");
 		values.put(FORM_VERSION, form.getForm_version());
 		values.put(FORM_JSON, form.getForm_json());
 		values.put(ORG_AUTO_ID, form.getOrg_auto_id());
@@ -196,17 +199,19 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			form.setForm_title(cursor.getString(2));
 			form.setForm_subtitle(cursor.getString(3));
 			form.setForm_desc(cursor.getString(4));
-			form.setForm_version(cursor.getString(5));
-			String form_json = cursor.getString(6);
+			String testt = cursor.getString(5);
+			form.setForm_location_required(Boolean.parseBoolean(cursor.getString(5)));
+			form.setForm_version(cursor.getString(6));
+			String form_json = cursor.getString(7);
 			form_json = JSONReader.convertStandardJSONString(form_json);
 			form.setForm_json(form_json);
-			form.setOrg_auto_id(cursor.getString(7));
-			form.setOrg_given_id(cursor.getString(8));
-			form.setOrg_name(cursor.getString(9));
-			form.setCreator_id(cursor.getString(10));
-			form.setCreator_email(cursor.getString(11));
-			form.setCreator_name(cursor.getString(12));
-			form.setForm_fields(cursor.getString(13));
+			form.setOrg_auto_id(cursor.getString(8));
+			form.setOrg_given_id(cursor.getString(9));
+			form.setOrg_name(cursor.getString(10));
+			form.setCreator_id(cursor.getString(11));
+			form.setCreator_email(cursor.getString(12));
+			form.setCreator_name(cursor.getString(13));
+			form.setForm_fields(cursor.getString(14));
 			cursor.close();
 			db.close();
 			return form;
@@ -227,17 +232,18 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				form.setForm_title(cursor.getString(2));
 				form.setForm_subtitle(cursor.getString(3));
 				form.setForm_desc(cursor.getString(4));
-				form.setForm_version(cursor.getString(5));
-				String form_json = cursor.getString(6);
+				form.setForm_location_required(Boolean.parseBoolean(cursor.getString(5)));
+				form.setForm_version(cursor.getString(6));
+				String form_json = cursor.getString(7);
 				form_json = JSONReader.convertStandardJSONString(form_json);
 				form.setForm_json(form_json);
-				form.setOrg_auto_id(cursor.getString(7));
-				form.setOrg_given_id(cursor.getString(8));
-				form.setOrg_name(cursor.getString(9));
-				form.setCreator_id(cursor.getString(10));
-				form.setCreator_email(cursor.getString(11));
-				form.setCreator_name(cursor.getString(12));
-				form.setForm_fields(cursor.getString(13));
+				form.setOrg_auto_id(cursor.getString(8));
+				form.setOrg_given_id(cursor.getString(9));
+				form.setOrg_name(cursor.getString(10));
+				form.setCreator_id(cursor.getString(11));
+				form.setCreator_email(cursor.getString(12));
+				form.setCreator_name(cursor.getString(13));
+				form.setForm_fields(cursor.getString(14));
 				formList.add(form);
 			} while (cursor.moveToNext());
 		}
@@ -293,6 +299,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(FORM_TITLE, form.getForm_title());
 		values.put(FORM_SUBTITLE, form.getForm_subtitle());
 		values.put(FORM_DESC, form.getForm_desc());
+		values.put(FORM_LOCATION_REQUIRED, form.isForm_location_required()+"");
 		values.put(FORM_VERSION, form.getForm_version());
 		values.put(FORM_JSON, form.getForm_json());
 		values.put(ORG_AUTO_ID, form.getOrg_auto_id());

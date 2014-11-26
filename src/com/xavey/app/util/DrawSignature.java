@@ -2,15 +2,10 @@ package com.xavey.app.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,14 +14,12 @@ import android.graphics.Path;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xavey.app.ApplicationValues;
@@ -49,11 +42,11 @@ public class DrawSignature extends Activity {
 		mPaint = new Paint();
 		mPaint.setAntiAlias(true);
 		mPaint.setDither(true);
-		mPaint.setColor(Color.GREEN);
+		mPaint.setColor(Color.BLACK); // <-- pen color
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeJoin(Paint.Join.BEVEL);
 		mPaint.setStrokeCap(Paint.Cap.ROUND);
-		mPaint.setStrokeWidth(12);
+		mPaint.setStrokeWidth(3); // <-- pen size here
 
 		Intent i = getIntent();
 		String field_help = i.getStringExtra("field_help");

@@ -126,6 +126,8 @@ public class AudioRecordingManager {
 		recorder.setOnErrorListener(errorListener);
 		recorder.setOnInfoListener(infoListener);
 
+		ApplicationValues.IS_RECORDING_NOW = true;
+		
 		try {
 			recorder.prepare();
 			recorder.start();
@@ -136,7 +138,7 @@ public class AudioRecordingManager {
 		}
 	}
 
-	private void stopRecording() {
+	public void stopRecording() {	
 		//boolean isAudioAlreadyExist = dbHelper.isAudioAlreadyExistInDB(getAudioInfo().getAudio_path());
 		if (null != recorder) {
 			recorder.stop();

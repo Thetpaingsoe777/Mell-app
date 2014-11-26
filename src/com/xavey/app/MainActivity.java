@@ -308,7 +308,7 @@ public class MainActivity extends Activity {
 		inflater.inflate(R.menu.app_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -422,6 +422,7 @@ public class MainActivity extends Activity {
 				else if(responseCode==403){
 //					syncManager.updateToken(userName, password);
 					// assumed 403 never come cuz updated the token before sync
+					toastManager.xaveyToast(null, "Token expired..!");
 				}
 				else{
 					toastManager.xaveyToast(null, "Server error..! ");
@@ -470,6 +471,11 @@ public class MainActivity extends Activity {
 							form.setForm_desc(form_meta.getString("form_desc"));
 							form.setForm_version(form_meta
 									.getString("form_version"));
+							if(form_meta.has("form_location_required")){//<-- this condition won't be needed in future
+								boolean test = form_meta.getBoolean("form_location_required");
+								form.setForm_location_required(form_meta.getBoolean("form_location_required"));
+								
+							}
 							// org
 							JSONObject org = form_content.getJSONObject("org");
 							form.setOrg_auto_id(org.getString("auto_id"));

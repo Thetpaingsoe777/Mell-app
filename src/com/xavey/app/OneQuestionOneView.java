@@ -53,6 +53,7 @@ import com.xavey.app.model.Form;
 import com.xavey.app.model.Image;
 import com.xavey.app.util.AudioRecordingManager;
 import com.xavey.app.util.ConnectionDetector;
+import com.xavey.app.util.GPSTracker;
 import com.xavey.app.util.ImageSavingManager;
 import com.xavey.app.util.JSONReader;
 import com.xavey.app.util.JSONWriter;
@@ -67,8 +68,7 @@ public class OneQuestionOneView extends FragmentActivity {
 	private QuestionPagerAdapter qAdapter; // 19-9-2014
 
 	ViewPager vPager;
-	int pageTotal;
-
+	// int pageTotal;
 
 	Intent intent;
 	JSONReader jsonReader;
@@ -95,22 +95,41 @@ public class OneQuestionOneView extends FragmentActivity {
 	LinkedList<Integer> navigator = new LinkedList<Integer>();
 	LinkedList<String> used_field_ids = new LinkedList<String>();
 
-	String currentDocumentID="";
-	
+	String currentDocumentID = "";
+
 	AudioRecordingManager recordingManager;
+	
+	GPSTracker gps;
+	ToastManager toast;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.screen_slide);
 		loadUI();
+		gps = new GPSTracker(getApplicationContext());
+		toast = new ToastManager(this);
 		currentDocumentID = UUIDGenerator.getUUIDForDocument();
 		jsonReader.setCurrentDocumentID(currentDocumentID);
 		vPager = (ViewPager) findViewById(R.id.pager);
 		try {
-			layoutList = jsonReader.readForm2(currentForm);
-			layoutList.add(produceSubmitLayout());
+			if(currentForm.isForm_location_required()){
+				if(gps.canGetLocation()){
+					//render
+					layoutList = jsonReader.readForm2(currentForm);
+					layoutList.add(produceSubmitLayout());
+				}
+				else{
+					toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
+					finish();
+				}
+			}
+			else{
+				layoutList = jsonReader.readForm2(currentForm);
+				layoutList.add(produceSubmitLayout());
+			}
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -122,183 +141,259 @@ public class OneQuestionOneView extends FragmentActivity {
 		 */
 
 		FragmentManager supportFragmentMagaer = getSupportFragmentManager();
-		qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
+		if(layoutList!=null){
+			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
 				layoutList);
-		vPager.setAdapter(qAdapter);
+			vPager.setAdapter(qAdapter);
+			
+			vPager.setOnPageChangeListener(new OnPageChangeListener() {
 
-		vPager.setOnPageChangeListener(new OnPageChangeListener() {
+				String fieldRequired;
+				String layoutID;
+				int index = 0;
+				LinearLayout currentLayout = null;
+				LinearLayout nextLayout = null;
+				RelativeLayout currentUpperLayout = null;
+				int currentPosition = 0;
 
-			String fieldRequired;
-			String layoutID;
-			int index = 0;
-			LinearLayout currentLayout = null;
-			LinearLayout nextLayout = null;
-			RelativeLayout currentUpperLayout = null;
-			int currentPosition = 0;
+				// private int field_id;
+				int skipID = 0;
+				String direction = "";
 
-			// private int field_id;
-			int skipID = 0;
-			String direction = "";
+				private final String LEFT_TO_RIGHT = "L_R";
+				private final String RIGHT_TO_LEFT = "R_L";
 
-			private final String LEFT_TO_RIGHT = "L_R";
-			private final String RIGHT_TO_LEFT = "R_L";
+				// int previousIndex = 0;
 
-			// int previousIndex = 0;
+				// just for testing
+				String currentLayoutID = "";
+				String currentFieldID = "";
+				String currentFieldRef = "";
+				JSONArray currentNextCond;
 
-			// just for testing
-			String currentLayoutID = "";
-			String currentFieldID = "";
-			String currentFieldRef = "";
-			JSONArray currentNextCond;
+				ToastManager toast = new ToastManager(OneQuestionOneView.this);
 
-			ToastManager toast = new ToastManager(OneQuestionOneView.this);
+				@Override
+				public void onPageSelected(int newPosition) {
 
-			@Override
-			public void onPageSelected(int newPosition) {
-
-				if (newPosition > currentPosition) {
-					// left to right
-					direction = LEFT_TO_RIGHT;
-				} else {
-					// right to left
-					direction = RIGHT_TO_LEFT;
-				}
-				int lastJump = -1;
-				if (navigator.size() != 0) {
-					lastJump = navigator.getLast();
-				}
-				LinearLayout currentParentLayout = layoutList
-						.get(currentPosition);
-				for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
-					View view = currentParentLayout.getChildAt(i);
-					if (view.getClass().getName().equals("android.widget.ScrollView")) {
-						ScrollView scroll = (ScrollView) view;
-						LinearLayout linearLayout = (LinearLayout) scroll.getChildAt(0);
-						if(linearLayout.getTag(R.id.layout_id) != null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
-							currentLayout = linearLayout;
+					if (newPosition > currentPosition) {
+						// left to right
+						direction = LEFT_TO_RIGHT;
+					} else {
+						// right to left
+						direction = RIGHT_TO_LEFT;
 					}
-					if (view.getClass().getName()
-							.equals("android.widget.RelativeLayout")) {
-						currentUpperLayout = (RelativeLayout) view;
+					int lastJump = -1;
+					if (navigator.size() != 0) {
+						lastJump = navigator.getLast();
 					}
-				}
-
-				nextLayout = layoutList.get(currentPosition);
-				LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
-				// if next layout is submit or not
-				boolean isSubmitLayout = isSubmitLayout(nextLayout);
-				if(!isSubmitLayout)
-				if (nextInnerLayout.getTag(R.id.layout_id) != null) {
-					currentLayoutID = nextInnerLayout.getTag(R.id.layout_id).toString();
-					currentFieldID = nextInnerLayout.getTag(R.id.field_id).toString();
-					currentFieldRef = nextInnerLayout.getTag(R.id.field_ref).toString();
-					currentNextCond = (JSONArray)nextInnerLayout.getTag(R.id.next_cond);
-				}else{
-					for(int i=0; i<currentNextCond.length(); i++){
-						currentNextCond.remove(i);
+					LinearLayout currentParentLayout = layoutList
+							.get(currentPosition);
+					for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
+						View view = currentParentLayout.getChildAt(i);
+						if (view.getClass().getName()
+								.equals("android.widget.ScrollView")) {
+							ScrollView scroll = (ScrollView) view;
+							LinearLayout linearLayout = (LinearLayout) scroll
+									.getChildAt(0);
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout"))
+								currentLayout = linearLayout;
+						}
+						if (view.getClass().getName()
+								.equals("android.widget.RelativeLayout")) {
+							currentUpperLayout = (RelativeLayout) view;
+						}
 					}
-				}
 
-				/*
-				 * String toast_text = "Current Position : " + currentPosition +
-				 * "\n" + "New Position : " + newPosition + "\n" +
-				 * "CurrentLayout ID : " + currentLayoutID + "\n" +
-				 * "Last Jump Range : " + lastJump;
-				 * Toast.makeText(getApplicationContext(), toast_text, 4000)
-				 * .show();
-				 */
+					nextLayout = layoutList.get(currentPosition);
+					LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
+					// if next layout is submit or not
+					boolean isSubmitLayout = isSubmitLayout(nextLayout);
+					if (!isSubmitLayout)
+						if (nextInnerLayout.getTag(R.id.layout_id) != null) {
+							currentLayoutID = nextInnerLayout
+									.getTag(R.id.layout_id).toString();
+							currentFieldID = nextInnerLayout.getTag(R.id.field_id)
+									.toString();
+							currentFieldRef = nextInnerLayout
+									.getTag(R.id.field_ref).toString();
+							currentNextCond = (JSONArray) nextInnerLayout
+									.getTag(R.id.next_cond);
+						} else {
+							for (int i = 0; i < currentNextCond.length(); i++) {
+								currentNextCond.remove(i);
+							}
+						}
 
-				boolean isNeedToValid = currentLayout.getTag(R.id.layout_id)
-						.toString().equals("radioLayout");
-				isNeedToValid = isNeedToValid
-						|| currentLayout.getTag(R.id.layout_id).toString()
-								.equals("datetimeLayout");
-				isNeedToValid = isNeedToValid
-						|| currentLayout.getTag(R.id.layout_id).toString()
-								.equals("submitLayout");
-				LinearLayoutManager lLManager = new LinearLayoutManager();
+					/*
+					 * String toast_text = "Current Position : " + currentPosition +
+					 * "\n" + "New Position : " + newPosition + "\n" +
+					 * "CurrentLayout ID : " + currentLayoutID + "\n" +
+					 * "Last Jump Range : " + lastJump;
+					 * Toast.makeText(getApplicationContext(), toast_text, 4000)
+					 * .show();
+					 */
 
-				TextView errorMsg = lLManager
-						.getErrorMsgTextView(currentLayout);
+					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString().equals("radioLayout");
+					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("datetimeLayout");
+					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("submitLayout");
+					LinearLayoutManager lLManager = new LinearLayoutManager();
 
-				 LayoutParams errorMsgLayoutOpen = new LayoutParams(
-				 LayoutParams.MATCH_PARENT,
-				 30);
-				 errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
+					TextView errorMsg = lLManager.getErrorMsgTextView(currentLayout);
 
-				 LayoutParams errorMsgLayoutHide = new LayoutParams(
-				 LayoutParams.MATCH_PARENT, 0);
-				 errorMsgLayoutHide.setMargins(10, 20, 10, 20);
+					LayoutParams errorMsgLayoutOpen = new LayoutParams(LayoutParams.MATCH_PARENT, 30);
+					errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
 
-				if (!isNeedToValid) {
-					HashMap<String, String> test = lLManager
-							.test(currentLayout);
-					String value="";
-					if(test.containsKey("value"))
-						value = test.get("value");
-					String field_required="false";
-					if(test.containsKey("")){
-						field_required = test.get("field_required");
-					}
-					String field_label = test.get("field_label");
-					boolean isNotTyped = field_required.equals("true")
-							&& value.equals("#no_value#");
-					if (!isNotTyped) {
-						// user typed values
-						String tagID = currentLayout.getTag(R.id.layout_id)
-								.toString();
-						if (tagID.equals("numberLayout")) {
-							String value_ = test.get("value").toString();
-							String field_max_value = test
-									.get("field_max_value");
-							String field_min_value = test
-									.get("field_min_value");
-							// String field_default_value =
-							// test.get("field_default_value"); // no need yet
-							String field_err_msg = test.get("field_err_msg");
-							int userTypedValue = Integer.parseInt(value_);
-							int maxValue = Integer.parseInt(field_max_value);
-							int minValue = Integer.parseInt(field_min_value);
-							if (userTypedValue > maxValue
-									|| userTypedValue < minValue) {
-								// out of range ..
-								// block
-								// block for only left to right cuz invalid
-								if (direction.equals(LEFT_TO_RIGHT)) {
-									// int range = newPosition-currentPosition;
+					LayoutParams errorMsgLayoutHide = new LayoutParams(
+							LayoutParams.MATCH_PARENT, 0);
+					errorMsgLayoutHide.setMargins(10, 20, 10, 20);
+
+					if (!isNeedToValid) {
+						HashMap<String, String> test = lLManager
+								.test(currentLayout);
+						String value = "";
+						if (test.containsKey("value"))
+							value = test.get("value");
+						String field_required = "false";
+						if (test.containsKey("")) {
+							field_required = test.get("field_required");
+						}
+						String field_label = test.get("field_label");
+						boolean isNotTyped = field_required.equals("true") && value.equals("#no_value#");
+						if (!isNotTyped) {
+							// user typed values
+							
+							if(ApplicationValues.IS_RECORDING_NOW){
+								// still recording...
+								// block..							
+								// there is no direction validation...
+								// bcuz it will block both direction if recording is not ending
 									navigator.addLast(0);
 									used_field_ids.addLast(currentFieldID);
 									vPager.setCurrentItem(currentPosition);
-									errorMsg.setText("" + field_err_msg);
+									errorMsg.setText("Audo recording is need to stop.");
 									errorMsg.setTextColor(Color.RED);
 									// errorMsg.setLayoutParams(errorMsgLayoutOpen);
 									currentPosition = previousIndex;
-								} else { // RIGHT_TO_LEFT
-									int last_range = navigator.getLast();
-									newPosition = currentPosition - last_range;
-									vPager.setCurrentItem(newPosition);
-									currentPosition = newPosition;
-									navigator.removeLast();
-									used_field_ids.removeLast();
+							}
+							
+							String tagID = currentLayout.getTag(R.id.layout_id).toString();
+							if (tagID.equals("numberLayout")) {
+								String value_ = test.get("value").toString();
+								String field_max_value = test
+										.get("field_max_value");
+								String field_min_value = test
+										.get("field_min_value");
+								// String field_default_value =
+								// test.get("field_default_value"); // no need yet
+								String field_err_msg = test.get("field_err_msg");
+								int userTypedValue = Integer.parseInt(value_);
+								int maxValue = Integer.parseInt(field_max_value);
+								int minValue = Integer.parseInt(field_min_value);
+								if (userTypedValue > maxValue || userTypedValue < minValue) {
+									// out of range ..
+									// block
+									// block for only left to right cuz invalid
+									if (direction.equals(LEFT_TO_RIGHT)) {
+										// int range = newPosition-currentPosition;
+										navigator.addLast(0);
+										used_field_ids.addLast(currentFieldID);
+										vPager.setCurrentItem(currentPosition);
+										errorMsg.setText("" + field_err_msg);
+										errorMsg.setTextColor(Color.RED);
+										// errorMsg.setLayoutParams(errorMsgLayoutOpen);
+										currentPosition = previousIndex;
+									} else { // RIGHT_TO_LEFT
+										int last_range = navigator.getLast();
+										newPosition = currentPosition - last_range;
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										navigator.removeLast();
+										used_field_ids.removeLast();
+									}
+								} else {
+									// in range
+									// pass
+									if (direction.equals(LEFT_TO_RIGHT)) {
+
+										// logic testing
+										// reverse
+										/*
+										 * LinearLayout nextLayout_ =
+										 * layoutList.get(newPosition); boolean
+										 * isInvolvedRef =
+										 * isFieldInvolvedReference(nextLayout_);
+										 * if(isInvolvedRef){ String field_ref =
+										 * getReferenceFromParrentLayout
+										 * (nextLayout_); LinearLayout ref_layout =
+										 * getRefLayout(field_ref, layoutList);
+										 * JSONArray next_cond =
+										 * getNextConditionFromParrentLayout
+										 * (nextLayout_); String
+										 * value_from_ref_layout =
+										 * jsonReader.readValueFromLayout
+										 * (ref_layout); boolean isNeedToSkip =
+										 * isNeedToSkip(next_cond,
+										 * value_from_ref_layout); newPosition++; }
+										 */
+										// ------------------------------------------------------
+										newPosition = getNextRoute(newPosition);
+										int range = newPosition - currentPosition;
+										if (range != 0)
+											navigator.addLast(range);
+										used_field_ids.addLast(currentFieldID);
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										previousIndex = currentPosition;
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									} else { // RIGHT_TO_LEFT
+										int last_range = navigator.getLast();
+										newPosition = currentPosition - last_range;
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										navigator.removeLast();
+										used_field_ids.removeLast();
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									}
+									if (errorMsg != null)
+										errorMsg.setText("");
 								}
 							} else {
-								// in range
-								// pass
+								// user typed and field type is not number...
+								// so no need validation let them go
+
 								if (direction.equals(LEFT_TO_RIGHT)) {
-									
+
 									// logic testing
 									// reverse
-									/*LinearLayout nextLayout_ = layoutList.get(newPosition);
-									boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-									if(isInvolvedRef){
-										String field_ref = getReferenceFromParrentLayout(nextLayout_);
-										LinearLayout ref_layout = getRefLayout(field_ref, layoutList);
-										JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-										String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-										boolean isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-										newPosition++;
-									}*/
-									//------------------------------------------------------
+									/*
+									 * LinearLayout nextLayout_ =
+									 * layoutList.get(newPosition); boolean
+									 * isInvolvedRef =
+									 * isFieldInvolvedReference(nextLayout_);
+									 * if(isInvolvedRef){ String field_ref =
+									 * getReferenceFromParrentLayout(nextLayout_);
+									 * LinearLayout ref_layout =
+									 * getRefLayout(field_ref, layoutList);
+									 * JSONArray next_cond =
+									 * getNextConditionFromParrentLayout
+									 * (nextLayout_); String value_from_ref_layout =
+									 * jsonReader.readValueFromLayout(ref_layout);
+									 * boolean isNeedToSkip =
+									 * isNeedToSkip(next_cond,
+									 * value_from_ref_layout); newPosition++; }
+									 */
+									// ----------------------------------------------------------
 									newPosition = getNextRoute(newPosition);
 									int range = newPosition - currentPosition;
 									if (range != 0)
@@ -308,8 +403,9 @@ public class OneQuestionOneView extends FragmentActivity {
 									currentPosition = newPosition;
 									previousIndex = currentPosition;
 									// hide keyboard
-									LinearLayout nextLayout_ = layoutList.get(newPosition);
-									if(!isSubmitLayout(nextLayout_))
+									LinearLayout nextLayout_ = layoutList
+											.get(newPosition);
+									if (!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
 								} else { // RIGHT_TO_LEFT
 									int last_range = navigator.getLast();
@@ -319,44 +415,25 @@ public class OneQuestionOneView extends FragmentActivity {
 									navigator.removeLast();
 									used_field_ids.removeLast();
 									// hide keyboard
-									LinearLayout nextLayout_ = layoutList.get(newPosition);
-									if(!isSubmitLayout(nextLayout_))
+									LinearLayout nextLayout_ = layoutList
+											.get(newPosition);
+									if (!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
 								}
 								if (errorMsg != null)
 									errorMsg.setText("");
 							}
 						} else {
-							// user typed and field type is not number... 
-							// so no need validation let them go
+							// user didn't type anything
+							// block
 
 							if (direction.equals(LEFT_TO_RIGHT)) {
-								
-								// logic testing
-								// reverse
-								/*LinearLayout nextLayout_ = layoutList.get(newPosition);
-								boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-								if(isInvolvedRef){
-									String field_ref = getReferenceFromParrentLayout(nextLayout_);
-									LinearLayout ref_layout = getRefLayout(field_ref, layoutList);
-									JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-									String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-									boolean isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-									newPosition++;
-								}*/
-								//----------------------------------------------------------
-								newPosition = getNextRoute(newPosition);
-								int range = newPosition - currentPosition;
-								if (range != 0)
-									navigator.addLast(range);
+								navigator.addLast(0);
 								used_field_ids.addLast(currentFieldID);
-								vPager.setCurrentItem(newPosition);
-								currentPosition = newPosition;
-								previousIndex = currentPosition;
-								// hide keyboard
-								LinearLayout nextLayout_ = layoutList.get(newPosition);
-								if(!isSubmitLayout(nextLayout_))
-									hideKeyboard(nextLayout_);
+								vPager.setCurrentItem(currentPosition);
+								errorMsg.setText(field_label + " is required !");
+								errorMsg.setTextColor(Color.RED);
+								currentPosition = previousIndex;
 							} else { // RIGHT_TO_LEFT
 								int last_range = navigator.getLast();
 								newPosition = currentPosition - last_range;
@@ -364,451 +441,494 @@ public class OneQuestionOneView extends FragmentActivity {
 								currentPosition = newPosition;
 								navigator.removeLast();
 								used_field_ids.removeLast();
+							}
+						}
+					} else {
+						// here will be fragments they are not concerned with any
+						// validation
+						// pass
+						// another question is where to go if radio layout
+						// (skip logic)
+
+						if (currentLayout.getTag(R.id.layout_id).toString()
+								.equals("radioLayout")) {
+							for (int i = 0; i < currentLayout.getChildCount(); i++) {
+								String className = currentLayout.getChildAt(i)
+										.getClass().getName().toString();
+								if (className.equals("android.widget.RadioGroup")) {
+									// radio
+									RadioGroup radioGroup = (RadioGroup) currentLayout
+											.getChildAt(i);
+
+									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
+
+									String fieldID = currentLayout.getTag(R.id.field_id).toString();
+									Log.i("fieldID", fieldID);
+									
+									
+									if (direction.equals(LEFT_TO_RIGHT)) {
+
+											String field_skip = selectedButton.getTag(R.id.field_skip).toString();
+											if(ApplicationValues.IS_RECORDING_NOW){
+												// still recording...
+												// block..							
+												// there is no direction validation...
+												// bcuz it will block both direction if recording is not ending
+													navigator.addLast(0);
+													used_field_ids.addLast(currentFieldID);
+													vPager.setCurrentItem(currentPosition);
+													toast.xaveyToast(null, "Audio recording is needed to stop.");
+//													errorMsg.setText("Audio recording is need to stop.");
+//													errorMsg.setTextColor(Color.RED);
+													// errorMsg.setLayoutParams(errorMsgLayoutOpen);
+													currentPosition = previousIndex;
+											}
+											else if (field_skip.length() > 0) {
+												if (field_skip.equals("submit")) {
+													// skip logic
+													// skip to submit
+
+													newPosition = layoutList.size() - 1;
+													int range = newPosition
+															- currentPosition;
+													navigator.addLast(range);
+													used_field_ids.addLast(currentFieldID);
+													vPager.setCurrentItem(newPosition);
+													currentPosition = newPosition;
+													previousIndex = currentPosition;
+													// hide keyboard
+													LinearLayout nextLayout_ = layoutList
+															.get(newPosition);
+													if (!isSubmitLayout(nextLayout_))
+														hideKeyboard(nextLayout_);
+												} else {
+
+													// skip logic
+													skipID = Integer
+															.parseInt(field_skip);
+													newPosition = skipID - 1;
+													newPosition = getNextRoute(newPosition);
+													previousIndex = currentPosition;
+													int range = newPosition
+															- currentPosition;
+													if (range != 0) // <-- don't
+																	// know why
+																	// but a
+																	// zero came
+																	// sometimes,
+																	// so i
+																	// filtered
+														navigator.addLast(range);
+													used_field_ids
+															.addLast(currentFieldID);
+													vPager.setCurrentItem(newPosition);
+													currentPosition = newPosition;
+													// hide keyboard
+													LinearLayout nextLayout_ = layoutList
+															.get(newPosition);
+													if (!isSubmitLayout(nextLayout_))
+														hideKeyboard(nextLayout_);
+												}
+											} else {
+												
+												newPosition = getNextRoute(newPosition);
+												int range = newPosition	- currentPosition;
+												navigator.addLast(range);
+												used_field_ids.addLast(currentFieldID);
+												vPager.setCurrentItem(newPosition);
+												currentPosition = newPosition;
+												previousIndex = currentPosition;
+												// hide keyboard
+												LinearLayout nextLayout_ = layoutList.get(newPosition);
+												if (!isSubmitLayout(nextLayout_))
+													hideKeyboard(nextLayout_);
+											}
+
+
+									} else { // RIGHT_TO_LEFT
+										int last_range = navigator.getLast();
+										newPosition = currentPosition - last_range;
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										navigator.removeLast();
+										used_field_ids.removeLast();
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									}
+									if (errorMsg != null)
+										errorMsg.setLayoutParams(new LayoutParams(
+												LayoutParams.WRAP_CONTENT, 0));
+								}
+							}
+						} else {
+							// not radio
+							// no need validation
+
+							if (direction.equals(LEFT_TO_RIGHT)) {
+
+								// logic testing
+								// reverse
+								// LinearLayout nextLayout_ =
+								// layoutList.get(newPosition);
+								// boolean isInvolvedRef =
+								// isFieldInvolvedReference(nextLayout_);
+								// if(isInvolvedRef){
+								// String field_ref =
+								// getReferenceFromParrentLayout(nextLayout_);
+								// LinearLayout ref_layout = getRefLayout(field_ref,
+								// layoutList);
+								// JSONArray next_cond =
+								// getNextConditionFromParrentLayout(nextLayout_);
+								// String value_from_ref_layout =
+								// jsonReader.readValueFromLayout(ref_layout);
+								// boolean isNeedToSkip = isNeedToSkip(next_cond,
+								// value_from_ref_layout);
+								// newPosition++;
+								// }
+								// ----------------------------------------------------------
+
+								newPosition = getNextRoute(newPosition);
+								int range = newPosition - currentPosition;
+								navigator.addLast(range);
+								used_field_ids.addLast(currentFieldID);
+
+								vPager.setCurrentItem(newPosition);
+								currentPosition = newPosition;
+								previousIndex = currentPosition;
 								// hide keyboard
-								LinearLayout nextLayout_ = layoutList.get(newPosition);
-								if(!isSubmitLayout(nextLayout_))
+								LinearLayout nextLayout_ = layoutList
+										.get(newPosition);
+								if (!isSubmitLayout(nextLayout_))
+									hideKeyboard(nextLayout_);
+
+							} else { // RIGHT_TO_LEFT
+								int last_range = navigator.getLast();
+								if (currentPosition - last_range > 0) {
+									newPosition = currentPosition - last_range;
+									navigator.removeLast();
+									used_field_ids.removeLast();
+								}
+								vPager.setCurrentItem(newPosition);
+								currentPosition = newPosition;
+								// hide keyboard
+								LinearLayout nextLayout_ = layoutList
+										.get(newPosition);
+								if (isSubmitLayout(nextLayout_))
 									hideKeyboard(nextLayout_);
 							}
 							if (errorMsg != null)
 								errorMsg.setText("");
 						}
-					} else {
-						// user didn't type anything
-						// block
-
-						if (direction.equals(LEFT_TO_RIGHT)) {
-							navigator.addLast(0);
-							used_field_ids.addLast(currentFieldID);
-							vPager.setCurrentItem(currentPosition);
-							errorMsg.setText(field_label + " is required !");
-							errorMsg.setTextColor(Color.RED);
-							currentPosition = previousIndex;
-						} else { // RIGHT_TO_LEFT
-							int last_range = navigator.getLast();
-							newPosition = currentPosition - last_range;
-							vPager.setCurrentItem(newPosition);
-							currentPosition = newPosition;
-							navigator.removeLast();
-							used_field_ids.removeLast();
-						}
-					}
-				} else {
-					// here will be fragments they are not concerned with any
-					// validation
-					// pass
-					// another question is where to go if radio layout
-					// (skip logic)
-					if (currentLayout.getTag(R.id.layout_id).toString()
-							.equals("radioLayout")) {
-						for (int i = 0; i < currentLayout.getChildCount(); i++) {
-							String className = currentLayout.getChildAt(i)
-									.getClass().getName().toString();
-							if (className.equals("android.widget.RadioGroup")) {
-								// radio
-								RadioGroup radioGroup = (RadioGroup) currentLayout
-										.getChildAt(i);
-
-								RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-
-								String fieldID = currentLayout.getTag(R.id.field_id).toString();
-								Log.i("fieldID", fieldID);
-
-								if (direction.equals(LEFT_TO_RIGHT)) {
-									String field_skip = selectedButton.getTag(
-											R.id.field_skip).toString();
-									if (field_skip.length() > 0) {
-										if(field_skip.equals("submit")){
-											// skip logic
-											// skip to submit
-
-											newPosition = layoutList.size()-1;
-											int range = newPosition - currentPosition;
-											navigator.addLast(range);
-											used_field_ids.addLast(currentFieldID);
-											vPager.setCurrentItem(newPosition);
-											currentPosition = newPosition;
-											previousIndex = currentPosition;
-											// hide keyboard
-											LinearLayout nextLayout_ = layoutList.get(newPosition);
-											if(!isSubmitLayout(nextLayout_))
-												hideKeyboard(nextLayout_);
-										}
-										else{
-											// skip logic 
-											skipID = Integer.parseInt(field_skip);
-											newPosition = skipID - 1;
-											newPosition = getNextRoute(newPosition);
-											previousIndex = currentPosition;
-											int range = newPosition	- currentPosition;
-											if (range != 0) // <-- don't know why
-															// but a
-															// zero came sometimes,
-															// so i
-															// filtered
-												navigator.addLast(range);
-											used_field_ids.addLast(currentFieldID);
-											vPager.setCurrentItem(newPosition);
-											currentPosition = newPosition;	
-											// hide keyboard
-											LinearLayout nextLayout_ = layoutList.get(newPosition);
-											if(!isSubmitLayout(nextLayout_))
-												hideKeyboard(nextLayout_);
-										}
-									}else{
-										// logic testing
-										// reverse
-										/*LinearLayout nextLayout_ = layoutList.get(newPosition);
-										boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-										if(isInvolvedRef){
-											String field_ref = getReferenceFromParrentLayout(nextLayout_);
-											LinearLayout ref_layout = getRefLayout(field_ref, layoutList);
-											JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-											String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-											boolean isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-											newPosition++;
-										}*/
-										newPosition = getNextRoute(newPosition);
-										int range = newPosition-currentPosition;
-										navigator.addLast(range);
-										used_field_ids.addLast(currentFieldID);
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										previousIndex = currentPosition;
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList.get(newPosition);
-										if(!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
-									}
-								} else { // RIGHT_TO_LEFT
-									int last_range = navigator.getLast();
-									newPosition = currentPosition - last_range;
-									vPager.setCurrentItem(newPosition);
-									currentPosition = newPosition;
-									navigator.removeLast();
-									used_field_ids.removeLast();
-									// hide keyboard
-									LinearLayout nextLayout_ = layoutList.get(newPosition);
-									if(!isSubmitLayout(nextLayout_))
-										hideKeyboard(nextLayout_);
-								}
-								if (errorMsg != null)
-									errorMsg.setLayoutParams(new LayoutParams(
-											LayoutParams.WRAP_CONTENT, 0));
-							}
-						}
-					} else {
-						// not radio
-						// no need validation
-
-						if (direction.equals(LEFT_TO_RIGHT)) {
-
-							// logic testing
-							// reverse
-//							LinearLayout nextLayout_ = layoutList.get(newPosition);
-//							boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-//							if(isInvolvedRef){
-//								String field_ref = getReferenceFromParrentLayout(nextLayout_);
-//								LinearLayout ref_layout = getRefLayout(field_ref, layoutList);
-//								JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-//								String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-//								boolean isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-//								newPosition++;
-//							}
-							//----------------------------------------------------------
-
-							newPosition = getNextRoute(newPosition);
-							int range = newPosition - currentPosition;
-							navigator.addLast(range);
-							used_field_ids.addLast(currentFieldID);
-
-							vPager.setCurrentItem(newPosition);
-							currentPosition = newPosition;
-							previousIndex = currentPosition;
-							// hide keyboard
-							LinearLayout nextLayout_ = layoutList.get(newPosition);
-							if(!isSubmitLayout(nextLayout_))
-								hideKeyboard(nextLayout_);
-
-						} else { // RIGHT_TO_LEFT
-							int last_range = navigator.getLast();
-							if (currentPosition - last_range > 0) {
-								newPosition = currentPosition - last_range;
-								navigator.removeLast();
-								used_field_ids.removeLast();
-							}
-							vPager.setCurrentItem(newPosition);
-							currentPosition = newPosition;
-							// hide keyboard
-							LinearLayout nextLayout_ = layoutList.get(newPosition);
-							if(isSubmitLayout(nextLayout_))
-								hideKeyboard(nextLayout_);
-						}
-						if (errorMsg != null)
-							errorMsg.setText("");
 					}
 				}
-			}
 
-			
+				private int getNextRoute(int newPosition) {
+					boolean isNeedToSkip = true;
+					LinearLayout currentLayoutTest = layoutList
+							.get(currentPosition);
+					while (isNeedToSkip) {
+						LinearLayout nextLayout_ = layoutList.get(newPosition);
 
-			private int getNextRoute(int newPosition){
-				boolean isNeedToSkip = true;
-				LinearLayout currentLayoutTest = layoutList.get(currentPosition);
-				while(isNeedToSkip){
-					LinearLayout nextLayout_ = layoutList.get(newPosition);
-					
-					boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-					boolean isFieldInvolvedNextCondType = isFieldInvolvedNextCondType(nextLayout_);
+						boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
+						boolean isFieldInvolvedNextCondType = isFieldInvolvedNextCondType(nextLayout_);
 
-					String nextConditionType="nothing";
+						String nextConditionType = "nothing";
 
-					if(isInvolvedRef){
-						String field_ref = getReferenceFromParrentLayout(nextLayout_);
-						LinearLayout ref_layout = getRefLayout(field_ref, layoutList);
-						JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-						
-						if(isFieldInvolvedNextCondType){
-							nextConditionType = getNextConditionTypeFromParrentLayout(nextLayout_);
-							if(nextConditionType.equals("count")){
-								// count is here
-								LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
-								int count = 0;
-								if(ref_inner_layout.getTag(R.id.layout_id).toString().equals("checkBoxLayout")){
-									for(int i=0; i<ref_inner_layout.getChildCount(); i++){
-										View v = ref_inner_layout.getChildAt(i);
-										String className = v.getClass().getName().toString();
-										if(className.equals("android.widget.CheckBox")){
-											CheckBox cb = (CheckBox) v;
-											if(cb.isChecked())
-												count++;
+						if (isInvolvedRef) {
+							String field_ref = getReferenceFromParrentLayout(nextLayout_);
+							LinearLayout ref_layout = getRefLayout(field_ref,
+									layoutList);
+							JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
+
+							if (isFieldInvolvedNextCondType) {
+								nextConditionType = getNextConditionTypeFromParrentLayout(nextLayout_);
+								if (nextConditionType.equals("count")) {
+									// count is here
+									LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
+									int count = 0;
+									if (ref_inner_layout.getTag(R.id.layout_id)
+											.toString().equals("checkBoxLayout")) {
+										for (int i = 0; i < ref_inner_layout
+												.getChildCount(); i++) {
+											View v = ref_inner_layout.getChildAt(i);
+											String className = v.getClass()
+													.getName().toString();
+											if (className
+													.equals("android.widget.CheckBox")) {
+												CheckBox cb = (CheckBox) v;
+												if (cb.isChecked())
+													count++;
+											}
 										}
 									}
+									// now we got count here
+									isNeedToSkip = isNeedToSkip(next_cond, count
+											+ "");
+									if (isNeedToSkip)
+										newPosition++;
 								}
-								// now we got count here
-								isNeedToSkip = isNeedToSkip(next_cond,count+"");
-								if(isNeedToSkip)
-									newPosition++;
+							} else {
+								String value_from_ref_layout = jsonReader
+										.readValueFromLayout(ref_layout);
+								isNeedToSkip = isNeedToSkip(next_cond,
+										value_from_ref_layout);
+								newPosition++;
 							}
-						}else{
-							String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-							isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-							newPosition++;
+						} else {
+							isNeedToSkip = false;
 						}
 					}
-					else{
-						isNeedToSkip=false;
-					}
-				}
-				
-				return newPosition;
-			}
-			
-			private boolean isFieldInvolvedNextCondType(LinearLayout parrentlayout){
-				String next_cond_type="";
-				for(int i=0; i<parrentlayout.getChildCount(); i++){
-					if(parrentlayout.getTag(R.id.layout_id)!=null){
-						if(parrentlayout.getTag(R.id.layout_id).toString().equals("submitLayout"))
-							return false;
-					}
-					else if(parrentlayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")){
-						LinearLayout linearLayout = (LinearLayout) parrentlayout.getChildAt(i);
-						LinearLayout innerLayout = null;
-						if(linearLayout.getTag(R.id.layout_id)!=null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")){
-							innerLayout = linearLayout;
-							if(innerLayout.getTag(R.id.next_cond_type)!=null)
-								next_cond_type = innerLayout.getTag(R.id.next_cond_type).toString();
-						}
-					}
-				}
-				if(next_cond_type.length()>0)
-					return true;
-				else
-					return false;
-			}
-			
-			private boolean isFieldInvolvedReference(LinearLayout parrentlayout){
-				String field_ref="";
-				for(int i=0; i<parrentlayout.getChildCount(); i++){
-					if(parrentlayout.getTag(R.id.layout_id)!=null){
-						if(parrentlayout.getTag(R.id.layout_id).toString().equals("submitLayout"))
-							return false;
-					}
-					else if(parrentlayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")){
-						LinearLayout linearLayout = (LinearLayout) parrentlayout.getChildAt(i);
-						LinearLayout innerLayout = null;
-						if(linearLayout.getTag(R.id.layout_id)!=null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")){
-							innerLayout = linearLayout;
-							field_ref = innerLayout.getTag(R.id.field_ref).toString();
-						}
-					}
-				}
-				if(field_ref.length()>0)
-					return true;
-				else
-					return false;
-			}
 
-			private String getReferenceFromParrentLayout(LinearLayout parrentLayout){
-				String reference = "";
-				for(int i=0; i<parrentLayout.getChildCount(); i++){
-					if(parrentLayout.getTag(R.id.layout_id)!=null){
-						if(parrentLayout.getTag(R.id.layout_id).toString().equals("submitLayout"))
-							return "";
-					}
-					else if(parrentLayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")){
-						LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
-						LinearLayout innerLayout = null;
-						if(linearLayout.getTag(R.id.layout_id)!=null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")){
-							innerLayout = linearLayout;
-							reference = innerLayout.getTag(R.id.field_ref).toString();
-						}
-					}
+					return newPosition;
 				}
-				return reference;
-			}
-			
-			
-			
-			private boolean isSubmitLayout(LinearLayout linearLayout){
-				boolean isSubmitLayout = false;
-				if(linearLayout.getTag(R.id.layout_id)!=null){
-					if(linearLayout.getTag(R.id.layout_id).toString().equals("submitLayout")){
-						isSubmitLayout = true;
-					}
-				}
-				return isSubmitLayout;
-			}
-			
-			private LinearLayout getInnerLayout(LinearLayout parrentLayout){
-				LinearLayout innerLayout = null;
-				for(int i=0; i<nextLayout.getChildCount(); i++){
-					String className = nextLayout.getChildAt(i).getClass().getName();
-					View v = nextLayout.getChildAt(i);
-					
-					if(className.equals("android.widget.ScrollView")){
-						ScrollView scroll = (ScrollView) v;
-						innerLayout = (LinearLayout) scroll.getChildAt(0);
-						String layoutID = innerLayout.getTag(R.id.layout_id).toString();
-						if(innerLayout.getTag(R.id.layout_id)!=null && !layoutID.equals("recordingLayout")){
-							return innerLayout;
-						}
-//						else{
-//							return null;
-//						}
-					}
-				}
-				return innerLayout;
-			}
 
-			private LinearLayout getRefLayout(String field_ref, ArrayList<LinearLayout> layoutList){
-				LinearLayout refLayout = null;
-				int field_ref_ = Integer.parseInt(field_ref);
-				refLayout = layoutList.get(field_ref_-1);
-				return refLayout;
-			}
-
-			private String getNextConditionTypeFromParrentLayout(LinearLayout parrentLayout){
-				String nextConditionType = null;
-				for(int i=0; i<parrentLayout.getChildCount(); i++){
-					if(parrentLayout.getTag(R.id.layout_id)!=null){
-						if(parrentLayout.getTag(R.id.layout_id).toString().equals("submitLayout"))
-							return null;
-					}
-					else if(parrentLayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")){
-						LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
-						LinearLayout innerLayout = null;
-						if(linearLayout.getTag(R.id.layout_id)!=null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")){
-							innerLayout = linearLayout;
-							nextConditionType = innerLayout.getTag(R.id.next_cond_type).toString();
-						}
-					}
-				}
-				return nextConditionType;
-			}
-			
-			
-			private JSONArray getNextConditionFromParrentLayout(LinearLayout parrentLayout){
-				JSONArray nextCondition = null;
-				for(int i=0; i<parrentLayout.getChildCount(); i++){
-					if(parrentLayout.getTag(R.id.layout_id)!=null){
-						if(parrentLayout.getTag(R.id.layout_id).toString().equals("submitLayout"))
-							return null;
-					}
-					else if(parrentLayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")){
-						LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
-						LinearLayout innerLayout = null;
-						if(linearLayout.getTag(R.id.layout_id)!=null && !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")){
-							innerLayout = linearLayout;
-							nextCondition = (JSONArray) innerLayout.getTag(R.id.next_cond);
-						}
-					}
-				}
-				return nextCondition;
-			}
-
-			private boolean isNeedToSkip(JSONArray next_cond, String value){
-				boolean isNeedToSkip = false;
-				if(value.contains("|")){
-					// for values which contain pipes
-					// like checklist and location
-					String[] values = value.split("|");
-					for(int i=0; i<next_cond.length(); i++){
-						try{
-							String cond = next_cond.getString(i);
-							for(int j=0; j<values.length; j++){
-								String value_item = values[j];
-								if(cond.equals(value_item)){
-									isNeedToSkip = isNeedToSkip||true;
-								}
+				private boolean isFieldInvolvedNextCondType(
+						LinearLayout parrentlayout) {
+					String next_cond_type = "";
+					for (int i = 0; i < parrentlayout.getChildCount(); i++) {
+						if (parrentlayout.getTag(R.id.layout_id) != null) {
+							if (parrentlayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout"))
+								return false;
+						} else if (parrentlayout.getChildAt(i).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentlayout
+									.getChildAt(i);
+							LinearLayout innerLayout = null;
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout")) {
+								innerLayout = linearLayout;
+								if (innerLayout.getTag(R.id.next_cond_type) != null)
+									next_cond_type = innerLayout.getTag(
+											R.id.next_cond_type).toString();
 							}
 						}
-						catch(JSONException e){
-							toast.xaveyToast(null, e.getMessage());
+					}
+					if (next_cond_type.length() > 0)
+						return true;
+					else
+						return false;
+				}
+
+				private boolean isFieldInvolvedReference(LinearLayout parrentlayout) {
+					String field_ref = "";
+					for (int i = 0; i < parrentlayout.getChildCount(); i++) {
+						if (parrentlayout.getTag(R.id.layout_id) != null) {
+							if (parrentlayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout"))
+								return false;
+						} else if (parrentlayout.getChildAt(i).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentlayout
+									.getChildAt(i);
+							LinearLayout innerLayout = null;
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout")) {
+								innerLayout = linearLayout;
+								field_ref = innerLayout.getTag(R.id.field_ref)
+										.toString();
+							}
 						}
 					}
+					if (field_ref.length() > 0)
+						return true;
+					else
+						return false;
 				}
-				else{
-					for(int i=0; i<next_cond.length(); i++){
-						String cond="";
-						try {
-							cond = next_cond.getString(i);
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						if(cond.equals(value)){
-							isNeedToSkip = isNeedToSkip||true;
+
+				private String getReferenceFromParrentLayout(
+						LinearLayout parrentLayout) {
+					String reference = "";
+					for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+						if (parrentLayout.getTag(R.id.layout_id) != null) {
+							if (parrentLayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout"))
+								return "";
+						} else if (parrentLayout.getChildAt(i).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentLayout
+									.getChildAt(i);
+							LinearLayout innerLayout = null;
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout")) {
+								innerLayout = linearLayout;
+								reference = innerLayout.getTag(R.id.field_ref)
+										.toString();
+							}
 						}
 					}
+					return reference;
 				}
-				return isNeedToSkip;
-			}
 
-			private void previous(int newPosition) {
-				int last_range = navigator.getLast();
-				vPager.setCurrentItem(newPosition - last_range);
-				currentPosition = newPosition - last_range;
-			}
+				private boolean isSubmitLayout(LinearLayout linearLayout) {
+					boolean isSubmitLayout = false;
+					if (linearLayout.getTag(R.id.layout_id) != null) {
+						if (linearLayout.getTag(R.id.layout_id).toString()
+								.equals("submitLayout")) {
+							isSubmitLayout = true;
+						}
+					}
+					return isSubmitLayout;
+				}
 
-			@Override
-			public void onPageScrolled(int position, float arg1, int arg2) {
+				private LinearLayout getInnerLayout(LinearLayout parrentLayout) {
+					LinearLayout innerLayout = null;
+					for (int i = 0; i < nextLayout.getChildCount(); i++) {
+						String className = nextLayout.getChildAt(i).getClass()
+								.getName();
+						View v = nextLayout.getChildAt(i);
 
-			}
+						if (className.equals("android.widget.ScrollView")) {
+							ScrollView scroll = (ScrollView) v;
+							innerLayout = (LinearLayout) scroll.getChildAt(0);
+							String layoutID = innerLayout.getTag(R.id.layout_id)
+									.toString();
+							if (innerLayout.getTag(R.id.layout_id) != null
+									&& !layoutID.equals("recordingLayout")) {
+								return innerLayout;
+							}
+							// else{
+							// return null;
+							// }
+						}
+					}
+					return innerLayout;
+				}
 
-			@Override
-			public void onPageScrollStateChanged(int position) {
-				// if(currentPosition>position)
-				// {
-				// Toast.makeText(getApplicationContext(), "Swiped Right",
-				// Toast.LENGTH_SHORT).show();
-				// }else
-				// {
-				// Toast.makeText(getApplicationContext(), "Swiped Left",
-				// Toast.LENGTH_SHORT).show();
-				// }
-				// currentPosition = position;
-			}
-		});
+				private LinearLayout getRefLayout(String field_ref,
+						ArrayList<LinearLayout> layoutList) {
+					LinearLayout refLayout = null;
+					int field_ref_ = Integer.parseInt(field_ref);
+					refLayout = layoutList.get(field_ref_ - 1);
+					return refLayout;
+				}
+
+				private String getNextConditionTypeFromParrentLayout(
+						LinearLayout parrentLayout) {
+					String nextConditionType = null;
+					for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+						if (parrentLayout.getTag(R.id.layout_id) != null) {
+							if (parrentLayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout"))
+								return null;
+						} else if (parrentLayout.getChildAt(i).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentLayout
+									.getChildAt(i);
+							LinearLayout innerLayout = null;
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout")) {
+								innerLayout = linearLayout;
+								nextConditionType = innerLayout.getTag(
+										R.id.next_cond_type).toString();
+							}
+						}
+					}
+					return nextConditionType;
+				}
+
+				private JSONArray getNextConditionFromParrentLayout(
+						LinearLayout parrentLayout) {
+					JSONArray nextCondition = null;
+					for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+						if (parrentLayout.getTag(R.id.layout_id) != null) {
+							if (parrentLayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout"))
+								return null;
+						} else if (parrentLayout.getChildAt(i).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentLayout
+									.getChildAt(i);
+							LinearLayout innerLayout = null;
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString().equals("recordingLayout")) {
+								innerLayout = linearLayout;
+								nextCondition = (JSONArray) innerLayout
+										.getTag(R.id.next_cond);
+							}
+						}
+					}
+					return nextCondition;
+				}
+
+				private boolean isNeedToSkip(JSONArray next_cond, String value) {
+					boolean isNeedToSkip = false;
+					if (value.contains("|")) {
+						// for values which contain pipes
+						// like checklist and location
+						String[] values = value.split("|");
+						for (int i = 0; i < next_cond.length(); i++) {
+							try {
+								String cond = next_cond.getString(i);
+								for (int j = 0; j < values.length; j++) {
+									String value_item = values[j];
+									if (cond.equals(value_item)) {
+										isNeedToSkip = isNeedToSkip || true;
+									}
+								}
+							} catch (JSONException e) {
+								toast.xaveyToast(null, e.getMessage());
+							}
+						}
+					} else {
+						for (int i = 0; i < next_cond.length(); i++) {
+							String cond = "";
+							try {
+								cond = next_cond.getString(i);
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							if (cond.equals(value)) {
+								isNeedToSkip = isNeedToSkip || true;
+							}
+						}
+					}
+					return isNeedToSkip;
+				}
+
+				private void previous(int newPosition) {
+					int last_range = navigator.getLast();
+					vPager.setCurrentItem(newPosition - last_range);
+					currentPosition = newPosition - last_range;
+				}
+
+				@Override
+				public void onPageScrolled(int position, float arg1, int arg2) {
+
+				}
+
+				@Override
+				public void onPageScrollStateChanged(int position) {
+					// if(currentPosition>position)
+					// {
+					// Toast.makeText(getApplicationContext(), "Swiped Right",
+					// Toast.LENGTH_SHORT).show();
+					// }else
+					// {
+					// Toast.makeText(getApplicationContext(), "Swiped Left",
+					// Toast.LENGTH_SHORT).show();
+					// }
+					// currentPosition = position;
+				}
+			});
+			
+		}
+		
+
+		
+	
+	
+	// here
+	
 	}
 
 	/*
@@ -1031,18 +1151,21 @@ public class OneQuestionOneView extends FragmentActivity {
 						String fieldName = map.get("field_name").toString();
 						String fieldValueAudio = "";
 						boolean is_audio_required = false;
-						if(map.containsKey("field_audio_required")){
-							is_audio_required = Boolean.parseBoolean(map.get("field_audio_required").toString());
+						if (map.containsKey("field_audio_required")) {
+							is_audio_required = Boolean.parseBoolean(map.get(
+									"field_audio_required").toString());
 						}
 
-						if(is_audio_required){
-							String audio_file = recordingManager.getFilename(fieldName+" - "+currentDocumentID);
+						if (is_audio_required) {
+							String audio_file = recordingManager
+									.getFilename(fieldName + " - "
+											+ currentDocumentID);
 							File file = new File(audio_file);
 							if (file.exists()) {
 								fieldValueAudio = audio_file;
 							}
 						}
-						
+
 						String userTypedValue = "";
 						if (incompleteMap.containsKey(fieldID)) { // <--
 																	// filter
@@ -1054,8 +1177,9 @@ public class OneQuestionOneView extends FragmentActivity {
 								child.put("field_name", fieldName);
 								child.put("field_value", userTypedValue);
 								child.put("field_label", fieldLabel);
-								if(fieldValueAudio.length()>0){
-									child.put("field_value_audio", fieldValueAudio);
+								if (fieldValueAudio.length() > 0) {
+									child.put("field_value_audio",
+											fieldValueAudio);
 								}
 								jsonArray.put(child);
 							} catch (JSONException e) {
@@ -1079,8 +1203,9 @@ public class OneQuestionOneView extends FragmentActivity {
 					e.printStackTrace();
 				}
 				// just put this outside....
-				// whatever internet's avaliable or not.., it will store in local first
-				//---------------------------------------------------------
+				// whatever internet's avaliable or not.., it will store in
+				// local first
+				// ---------------------------------------------------------
 
 				// offline mode
 				document.setSubmitted("0");
@@ -1113,15 +1238,14 @@ public class OneQuestionOneView extends FragmentActivity {
 					e.printStackTrace();
 				}
 
-				//---------------------------------------------------------
+				// ---------------------------------------------------------
 
 				// -----
 				isInternetAvailable = connectionDetector
 						.isConnectingToInternet();
 				if (isInternetAvailable) {
 					try {
-						syncManager = new SyncManager(
-								OneQuestionOneView.this);
+						syncManager = new SyncManager(OneQuestionOneView.this);
 						if (imagesToSubmit.size() > 0) {
 							syncManager.submitDocument2(document, currentForm,
 									imagesToSubmit); // <--
@@ -1132,40 +1256,32 @@ public class OneQuestionOneView extends FragmentActivity {
 						e.printStackTrace();
 					}
 				} else {
-					
-					// -------------------------------------------------------------------
-					
-					/*// offline mode
-					document.setSubmitted("0");
-					// save image too.
-					String docID = document.getDocument_id();
-					for (HashMap<String, String> image_map : imagesToSubmit) {
-						String image_name = image_map.get("field_name");
-						String image_path = image_map.get("imagePath");
-						Image image = new Image();
-						image.setDoc_id(docID);
-						image.setImage_name(image_name);
-						image.setImage_path(image_path);
-						dbHelper.addNewImage(image);
-					}
-					SyncManager syncManager = new SyncManager(
-							OneQuestionOneView.this);
 
-					// document_json(structure) is needed everytime before
-					// upload
-					try {
-						JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
-								document, currentForm);
-						// here.. may be shock
-						document.setDocument_json_to_submit(mainArray
-								.getJSONObject(0).toString());
-						// following line won't be needed , but not sure..., fix
-						// later
-						document.setSubmitted("0");
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}*/
-					
+					// -------------------------------------------------------------------
+
+					/*
+					 * // offline mode document.setSubmitted("0"); // save image
+					 * too. String docID = document.getDocument_id(); for
+					 * (HashMap<String, String> image_map : imagesToSubmit) {
+					 * String image_name = image_map.get("field_name"); String
+					 * image_path = image_map.get("imagePath"); Image image =
+					 * new Image(); image.setDoc_id(docID);
+					 * image.setImage_name(image_name);
+					 * image.setImage_path(image_path);
+					 * dbHelper.addNewImage(image); } SyncManager syncManager =
+					 * new SyncManager( OneQuestionOneView.this);
+					 * 
+					 * // document_json(structure) is needed everytime before //
+					 * upload try { JSONArray mainArray =
+					 * jsonReader.getJSONArrayToSubmit( document, currentForm);
+					 * // here.. may be shock
+					 * document.setDocument_json_to_submit(mainArray
+					 * .getJSONObject(0).toString()); // following line won't be
+					 * needed , but not sure..., fix // later
+					 * document.setSubmitted("0"); } catch (JSONException e) {
+					 * e.printStackTrace(); }
+					 */
+
 					// -----------------------------------------------------------
 				}
 				dbHelper.addNewDocument(document);
@@ -1214,16 +1330,18 @@ public class OneQuestionOneView extends FragmentActivity {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		for (int i = 0; i < layoutList.size(); i++) {
 			// -1 don't care the last room cuz the last room is submitLayout
-			
+
 			LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
 			LinearLayout linearLayout = null;
 			for (int p = 0; p < parentLayout.getChildCount(); p++) {
 				View child = parentLayout.getChildAt(p);
 				if (child.getTag(R.id.layout_id) != null
 						&& child.getClass().getName()
-								.equals("android.widget.LinearLayout") ) {
-					if(!child.getTag(R.id.layout_id).toString().equals("recordingLayout"))
-						linearLayout = (LinearLayout) parentLayout.getChildAt(p);
+								.equals("android.widget.LinearLayout")) {
+					if (!child.getTag(R.id.layout_id).toString()
+							.equals("recordingLayout"))
+						linearLayout = (LinearLayout) parentLayout
+								.getChildAt(p);
 				}
 			}
 			parentLayout.getChildAt(1);
@@ -1259,8 +1377,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						TextView textView = (TextView) linearLayout
 								.getChildAt(j);
 
-						key = linearLayout.getTag(R.id.field_id)
-								.toString();
+						key = linearLayout.getTag(R.id.field_id).toString();
 						field_label = linearLayout.getTag(R.id.field_label_id)
 								.toString();
 
@@ -1286,25 +1403,34 @@ public class OneQuestionOneView extends FragmentActivity {
 						RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 						String value = selectedButton.getTag(R.id.radio_value)
 								.toString();
-						
-						for(int u=0; u<radioGroup.getChildCount(); u++){
-							LinearLayout layoutLine = (LinearLayout) radioGroup.getChildAt(u);
+
+						for (int u = 0; u < radioGroup.getChildCount(); u++) {
+							LinearLayout layoutLine = (LinearLayout) radioGroup
+									.getChildAt(u);
 							RadioButton childButton = null;
 							EditText childEditText = null;
-							for(int v=0; v<layoutLine.getChildCount(); v++){
-								String childClassName = layoutLine.getChildAt(v).getClass().getName().toString();
-								if(childClassName.equals("android.widget.RadioButton"))
-								{
-									childButton = (RadioButton) layoutLine.getChildAt(v);
-								}
-								else if(childClassName.equals("android.widget.EditText")){
-									childEditText = (EditText) layoutLine.getChildAt(v);
+							for (int v = 0; v < layoutLine.getChildCount(); v++) {
+								String childClassName = layoutLine
+										.getChildAt(v).getClass().getName()
+										.toString();
+								if (childClassName
+										.equals("android.widget.RadioButton")) {
+									childButton = (RadioButton) layoutLine
+											.getChildAt(v);
+								} else if (childClassName
+										.equals("android.widget.EditText")) {
+									childEditText = (EditText) layoutLine
+											.getChildAt(v);
 								}
 							}
-							String radio_value = childButton.getTag(R.id.radio_value).toString();
-							if(radio_value.equals(value)){
-								if(childEditText.getText().toString().length()>0)
-									value = value + ":" + childEditText.getText().toString();
+							String radio_value = childButton.getTag(
+									R.id.radio_value).toString();
+							if (radio_value.equals(value)) {
+								if (childEditText.getText().toString().length() > 0)
+									value = value
+											+ ":"
+											+ childEditText.getText()
+													.toString();
 							}
 						}
 						map.put(key, value);
@@ -1312,7 +1438,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				}
 			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("checkBoxLayout")) {
-				//JSONArray checkedValues = new JSONArray();
+				// JSONArray checkedValues = new JSONArray();
 				String checkedValues = "";
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String field_label = linearLayout.getTag(R.id.field_label_id)
@@ -1334,12 +1460,12 @@ public class OneQuestionOneView extends FragmentActivity {
 								.getChildAt(z);
 						if (checkBox.isChecked()) {
 							String value = checkBox.getTag().toString();
-							//checkedValues.put(value);
-							checkedValues += "|"+value;
+							// checkedValues.put(value);
+							checkedValues += "|" + value;
 						}
 					}
 				}
-				if(checkedValues.length()>0)
+				if (checkedValues.length() > 0)
 					checkedValues = checkedValues.substring(1);
 				else
 					checkedValues = "-";
@@ -1429,7 +1555,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				// drawing preview dal mhar tag htae htar ya mhar..
-				if(drawingPreview.getTag()!=null)
+				if (drawingPreview.getTag() != null)
 					map.put(key, drawingPreview.getTag().toString());
 				else
 					map.put(key, "-");
@@ -1458,7 +1584,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						photoPreview = (ImageView) linearLayout.getChildAt(j);
 					}
 				}
-				if(photoPreview.getTag()!=null)
+				if (photoPreview.getTag() != null)
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
@@ -1467,30 +1593,32 @@ public class OneQuestionOneView extends FragmentActivity {
 		return map;
 	}
 
-	private RadioButton getSelectedRadioButtonMyRadioGroup(
-			RadioGroup radioGroup) {
+	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
 		RadioButton selectedButton = null;
-		for(int i=0; i<radioGroup.getChildCount(); i++){
-			LinearLayout radioButtonLine = (LinearLayout) radioGroup.getChildAt(i);
-			for(int z=0; z<radioButtonLine.getChildCount(); z++){
+		for (int i = 0; i < radioGroup.getChildCount(); i++) {
+			LinearLayout radioButtonLine = (LinearLayout) radioGroup
+					.getChildAt(i);
+			for (int z = 0; z < radioButtonLine.getChildCount(); z++) {
 				View view = radioButtonLine.getChildAt(z);
 				String className = view.getClass().getName().toString();
-				if(className.equals("android.widget.RadioButton")){
+				if (className.equals("android.widget.RadioButton")) {
 					RadioButton radioButton = (RadioButton) view;
-					if(radioButton.isChecked()){
+					if (radioButton.isChecked()) {
 						return radioButton;
 					}
 				}
 			}
-			/*Object test = radioButtonLine.getTag(R.id.is_radiobutton_selected);
-			boolean isSelected = Boolean.parseBoolean(radioButtonLine.getTag(R.id.is_radiobutton_selected).toString());
-			if(isSelected){
-				for(int j=0; j<radioButtonLine.getChildCount(); j++){
-					if(radioButtonLine.getChildAt(j).getClass().getName().equals("android.widget.RadioButton")){
-						selectedButton = (RadioButton) radioButtonLine.getChildAt(j);
-					}
-				}
-			}*/
+			/*
+			 * Object test =
+			 * radioButtonLine.getTag(R.id.is_radiobutton_selected); boolean
+			 * isSelected = Boolean.parseBoolean(radioButtonLine.getTag(R.id.
+			 * is_radiobutton_selected).toString()); if(isSelected){ for(int
+			 * j=0; j<radioButtonLine.getChildCount(); j++){
+			 * if(radioButtonLine.getChildAt
+			 * (j).getClass().getName().equals("android.widget.RadioButton")){
+			 * selectedButton = (RadioButton) radioButtonLine.getChildAt(j); } }
+			 * }
+			 */
 		}
 		return selectedButton;
 	}
@@ -1521,27 +1649,30 @@ public class OneQuestionOneView extends FragmentActivity {
 	private void hideKeyboard(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;
 		int childCount = parrentLayout.getChildCount();
-		for(int i=0; i<parrentLayout.getChildCount(); i++){
-			String className = parrentLayout.getChildAt(i).getClass().getName().toString();
-			if(className.equals("android.widget.ScrollView")){
+		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+			String className = parrentLayout.getChildAt(i).getClass().getName()
+					.toString();
+			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);
 			}
 		}
 		String innerLayoutID = innerLayout.getTag(R.id.layout_id).toString();
-		if(innerLayoutID.equals("datetimeLayout") 
+		if (innerLayoutID.equals("datetimeLayout")
 				|| innerLayoutID.equals("radioLayout")
 				|| innerLayoutID.equals("checkBoxLayout")
 				|| innerLayoutID.equals("locationLayout")
 				|| innerLayoutID.equals("drawingLayout")
-			|| innerLayoutID.equals("photoLayout")
-			|| innerLayoutID.equals("martixOptionSingleLayout")){
-				InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-			    // check if no view has focus:
-			    View view = this.getCurrentFocus();
-			    if (view != null) {
-			        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-			    }
+				|| innerLayoutID.equals("photoLayout")
+				|| innerLayoutID.equals("martixOptionSingleLayout")) {
+			InputMethodManager inputManager = (InputMethodManager) this
+					.getSystemService(Context.INPUT_METHOD_SERVICE);
+			// check if no view has focus:
+			View view = this.getCurrentFocus();
+			if (view != null) {
+				inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+						InputMethodManager.HIDE_NOT_ALWAYS);
+			}
 		}
 
 	}

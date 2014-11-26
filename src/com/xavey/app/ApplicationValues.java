@@ -33,6 +33,8 @@ public class ApplicationValues {
 	
 	public static FONT CURRENT_FONT = FONT.DEFAULT_;
 	
+	public static boolean IS_RECORDING_NOW = false;
+	
 	
 	public static String getDeviceID(Activity activity) {
 		TelephonyManager telephonyManager = (TelephonyManager) activity

@@ -6,15 +6,18 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -76,8 +79,20 @@ public class LoginActivity extends Activity {
 
 		btnLogin.setOnClickListener(new OnClickListener() {
 
+			private void hideLoginKeyboard(){
+				InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				// check if no view has focus:
+				View view = getCurrentFocus();
+				if (view != null) {
+					inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+				}
+			}
+			
 			@Override
 			public void onClick(View v) {
+				
+				hideLoginKeyboard();
 				
 				txtMsg.setText("");
 				
@@ -237,14 +252,15 @@ public class LoginActivity extends Activity {
 			}
 			return false;
 		}
+		
+		
 
 		@Override
 		protected void onPostExecute(HashMap<String, String> result) {
 			Dialog.dismiss();
 			
 			int responseCode = Integer.parseInt(result.get("response_code").toString());
-			
-			 
+
 //			String organization = "local org";
 //			String token = "token2324234234";
 			
@@ -282,6 +298,9 @@ public class LoginActivity extends Activity {
 						MainActivity.class);
 				startActivity(itt);
 				finish();
+			}
+			else if(responseCode==403){
+				txtMsg.setText("Token expired....!");
 			}
 			else if(responseCode==401){
 				txtMsg.setText("Login failed, Try again.");

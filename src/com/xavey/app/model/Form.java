@@ -19,6 +19,7 @@ public class Form {
 	private String creator_name;
 	
 	private String form_fields;
+	private boolean form_location_required;
 
 	
 	public String getId() {
@@ -105,5 +106,11 @@ public class Form {
 	}
 	public void setCreator_name(String creator_name) {
 		this.creator_name = creator_name;
+	}
+	public boolean isForm_location_required() {
+		return form_location_required;
+	}
+	public void setForm_location_required(boolean form_location_required) {
+		this.form_location_required = form_location_required;
 	}
 }

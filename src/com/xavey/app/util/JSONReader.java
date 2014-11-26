@@ -82,10 +82,9 @@ public class JSONReader {
 
 	// Layout setting here
 	// get incoming JSONString and return a linear layout
-	
 
 	public ArrayList<LinearLayout> readForm2(Form form) throws JSONException {
-
+		
 		ArrayList<LinearLayout> layoutList = new ArrayList<LinearLayout>();
 
 		ArrayList<HashMap<String, Object>> formFields = getFormFields(form
@@ -144,14 +143,10 @@ public class JSONReader {
 				if (key.equals("field_type")) {
 					if (fields.get(key).equals("text")) {
 						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-						                                             LayoutParams.MATCH_PARENT));
-						
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						LayoutParams parentLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT);
+						LayoutParams parentLayoutParams = new LayoutParams(	LayoutParams.MATCH_PARENT,	LayoutParams.MATCH_PARENT);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 						RelativeLayout upLayout = new RelativeLayout(activity);
@@ -238,10 +233,10 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						textLayout.addView(errorMsg);
-						
+
 						scroll.addView(textLayout);
 						parentLayout.addView(scroll);
-						
+
 						// audio stuff
 						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
 						if(isAudioRequired){
@@ -472,7 +467,7 @@ public class JSONReader {
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("options")) {
 						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
@@ -488,8 +483,7 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -504,35 +498,28 @@ public class JSONReader {
 						// radioLayoutParams.setMargins(0, 25, 0, 25);
 						// radioLayout.setLayoutParams(radioLayoutParams);
 						radioLayout.setLayoutParams(innerLayoutParams);
-//						radioLayout
-//								.setBackgroundResource(R.drawable.linear_layout_ui);
+//						radioLayout.setBackgroundResource(R.drawable.linear_layout_ui);
 						radioLayout.setOrientation(LinearLayout.VERTICAL);
 						radioLayout.setTag(R.id.layout_id, "radioLayout");
-						radioLayout.setTag(R.id.field_id,
-								fields.get("field_id"));
-						radioLayout.setTag(R.id.field_name_id,
-								fields.get("field_name"));
-						radioLayout.setTag(R.id.field_required_id,
-								fields.get("field_required"));
-						radioLayout.setTag(R.id.field_label_id,
-								fields.get("field_label"));
+						radioLayout.setTag(R.id.field_id, fields.get("field_id"));
+						radioLayout.setTag(R.id.field_name_id, fields.get("field_name"));
+						radioLayout.setTag(R.id.field_required_id, fields.get("field_required"));
+						radioLayout.setTag(R.id.field_label_id, fields.get("field_label"));
 						radioLayout.setTag(R.id.field_ref, fields.get("field_ref"));
 						radioLayout.setTag(R.id.next_cond, fields.get("next_cond"));
+						
 						if(fields.containsKey("next_cond_type")){
 							radioLayout.setTag(R.id.next_cond_type, fields.get("next_cond_type"));
 						}
 						String field_default_value = fields.get("field_default_value").toString();
 						radioLayout.setTag(R.id.field_default_value,field_default_value );
-						String radioLabel = fields.get("field_label")
-								.toString();
+						String radioLabel = fields.get("field_label").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(radioLabel);
 						tvLabel.setTextSize(labelTextSize);
 						String fieldName = fields.get("field_name").toString();
-						String fieldRequired = fields.get("field_required")
-								.toString();
-						String fieldLabel = fields.get("field_label")
-								.toString();
+						String fieldRequired = fields.get("field_required").toString();
+						String fieldLabel = fields.get("field_label").toString();
 						tvLabel.setTag(R.id.field_name_id, fieldName);
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
@@ -581,31 +568,34 @@ public class JSONReader {
 							radioButton.setTag(R.id.field_skip, skip);
 							radioButton.setTag(R.id.extra, extra);
 							radioButton.setTag(R.id.is_radiobutton_selected, false);
-							radioButton.setSelected(true);
+							radioButton.setSelected(false);
 
-							if(!tag.equals(field_default_value)){
-								radioButton.setSelected(false);
+							if(tag.equals(field_default_value)){
+								radioButton.setSelected(true);
+								radioButton.setChecked(true);
+								radioButton.setTag(R.id.is_radiobutton_selected, true);
 							}
 							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
 									RadioGroup.LayoutParams.MATCH_PARENT,
 									RadioGroup.LayoutParams.WRAP_CONTENT);
-							
+
 							EditText extraValue = new EditText(activity);
 							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
 							extraValue.setTag(R.id.extra_status, "off");
-							
+
 							layoutParams.setMargins(0, 10, 0, 10);
-							if (default_value == (j + 1)) {
-								radioButton.setChecked(true);
-							}
+//							if (default_value == (j + 1)) {
+//								radioButton.setChecked(true);
+//								radioButton.setTag(R.id.is_radiobutton_selected, true);
+//							}
 							setTypeFace(radioButton);
-							
+
 							//rg.addView(radioButton, j, layoutParams);\
 							LinearLayout radioButtonLine = new LinearLayout(activity);
 							radioButtonLine.setTag(R.id.layout_id, "radioButtonLine");
 							radioButtonLine.setLayoutParams(radioButtonLineLayoutParams);
 							radioButtonLine.setOrientation(LinearLayout.VERTICAL);
-							
+
 							radioButton.setOnClickListener(new OnClickListener() {
 								@Override
 								public void onClick(View v) {
@@ -623,7 +613,7 @@ public class JSONReader {
 										// if child == radiobutton , then assigned to button
 										// if child == edit text , than assigned to edittext
 										// end loop
-										
+
 										RadioButton singleButtonFromAll = null;
 										EditText singleEditTextFromAll = null;
 										for(int j=0; j<radioButtonLine_.getChildCount(); j++){
@@ -642,7 +632,6 @@ public class JSONReader {
 										}
 
 										// now we got editext and radio button 
-
 										boolean extra = Boolean.parseBoolean(singleButtonFromAll.getTag(R.id.extra).toString());
 
 										int randomed_ = 0;
@@ -668,7 +657,6 @@ public class JSONReader {
 												singleEditTextFromAll.setLayoutParams(extraValueLayoutParamsAppear);
 											}
 										}
-
 									}
 									
 //									if(extraValue.getTag(R.id.extra_status).toString().equals("off")){
@@ -696,7 +684,7 @@ public class JSONReader {
 							rg.addView(radioButtonLine);
 						}
 						// for loop ends here
-						
+
 //						RelativeLayout radiobuttonLayout = new RelativeLayout(activity);
 //						int relative_MATCH_PARENT_ = RelativeLayout.LayoutParams.MATCH_PARENT;
 //						int relative_WRAP_CONTENT_ = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -710,13 +698,17 @@ public class JSONReader {
 //						EditText testText = new EditText(activity);
 //						testText.setLayoutParams(labelLayoutParams);
 //						radiobuttonLayout.addView(testText);
-//						
 //						radioLayout.addView(radiobuttonLayout);
+						
+						if(getSelectedRadioButtonMyRadioGroup(rg)==null){
+							RadioButton firstButton = getRadioButtonByIndexMyRadioGroup(rg, 0);
+							firstButton.setChecked(true);
+						}
+
 						radioLayout.addView(rg);
 						radioLayout.setGravity(Gravity.CENTER);
 						
 						scroll.addView(radioLayout);
-						
 						parentLayout.addView(scroll);
 						
 						// audio stuff
@@ -996,7 +988,7 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						locationLayout.addView(errorMsg);
 						locationLayout.addView(btnGPS);
-						
+			
 						scroll.addView(locationLayout);
 						parentLayout.addView(scroll);
 
@@ -1533,9 +1525,7 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getBoolean("field_required"));
-					// fields.put("field_default_value",
-					// jChild.getInt("field_default_value"));
-					fields.put("field_default_value", 1);
+					fields.put("field_default_value", jChild.get("field_default_value"));
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
 					JSONObject field_dataset = jChild
 							.getJSONObject("field_dataset");
@@ -1902,6 +1892,8 @@ public class JSONReader {
 		}
 		return dataList;
 	}
+	
+	
 
 	public JSONArray getJSONArrayToSubmit(Document document, Form form)
 			throws JSONException {
@@ -2171,6 +2163,22 @@ public class JSONReader {
 			}
 		}
 		return selectedButton;
+	}
+	
+	private RadioButton getRadioButtonByIndexMyRadioGroup(
+			RadioGroup radioGroup, int index) {
+
+		LinearLayout radioButtonLine = (LinearLayout) radioGroup.getChildAt(index);
+		for(int z=0; z<radioButtonLine.getChildCount(); z++){
+			View view = radioButtonLine.getChildAt(z);
+			String className = view.getClass().getName().toString();
+			if(className.equals("android.widget.RadioButton")){
+				RadioButton radioButton = (RadioButton) view;
+					return radioButton;
+			}
+		}
+
+		return null;
 	}
 
 	private static final AtomicLong UNIQUE_TIMESTAMP = new AtomicLong();
