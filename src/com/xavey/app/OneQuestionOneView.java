@@ -98,7 +98,7 @@ public class OneQuestionOneView extends FragmentActivity {
 	String currentDocumentID = "";
 
 	AudioRecordingManager recordingManager;
-	
+
 	GPSTracker gps;
 	ToastManager toast;
 
@@ -114,22 +114,8 @@ public class OneQuestionOneView extends FragmentActivity {
 		jsonReader.setCurrentDocumentID(currentDocumentID);
 		vPager = (ViewPager) findViewById(R.id.pager);
 		try {
-			if(currentForm.isForm_location_required()){
-				if(gps.canGetLocation()){
-					//render
-					layoutList = jsonReader.readForm2(currentForm);
-					layoutList.add(produceSubmitLayout());
-				}
-				else{
-					toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
-					finish();
-				}
-			}
-			else{
-				layoutList = jsonReader.readForm2(currentForm);
-				layoutList.add(produceSubmitLayout());
-			}
-			
+			layoutList = jsonReader.readForm2(currentForm);
+			layoutList.add(produceSubmitLayout());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -140,12 +126,12 @@ public class OneQuestionOneView extends FragmentActivity {
 		 * vPager.setAdapter(adapterViewPager);
 		 */
 
-		FragmentManager supportFragmentMagaer = getSupportFragmentManager();
-		if(layoutList!=null){
+
+		if (layoutList != null) {
 			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
-				layoutList);
+					layoutList);
 			vPager.setAdapter(qAdapter);
-			
+
 			vPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 				String fieldRequired;
@@ -198,7 +184,8 @@ public class OneQuestionOneView extends FragmentActivity {
 									.getChildAt(0);
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout"))
+											.toString()
+											.equals("recordingLayout"))
 								currentLayout = linearLayout;
 						}
 						if (view.getClass().getName()
@@ -213,12 +200,12 @@ public class OneQuestionOneView extends FragmentActivity {
 					boolean isSubmitLayout = isSubmitLayout(nextLayout);
 					if (!isSubmitLayout)
 						if (nextInnerLayout.getTag(R.id.layout_id) != null) {
-							currentLayoutID = nextInnerLayout
-									.getTag(R.id.layout_id).toString();
-							currentFieldID = nextInnerLayout.getTag(R.id.field_id)
-									.toString();
-							currentFieldRef = nextInnerLayout
-									.getTag(R.id.field_ref).toString();
+							currentLayoutID = nextInnerLayout.getTag(
+									R.id.layout_id).toString();
+							currentFieldID = nextInnerLayout.getTag(
+									R.id.field_id).toString();
+							currentFieldRef = nextInnerLayout.getTag(
+									R.id.field_ref).toString();
 							currentNextCond = (JSONArray) nextInnerLayout
 									.getTag(R.id.next_cond);
 						} else {
@@ -228,22 +215,30 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 
 					/*
-					 * String toast_text = "Current Position : " + currentPosition +
-					 * "\n" + "New Position : " + newPosition + "\n" +
-					 * "CurrentLayout ID : " + currentLayoutID + "\n" +
+					 * String toast_text = "Current Position : " +
+					 * currentPosition + "\n" + "New Position : " + newPosition
+					 * + "\n" + "CurrentLayout ID : " + currentLayoutID + "\n" +
 					 * "Last Jump Range : " + lastJump;
 					 * Toast.makeText(getApplicationContext(), toast_text, 4000)
 					 * .show();
 					 */
 
-					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString().equals("radioLayout");
-					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("datetimeLayout");
-					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("submitLayout");
+					boolean isNeedToValid = currentLayout
+							.getTag(R.id.layout_id).toString()
+							.equals("radioLayout");
+					isNeedToValid = isNeedToValid
+							|| currentLayout.getTag(R.id.layout_id).toString()
+									.equals("datetimeLayout");
+					isNeedToValid = isNeedToValid
+							|| currentLayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout");
 					LinearLayoutManager lLManager = new LinearLayoutManager();
 
-					TextView errorMsg = lLManager.getErrorMsgTextView(currentLayout);
+					TextView errorMsg = lLManager
+							.getErrorMsgTextView(currentLayout);
 
-					LayoutParams errorMsgLayoutOpen = new LayoutParams(LayoutParams.MATCH_PARENT, 30);
+					LayoutParams errorMsgLayoutOpen = new LayoutParams(
+							LayoutParams.MATCH_PARENT, 30);
 					errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
 
 					LayoutParams errorMsgLayoutHide = new LayoutParams(
@@ -261,25 +256,28 @@ public class OneQuestionOneView extends FragmentActivity {
 							field_required = test.get("field_required");
 						}
 						String field_label = test.get("field_label");
-						boolean isNotTyped = field_required.equals("true") && value.equals("#no_value#");
+						boolean isNotTyped = field_required.equals("true")
+								&& value.equals("#no_value#");
 						if (!isNotTyped) {
 							// user typed values
-							
-							if(ApplicationValues.IS_RECORDING_NOW){
+
+							if (ApplicationValues.IS_RECORDING_NOW) {
 								// still recording...
-								// block..							
+								// block..
 								// there is no direction validation...
-								// bcuz it will block both direction if recording is not ending
-									navigator.addLast(0);
-									used_field_ids.addLast(currentFieldID);
-									vPager.setCurrentItem(currentPosition);
-									errorMsg.setText("Audo recording is need to stop.");
-									errorMsg.setTextColor(Color.RED);
-									// errorMsg.setLayoutParams(errorMsgLayoutOpen);
-									currentPosition = previousIndex;
+								// bcuz it will block both direction if
+								// recording is not ending
+								navigator.addLast(0);
+								used_field_ids.addLast(currentFieldID);
+								vPager.setCurrentItem(currentPosition);
+								errorMsg.setText("Audo recording is need to stop.");
+								errorMsg.setTextColor(Color.RED);
+								// errorMsg.setLayoutParams(errorMsgLayoutOpen);
+								currentPosition = previousIndex;
 							}
-							
-							String tagID = currentLayout.getTag(R.id.layout_id).toString();
+
+							String tagID = currentLayout.getTag(R.id.layout_id)
+									.toString();
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
 								String field_max_value = test
@@ -287,17 +285,23 @@ public class OneQuestionOneView extends FragmentActivity {
 								String field_min_value = test
 										.get("field_min_value");
 								// String field_default_value =
-								// test.get("field_default_value"); // no need yet
-								String field_err_msg = test.get("field_err_msg");
+								// test.get("field_default_value"); // no need
+								// yet
+								String field_err_msg = test
+										.get("field_err_msg");
 								int userTypedValue = Integer.parseInt(value_);
-								int maxValue = Integer.parseInt(field_max_value);
-								int minValue = Integer.parseInt(field_min_value);
-								if (userTypedValue > maxValue || userTypedValue < minValue) {
+								int maxValue = Integer
+										.parseInt(field_max_value);
+								int minValue = Integer
+										.parseInt(field_min_value);
+								if (userTypedValue > maxValue
+										|| userTypedValue < minValue) {
 									// out of range ..
 									// block
 									// block for only left to right cuz invalid
 									if (direction.equals(LEFT_TO_RIGHT)) {
-										// int range = newPosition-currentPosition;
+										// int range =
+										// newPosition-currentPosition;
 										navigator.addLast(0);
 										used_field_ids.addLast(currentFieldID);
 										vPager.setCurrentItem(currentPosition);
@@ -307,7 +311,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
 										int last_range = navigator.getLast();
-										newPosition = currentPosition - last_range;
+										newPosition = currentPosition
+												- last_range;
 										vPager.setCurrentItem(newPosition);
 										currentPosition = newPosition;
 										navigator.removeLast();
@@ -324,23 +329,26 @@ public class OneQuestionOneView extends FragmentActivity {
 										 * LinearLayout nextLayout_ =
 										 * layoutList.get(newPosition); boolean
 										 * isInvolvedRef =
-										 * isFieldInvolvedReference(nextLayout_);
-										 * if(isInvolvedRef){ String field_ref =
+										 * isFieldInvolvedReference
+										 * (nextLayout_); if(isInvolvedRef){
+										 * String field_ref =
 										 * getReferenceFromParrentLayout
-										 * (nextLayout_); LinearLayout ref_layout =
-										 * getRefLayout(field_ref, layoutList);
-										 * JSONArray next_cond =
+										 * (nextLayout_); LinearLayout
+										 * ref_layout = getRefLayout(field_ref,
+										 * layoutList); JSONArray next_cond =
 										 * getNextConditionFromParrentLayout
 										 * (nextLayout_); String
 										 * value_from_ref_layout =
 										 * jsonReader.readValueFromLayout
 										 * (ref_layout); boolean isNeedToSkip =
 										 * isNeedToSkip(next_cond,
-										 * value_from_ref_layout); newPosition++; }
+										 * value_from_ref_layout);
+										 * newPosition++; }
 										 */
 										// ------------------------------------------------------
 										newPosition = getNextRoute(newPosition);
-										int range = newPosition - currentPosition;
+										int range = newPosition
+												- currentPosition;
 										if (range != 0)
 											navigator.addLast(range);
 										used_field_ids.addLast(currentFieldID);
@@ -354,7 +362,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
 										int last_range = navigator.getLast();
-										newPosition = currentPosition - last_range;
+										newPosition = currentPosition
+												- last_range;
 										vPager.setCurrentItem(newPosition);
 										currentPosition = newPosition;
 										navigator.removeLast();
@@ -382,14 +391,15 @@ public class OneQuestionOneView extends FragmentActivity {
 									 * isInvolvedRef =
 									 * isFieldInvolvedReference(nextLayout_);
 									 * if(isInvolvedRef){ String field_ref =
-									 * getReferenceFromParrentLayout(nextLayout_);
-									 * LinearLayout ref_layout =
+									 * getReferenceFromParrentLayout
+									 * (nextLayout_); LinearLayout ref_layout =
 									 * getRefLayout(field_ref, layoutList);
 									 * JSONArray next_cond =
 									 * getNextConditionFromParrentLayout
-									 * (nextLayout_); String value_from_ref_layout =
-									 * jsonReader.readValueFromLayout(ref_layout);
-									 * boolean isNeedToSkip =
+									 * (nextLayout_); String
+									 * value_from_ref_layout =
+									 * jsonReader.readValueFromLayout
+									 * (ref_layout); boolean isNeedToSkip =
 									 * isNeedToSkip(next_cond,
 									 * value_from_ref_layout); newPosition++; }
 									 */
@@ -444,7 +454,8 @@ public class OneQuestionOneView extends FragmentActivity {
 							}
 						}
 					} else {
-						// here will be fragments they are not concerned with any
+						// here will be fragments they are not concerned with
+						// any
 						// validation
 						// pass
 						// another question is where to go if radio layout
@@ -455,99 +466,109 @@ public class OneQuestionOneView extends FragmentActivity {
 							for (int i = 0; i < currentLayout.getChildCount(); i++) {
 								String className = currentLayout.getChildAt(i)
 										.getClass().getName().toString();
-								if (className.equals("android.widget.RadioGroup")) {
+								if (className
+										.equals("android.widget.RadioGroup")) {
 									// radio
 									RadioGroup radioGroup = (RadioGroup) currentLayout
 											.getChildAt(i);
 
 									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 
-									String fieldID = currentLayout.getTag(R.id.field_id).toString();
+									String fieldID = currentLayout.getTag(
+											R.id.field_id).toString();
 									Log.i("fieldID", fieldID);
-									
-									
+
 									if (direction.equals(LEFT_TO_RIGHT)) {
 
-											String field_skip = selectedButton.getTag(R.id.field_skip).toString();
-											if(ApplicationValues.IS_RECORDING_NOW){
-												// still recording...
-												// block..							
-												// there is no direction validation...
-												// bcuz it will block both direction if recording is not ending
-													navigator.addLast(0);
-													used_field_ids.addLast(currentFieldID);
-													vPager.setCurrentItem(currentPosition);
-													toast.xaveyToast(null, "Audio recording is needed to stop.");
-//													errorMsg.setText("Audio recording is need to stop.");
-//													errorMsg.setTextColor(Color.RED);
-													// errorMsg.setLayoutParams(errorMsgLayoutOpen);
-													currentPosition = previousIndex;
-											}
-											else if (field_skip.length() > 0) {
-												if (field_skip.equals("submit")) {
-													// skip logic
-													// skip to submit
+										String field_skip = selectedButton
+												.getTag(R.id.field_skip)
+												.toString();
+										if (ApplicationValues.IS_RECORDING_NOW) {
+											// still recording...
+											// block..
+											// there is no direction
+											// validation...
+											// bcuz it will block both direction
+											// if recording is not ending
+											navigator.addLast(0);
+											used_field_ids
+													.addLast(currentFieldID);
+											vPager.setCurrentItem(currentPosition);
+											toast.xaveyToast(null,
+													"Audio recording is needed to stop.");
+											// errorMsg.setText("Audio recording is need to stop.");
+											// errorMsg.setTextColor(Color.RED);
+											// errorMsg.setLayoutParams(errorMsgLayoutOpen);
+											currentPosition = previousIndex;
+										} else if (field_skip.length() > 0) {
+											if (field_skip.equals("submit")) {
+												// skip logic
+												// skip to submit
 
-													newPosition = layoutList.size() - 1;
-													int range = newPosition
-															- currentPosition;
-													navigator.addLast(range);
-													used_field_ids.addLast(currentFieldID);
-													vPager.setCurrentItem(newPosition);
-													currentPosition = newPosition;
-													previousIndex = currentPosition;
-													// hide keyboard
-													LinearLayout nextLayout_ = layoutList
-															.get(newPosition);
-													if (!isSubmitLayout(nextLayout_))
-														hideKeyboard(nextLayout_);
-												} else {
-
-													// skip logic
-													skipID = Integer
-															.parseInt(field_skip);
-													newPosition = skipID - 1;
-													newPosition = getNextRoute(newPosition);
-													previousIndex = currentPosition;
-													int range = newPosition
-															- currentPosition;
-													if (range != 0) // <-- don't
-																	// know why
-																	// but a
-																	// zero came
-																	// sometimes,
-																	// so i
-																	// filtered
-														navigator.addLast(range);
-													used_field_ids
-															.addLast(currentFieldID);
-													vPager.setCurrentItem(newPosition);
-													currentPosition = newPosition;
-													// hide keyboard
-													LinearLayout nextLayout_ = layoutList
-															.get(newPosition);
-													if (!isSubmitLayout(nextLayout_))
-														hideKeyboard(nextLayout_);
-												}
-											} else {
-												
-												newPosition = getNextRoute(newPosition);
-												int range = newPosition	- currentPosition;
+												newPosition = layoutList.size() - 1;
+												int range = newPosition
+														- currentPosition;
 												navigator.addLast(range);
-												used_field_ids.addLast(currentFieldID);
+												used_field_ids
+														.addLast(currentFieldID);
 												vPager.setCurrentItem(newPosition);
 												currentPosition = newPosition;
 												previousIndex = currentPosition;
 												// hide keyboard
-												LinearLayout nextLayout_ = layoutList.get(newPosition);
+												LinearLayout nextLayout_ = layoutList
+														.get(newPosition);
+												if (!isSubmitLayout(nextLayout_))
+													hideKeyboard(nextLayout_);
+											} else {
+
+												// skip logic
+												skipID = Integer
+														.parseInt(field_skip);
+												newPosition = skipID - 1;
+												newPosition = getNextRoute(newPosition);
+												previousIndex = currentPosition;
+												int range = newPosition
+														- currentPosition;
+												if (range != 0) // <-- don't
+																// know why
+																// but a
+																// zero came
+																// sometimes,
+																// so i
+																// filtered
+													navigator.addLast(range);
+												used_field_ids
+														.addLast(currentFieldID);
+												vPager.setCurrentItem(newPosition);
+												currentPosition = newPosition;
+												// hide keyboard
+												LinearLayout nextLayout_ = layoutList
+														.get(newPosition);
 												if (!isSubmitLayout(nextLayout_))
 													hideKeyboard(nextLayout_);
 											}
+										} else {
 
+											newPosition = getNextRoute(newPosition);
+											int range = newPosition
+													- currentPosition;
+											navigator.addLast(range);
+											used_field_ids
+													.addLast(currentFieldID);
+											vPager.setCurrentItem(newPosition);
+											currentPosition = newPosition;
+											previousIndex = currentPosition;
+											// hide keyboard
+											LinearLayout nextLayout_ = layoutList
+													.get(newPosition);
+											if (!isSubmitLayout(nextLayout_))
+												hideKeyboard(nextLayout_);
+										}
 
 									} else { // RIGHT_TO_LEFT
 										int last_range = navigator.getLast();
-										newPosition = currentPosition - last_range;
+										newPosition = currentPosition
+												- last_range;
 										vPager.setCurrentItem(newPosition);
 										currentPosition = newPosition;
 										navigator.removeLast();
@@ -578,13 +599,15 @@ public class OneQuestionOneView extends FragmentActivity {
 								// if(isInvolvedRef){
 								// String field_ref =
 								// getReferenceFromParrentLayout(nextLayout_);
-								// LinearLayout ref_layout = getRefLayout(field_ref,
+								// LinearLayout ref_layout =
+								// getRefLayout(field_ref,
 								// layoutList);
 								// JSONArray next_cond =
 								// getNextConditionFromParrentLayout(nextLayout_);
 								// String value_from_ref_layout =
 								// jsonReader.readValueFromLayout(ref_layout);
-								// boolean isNeedToSkip = isNeedToSkip(next_cond,
+								// boolean isNeedToSkip =
+								// isNeedToSkip(next_cond,
 								// value_from_ref_layout);
 								// newPosition++;
 								// }
@@ -650,10 +673,12 @@ public class OneQuestionOneView extends FragmentActivity {
 									LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
 									int count = 0;
 									if (ref_inner_layout.getTag(R.id.layout_id)
-											.toString().equals("checkBoxLayout")) {
+											.toString()
+											.equals("checkBoxLayout")) {
 										for (int i = 0; i < ref_inner_layout
 												.getChildCount(); i++) {
-											View v = ref_inner_layout.getChildAt(i);
+											View v = ref_inner_layout
+													.getChildAt(i);
 											String className = v.getClass()
 													.getName().toString();
 											if (className
@@ -665,8 +690,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 									}
 									// now we got count here
-									isNeedToSkip = isNeedToSkip(next_cond, count
-											+ "");
+									isNeedToSkip = isNeedToSkip(next_cond,
+											count + "");
 									if (isNeedToSkip)
 										newPosition++;
 								}
@@ -693,14 +718,16 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (parrentlayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return false;
-						} else if (parrentlayout.getChildAt(i).getClass().getName()
+						} else if (parrentlayout.getChildAt(i).getClass()
+								.getName()
 								.equals("android.widget.LinearLayout")) {
 							LinearLayout linearLayout = (LinearLayout) parrentlayout
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout")) {
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								if (innerLayout.getTag(R.id.next_cond_type) != null)
 									next_cond_type = innerLayout.getTag(
@@ -714,21 +741,24 @@ public class OneQuestionOneView extends FragmentActivity {
 						return false;
 				}
 
-				private boolean isFieldInvolvedReference(LinearLayout parrentlayout) {
+				private boolean isFieldInvolvedReference(
+						LinearLayout parrentlayout) {
 					String field_ref = "";
 					for (int i = 0; i < parrentlayout.getChildCount(); i++) {
 						if (parrentlayout.getTag(R.id.layout_id) != null) {
 							if (parrentlayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return false;
-						} else if (parrentlayout.getChildAt(i).getClass().getName()
+						} else if (parrentlayout.getChildAt(i).getClass()
+								.getName()
 								.equals("android.widget.LinearLayout")) {
 							LinearLayout linearLayout = (LinearLayout) parrentlayout
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout")) {
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								field_ref = innerLayout.getTag(R.id.field_ref)
 										.toString();
@@ -749,14 +779,16 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (parrentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return "";
-						} else if (parrentLayout.getChildAt(i).getClass().getName()
+						} else if (parrentLayout.getChildAt(i).getClass()
+								.getName()
 								.equals("android.widget.LinearLayout")) {
 							LinearLayout linearLayout = (LinearLayout) parrentLayout
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout")) {
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								reference = innerLayout.getTag(R.id.field_ref)
 										.toString();
@@ -787,8 +819,8 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (className.equals("android.widget.ScrollView")) {
 							ScrollView scroll = (ScrollView) v;
 							innerLayout = (LinearLayout) scroll.getChildAt(0);
-							String layoutID = innerLayout.getTag(R.id.layout_id)
-									.toString();
+							String layoutID = innerLayout
+									.getTag(R.id.layout_id).toString();
 							if (innerLayout.getTag(R.id.layout_id) != null
 									&& !layoutID.equals("recordingLayout")) {
 								return innerLayout;
@@ -817,14 +849,16 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (parrentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return null;
-						} else if (parrentLayout.getChildAt(i).getClass().getName()
+						} else if (parrentLayout.getChildAt(i).getClass()
+								.getName()
 								.equals("android.widget.LinearLayout")) {
 							LinearLayout linearLayout = (LinearLayout) parrentLayout
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout")) {
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								nextConditionType = innerLayout.getTag(
 										R.id.next_cond_type).toString();
@@ -842,14 +876,16 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (parrentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return null;
-						} else if (parrentLayout.getChildAt(i).getClass().getName()
+						} else if (parrentLayout.getChildAt(i).getClass()
+								.getName()
 								.equals("android.widget.LinearLayout")) {
 							LinearLayout linearLayout = (LinearLayout) parrentLayout
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
 									&& !linearLayout.getTag(R.id.layout_id)
-											.toString().equals("recordingLayout")) {
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								nextCondition = (JSONArray) innerLayout
 										.getTag(R.id.next_cond);
@@ -920,15 +956,11 @@ public class OneQuestionOneView extends FragmentActivity {
 					// currentPosition = position;
 				}
 			});
-			
-		}
-		
 
-		
-	
-	
-	// here
-	
+		}
+
+		// here
+
 	}
 
 	/*
@@ -1130,6 +1162,10 @@ public class OneQuestionOneView extends FragmentActivity {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//testing...
+				toast.xaveyToast(null, "lat: "+ gps.getLatitude() +"\nlong: "+gps.getLongitude());
+				
+				
 				Document document = new Document();
 				ArrayList<LinearLayout> completeList = getCompleteList(
 						layoutList, used_field_ids);
@@ -1229,8 +1265,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
 							document, currentForm);
 					// here.. may be shock
-					document.setDocument_json_to_submit(mainArray
-							.getJSONObject(0).toString());
+					document.setDocument_json_to_submit(mainArray.getJSONObject(0).toString());
 					// following line won't be needed , but not sure..., fix
 					// later
 					document.setSubmitted("0");
@@ -1335,14 +1370,18 @@ public class OneQuestionOneView extends FragmentActivity {
 			LinearLayout linearLayout = null;
 			for (int p = 0; p < parentLayout.getChildCount(); p++) {
 				View child = parentLayout.getChildAt(p);
-				if (child.getTag(R.id.layout_id) != null
-						&& child.getClass().getName()
-								.equals("android.widget.LinearLayout")) {
-					if (!child.getTag(R.id.layout_id).toString()
-							.equals("recordingLayout"))
-						linearLayout = (LinearLayout) parentLayout
-								.getChildAt(p);
+				if(child.getClass().getName().equals("android.widget.ScrollView")){
+					ScrollView scrollView = (ScrollView) child;
+					for(int a=0; a<scrollView.getChildCount(); a++){
+						View scrollChild = scrollView.getChildAt(a);
+						if (scrollChild.getTag(R.id.layout_id) != null && scrollChild.getClass().getName().equals("android.widget.LinearLayout")) {
+							if (!scrollChild.getTag(R.id.layout_id).toString()
+									.equals("recordingLayout"))
+								linearLayout = (LinearLayout) scrollChild;
+						}
+					}
 				}
+
 			}
 			parentLayout.getChildAt(1);
 
@@ -1591,7 +1630,8 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 		}
 		return map;
-	}
+	}// </getValueFromEachLayout>
+	
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
 		RadioButton selectedButton = null;

@@ -21,7 +21,9 @@ import com.xavey.app.adapter.FormAdapter;
 import com.xavey.app.adapter.FormAdapter.ViewHolder;
 import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Form;
+import com.xavey.app.util.GPSTracker;
 import com.xavey.app.util.SessionManager;
+import com.xavey.app.util.ToastManager;
 
 public class HomeFragment extends Fragment implements OnItemClickListener{
 
@@ -33,6 +35,8 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	FormAdapter formAdapter;
 	ArrayList<Form> formList;
 	XaveyDBHelper dbHelper;
+	
+	GPSTracker gps;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,6 +77,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 		else
 			formGridView.setNumColumns(2);
 		setWelcomeText();
+		gps = new GPSTracker(getActivity().getApplicationContext());
 	}
 
 	public static boolean isTablet(Context context) {
@@ -90,11 +95,27 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 		//Intent i = new Intent(activity, DocumentInputActivity.class);
-		Intent i = new Intent(activity, OneQuestionOneView.class);
+
 		ViewHolder holder = (ViewHolder)view.getTag();
 		String id_from_holder = holder.getFormID();
-		i.putExtra("formID", id_from_holder);
-		startActivity(i);
+		Form clickedForm = dbHelper.getFormByFormID(id_from_holder);
+		if(clickedForm.isForm_location_required())
+		{
+			if(gps.canGetLocation()){
+				Intent i = new Intent(activity, OneQuestionOneView.class);
+				i.putExtra("formID", id_from_holder);
+				startActivity(i);
+			}
+			else{
+				ToastManager toast = new ToastManager(activity);
+				toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
+			}
+		}
+		else{
+			Intent i = new Intent(activity, OneQuestionOneView.class);
+			i.putExtra("formID", id_from_holder);
+			startActivity(i);
+		}
 	}
 
 }

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -35,10 +36,20 @@ public class LinearLayoutManager {
 		LinearLayout targetLayout = null;
 		for(int i=0; i<linearLayout.getChildCount();i++){
 			View view = linearLayout.getChildAt(i);
-			if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id)!=null){
-				if(!view.getTag(R.id.layout_id).toString().equals("recordingLayout"))
-					targetLayout = (LinearLayout) view;
+			
+			String className = view.getClass().getName();
+			if(className.equals("android.widget.ScrollView")){
+				ScrollView scrollView = (ScrollView) view;
+				for(int z=0; z<scrollView.getChildCount(); z++){
+					View scrollViewChild = scrollView.getChildAt(z);
+					String svChildClassName = scrollViewChild.getClass().getName();
+					if(svChildClassName.equals("android.widget.LinearLayout") && scrollViewChild.getTag(R.id.layout_id)!=null){
+						if(!scrollViewChild.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+							targetLayout = (LinearLayout) scrollViewChild;
+					}
+				}
 			}
+
 		}
 		if(targetLayout!=null){
 			if(targetLayout.getTag(R.id.field_id)!=null)
