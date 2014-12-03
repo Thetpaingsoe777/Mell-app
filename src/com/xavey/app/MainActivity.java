@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	//private CharSequence mDrawerTitle;
-	CustomDrawerAdapter adapter;
+	CustomDrawerAdapter adapter_;
 	List<DrawerItem> itemList;
 	SessionManager session;
 	public static Menu optionMenu;
@@ -92,6 +92,7 @@ public class MainActivity extends Activity {
 		}
 		downloadForms();
 		customHandler.postDelayed(updateTimerThread, 1000 * 30);
+		
 	}
 
 	private void downloadForms(){
@@ -181,9 +182,9 @@ public class MainActivity extends Activity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		addDrawerItem();
-		adapter = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
+		adapter_ = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
 				itemList);
-		mDrawerList.setAdapter(adapter);
+		mDrawerList.setAdapter(adapter_);
 		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -281,8 +282,7 @@ public class MainActivity extends Activity {
 			fragment.setArguments(args);
 			try{
 				FragmentManager frgManager = getFragmentManager();
-				frgManager.beginTransaction().replace(R.id.content_frame, fragment)
-						.commit();
+				frgManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 				mDrawerList.setItemChecked(position, true);
 				setTitle(itemList.get(position).getItemName());
 				mDrawerLayout.closeDrawer(mDrawerList);

@@ -27,4 +27,7 @@
     <!-- for audio -->
     <item type="id" name="audio_path"/>
     
+    <!-- matrix -->
+    <item type="id" name="matrix_cell"/>
+    
 </resources>

@@ -22,7 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.DisplayMetrics;
@@ -173,8 +172,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
 					}
-					LinearLayout currentParentLayout = layoutList
-							.get(currentPosition);
+					LinearLayout currentParentLayout = layoutList.get(currentPosition);
 					for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
 						View view = currentParentLayout.getChildAt(i);
 						if (view.getClass().getName()
@@ -1627,6 +1625,11 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
+			}else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixCLLayout")) {
+				int yta = 0;
+				toast.xaveyToast(null, "");
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				
 			}
 		}
 		return map;
