@@ -2546,7 +2546,7 @@ public class JSONReader {
 		// location child node
 		JSONObject locationChildNode = new JSONObject();
 		locationChildNode.put("lat", gps.getLatitude());
-		locationChildNode.put("long", gps.getLongitude());
+		locationChildNode.put("lng", gps.getLongitude());
 
 		document_json.put("data", dataArray);
 		document_json.put("timestamp", timestamp);
