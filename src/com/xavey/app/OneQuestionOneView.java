@@ -18,6 +18,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
@@ -50,6 +51,7 @@ import com.xavey.app.db.XaveyDBHelper;
 import com.xavey.app.model.Document;
 import com.xavey.app.model.Form;
 import com.xavey.app.model.Image;
+import com.xavey.app.model.MatrixCell;
 import com.xavey.app.util.AudioRecordingManager;
 import com.xavey.app.util.ConnectionDetector;
 import com.xavey.app.util.GPSTracker;
@@ -57,6 +59,7 @@ import com.xavey.app.util.ImageSavingManager;
 import com.xavey.app.util.JSONReader;
 import com.xavey.app.util.JSONWriter;
 import com.xavey.app.util.LinearLayoutManager;
+import com.xavey.app.util.MYHorizontalScrollView;
 import com.xavey.app.util.SyncManager;
 import com.xavey.app.util.ToastManager;
 import com.xavey.app.util.TypeFaceManager;
@@ -125,10 +128,8 @@ public class OneQuestionOneView extends FragmentActivity {
 		 * vPager.setAdapter(adapterViewPager);
 		 */
 
-
 		if (layoutList != null) {
-			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
-					layoutList);
+			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(), layoutList);
 			vPager.setAdapter(qAdapter);
 
 			vPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -221,31 +222,21 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * .show();
 					 */
 
-					boolean isNeedToValid = currentLayout
-							.getTag(R.id.layout_id).toString()
-							.equals("radioLayout");
-					isNeedToValid = isNeedToValid
-							|| currentLayout.getTag(R.id.layout_id).toString()
-									.equals("datetimeLayout");
-					isNeedToValid = isNeedToValid
-							|| currentLayout.getTag(R.id.layout_id).toString()
-									.equals("submitLayout");
+					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString().equals("radioLayout");
+					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("datetimeLayout");
+					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("submitLayout");
 					LinearLayoutManager lLManager = new LinearLayoutManager();
 
-					TextView errorMsg = lLManager
-							.getErrorMsgTextView(currentLayout);
+					TextView errorMsg = lLManager.getErrorMsgTextView(currentLayout);
 
-					LayoutParams errorMsgLayoutOpen = new LayoutParams(
-							LayoutParams.MATCH_PARENT, 30);
+					LayoutParams errorMsgLayoutOpen = new LayoutParams(LayoutParams.MATCH_PARENT, 30);
 					errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
 
-					LayoutParams errorMsgLayoutHide = new LayoutParams(
-							LayoutParams.MATCH_PARENT, 0);
+					LayoutParams errorMsgLayoutHide = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
 					errorMsgLayoutHide.setMargins(10, 20, 10, 20);
 
 					if (!isNeedToValid) {
-						HashMap<String, String> test = lLManager
-								.test(currentLayout);
+						HashMap<String, String> test = lLManager.test(currentLayout);
 						String value = "";
 						if (test.containsKey("value"))
 							value = test.get("value");
@@ -254,11 +245,9 @@ public class OneQuestionOneView extends FragmentActivity {
 							field_required = test.get("field_required");
 						}
 						String field_label = test.get("field_label");
-						boolean isNotTyped = field_required.equals("true")
-								&& value.equals("#no_value#");
+						boolean isNotTyped = field_required.equals("true") && value.equals("#no_value#");
 						if (!isNotTyped) {
 							// user typed values
-
 							if (ApplicationValues.IS_RECORDING_NOW) {
 								// still recording...
 								// block..
@@ -274,8 +263,7 @@ public class OneQuestionOneView extends FragmentActivity {
 								currentPosition = previousIndex;
 							}
 
-							String tagID = currentLayout.getTag(R.id.layout_id)
-									.toString();
+							String tagID = currentLayout.getTag(R.id.layout_id).toString();
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
 								String field_max_value = test
@@ -1161,9 +1149,8 @@ public class OneQuestionOneView extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				//testing...
-				toast.xaveyToast(null, "lat: "+ gps.getLatitude() +"\nlong: "+gps.getLongitude());
-				
-				
+				//toast.xaveyToast(null, "lat: "+ gps.getLatitude() +"\nlong: "+gps.getLongitude());
+
 				Document document = new Document();
 				ArrayList<LinearLayout> completeList = getCompleteList(
 						layoutList, used_field_ids);
@@ -1201,10 +1188,8 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 
 						String userTypedValue = "";
-						if (incompleteMap.containsKey(fieldID)) { // <--
-																	// filter
-							userTypedValue = incompleteMap.get(fieldID)
-									.toString();
+						if (incompleteMap.containsKey(fieldID)) { // <--filter
+							userTypedValue = incompleteMap.get(fieldID).toString();
 							try {
 								JSONObject child = new JSONObject();
 								child.put("field_id", fieldID);
@@ -1212,8 +1197,7 @@ public class OneQuestionOneView extends FragmentActivity {
 								child.put("field_value", userTypedValue);
 								child.put("field_label", fieldLabel);
 								if (fieldValueAudio.length() > 0) {
-									child.put("field_value_audio",
-											fieldValueAudio);
+									child.put("field_value_audio", fieldValueAudio);
 								}
 								jsonArray.put(child);
 							} catch (JSONException e) {
@@ -1231,8 +1215,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					document.setCreated_at(getCurrentDateTime());
 					document.setDocument_json(document_json.toString());
 					document.setForm_id(currentForm.getForm_id());
-					document.setCreated_worker(ApplicationValues.loginUser
-							.getUser_id());
+					document.setCreated_worker(ApplicationValues.loginUser.getUser_id());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -1254,8 +1237,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					image.setImage_path(image_path);
 					dbHelper.addNewImage(image);
 				}
-				SyncManager syncManager = new SyncManager(
-						OneQuestionOneView.this);
+				SyncManager syncManager = new SyncManager(OneQuestionOneView.this);
 
 				// document_json(structure) is needed everytime before
 				// upload
@@ -1273,9 +1255,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				// ---------------------------------------------------------
 
-				// -----
-				isInternetAvailable = connectionDetector
-						.isConnectingToInternet();
+				// ----- 
+				isInternetAvailable = connectionDetector.isConnectingToInternet();
 				if (isInternetAvailable) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
@@ -1289,9 +1270,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						e.printStackTrace();
 					}
 				} else {
-
 					// -------------------------------------------------------------------
-
 					/*
 					 * // offline mode document.setSubmitted("0"); // save image
 					 * too. String docID = document.getDocument_id(); for
@@ -1314,7 +1293,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * document.setSubmitted("0"); } catch (JSONException e) {
 					 * e.printStackTrace(); }
 					 */
-
 					// -----------------------------------------------------------
 				}
 				dbHelper.addNewDocument(document);
@@ -1366,20 +1344,18 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
 			LinearLayout linearLayout = null;
-			for (int p = 0; p < parentLayout.getChildCount(); p++) {
+			for (int p=0; p<parentLayout.getChildCount(); p++) {
 				View child = parentLayout.getChildAt(p);
-				if(child.getClass().getName().equals("android.widget.ScrollView")){
+				if(child.getClass().getName().equals("android.widget.ScrollView")){ 
 					ScrollView scrollView = (ScrollView) child;
 					for(int a=0; a<scrollView.getChildCount(); a++){
 						View scrollChild = scrollView.getChildAt(a);
 						if (scrollChild.getTag(R.id.layout_id) != null && scrollChild.getClass().getName().equals("android.widget.LinearLayout")) {
-							if (!scrollChild.getTag(R.id.layout_id).toString()
-									.equals("recordingLayout"))
+							if (!scrollChild.getTag(R.id.layout_id).toString().equals("recordingLayout"))
 								linearLayout = (LinearLayout) scrollChild;
 						}
 					}
 				}
-
 			}
 			parentLayout.getChildAt(1);
 
@@ -1388,8 +1364,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String value = "";
 				EditText edt1 = null;
-				String field_label = linearLayout.getTag(R.id.field_label_id)
-						.toString();
+				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
 
 				for (int j = 0; j < linearLayout.getChildCount(); j++) {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(j)
@@ -1478,9 +1453,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				// JSONArray checkedValues = new JSONArray();
 				String checkedValues = "";
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String field_label = linearLayout.getTag(R.id.field_label_id)
-						.toString();
-
+				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
 				for (int z = 0; z < linearLayout.getChildCount(); z++) {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(z)
 							.getClass();
@@ -1503,7 +1476,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				if (checkedValues.length() > 0)
-					checkedValues = checkedValues.substring(1);
+					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
@@ -1575,11 +1548,9 @@ public class OneQuestionOneView extends FragmentActivity {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(j)
 							.getClass();
 					if (subClass.getName().equals("android.widget.ImageView")) {
-
 						// ဒီ method ထဲမှာဘာမှမလုပ်ဘူး... ဒီ small imageview က
 						// preview ပဲပြထားတာ... တကယ့် path က သယ်လာပြီးသား....
 						// validation ပဲလုပ်တာ..
-
 						drawingPreview = (ImageView) linearLayout.getChildAt(j);
 						// to check image involve or not
 						/*
@@ -1625,11 +1596,120 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
-			}else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixCLLayout")) {
-				int yta = 0;
-				toast.xaveyToast(null, "");
+			}else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixCheckListLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				
+				String checkedValues="";
+				//ArrayList<MatrixCell> selectedCellList = new ArrayList<MatrixCell>();
+				key.toCharArray();
+				for(int x=0; x<linearLayout.getChildCount(); x++){
+					View view = linearLayout.getChildAt(x);
+					if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id).toString().equals("theMatrixLayout")){
+						LinearLayout theMatrixLayout = (LinearLayout) view;
+						LinearLayout rowLabelColumn = null;
+						MYHorizontalScrollView horizontalScrollView = null;
+						for(int y=0; y<theMatrixLayout.getChildCount(); y++){
+							View v = theMatrixLayout.getChildAt(y);
+
+							if(v.getTag(R.id.layout_id).toString().equals("rowLabelColumn")){
+								rowLabelColumn = (LinearLayout) v;
+							}
+							else if(v.getTag(R.id.layout_id).toString().equals("horizontalScrollView")){
+								horizontalScrollView = (MYHorizontalScrollView) v;
+							}
+						}
+						// both rowLabelColumn and horizontalScrollView must be already assigned in this line
+						if(((LinearLayout) horizontalScrollView.getChildAt(0)).getTag(R.id.layout_id).toString().equals("AllColumns")){
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView.getChildAt(0);
+							for(int ac=0; ac<AllColumns.getChildCount(); ac++){
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns.getChildAt(ac);
+								String columnTitle = "";
+								for(int sc=0; sc<singleColumnAt_ac.getChildCount(); sc++){
+									View singleCheckBoxLayout = singleColumnAt_ac.getChildAt(sc);
+									String cellTag = singleCheckBoxLayout.getTag(R.id.layout_id).toString();
+									if(cellTag.equals("columnTitle")){
+										columnTitle = ((TextView)singleCheckBoxLayout).getText().toString();
+									}
+									else if(cellTag.equals("cell")){
+										LinearLayout cellLayout = (LinearLayout) singleCheckBoxLayout;
+										for(int c=0; c<cellLayout.getChildCount(); c++){
+											if(cellLayout.getChildAt(c).getClass().getName().toString().equals("android.widget.CheckBox")){
+												CheckBox cb = (CheckBox) cellLayout.getChildAt(c);
+												if(cb.isChecked()){
+													MatrixCell cell = (MatrixCell) cb.getTag(R.id.matrix_cell);
+													checkedValues += "|"+"h"+cell.getH_index()+""+"v"+cell.getV_index()+":"+cell.getValue(); // <-h0v0
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						// -------------
+						if (checkedValues.length() > 0)
+							checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+						else
+							checkedValues = "-";
+					}
+				}
+				map.put(key, checkedValues);
+			}
+			
+			else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixOptionLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String checkedValues="";
+				//ArrayList<MatrixCell> selectedCellList = new ArrayList<MatrixCell>();
+				key.toCharArray();
+				for(int x=0; x<linearLayout.getChildCount(); x++){
+					View view = linearLayout.getChildAt(x);
+					if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id).toString().equals("theMatrixLayout")){
+						LinearLayout theMatrixLayout = (LinearLayout) view;
+						LinearLayout rowLabelColumn = null;
+						MYHorizontalScrollView horizontalScrollView = null;
+						for(int y=0; y<theMatrixLayout.getChildCount(); y++){
+							View v = theMatrixLayout.getChildAt(y);
+
+							if(v.getTag(R.id.layout_id).toString().equals("rowLabelColumn")){
+								rowLabelColumn = (LinearLayout) v;
+							}
+							else if(v.getTag(R.id.layout_id).toString().equals("horizontalScrollView")){
+								horizontalScrollView = (MYHorizontalScrollView) v;
+							}
+						}
+						// both rowLabelColumn and horizontalScrollView must be already assigned in this line
+						if(((LinearLayout) horizontalScrollView.getChildAt(0)).getTag(R.id.layout_id).toString().equals("AllColumns")){
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView.getChildAt(0);
+							for(int ac=0; ac<AllColumns.getChildCount(); ac++){
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns.getChildAt(ac);
+								String columnTitle = "";
+								for(int sc=0; sc<singleColumnAt_ac.getChildCount(); sc++){
+									View singleRadioButtonLayout = singleColumnAt_ac.getChildAt(sc);
+									String cellTag = singleRadioButtonLayout.getTag(R.id.layout_id).toString();
+									if(cellTag.equals("columnTitle")){
+										columnTitle = ((TextView)singleRadioButtonLayout).getText().toString();
+									}
+									else if(cellTag.equals("cell")){
+										LinearLayout cellLayout = (LinearLayout) singleRadioButtonLayout;
+										for(int c=0; c<cellLayout.getChildCount(); c++){
+											if(cellLayout.getChildAt(c).getClass().getName().toString().equals("android.widget.RadioButton")){
+												RadioButton rb = (RadioButton) cellLayout.getChildAt(c);
+												if(rb.isChecked()){
+													MatrixCell cell = (MatrixCell) rb.getTag(R.id.matrix_cell);
+													checkedValues += "|"+"h"+cell.getH_index()+""+"v"+cell.getV_index()+":"+cell.getValue(); // <-h0v0
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						// -------------
+						if (checkedValues.length() > 0)
+							checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+						else
+							checkedValues = "-";
+					}
+				}
+				map.put(key, checkedValues);
 			}
 		}
 		return map;

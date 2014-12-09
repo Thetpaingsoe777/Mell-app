@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	ArrayList<Form> formList;
 	XaveyDBHelper dbHelper;
 	
-	GPSTracker gps;
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +77,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 		else
 			formGridView.setNumColumns(2);
 		setWelcomeText();
-		gps = new GPSTracker(getActivity().getApplicationContext());
+		
 	}
 
 	public static boolean isTablet(Context context) {
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 		//Intent i = new Intent(activity, DocumentInputActivity.class);
-
+		GPSTracker gps = new GPSTracker(getActivity().getApplicationContext());
 		ViewHolder holder = (ViewHolder)view.getTag();
 		String id_from_holder = holder.getFormID();
 		Form clickedForm = dbHelper.getFormByFormID(id_from_holder);
