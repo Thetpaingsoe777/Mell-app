@@ -484,7 +484,7 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 
 						layoutList.add(parentLayout);
-					} else if (fields.get(key).equals("s")) {
+					} else if (fields.get(key).equals("option")) {
 						ScrollView scroll = new ScrollView(activity);
 						scroll.setLayoutParams(new LayoutParams(
 								LayoutParams.MATCH_PARENT,
@@ -1510,7 +1510,7 @@ public class JSONReader {
 						matrixChecklistLayout.addView(tvLabel);
 						
 						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
 						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
 						
@@ -1694,11 +1694,16 @@ public class JSONReader {
 
 						int aaaaa = maxHeight;
 						
+						ScrollView horizontalSCrollViewParent = new ScrollView(activity);
+						horizontalSCrollViewParent.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+						
+						
 						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
 						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 						horizontalScrollView.addView(AllColumns);
 						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
 						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
+						
 						theMatrixLayout.addView(horizontalScrollView);
 						matrixChecklistLayout.addView(theMatrixLayout);
 
@@ -1780,7 +1785,7 @@ public class JSONReader {
 						matrixOptionLayout.addView(tvLabel);
 						
 						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
 						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
 						
@@ -1856,6 +1861,11 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
+						
+						// collect highest values of width and height here
+						//int measuredWidth = 0;
+						int measuredHeight = 0;
+						
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(activity);
 						row_label_column_set.setTag(R.id.layout_id, "rowLabelColumn");
@@ -1878,6 +1888,7 @@ public class JSONReader {
 						blankText.setText("     ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
+						blankLayout.setBackgroundColor(Color.parseColor("#bbaacc"));
 						row_label_column_set.addView(blankLayout);
 						theMatrixLayout.addView(row_label_column_set);
 
@@ -1898,13 +1909,12 @@ public class JSONReader {
 							rowLabel.setText(v_values_list.get(r).get("label")
 									.toString());
 							rowLabel.setGravity(Gravity.CENTER);
-							//rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
+							rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
 							// value may be useless here
 							row_label_column_set.addView(rowLabel);
 						}
 						// </producing row_label_set>
 
-						int maxHeight = 0;
 
 						// <prepare AllColumns
 						LinearLayout AllColumns = new LinearLayout(activity);
@@ -1928,13 +1938,13 @@ public class JSONReader {
 							TextView tvColumnTitle = new TextView(activity);
 							tvColumnTitle.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
 							tvColumnTitle.setText(columnTitle);
-							//tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
+							tvColumnTitle.setBackgroundColor(Color.parseColor("#49F2D6"));
 							tvColumnTitle.setGravity(Gravity.CENTER);
 							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
 							// following code dosen't work
-//							if(tvColumnTitle.getLayoutParams().height>maxHeight){
-//								maxHeight = tvColumnTitle.getHeight();
-//							}
+							if(tvColumnTitle.getMeasuredHeight()>measuredHeight){
+								measuredHeight = tvColumnTitle.getHeight();
+							}
 
 							columnLayout.addView(tvColumnTitle);
 
@@ -1964,7 +1974,6 @@ public class JSONReader {
 
 						// </matrix stuffs>
 
-						int aaaaa = maxHeight;
 
 						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
 						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
@@ -1972,6 +1981,7 @@ public class JSONReader {
 						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
 						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
 						theMatrixLayout.addView(horizontalScrollView);
+
 						matrixOptionLayout.addView(theMatrixLayout);
 
 						//<setting onClickListener to individual RadioButton>
@@ -2112,7 +2122,7 @@ public class JSONReader {
 							jChild.getString("field_required"));
 					fields.put("field_default_value",
 							jChild.getString("field_default_value"));
-				} else if (field_type.equals("s")) {
+				} else if (field_type.equals("option")) {
 					// with dataset (s and checklist)
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
