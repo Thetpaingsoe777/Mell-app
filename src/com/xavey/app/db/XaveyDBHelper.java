@@ -54,6 +54,8 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private static final String EMAIL = "email";
 	private static final String ROLE = "role";
 	private static final String ORGANIZATION = "organization";
+	private static final String LOGO_NAME = "logo_name";
+	private static final String LOGO_IMAGE = "log_image";
 	private static final String TOKEN="token";
 
 	private static final String WORKER_FORM_TABLE = "worker_form";
@@ -104,12 +106,20 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				+ CREATOR_ID + " TEXT," + CREATOR_EMAIL + " TEXT," + CREATOR_NAME
 				+ " TEXT," + FORM_FIELDS + " TEXT" + ")";
 
-		String CREATE_USER_TABLE = "CREATE TABLE " + USER_TABLE + "(" + ID
-				+ " INTEGER PRIMARY KEY," + USER_ID + " INTEGER," + USER_NAME
-				+ " TEXT," + PASSWORD + " TEXT," 
-				+ HASH_PWD + " TEXT," + EMAIL + " TEXT," + ROLE
-				+ " INTEGER," + ORGANIZATION + " TEXT," 
-				+ TOKEN + " TEXT"
+		String CREATE_USER_TABLE = 
+				"CREATE TABLE " + USER_TABLE + 
+				"(" + 
+				ID + " INTEGER PRIMARY KEY," + 
+				USER_ID + " INTEGER," + 
+				USER_NAME + " TEXT," + 
+				PASSWORD + " TEXT," + 
+				HASH_PWD + " TEXT," + 
+				EMAIL + " TEXT," + 
+				ROLE + " INTEGER," + 
+				ORGANIZATION + " TEXT,"	+
+				LOGO_NAME + " TEXT," +
+				LOGO_IMAGE + " BLOB," +
+				TOKEN + " TEXT"
 				+ ")";
 
 		String CREATE_WORKER_FORM_TABLE = "CREATE TABLE " + WORKER_FORM_TABLE
@@ -326,6 +336,8 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(EMAIL, user.getEmail());
 		values.put(ROLE, user.getRole());
 		values.put(ORGANIZATION, user.getOrganization());
+		values.put(LOGO_NAME, user.getLogoName());
+		values.put(LOGO_IMAGE, user.getLogoImage());
 		values.put(TOKEN, user.getToken());
 		db.insert(USER_TABLE, null, values);
 		db.close();
@@ -341,6 +353,8 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(EMAIL, user.getEmail());
 		values.put(ROLE, user.getRole());
 		values.put(ORGANIZATION, user.getOrganization());
+		values.put(LOGO_NAME, user.getLogoName());
+		values.put(LOGO_IMAGE, user.getLogoImage());
 		values.put(TOKEN, user.getToken());
 		return db.update(USER_TABLE, values, USER_ID+"=?", new String[]{user.getUser_id()});
 	}
@@ -354,8 +368,16 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 
 	public User getUserByUserID(String user_id) {
 		SQLiteDatabase db = this.getReadableDatabase();
-		String values = USER_ID + "," + USER_NAME + ", " + PASSWORD + ", "+ HASH_PWD + ", "
-				+ EMAIL + ", " + ROLE + ", " + ORGANIZATION + ", " + TOKEN;
+		String values = USER_ID + "," + 
+		USER_NAME + ", " + 
+		PASSWORD + ", " + 
+		HASH_PWD + ", " + 
+		EMAIL + ", " + 
+		ROLE + ", " + 
+		ORGANIZATION + ", " + 
+		LOGO_NAME + ", " + 
+		LOGO_IMAGE + ", " + 
+		TOKEN;
 		Cursor cursor = db.rawQuery("select " + values + " from " + USER_TABLE
 				+ " where " + USER_ID + "=?", new String[] { user_id });
 		User user = new User();
@@ -368,7 +390,9 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			user.setEmail(cursor.getString(4));
 			user.setRole(cursor.getString(5));
 			user.setOrganization(cursor.getString(6));
-			user.setToken(cursor.getString(7));
+			user.setLogoName(cursor.getString(7));
+			user.setLogoImage(cursor.getBlob(8));
+			user.setToken(cursor.getString(9));
 		}
 		cursor.close();
 		db.close();
@@ -378,8 +402,16 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	public ArrayList<User> getAllUsers() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		ArrayList<User> userList = new ArrayList<User>();
-		String values = USER_ID + "," + USER_NAME + ", " + PASSWORD + ", " + HASH_PWD + ", "
-				+ EMAIL + ", " + ROLE + ", " + ORGANIZATION;
+		String values = 
+				USER_ID + "," + 
+				USER_NAME + ", " + 
+				PASSWORD + ", " + 
+				HASH_PWD + ", " + 
+				EMAIL + ", " + 
+				ROLE + ", " + 
+				ORGANIZATION + ", " +
+				LOGO_NAME + ", " +
+				LOGO_IMAGE;
 		Cursor cursor = db.rawQuery("select " + values + " from " + USER_TABLE,
 				null);
 		User user = new User();
@@ -392,6 +424,8 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			user.setEmail(cursor.getString(4));
 			user.setRole(cursor.getString(5));
 			user.setOrganization(cursor.getString(6));
+			user.setLogoName(cursor.getString(7));
+			user.setLogoImage(cursor.getBlob(8));
 			userList.add(user);
 		}
 		cursor.close();
@@ -431,7 +465,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			return null;
 		}
 	}
-	
+
 	public String getTokenByUserID(String userID){
 		String token="null";
 		SQLiteDatabase db = this.getReadableDatabase();

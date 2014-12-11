@@ -1,5 +1,6 @@
 package com.xavey.app.model;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -13,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -28,6 +30,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 
 import android.app.Activity;
@@ -46,13 +49,25 @@ public class RestClient {
 	private int responseCode;
 	private String message;
 	private String response;
+	private byte[] responseImage;
+	
+
 	private String filePath;
+	
 	
 	private Activity main_activity;
 	
 
 	public String getResponse() {
 		return response;
+	}
+	
+	public byte[] getResponseImage() {
+		return responseImage;
+	}
+
+	public void setResponseImage(byte[] responseImage) {
+		this.responseImage = responseImage;
 	}
 
 	public String getErrorMessage() {
@@ -333,14 +348,29 @@ public class RestClient {
 
 		try {
 			httpResponse = client.execute(request);
+			Header[] responseHeader = httpResponse.getHeaders("content-type");
+			Header header = responseHeader[0];
+			String headerValue = header.getValue();
 			responseCode = httpResponse.getStatusLine().getStatusCode();
 			message = httpResponse.getStatusLine().getReasonPhrase();
 
 			HttpEntity entity = httpResponse.getEntity();
-
+			
 			if (entity != null) {
 				InputStream instream = entity.getContent();
-				response = convertStreamToString(instream);
+				if(headerValue.equals("image/png") || headerValue.equals("image/jpg") || headerValue.equals("image/jpeg")){
+					BufferedInputStream bis = new BufferedInputStream(instream);
+					ByteArrayBuffer baf = new ByteArrayBuffer(500);
+	                   int current = 0;
+	                   while ((current = bis.read()) != -1) {
+	                           baf.append((byte) current);
+	                   }
+	                   responseImage = baf.toByteArray();
+				}
+				else{
+					response = convertStreamToString(instream);
+				}
+				
 				// Closing the input stream will trigger connection release
 				instream.close();
 			}

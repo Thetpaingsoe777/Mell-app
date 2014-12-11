@@ -8,6 +8,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,8 +38,6 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	FormAdapter formAdapter;
 	ArrayList<Form> formList;
 	XaveyDBHelper dbHelper;
-	
-	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,7 +47,16 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 				false);
 
 		loadUI(view);
-		activity.getActionBar().setIcon(R.drawable.home);
+
+		byte[] logoByteArray = ApplicationValues.loginUser.getLogoImage();
+		if(logoByteArray!=null){
+			Bitmap logoBitMap = BitmapFactory.decodeByteArray(logoByteArray , 0, logoByteArray .length);
+			BitmapDrawable bd = new BitmapDrawable(getResources(), logoBitMap);
+			activity.getActionBar().setIcon(bd);
+		}else{
+			activity.getActionBar().setIcon(R.drawable.home);
+		}
+		
 		activity.getActionBar().setTitle("Home");
 		refresh();
 		return view;

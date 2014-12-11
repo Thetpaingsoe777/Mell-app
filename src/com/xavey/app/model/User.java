@@ -10,6 +10,8 @@ public class User {
 	private String email;// new added
 	private String role;
 	private String organization;// new added
+	private String logo_name;
+	private byte[] logo_image;
 /*	private String err;
 	private boolean result;
 	private String code;
@@ -101,5 +103,17 @@ public class User {
 	}
 	public void setToken(String token) {
 		this.token = token;
+	}
+	public String getLogoName() {
+		return logo_name;
+	}
+	public void setLogoName(String logo_name) {
+		this.logo_name = logo_name;
+	}
+	public byte[] getLogoImage() {
+		return logo_image;
+	}
+	public void setLogoImage(byte[] logo_image) {
+		this.logo_image = logo_image;
 	}
 }

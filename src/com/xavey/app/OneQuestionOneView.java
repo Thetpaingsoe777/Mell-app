@@ -17,8 +17,11 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
@@ -1749,7 +1752,14 @@ public class OneQuestionOneView extends FragmentActivity {
 	private void loadUI() {
 		getScreenInfo();
 		TypeFaceManager tfManager = new TypeFaceManager(this);
-		getActionBar().setIcon(R.drawable.home);
+		byte[] logoByteArray = ApplicationValues.loginUser.getLogoImage();
+		if(logoByteArray!=null){
+			Bitmap logoBitMap = BitmapFactory.decodeByteArray(logoByteArray , 0, logoByteArray .length);
+			BitmapDrawable bd = new BitmapDrawable(getResources(), logoBitMap);
+			getActionBar().setIcon(bd);
+		}else{
+			getActionBar().setIcon(R.drawable.home);
+		}
 		getActionBar().setTitle("Home");
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		intent = getIntent();

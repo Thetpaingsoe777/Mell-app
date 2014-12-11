@@ -100,11 +100,11 @@ public class JSONReader {
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		// labelLayoutParams.setMargins(10, 10, 10, 60);
 		// labelLayoutParams.height = 30;
-		labelLayoutParams.setMargins(10, 10, 10, 10);
+		labelLayoutParams.setMargins(10, 5, 10, 5);
 
 		LayoutParams descriptionLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		// descriptionLayoutParams.height = 30;
-		descriptionLayoutParams.setMargins(10, 10, 5, 10);
+		descriptionLayoutParams.setMargins(10, 5, 10, 5);
 
 		LayoutParams innerLayoutParams = new LayoutParams(LayoutWidth, LayoutParams.WRAP_CONTENT);
 		LayoutParams editTextLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, editTextLayoutHeight);
@@ -334,7 +334,6 @@ public class JSONReader {
 								isFieldRequired(fields.get("field_required")));
 						tvLabel.setTag(R.id.field_label_id, textLabel);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						tvLabel.setPadding(0, 5, 0, 5);
 						setTypeFace(tvLabel);
 						numberLayout.addView(tvLabel);
 
@@ -345,7 +344,6 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(18);
 						tvdescription.setLayoutParams(labelLayoutParams);
-						tvdescription.setPadding(0, 5, 0, 5);
 						setTypeFace(tvdescription);
 						numberLayout.addView(tvdescription);
 
@@ -448,7 +446,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_name_id, fieldName);
 						tvLabel.setTag(R.id.field_required_id, fieldRequired);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						tvLabel.setPadding(0, 5, 0, 5);
 						setTypeFace(tvLabel);
 						datetimeLayout.addView(tvLabel);
 
@@ -459,7 +456,6 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(18);
 						tvdescription.setLayoutParams(labelLayoutParams);
-						tvdescription.setPadding(0, 5, 0, 5);
 						setTypeFace(tvdescription);
 						datetimeLayout.addView(tvdescription);
 
@@ -561,7 +557,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setGravity(Gravity.CENTER_VERTICAL);
 						tvLabel.setLayoutParams(labelLayoutParams);
-						tvLabel.setPadding(0, 5, 0, 5);
 						setTypeFace(tvLabel);
 						radioLayout.addView(tvLabel);
 
@@ -572,7 +567,6 @@ public class JSONReader {
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
-						tvdescription.setPadding(0, 5, 0, 5);
 						setTypeFace(tvdescription);
 						radioLayout.addView(tvdescription);
 
@@ -1014,7 +1008,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_name_id, field_name);
 						tvLabel.setTag(R.id.field_required_id, field_required);
 						tvLabel.setTag(R.id.field_label_id, field_label);
-						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
@@ -1166,7 +1159,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_name_id, field_name);
 						tvLabel.setTag(R.id.field_required_id, field_required);
 						tvLabel.setTag(R.id.field_label_id, field_label);
-						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
@@ -1316,7 +1308,6 @@ public class JSONReader {
 						tvLabel.setTag(R.id.field_name_id, field_name);
 						tvLabel.setTag(R.id.field_required_id, field_required);
 						tvLabel.setTag(R.id.field_label_id, field_label);
-						tvLabel.setPadding(0, 0, 0, 10);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
@@ -1455,9 +1446,9 @@ public class JSONReader {
 						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						LayoutParams parentLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-						int fivePercentWidth = displayManager.getWidth(5);
-						parentLayoutParams.setMargins(fivePercentWidth, 0, fivePercentWidth, 0);
+						LayoutParams parentLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 						RelativeLayout upLayout = new RelativeLayout(activity);
@@ -1503,14 +1494,25 @@ public class JSONReader {
 								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label);
-						tvLabel.setPadding(0, 0, 0, 10);
+						tvLabel.setTextSize(labelTextSize);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
 						matrixChecklistLayout.addView(tvLabel);
 						
+						// adding description
+						String description = fields.get("field_desc")
+								.toString();
+						TextView tvdescription = new TextView(activity);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(descriptionTextSize);
+						tvdescription.setLayoutParams(descriptionLayoutParams);
+						tvdescription.setPadding(0, 5, 0, 5);
+						setTypeFace(tvdescription);
+						matrixChecklistLayout.addView(tvdescription);
+						
 						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
 						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
 						
@@ -1589,22 +1591,23 @@ public class JSONReader {
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(activity);
 						row_label_column_set.setTag(R.id.layout_id, "rowLabelColumn");
+						int cell_row_width = 200;
 						int cell_column_width = 150;
 						int cell_column_height= 70;
 
 						LayoutParams rowLabelLayoutParams = new LayoutParams(
-								cell_column_width, LayoutParams.WRAP_CONTENT);
+								cell_row_width, LayoutParams.WRAP_CONTENT);
 						row_label_column_set.setLayoutParams(rowLabelLayoutParams);
 						row_label_column_set.setOrientation(LinearLayout.VERTICAL);
 						row_label_column_set.setGravity(Gravity.CENTER);
 
 						LinearLayout blankLayout = new LinearLayout(activity);
 						LayoutParams blankLayoutParams = new LayoutParams(
-								cell_column_width, cell_column_height);
+								cell_row_width, cell_column_height);
 						blankLayout.setLayoutParams(blankLayoutParams);
 						blankLayout.setGravity(Gravity.CENTER);
 						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+						blankText.setLayoutParams(new LayoutParams(cell_row_width, cell_column_height));
 						blankText.setText("     ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
@@ -1616,18 +1619,18 @@ public class JSONReader {
 									activity);
 
 							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_column_width,
+									cell_row_width,
 									cell_column_height);
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
 							LayoutParams rowLabelParams = new LayoutParams(
-									cell_column_width,
+									cell_row_width,
 									cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
 							rowLabel.setText(v_values_list.get(r).get("label")
 									.toString());
-							rowLabel.setGravity(Gravity.CENTER);
+							rowLabel.setGravity(Gravity.START);
 							//rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
 							// value may be useless here
 							row_label_column_set.addView(rowLabel);
@@ -1694,16 +1697,11 @@ public class JSONReader {
 
 						int aaaaa = maxHeight;
 						
-						ScrollView horizontalSCrollViewParent = new ScrollView(activity);
-						horizontalSCrollViewParent.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-						
-						
 						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
 						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
 						horizontalScrollView.addView(AllColumns);
 						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
 						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
-						
 						theMatrixLayout.addView(horizontalScrollView);
 						matrixChecklistLayout.addView(theMatrixLayout);
 
@@ -1728,9 +1726,9 @@ public class JSONReader {
 						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						LayoutParams parentLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-						int fivePercentWidth = displayManager.getWidth(5);
-						parentLayoutParams.setMargins(fivePercentWidth, 0, fivePercentWidth, 0);
+						LayoutParams parentLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 						RelativeLayout upLayout = new RelativeLayout(activity);
@@ -1778,14 +1776,25 @@ public class JSONReader {
 								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label);
-						tvLabel.setPadding(0, 0, 0, 10);
+						tvLabel.setTextSize(labelTextSize);
 						// tvLabel.setTag(fields.get("field_name"));
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
 						matrixOptionLayout.addView(tvLabel);
 						
+						// adding description
+						String description = fields.get("field_desc")
+								.toString();
+						TextView tvdescription = new TextView(activity);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(descriptionTextSize);
+						tvdescription.setLayoutParams(descriptionLayoutParams);
+						tvdescription.setPadding(0, 5, 0, 5);
+						setTypeFace(tvdescription);
+						matrixOptionLayout.addView(tvdescription);
+						
 						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
 						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
 						
@@ -1861,60 +1870,60 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						
-						// collect highest values of width and height here
-						//int measuredWidth = 0;
-						int measuredHeight = 0;
-						
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(activity);
 						row_label_column_set.setTag(R.id.layout_id, "rowLabelColumn");
+						int cell_row_width = 200;
 						int cell_column_width = 150;
 						int cell_column_height= 70;
 
 						LayoutParams rowLabelLayoutParams = new LayoutParams(
-								cell_column_width, LayoutParams.WRAP_CONTENT);
+								cell_row_width, LayoutParams.WRAP_CONTENT);
 						row_label_column_set.setLayoutParams(rowLabelLayoutParams);
 						row_label_column_set.setOrientation(LinearLayout.VERTICAL);
 						row_label_column_set.setGravity(Gravity.CENTER);
 
 						LinearLayout blankLayout = new LinearLayout(activity);
 						LayoutParams blankLayoutParams = new LayoutParams(
-								cell_column_width, cell_column_height);
+								cell_row_width, cell_column_height);
 						blankLayout.setLayoutParams(blankLayoutParams);
 						blankLayout.setGravity(Gravity.CENTER);
 						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+						blankText.setLayoutParams(new LayoutParams(cell_row_width, cell_column_height));
 						blankText.setText("     ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
-						blankLayout.setBackgroundColor(Color.parseColor("#bbaacc"));
 						row_label_column_set.addView(blankLayout);
-						theMatrixLayout.addView(row_label_column_set);
 
 						for (int r = 0; r < v_values_list.size(); r++) {
 							LinearLayout rowLabelCells = new LinearLayout(
 									activity);
 
 							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_column_width,
+									cell_row_width,
 									cell_column_height);
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
 							LayoutParams rowLabelParams = new LayoutParams(
-									cell_column_width,
+									cell_row_width,
 									cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
 							rowLabel.setText(v_values_list.get(r).get("label")
 									.toString());
-							rowLabel.setGravity(Gravity.CENTER);
-							rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
+							rowLabel.setGravity(Gravity.START|Gravity.CENTER_VERTICAL);
+							//rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
 							// value may be useless here
+
 							row_label_column_set.addView(rowLabel);
+							
 						}
+						
+						theMatrixLayout.addView(row_label_column_set);
+						theMatrixLayout.setPadding(10, 0, 0, 0);
 						// </producing row_label_set>
 
+						int maxHeight = 0;
 
 						// <prepare AllColumns
 						LinearLayout AllColumns = new LinearLayout(activity);
@@ -1927,7 +1936,7 @@ public class JSONReader {
 							ArrayList<MatrixCell> columnSet = columnSetCollection.get(column);
 							LinearLayout columnLayout = new LinearLayout(activity);
 							LayoutParams columnLayoutParams = new LayoutParams(
-									cell_column_width,LayoutParams.WRAP_CONTENT);
+									cell_column_width,LayoutParams.MATCH_PARENT);
 							columnLayout.setLayoutParams(columnLayoutParams);
 							columnLayout.setOrientation(LinearLayout.VERTICAL);
 							columnLayout.setGravity(Gravity.CENTER);
@@ -1938,13 +1947,13 @@ public class JSONReader {
 							TextView tvColumnTitle = new TextView(activity);
 							tvColumnTitle.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
 							tvColumnTitle.setText(columnTitle);
-							tvColumnTitle.setBackgroundColor(Color.parseColor("#49F2D6"));
+							//tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
 							tvColumnTitle.setGravity(Gravity.CENTER);
 							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
 							// following code dosen't work
-							if(tvColumnTitle.getMeasuredHeight()>measuredHeight){
-								measuredHeight = tvColumnTitle.getHeight();
-							}
+//							if(tvColumnTitle.getLayoutParams().height>maxHeight){
+//								maxHeight = tvColumnTitle.getHeight();
+//							}
 
 							columnLayout.addView(tvColumnTitle);
 
@@ -1974,14 +1983,14 @@ public class JSONReader {
 
 						// </matrix stuffs>
 
+						int aaaaa = maxHeight;
 
 						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
-						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 						horizontalScrollView.addView(AllColumns);
 						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
 						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
 						theMatrixLayout.addView(horizontalScrollView);
-
 						matrixOptionLayout.addView(theMatrixLayout);
 
 						//<setting onClickListener to individual RadioButton>
@@ -2033,7 +2042,6 @@ public class JSONReader {
 
 						scroll.addView(matrixOptionLayout);
 						parentLayout.addView(scroll);
-
 						layoutList.add(parentLayout);
 					}
 					//</matrix_>
