@@ -6,16 +6,15 @@
     android:paddingBottom="10dp" ><!--  setbackground: grid_item_border is deleted -->
 
     <TextView
-        android:id="@+id/tvFormName"
+        android:id="@+id/tvImageData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_margin="15dp"
-        android:drawableTop="@drawable/form_icon_1"
         android:ellipsize="start"
         android:gravity="center"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textColor="@android:color/primary_text_light"
-        android:textSize="17sp" />
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
+        android:textColor="@android:color/secondary_text_dark_nodisable"
+        android:textSize="13sp" />
 
 </RelativeLayout>
