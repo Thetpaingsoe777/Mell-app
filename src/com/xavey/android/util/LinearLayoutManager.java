@@ -49,6 +49,12 @@ public class LinearLayoutManager {
 					}
 				}
 			}
+			else if(className.equals("android.widget.LinearLayout")){
+				LinearLayout linearLayout_ = (LinearLayout) view;
+				if(view.getTag(R.id.layout_id)!=null && !view.getTag(R.id.layout_id).toString().equals("recordingLayout")){
+					targetLayout = linearLayout_;
+				}
+			}
 
 		}
 		if(targetLayout!=null){

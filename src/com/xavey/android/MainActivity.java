@@ -361,6 +361,8 @@ public class MainActivity extends Activity {
 					// here is form download
 					// MainActivity.this.onResume();
 					downloadForms();
+					
+					
 				} else {
 					toastManager.xaveyToast(null,
 							"Not connecting with server...");

@@ -2155,6 +2155,9 @@ public class JSONReader {
 						imageGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
 						ImageAdapter imageAdapter = new ImageAdapter(activity, imageFieldList);
 						imageGridView.setAdapter(imageAdapter);
+						ArrayList<String> valuesList = new ArrayList<String>();
+						imageGridView.setTag(R.id.selected_grid_values,valuesList);
+						imageGridView.setTag(R.id.grid_view_type, "multipleSelection");
 						
 						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
@@ -2283,6 +2286,9 @@ public class JSONReader {
 						imageGridView.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
 						ImageAdapter imageAdapter = new ImageAdapter(activity, imageFieldList);
 						imageGridView.setAdapter(imageAdapter);
+						ArrayList<String> valuesList = new ArrayList<String>();
+						imageGridView.setTag(R.id.selected_grid_values,valuesList);
+						imageGridView.setTag(R.id.grid_view_type, "singleSelection");
 						
 						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);

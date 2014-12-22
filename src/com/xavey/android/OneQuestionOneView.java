@@ -38,6 +38,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
@@ -48,6 +49,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.xavey.android.adapter.ImageAdapter;
+import com.xavey.android.adapter.ImageAdapter.ViewHolder;
 import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
@@ -184,10 +187,15 @@ public class OneQuestionOneView extends FragmentActivity {
 							LinearLayout linearLayout = (LinearLayout) scroll
 									.getChildAt(0);
 							if (linearLayout.getTag(R.id.layout_id) != null
-									&& !linearLayout.getTag(R.id.layout_id)
-											.toString()
-											.equals("recordingLayout"))
+									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
 								currentLayout = linearLayout;
+						}
+						if(view.getClass().getName().equals("android.widget.LinearLayout")){
+							LinearLayout linearLayout = (LinearLayout) currentParentLayout.getChildAt(i);
+							if (linearLayout.getTag(R.id.layout_id) != null
+									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+								currentLayout = linearLayout;
+							
 						}
 						if (view.getClass().getName()
 								.equals("android.widget.RelativeLayout")) {
@@ -1370,6 +1378,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 				}
+				else if(child.getClass().getName().equals("android.widget.LinearLayout")){
+					LinearLayout linearLayout_ = (LinearLayout) child;
+					if(linearLayout_.getTag(R.id.layout_id)!=null && !linearLayout_.getTag(R.id.layout_id).toString().equals("recordingLayout")){
+						linearLayout = linearLayout_;
+					}
+				}
 			}
 			parentLayout.getChildAt(1);
 
@@ -1725,6 +1739,28 @@ public class OneQuestionOneView extends FragmentActivity {
 				}
 				map.put(key, checkedValues);
 			}
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("imageChecklistLayout")) {
+				// JSONArray checkedValues = new JSONArray();
+				String checkedValues = "";
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
+				
+				for(int l=0; l<linearLayout.getChildCount(); l++){
+					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
+					if(subClass.getName().equals("android.widget.GridView")){
+						GridView gridView = (GridView) linearLayout.getChildAt(l);
+						TextView selectedItem = (TextView) gridView.getSelectedItem();
+						String value = selectedItem.getTag(R.id.grid_item_value).toString();
+						checkedValues += "|" + value;
+					}
+				}
+				if (checkedValues.length() > 0)
+					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+				else
+					checkedValues = "-";
+				map.put(key, checkedValues);
+			}
 		}
 		return map;
 	}// </getValueFromEachLayout>
@@ -1800,6 +1836,11 @@ public class OneQuestionOneView extends FragmentActivity {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);
 			}
+			else if(className.equals("android.widget.LinearLayout")){
+				LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
+				if(linearLayout.getTag(R.id.layout_id)!=null && linearLayout.getTag(R.id.layout_id).toString()!="recordingLayout")
+					innerLayout = linearLayout;
+			}
 		}
 		String innerLayoutID = innerLayout.getTag(R.id.layout_id).toString();
 		if (innerLayoutID.equals("datetimeLayout")
@@ -1808,7 +1849,10 @@ public class OneQuestionOneView extends FragmentActivity {
 				|| innerLayoutID.equals("locationLayout")
 				|| innerLayoutID.equals("drawingLayout")
 				|| innerLayoutID.equals("photoLayout")
-				|| innerLayoutID.equals("martixOptionSingleLayout")) {
+				|| innerLayoutID.equals("martixOptionSingleLayout")
+				|| innerLayoutID.equals("imageOptionLayout")
+				|| innerLayoutID.equals("imageChecklistLayout")
+				) {
 			InputMethodManager inputManager = (InputMethodManager) this
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			// check if no view has focus:

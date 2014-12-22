@@ -30,4 +30,9 @@
     <!-- matrix -->
     <item type="id" name="matrix_cell"/>
     
+    <!-- gridview -->
+    <item type="id" name="grid_item_value"/>
+    <item type="id" name="selected_grid_values"/>
+    <item type="id" name="is_griditem_selected"/>
+    <item type="id" name="grid_view_type"/>
 </resources>

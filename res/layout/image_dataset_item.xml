@@ -14,7 +14,7 @@
         android:ellipsize="start"
         android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Small"
-        android:textColor="@android:color/secondary_text_dark_nodisable"
+        android:textColor="#A5ABA4"
         android:textSize="13sp" />
 
 </RelativeLayout>
