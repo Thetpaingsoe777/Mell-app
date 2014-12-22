@@ -44,6 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -1749,10 +1750,10 @@ public class OneQuestionOneView extends FragmentActivity {
 				for(int l=0; l<linearLayout.getChildCount(); l++){
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
 					if(subClass.getName().equals("android.widget.GridView")){
-						GridView gridView = (GridView) linearLayout.getChildAt(l);
-						TextView selectedItem = (TextView) gridView.getSelectedItem();
-						String value = selectedItem.getTag(R.id.grid_item_value).toString();
-						checkedValues += "|" + value;
+//						GridView gridView = (GridView) linearLayout.getChildAt(l);
+//						TextView selectedItem = (TextView) gridView.getSelectedItem();
+//						String value = selectedItem.getTag(R.id.grid_item_value).toString();
+//						checkedValues += "|" + value;
 					}
 				}
 				if (checkedValues.length() > 0)
@@ -1761,6 +1762,30 @@ public class OneQuestionOneView extends FragmentActivity {
 					checkedValues = "-";
 				map.put(key, checkedValues);
 			}
+			// <image option layout>
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("imageOptionLayout")) {
+				
+			}
+			// </image opton layout>
+			
+			// <rating>
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("ratingLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String startCount = "";
+				
+				for(int cc=0; cc<linearLayout.getChildCount(); cc++){
+					View child = linearLayout.getChildAt(cc);
+					if(child.getClass().getName().toString().equals("android.widget.RatingBar")){
+						RatingBar ratingBar = (RatingBar) child;
+						startCount = ratingBar.getRating() + "";
+					}
+				}
+				
+				map.put(key, startCount);
+			}
+			// </rating>
 		}
 		return map;
 	}// </getValueFromEachLayout>

@@ -38,6 +38,7 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -210,8 +211,7 @@ public class JSONReader {
 						tvdescription.setLayoutParams(descriptionLayoutParams);
 						tvdescription.setPadding(0, 5, 0, 5);
 						tvdescription.setGravity(Gravity.CENTER_VERTICAL);
-						tvdescription
-								.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+						tvdescription.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
 						setTypeFace(tvdescription);
 						textLayout.addView(tvdescription);
 
@@ -2307,6 +2307,150 @@ public class JSONReader {
 						layoutList.add(parentLayout);
 					}
 					//</image option>
+					
+					//<Rating>
+					else if (fields.get(key).equals("rating")) {
+
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+
+						LinearLayout parentLayout = new LinearLayout(activity);
+						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						LayoutParams parentLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
+						int fivePercentWidth = displayManager.getWidth(5);
+						parentLayoutParams.setMargins(fivePercentWidth, 0,
+								fivePercentWidth, 0);
+						parentLayout.setLayoutParams(parentLayoutParams);
+						parentLayout.setOrientation(LinearLayout.VERTICAL);
+						RelativeLayout upLayout = new RelativeLayout(activity);
+						upLayout.setPadding(0, 10, 20, 0);
+						int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
+						int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
+						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(relative_MATCH_PARENT, relative_WRAP_CONTENT);
+						upLayout.setLayoutParams(upLayoutParams);
+						TextView index = new TextView(activity);
+						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						index.setLayoutParams(tvLayoutParams);
+						index.setText("index/index");
+						index.setTag("index");
+						upLayout.addView(index);
+						// upLayout.addView(getLine(lineColor));
+						parentLayout.addView(upLayout);
+
+						final LinearLayout ratingLayout = new LinearLayout(
+								activity);
+						LayoutParams drawingLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.WRAP_CONTENT);
+						drawingLayoutParams.setMargins(5, 20, 5, 0);
+						ratingLayout.setLayoutParams(drawingLayoutParams);
+						ratingLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						// drawingLayout
+						// .setBackgroundResource(R.drawable.linear_layout_ui);
+						ratingLayout.setOrientation(LinearLayout.VERTICAL);
+						ratingLayout.setPadding(0, 10, 0, 0);
+						ratingLayout.setTag(R.id.layout_id, "ratingLayout");
+						ratingLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						ratingLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						ratingLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						ratingLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						ratingLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						ratingLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						ratingLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
+						String field_name = fields.get("field_name").toString();
+						String field_required = fields.get("field_required").toString();
+						String minLabel = fields.get("field_min_label").toString();
+						String maxLabel = fields.get("field_max_label").toString();
+						String minValue = fields.get("field_min_value").toString();
+						String maxValue = fields.get("field_max_value").toString();
+						TextView tvLabel = new TextView(activity);
+						tvLabel.setText(field_label + " : ");
+
+						tvLabel.setTag("label");
+						// tvLabel.setTag(fields.get("field_name"));
+						tvLabel.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvLabel);
+						ratingLayout.addView(tvLabel);
+
+						// adding description
+						String description = fields.get("field_desc")
+								.toString();
+						TextView tvdescription = new TextView(activity);
+						tvdescription.setPadding(10, 0, 0, 0);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(18);
+						tvdescription.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvdescription);
+						ratingLayout.addView(tvdescription);
+
+						RatingBar ratingBar = new RatingBar(activity);
+						RelativeLayout.LayoutParams ratingBarLayoutParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						ratingBarLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+						ratingBar.setLayoutParams(ratingBarLayoutParams);
+						ratingBar.setRating(Integer.parseInt(maxValue));
+						ratingBar.setStepSize(1);
+						
+						// etc.... 
+						ratingLayout.addView(ratingBar);
+						
+						
+						RelativeLayout minMaxLabelLayout = new RelativeLayout(activity);
+						minMaxLabelLayout.setTag(R.id.layout_id, "ratingAndMinMaxLabelLayout");
+						minMaxLabelLayout.setPadding(5, 10, 5, 10);
+						RelativeLayout.LayoutParams ratingAndMinMaxLabelLayoutParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						
+						minMaxLabelLayout.setLayoutParams(ratingAndMinMaxLabelLayoutParams);
+						
+						TextView tvMinLabel = new TextView(activity);
+						RelativeLayout.LayoutParams tvMinLabelParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvMinLabelParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+						tvMinLabel.setText(minLabel);
+						tvMinLabel.setTextSize(13);
+						minMaxLabelLayout.addView(tvMinLabel);
+						
+						TextView tvMaxLabel = new TextView(activity);
+						RelativeLayout.LayoutParams tvMaxLabelParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvMaxLabelParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvMaxLabel.setText(maxLabel);
+						tvMaxLabel.setTextSize(13);
+						minMaxLabelLayout.addView(tvMaxLabel);
+
+						ratingLayout.addView(minMaxLabelLayout);
+						
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
+						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
+
+						// error msg
+						TextView errorMsg = new TextView(activity);
+						errorMsg.setLayoutParams(errorMsgLayoutParams2);
+						setTypeFace(errorMsg);
+						errorMsg.setTextSize(12);
+						errorMsg.setTag("errorMsg");
+						ratingLayout.addView(errorMsg);
+
+						scroll.addView(ratingLayout);
+						parentLayout.addView(scroll);
+
+						layoutList.add(parentLayout);
+					}
+					//</Rating>
 				}
 			}
 		}
@@ -2629,6 +2773,22 @@ public class JSONReader {
 					fields.put("field_default_value", jChild.getString("field_default_value"));
 					JSONArray dataset_values = jChild.getJSONObject("field_dataset").getJSONArray("dataset_values");
 					fields.put("dataset_values", dataset_values);
+				}
+				else if(field_type.equals("rating")){
+					fields.put("field_id", jChild.getString("field_id"));
+					fields.put("field_name", jChild.getString("field_name"));
+					fields.put("field_type", jChild.getString("field_type"));
+					fields.put("field_label", jChild.getString("field_label"));
+					fields.put("field_help", jChild.getString("field_help"));
+					fields.put("field_ref", jChild.getString("field_ref"));
+					fields.put("next_cond", jChild.getJSONArray("next_cond"));
+					fields.put("field_desc", jChild.getString("field_desc"));
+					fields.put("field_required", jChild.getString("field_required"));
+					fields.put("field_max_label", jChild.getString("field_max_label"));
+					fields.put("field_max_value", jChild.getString("field_max_value"));
+					fields.put("field_min_label", jChild.getString("field_min_label"));
+					fields.put("field_min_value", jChild.getString("field_min_value"));
+					fields.put("field_default_value", jChild.getString("field_default_value"));
 				}
 
 				fieldList.add(fields);

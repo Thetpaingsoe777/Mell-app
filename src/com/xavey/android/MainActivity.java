@@ -109,15 +109,15 @@ public class MainActivity extends Activity {
 		if (userName != null) {
 			LOGIN_USER_ID = dbHelper.getUserIDByUserName(userName);
 			String password = nameAndPassword.get(SessionManager.PASSWORD);
-			String userID = dbHelper.getUserIDByUserName(userName);
-			User u = new User();
-			u.setUser_id(userID);
-			u.setUser_name(userName);
-			u.setPwd(password);
-			u.setToken(ApplicationValues.loginUser.getToken());
+			//String userID = dbHelper.getUserIDByUserName(userName);
+//			User u = new User();
+//			u.setUser_id(userID);
+//			u.setUser_name(userName);
+//			u.setPwd(password);
+//			u.setToken(ApplicationValues.loginUser.getToken());
 			// online mode
 			if (connectionDetector.isConnectingToInternet()) {
-				new FormDownloadTask().execute(u);
+				new FormDownloadTask().execute(ApplicationValues.loginUser);
 			}
 		}
 	}
@@ -412,7 +412,8 @@ public class MainActivity extends Activity {
 		@Override
 		protected ArrayList<Form> doInBackground(User... params) {
 			ArrayList<Form> userFormsList = new ArrayList<Form>();
-
+			User user = params[0];
+			String userID = user.getUser_id();
 			// ---------- updating token.. --------------------------------
 			String userName = ApplicationValues.loginUser.getUser_name();
 			String password = ApplicationValues.loginUser.getPwd();
@@ -431,15 +432,26 @@ public class MainActivity extends Activity {
 				toastManager.xaveyToast(null, e2.getMessage());
 			}
 			int userResponseCode = c_.getResponseCode();
+			String authenResponse = c_.getResponse();
+			String newToken = "";
+			try {
+				JSONObject authenResponse_ = new JSONObject(authenResponse);
+				newToken = authenResponse_.getString("token");
+				user.setToken(newToken);
+				dbHelper.updateUser(user);
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			// -----------------------------------------------------------------
 
 			if (userResponseCode == 200) {
 				try {
-					User user = params[0];
+					
 					// RestClient f = new RestClient(localFromDownloadURL);
 					RestClient f = new RestClient(serverFormDownloadURL);
 					f.AddParam("id", user.getUser_id());
-					f.AddHeader("x-access-token", user.getToken()); // <--token
+					f.AddHeader("x-access-token", newToken); // <--token
 					f.Execute(RequestMethod.GET);
 					int responseCode = f.getResponseCode();
 					String response = "";

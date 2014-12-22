@@ -61,16 +61,13 @@ public class ImageAdapter extends BaseAdapter {
 		if(convertView==null){
 			convertView = inflater.inflate(R.layout.image_dataset_item, parent, false);
 			holder.imageTitle = (TextView) convertView.findViewById(R.id.tvImageData);
-			
 			holder.isSelected = false;
 			convertView.setTag(holder);
 		}
 		else{
 			holder = (ViewHolder) convertView.getTag();
-			//holder.imageTitle.setTag(R.id.is_griditem_selected, true);
 		}
 		holder.imageTitle.setTag(R.id.is_griditem_selected, false);
-		
 		HashMap<String,String> map = data_set_values.get(position);
 		// not used the following so far
 		final String value = map.get("value");
