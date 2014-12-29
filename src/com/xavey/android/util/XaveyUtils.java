@@ -13,10 +13,15 @@ public class XaveyUtils {
 		act = a;
 	}
 	
-	public BitmapDrawable convertByteArrayToBitMapDrawable(byte[] byteArray){
+	public BitmapDrawable convertByteArrayToBitmapDrawable(byte[] byteArray){
 		Bitmap logoBitMap = BitmapFactory.decodeByteArray(byteArray , 0, byteArray.length);
 		BitmapDrawable bd = new BitmapDrawable(act.getResources(), logoBitMap);
 		return bd;
+	}
+	
+	public Bitmap convertByteArrayToBitmap(byte[] byteArray){
+		Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray , 0, byteArray.length);
+		return bitmap;
 	}
 	
 }

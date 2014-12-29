@@ -306,53 +306,6 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if (fields.get(key).equals("checklistxxx")) {
-						horizontalLayout = new LinearLayout(activity);
-						horizontalLayout.setBackgroundColor(Color.WHITE);
-						horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
-						String fieldName = fields.get("field_name").toString(); // < --
-						String fieldValue = "";
-						// String docName = docFields.get("field_name");
-						JSONArray valueArray;
-						try {
-							valueArray = new JSONArray(docFields.get(
-									"field_value").toString());
-							for (int z = 0; z < valueArray.length(); z++) {
-								if (z == valueArray.length() - 1)
-									fieldValue = fieldValue + valueArray.get(z);
-								else
-									fieldValue = fieldValue + valueArray.get(z) + ", ";
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-
-						LayoutParams lp;
-						lp = new LayoutParams(LayoutParams.WRAP_CONTENT, 40);
-						lp.setMargins(10, 5, 10, 15);
-						TextView tvFieldName = new TextView(activity);
-						tvFieldName.setText(fieldName + "  :");
-						tvFieldName.setTextSize(15);
-						tvFieldName.setLayoutParams(lp);
-						// tvFieldName.setWidth(500);
-
-						// may be change as uneditable Edittext later or may not
-						lp = new LayoutParams(LayoutParams.WRAP_CONTENT, 40);
-						lp.setMargins(10, 5, 10, 15);
-						TextView tvFieldValue = new TextView(activity);
-						//tvFieldValue.setTypeface(zawGyiTypeface);
-						tvFieldValue.setText(fieldValue);
-						tvFieldValue.setTextSize(15);
-						tvFieldValue.setLayoutParams(lp);
-						// tvFieldValue.setWidth(500);
-
-						horizontalLayout.addView(tvFieldName);
-						horizontalLayout.addView(tvFieldValue);
-						horizontalLayout.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.WRAP_CONTENT));
-						lL.addView(horizontalLayout);
-					}
 					else if(fields.get(key).equals("location")){
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
@@ -363,6 +316,18 @@ public class JSONWriter {
 						lL.addView(horizontalLayout);
 					}
 					else if(fields.get(key).equals("photo")){
+						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("")){
+						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("")){
+						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("")){
 						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
 						lL.addView(horizontalLayout);
 					}

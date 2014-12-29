@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 //			BitmapDrawable bd = new BitmapDrawable(getResources(), logoBitMap);
 //			activity.getActionBar().setIcon(bd);
 			XaveyUtils xaveyUtils = new XaveyUtils(activity);
-			BitmapDrawable bd = xaveyUtils.convertByteArrayToBitMapDrawable(logoByteArray);
+			BitmapDrawable bd = xaveyUtils.convertByteArrayToBitmapDrawable(logoByteArray);
 			activity.getActionBar().setIcon(bd);
 		}else{
 			activity.getActionBar().setIcon(R.drawable.home);

@@ -41,6 +41,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -50,9 +51,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.xavey.android.adapter.ImageAdapter;
-import com.xavey.android.adapter.ImageAdapter.ViewHolder;
 import com.xavey.android.adapter.QuestionPagerAdapter;
+import com.xavey.android.adapter.RatingSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
@@ -167,7 +167,6 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				@Override
 				public void onPageSelected(int newPosition) {
-
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
@@ -1750,10 +1749,11 @@ public class OneQuestionOneView extends FragmentActivity {
 				for(int l=0; l<linearLayout.getChildCount(); l++){
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
 					if(subClass.getName().equals("android.widget.GridView")){
-//						GridView gridView = (GridView) linearLayout.getChildAt(l);
-//						TextView selectedItem = (TextView) gridView.getSelectedItem();
-//						String value = selectedItem.getTag(R.id.grid_item_value).toString();
-//						checkedValues += "|" + value;
+						GridView gridView = (GridView) linearLayout.getChildAt(l);
+						ArrayList<String> selectedValueList = (ArrayList<String>) gridView.getTag(R.id.selected_grid_values);
+						for(String selectedValue : selectedValueList){
+							checkedValues += "|" + selectedValue;
+						}
 					}
 				}
 				if (checkedValues.length() > 0)
@@ -1765,9 +1765,29 @@ public class OneQuestionOneView extends FragmentActivity {
 			// <image option layout>
 			else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("imageOptionLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String checkedValues = "";
+				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
 				
+				for(int l=0; l<linearLayout.getChildCount(); l++){
+					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
+					if(subClass.getName().equals("android.widget.GridView")){
+						GridView gridView = (GridView) linearLayout.getChildAt(l);
+//						TextView selectedItem = (TextView) gridView.getSelectedItem();
+//						ArrayList<E>
+						ArrayList<String> selectedValueList = (ArrayList<String>) gridView.getTag(R.id.selected_grid_values);
+						for(String selectedValue : selectedValueList){
+							checkedValues += "|" + selectedValue;
+						}
+					}
+				}
+				if (checkedValues.length() > 0)
+					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+				else
+					checkedValues = "-";
+				map.put(key, checkedValues);
 			}
-			// </image opton layout>
+			// </image option layout>
 			
 			// <rating>
 			else if (linearLayout.getTag(R.id.layout_id).toString()
@@ -1777,19 +1797,59 @@ public class OneQuestionOneView extends FragmentActivity {
 				
 				for(int cc=0; cc<linearLayout.getChildCount(); cc++){
 					View child = linearLayout.getChildAt(cc);
-					if(child.getClass().getName().toString().equals("android.widget.RatingBar")){
-						RatingBar ratingBar = (RatingBar) child;
-						startCount = ratingBar.getRating() + "";
+					if(child.getClass().getName().toString().equals("android.widget.LinearLayout")){
+						if(child.getTag(R.id.layout_id).toString().equals("ratingAndLabelLayout")){
+							LinearLayout ratingAndLabelLayout = (LinearLayout) child;
+							for(int z=0; z<ratingAndLabelLayout.getChildCount(); z++){
+								View v = ratingAndLabelLayout.getChildAt(z);
+								if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
+									RatingBar ratingBar = (RatingBar) v;
+									startCount = (int)ratingBar.getRating() + "";
+								}
+							}
+						}
 					}
 				}
 				
 				map.put(key, startCount);
 			}
 			// </rating>
+			
+			else if (linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String checkedValues="";
+				for(int i_=0; i_<linearLayout.getChildCount(); i_++){
+					View view = linearLayout.getChildAt(i_);
+					if(view.getClass().getName().toString().equals("android.widget.ListView")){
+						ListView listView = (ListView) view;
+						RatingSetAdapter adapter = (RatingSetAdapter) listView.getAdapter();
+						ArrayList<HashMap<String, String>> data = adapter.getData();
+						HashMap<String,String> dataMap = data.get(i_);
+						String value = dataMap.get("value");
+						RelativeLayout relativeLayout = (RelativeLayout) listView.getChildAt(i_);
+						for(int rl=0; rl<relativeLayout.getChildCount(); rl++){
+							View child_ = relativeLayout.getChildAt(rl);
+							if(child_.getClass().getName().toString().equals("android.widget.LinearLayout")){
+								if(child_.getTag(R.id.layout_id).toString().equals("ratingBarLayout")){
+									LinearLayout ratingBarLayout = (LinearLayout) child_;
+									for(int rb=0; rb<ratingBarLayout.getChildCount(); rb++){
+										View v = ratingBarLayout.getChildAt(rb);
+										if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
+											RatingBar ratingBar = (RatingBar) v;
+											String rating = ratingBar.getRating()+"";
+											rating.length();
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				map.put(key, checkedValues);
+			}
 		}
 		return map;
 	}// </getValueFromEachLayout>
-	
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
 		RadioButton selectedButton = null;
@@ -1855,8 +1915,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout innerLayout = null;
 		int childCount = parrentLayout.getChildCount();
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
-			String className = parrentLayout.getChildAt(i).getClass().getName()
-					.toString();
+			String className = parrentLayout.getChildAt(i).getClass().getName().toString();
 			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);

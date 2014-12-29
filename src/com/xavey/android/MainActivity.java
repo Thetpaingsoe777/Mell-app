@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
 	private Handler customHandler = new Handler();;
 	ToastManager toastManager;
-	
+
 	public static int current_position = 0;
 
 	@Override
@@ -447,7 +447,6 @@ public class MainActivity extends Activity {
 
 			if (userResponseCode == 200) {
 				try {
-					
 					// RestClient f = new RestClient(localFromDownloadURL);
 					RestClient f = new RestClient(serverFormDownloadURL);
 					f.AddParam("id", user.getUser_id());
@@ -485,7 +484,6 @@ public class MainActivity extends Activity {
 						.xaveyToast(null,
 								"server error when downloading form.. at Main Activity");
 			}
-
 			return userFormsList;
 		}
 
@@ -594,7 +592,7 @@ public class MainActivity extends Activity {
 
 					// get the forms that involved images
 					ArrayList<HashMap<String,String>> imageIncludedFormList = new ArrayList<HashMap<String,String>>();
-					
+
 					for (Form form : result) {
 						String form_fields_string = form.getForm_fields();
 						JSONArray jsonArray = new JSONArray(form_fields_string);
@@ -604,23 +602,23 @@ public class MainActivity extends Activity {
 							String fieldType = field.getString("field_type");
 
 							if (fieldType.equals("image_checklist")
-									|| fieldType.equals("image_option")) {
+									|| fieldType.equals("image_option") || fieldType.equals("rating_set_image")) {
 								// getting ImageID here
-								JSONObject fieldDataset = field
-										.getJSONObject("field_dataset");
-								JSONArray dataSetValues = fieldDataset
-										.getJSONArray("dataset_values");
+								JSONObject fieldDataset = field.getJSONObject("field_dataset");
+								JSONArray dataSetValues = fieldDataset.getJSONArray("dataset_values");
 
 								for (int j = 0; j < dataSetValues.length(); j++) {
-									String imageID = dataSetValues
-											.getJSONObject(j)
-											.getString("image");
+									String imageID = dataSetValues.getJSONObject(j).getString("image");
 									HashMap<String, String> map = new HashMap<String, String>();
 									map.put("form_id", form.getForm_id());
 									map.put("image_id", imageID);
 									imageIncludedFormList.add(map);
 								}
-							} else {
+							}
+//							else if(fieldType.equals("rating_image_set")){
+//								
+//							}
+							else {
 								form.setImageSynced(true); 
 								dbHelper.updateForm(form);
 							}

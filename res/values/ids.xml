@@ -35,4 +35,8 @@
     <item type="id" name="selected_grid_values"/>
     <item type="id" name="is_griditem_selected"/>
     <item type="id" name="grid_view_type"/>
+    
+    <!-- listview -->
+    <item type="id" name="list_item_value"/>
+    
 </resources>
