@@ -1815,7 +1815,8 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 			// </rating>
 			
-			else if (linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetLayout")) {
+			// <rating_set> and <rating_set_image>
+			else if (linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetLayout")||linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetImageLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String checkedValues="";
 				for(int i_=0; i_<linearLayout.getChildCount(); i_++){
@@ -1824,29 +1825,38 @@ public class OneQuestionOneView extends FragmentActivity {
 						ListView listView = (ListView) view;
 						RatingSetAdapter adapter = (RatingSetAdapter) listView.getAdapter();
 						ArrayList<HashMap<String, String>> data = adapter.getData();
-						HashMap<String,String> dataMap = data.get(i_);
-						String value = dataMap.get("value");
-						RelativeLayout relativeLayout = (RelativeLayout) listView.getChildAt(i_);
-						for(int rl=0; rl<relativeLayout.getChildCount(); rl++){
-							View child_ = relativeLayout.getChildAt(rl);
-							if(child_.getClass().getName().toString().equals("android.widget.LinearLayout")){
-								if(child_.getTag(R.id.layout_id).toString().equals("ratingBarLayout")){
-									LinearLayout ratingBarLayout = (LinearLayout) child_;
-									for(int rb=0; rb<ratingBarLayout.getChildCount(); rb++){
-										View v = ratingBarLayout.getChildAt(rb);
-										if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
-											RatingBar ratingBar = (RatingBar) v;
-											String rating = ratingBar.getRating()+"";
-											rating.length();
+						
+						for(int lv=0; lv<listView.getChildCount(); lv++){
+							HashMap<String,String> dataMap = data.get(lv);
+							String value = dataMap.get("value");
+							RelativeLayout relativeLayout = (RelativeLayout) listView.getChildAt(lv);
+							for(int rl=0; rl<relativeLayout.getChildCount(); rl++){
+								View child_ = relativeLayout.getChildAt(rl);
+								if(child_.getClass().getName().toString().equals("android.widget.LinearLayout")){
+									if(child_.getTag(R.id.layout_id)!=null && child_.getTag(R.id.layout_id).toString().equals("ratingBarLayout")){
+										LinearLayout ratingBarLayout = (LinearLayout) child_;
+										for(int rb=0; rb<ratingBarLayout.getChildCount(); rb++){
+											View v = ratingBarLayout.getChildAt(rb);
+											if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
+												RatingBar ratingBar = (RatingBar) v;
+												int rating = (int) ratingBar.getRating();
+												checkedValues += "|" + value + ":" + rating;
+											}
 										}
 									}
 								}
 							}
 						}
+						
 					}
 				}
+				if (checkedValues.length() > 0)
+					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+				else
+					checkedValues = "-";
 				map.put(key, checkedValues);
 			}
+			// </rating set>
 		}
 		return map;
 	}// </getValueFromEachLayout>

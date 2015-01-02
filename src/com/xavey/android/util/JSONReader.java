@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -92,7 +94,8 @@ public class JSONReader {
 	public ArrayList<LinearLayout> readForm2(Form form) throws JSONException {
 
 		ArrayList<LinearLayout> layoutList = new ArrayList<LinearLayout>();
-		ArrayList<HashMap<String, Object>> formFields = getFormFields(form.getForm_json());
+		ArrayList<HashMap<String, Object>> formFields = getFormFields(form
+				.getForm_json());
 
 		int upLayoutHeight = displayManager.getHeigth(6);
 		int LayoutWidth = displayManager.getWidth(95);
@@ -106,24 +109,31 @@ public class JSONReader {
 		// labelLayoutParams.height = 30;
 		labelLayoutParams.setMargins(10, 5, 10, 5);
 
-		LayoutParams descriptionLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams descriptionLayoutParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		// descriptionLayoutParams.height = 30;
 		descriptionLayoutParams.setMargins(10, 5, 10, 5);
 
-		LayoutParams innerLayoutParams = new LayoutParams(LayoutWidth, LayoutParams.WRAP_CONTENT);
-		LayoutParams editTextLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, editTextLayoutHeight);
+		LayoutParams innerLayoutParams = new LayoutParams(LayoutWidth,
+				LayoutParams.WRAP_CONTENT);
+		LayoutParams editTextLayoutParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, editTextLayoutHeight);
 		editTextLayoutParams.setMargins(15, 10, 15, 10);
 
-		final LayoutParams extraValueLayoutParamsAppear = new LayoutParams(LayoutParams.MATCH_PARENT, editTextLayoutHeight);
+		final LayoutParams extraValueLayoutParamsAppear = new LayoutParams(
+				LayoutParams.MATCH_PARENT, editTextLayoutHeight);
 		extraValueLayoutParamsAppear.setMargins(25, 0, 25, 5);
-		final LayoutParams extraValueLayoutParamsDisappear = new LayoutParams(0, 0);
+		final LayoutParams extraValueLayoutParamsDisappear = new LayoutParams(
+				0, 0);
 		extraValueLayoutParamsDisappear.setMargins(25, 0, 25, 5);
 		editTextLayoutParams.setMargins(15, 10, 15, 10);
 
-		LayoutParams errorMsgLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams errorMsgLayoutParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		errorMsgLayoutParams.setMargins(10, 10, 10, 0);
 
-		LayoutParams radioButtonLineLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams radioButtonLineLayoutParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		radioButtonLineLayoutParams.setMargins(15, 10, 15, 5);
 
 		float labelTextSize = 18;
@@ -208,7 +218,8 @@ public class JSONReader {
 						tvdescription.setLayoutParams(descriptionLayoutParams);
 						tvdescription.setPadding(0, 5, 0, 5);
 						tvdescription.setGravity(Gravity.CENTER_VERTICAL);
-						tvdescription.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
+						tvdescription
+								.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_START);
 						setTypeFace(tvdescription);
 						textLayout.addView(tvdescription);
 
@@ -510,6 +521,8 @@ public class JSONReader {
 						// upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
+						ArrayList<LinearLayout> buttonLinesToBeRandomed = new ArrayList<LinearLayout>();
+
 						LinearLayout radioLayout = new LinearLayout(activity);
 						// LayoutParams radioLayoutParams = new LayoutParams(
 						// LayoutParams.MATCH_PARENT,
@@ -619,14 +632,16 @@ public class JSONReader {
 							if (tag.equals(field_default_value)) {
 								radioButton.setSelected(true);
 								radioButton.setChecked(true);
-								radioButton.setTag(R.id.is_radiobutton_selected, true);
+								radioButton.setTag(
+										R.id.is_radiobutton_selected, true);
 							}
 							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
 									RadioGroup.LayoutParams.MATCH_PARENT,
 									RadioGroup.LayoutParams.WRAP_CONTENT);
 
 							EditText extraValue = new EditText(activity);
-							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
+							extraValue
+									.setLayoutParams(extraValueLayoutParamsDisappear);
 							extraValue.setTag(R.id.extra_status, "off");
 
 							layoutParams.setMargins(0, 10, 0, 10);
@@ -642,13 +657,19 @@ public class JSONReader {
 									activity);
 							radioButtonLine.setTag(R.id.layout_id,
 									"radioButtonLine");
-							radioButtonLine.setLayoutParams(radioButtonLineLayoutParams);
-							radioButtonLine.setOrientation(LinearLayout.VERTICAL);
-							radioButton.setOnClickListener(new OnClickListener() {
+							radioButtonLine
+									.setLayoutParams(radioButtonLineLayoutParams);
+							radioButtonLine
+									.setOrientation(LinearLayout.VERTICAL);
+
+							radioButton
+									.setOnClickListener(new OnClickListener() {
 										@Override
 										public void onClick(View v) {
 											RadioButton clicked_button = (RadioButton) v;
-											clicked_button.setTag(R.id.is_radiobutton_selected, true);
+											clicked_button
+													.setTag(R.id.is_radiobutton_selected,
+															true);
 
 											// disable all other
 											Random r = new Random();
@@ -659,7 +680,8 @@ public class JSONReader {
 
 											for (int i = 0; i < rg
 													.getChildCount(); i++) {
-												LinearLayout radioButtonLine_ = (LinearLayout) rg.getChildAt(i);
+												LinearLayout radioButtonLine_ = (LinearLayout) rg
+														.getChildAt(i);
 												// for loop child count of radio
 												// Button line
 												// if child == radiobutton ,
@@ -672,7 +694,8 @@ public class JSONReader {
 												EditText singleEditTextFromAll = null;
 												for (int j = 0; j < radioButtonLine_
 														.getChildCount(); j++) {
-													View child = radioButtonLine_.getChildAt(j);
+													View child = radioButtonLine_
+															.getChildAt(j);
 													String child_class_name = child
 															.getClass()
 															.getName()
@@ -765,7 +788,18 @@ public class JSONReader {
 							}
 							radioButtonLine.addView(radioButton);
 							radioButtonLine.addView(extraValue);
-							rg.addView(radioButtonLine);
+
+							// random here everything...
+							// a condition should be checked here
+							// cuz not every question should be randomed
+
+							buttonLinesToBeRandomed.add(radioButtonLine); // <--
+																			// collect
+																			// the
+																			// lines
+																			// first
+
+							// rg.addView(radioButtonLine);
 						}
 						// for loop ends here
 
@@ -788,6 +822,14 @@ public class JSONReader {
 						// radiobuttonLayout.addView(testText);
 						// radioLayout.addView(radiobuttonLayout);
 
+						// random.... valid by some json in future
+						// example.. -> field_random : true
+
+						Collections.shuffle(buttonLinesToBeRandomed);
+						for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
+							rg.addView(eachButtonLine);
+						}
+
 						if (getSelectedRadioButtonMyRadioGroup(rg) == null) {
 							RadioButton firstButton = getRadioButtonByIndexMyRadioGroup(
 									rg, 0);
@@ -803,16 +845,20 @@ public class JSONReader {
 						// audio stuff
 						// String audiorequired =
 						// fields.get("field_audio_required").toString();
-						boolean isAudioRequired = Boolean.parseBoolean(fields.get("field_audio_required").toString());
+						boolean isAudioRequired = Boolean.parseBoolean(fields
+								.get("field_audio_required").toString());
 						if (isAudioRequired) {
 							Audio audioinfo = new Audio();
 							audioinfo.setAudio_name(fieldName);
-							recordingManager = new AudioRecordingManager(activity);
+							recordingManager = new AudioRecordingManager(
+									activity);
 							recordingManager.setAudioInfo(audioinfo);
-							recordingManager.setFileName(fieldName + " - "	+ getCurrentDocumentID());
+							recordingManager.setFileName(fieldName + " - "
+									+ getCurrentDocumentID());
 							LinearLayout recordingLayout = recordingManager
 									.getRecordingLayout();
-							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
+							recordingLayout.setTag(R.id.layout_id,
+									"recordingLayout");
 							parentLayout.addView(recordingLayout);
 						}
 
@@ -843,7 +889,8 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -862,14 +909,22 @@ public class JSONReader {
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
 						checkBoxLayout.setOrientation(LinearLayout.VERTICAL);
 						checkBoxLayout.setTag(R.id.layout_id, "checkBoxLayout");
-						checkBoxLayout.setTag(R.id.field_id, fields.get("field_id"));
-						checkBoxLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						checkBoxLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						checkBoxLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						checkBoxLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						checkBoxLayout.setTag(R.id.field_ref, fields.get("field_ref"));
-						checkBoxLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String checkLabel = fields.get("field_label").toString();
+						checkBoxLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						checkBoxLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						checkBoxLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						checkBoxLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						checkBoxLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						checkBoxLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						checkBoxLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String checkLabel = fields.get("field_label")
+								.toString();
 
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(checkLabel + " ");
@@ -888,7 +943,8 @@ public class JSONReader {
 						checkBoxLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc").toString();
+						String description = fields.get("field_desc")
+								.toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -902,6 +958,9 @@ public class JSONReader {
 						// "field_default_value").toString());
 						int default_value = 1;
 						int length = dataset.length();
+
+						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+
 						int checkboxCount = 0;
 						for (int j = 0; j < length; j++) {
 							JSONObject obj = new JSONObject();
@@ -910,7 +969,8 @@ public class JSONReader {
 							String tag = obj.getString("value");
 							CheckBox cb = new CheckBox(activity);
 							cb.setText(text);
-							cb.setTextSize(radioButtonTextSize); // same as radio
+							cb.setTextSize(radioButtonTextSize); // same as
+																	// radio
 							cb.setTag(tag);
 							cb.setTypeface(typeface.getTypeFace());
 							LayoutParams cbParams = new LayoutParams(
@@ -922,7 +982,8 @@ public class JSONReader {
 							if (default_value == (j + 1)) {
 								cb.setChecked(true);
 							}
-							checkBoxLayout.addView(cb);
+							checkBoxList.add(cb);
+							// checkBoxLayout.addView(cb);
 							checkboxCount++;
 						}
 						// error msg
@@ -932,6 +993,11 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						checkBoxLayout.addView(errorMsg);
+
+						Collections.shuffle(checkBoxList);
+						for (CheckBox cb : checkBoxList) {
+							checkBoxLayout.addView(cb);
+						}
 
 						scroll.addView(checkBoxLayout);
 						parentLayout.addView(scroll);
@@ -1374,7 +1440,8 @@ public class JSONReader {
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -1425,7 +1492,8 @@ public class JSONReader {
 						noteLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc").toString();
+						String description = fields.get("field_desc")
+								.toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -1438,11 +1506,13 @@ public class JSONReader {
 						scroll.addView(noteLayout);
 						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
-					} 
-					//<matrix_checklist>
+					}
+					// <matrix_checklist>
 					else if (fields.get(key).equals("matrix_checklist")) {
 						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						scroll.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1460,7 +1530,8 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -1468,22 +1539,32 @@ public class JSONReader {
 						// upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
-						LinearLayout matrixChecklistLayout = new LinearLayout(activity);
+						LinearLayout matrixChecklistLayout = new LinearLayout(
+								activity);
 						LayoutParams matrixSingleLayoutParams = new LayoutParams(
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						matrixSingleLayoutParams.setMargins(5, 20, 5, 0);
-						matrixChecklistLayout.setLayoutParams(matrixSingleLayoutParams);
-						matrixChecklistLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						matrixChecklistLayout.setOrientation(LinearLayout.VERTICAL);
+						matrixChecklistLayout
+								.setLayoutParams(matrixSingleLayoutParams);
+						matrixChecklistLayout
+								.setGravity(Gravity.CENTER_HORIZONTAL);
+						matrixChecklistLayout
+								.setOrientation(LinearLayout.VERTICAL);
 						matrixChecklistLayout.setPadding(0, 10, 0, 10);
-						matrixChecklistLayout.setTag(R.id.layout_id,"matrixCheckListLayout");
-						matrixChecklistLayout.setTag(R.id.field_id, fields.get("field_id"));
-						matrixChecklistLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						matrixChecklistLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						matrixChecklistLayout.setTag(R.id.field_label_id, fields.get("field_label"));
+						matrixChecklistLayout.setTag(R.id.layout_id,
+								"matrixCheckListLayout");
+						matrixChecklistLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						matrixChecklistLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						matrixChecklistLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						matrixChecklistLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
 						matrixChecklistLayout.setTag(R.id.field_err_msg, "-");
-						matrixChecklistLayout.setTag(R.id.field_ref, fields.get("field_ref"));
+						matrixChecklistLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
 						matrixChecklistLayout.setTag(R.id.next_cond,
 								fields.get("next_cond"));
 						String field_label = fields.get("field_label")
@@ -1498,7 +1579,7 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
 						matrixChecklistLayout.addView(tvLabel);
-						
+
 						// adding description
 						String description = fields.get("field_desc")
 								.toString();
@@ -1509,12 +1590,16 @@ public class JSONReader {
 						tvdescription.setPadding(0, 5, 0, 5);
 						setTypeFace(tvdescription);
 						matrixChecklistLayout.addView(tvdescription);
-						
-						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+
+						LinearLayout theMatrixLayout = new LinearLayout(
+								activity);
+						theMatrixLayout.setLayoutParams(new LayoutParams(
+								LayoutParams.WRAP_CONTENT,
+								LayoutParams.WRAP_CONTENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
-						
+						theMatrixLayout.setTag(R.id.layout_id,
+								"theMatrixLayout");
+
 						// <dataset_v stuffs>
 						JSONObject field_dataset_v = (JSONObject) fields
 								.get("field_dataset_v");
@@ -1546,8 +1631,10 @@ public class JSONReader {
 
 						ArrayList<HashMap<String, String>> h_values_list = new ArrayList<HashMap<String, String>>();
 						for (int v = 0; v < h_values.length(); v++) {
-							String value = h_values.getJSONObject(v).getString("value");
-							String label = h_values.getJSONObject(v).getString("label");
+							String value = h_values.getJSONObject(v).getString(
+									"value");
+							String label = h_values.getJSONObject(v).getString(
+									"label");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("value", value);
 							map.put("label", label);
@@ -1556,7 +1643,8 @@ public class JSONReader {
 						// </dataset_h stuffs>
 
 						// < matrix stuffs >
-						JSONArray matrix_values = (JSONArray) fields.get("matrix_values");
+						JSONArray matrix_values = (JSONArray) fields
+								.get("matrix_values");
 
 						int v_count = v_values_list.size();
 						int h_count = h_values_list.size();
@@ -1568,8 +1656,10 @@ public class JSONReader {
 							ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
 
 							for (int count = 0; count < matrix_values.length(); count++) {
-								JSONObject cell_values = matrix_values.getJSONObject(count);
-								String fieldSkip = cell_values.getString("field_skip");
+								JSONObject cell_values = matrix_values
+										.getJSONObject(count);
+								String fieldSkip = cell_values
+										.getString("field_skip");
 								String value = cell_values.getString("value");
 								String index_ = cell_values.getString("index");
 								String[] parts = index_.split(",");
@@ -1588,16 +1678,20 @@ public class JSONReader {
 							columnSetCollection.add(columnSet);
 						}
 						// <producing row_label_set>
-						LinearLayout row_label_column_set = new LinearLayout(activity);
-						row_label_column_set.setTag(R.id.layout_id, "rowLabelColumn");
+						LinearLayout row_label_column_set = new LinearLayout(
+								activity);
+						row_label_column_set.setTag(R.id.layout_id,
+								"rowLabelColumn");
 						int cell_row_width = 200;
 						int cell_column_width = 150;
-						int cell_column_height= 70;
+						int cell_column_height = 70;
 
 						LayoutParams rowLabelLayoutParams = new LayoutParams(
 								cell_row_width, LayoutParams.WRAP_CONTENT);
-						row_label_column_set.setLayoutParams(rowLabelLayoutParams);
-						row_label_column_set.setOrientation(LinearLayout.VERTICAL);
+						row_label_column_set
+								.setLayoutParams(rowLabelLayoutParams);
+						row_label_column_set
+								.setOrientation(LinearLayout.VERTICAL);
 						row_label_column_set.setGravity(Gravity.CENTER);
 
 						LinearLayout blankLayout = new LinearLayout(activity);
@@ -1606,7 +1700,8 @@ public class JSONReader {
 						blankLayout.setLayoutParams(blankLayoutParams);
 						blankLayout.setGravity(Gravity.CENTER);
 						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(cell_row_width, cell_column_height));
+						blankText.setLayoutParams(new LayoutParams(
+								cell_row_width, cell_column_height));
 						blankText.setText("     ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
@@ -1618,19 +1713,17 @@ public class JSONReader {
 									activity);
 
 							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_row_width,
-									cell_column_height);
+									cell_row_width, cell_column_height);
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
 							LayoutParams rowLabelParams = new LayoutParams(
-									cell_row_width,
-									cell_column_height);
+									cell_row_width, cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
 							rowLabel.setText(v_values_list.get(r).get("label")
 									.toString());
 							rowLabel.setGravity(Gravity.START);
-							//rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
+							// rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
 							// value may be useless here
 							row_label_column_set.addView(rowLabel);
 						}
@@ -1640,67 +1733,87 @@ public class JSONReader {
 
 						// <prepare AllColumns
 						LinearLayout AllColumns = new LinearLayout(activity);
-						AllColumns.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						AllColumns.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
 						AllColumns.setOrientation(LinearLayout.HORIZONTAL);
 						AllColumns.setTag(R.id.layout_id, "AllColumns");
-						
+
 						// <prepare columnSet>
-						for (int column = 0; column < columnSetCollection.size(); column++) {
-							ArrayList<MatrixCell> columnSet = columnSetCollection.get(column);
-							LinearLayout columnLayout = new LinearLayout(activity);
+						for (int column = 0; column < columnSetCollection
+								.size(); column++) {
+							ArrayList<MatrixCell> columnSet = columnSetCollection
+									.get(column);
+							LinearLayout columnLayout = new LinearLayout(
+									activity);
 							LayoutParams columnLayoutParams = new LayoutParams(
-									cell_column_width,LayoutParams.WRAP_CONTENT);
+									cell_column_width,
+									LayoutParams.WRAP_CONTENT);
 							columnLayout.setLayoutParams(columnLayoutParams);
 							columnLayout.setOrientation(LinearLayout.VERTICAL);
 							columnLayout.setGravity(Gravity.CENTER);
 							columnLayout.setTag(R.id.layout_id, "columnLayout");
 
 							// adding columnTitle
-							String columnTitle = h_values_list.get(column).get("label");
+							String columnTitle = h_values_list.get(column).get(
+									"label");
 							TextView tvColumnTitle = new TextView(activity);
-							tvColumnTitle.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+							tvColumnTitle.setLayoutParams(new LayoutParams(
+									cell_column_width, cell_column_height));
 							tvColumnTitle.setText(columnTitle);
-							//tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
+							// tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
 							tvColumnTitle.setGravity(Gravity.CENTER);
 							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
 							// following code dosen't work
-//							if(tvColumnTitle.getLayoutParams().height>maxHeight){
-//								maxHeight = tvColumnTitle.getHeight();
-//							}
+							// if(tvColumnTitle.getLayoutParams().height>maxHeight){
+							// maxHeight = tvColumnTitle.getHeight();
+							// }
 
 							columnLayout.addView(tvColumnTitle);
 
 							for (int cs = 0; cs < columnSet.size(); cs++) {
 								MatrixCell cell = columnSet.get(cs);
-								LinearLayout singleCheckBoxLayout = new LinearLayout(activity);
-								singleCheckBoxLayout.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+								LinearLayout singleCheckBoxLayout = new LinearLayout(
+										activity);
+								singleCheckBoxLayout
+										.setLayoutParams(new LayoutParams(
+												cell_column_width,
+												cell_column_height));
 								singleCheckBoxLayout.setGravity(Gravity.CENTER);
-								singleCheckBoxLayout.setTag(R.id.layout_id, "cell");
+								singleCheckBoxLayout.setTag(R.id.layout_id,
+										"cell");
 								CheckBox cb = new CheckBox(activity);
 								LayoutParams checkBoxParams = new LayoutParams(
-										LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+										LayoutParams.WRAP_CONTENT,
+										LayoutParams.WRAP_CONTENT);
 								cb.setLayoutParams(checkBoxParams);
 								cb.setTag(R.id.matrix_cell, cell);
-								//cb.setGravity(Gravity.CENTER); // <-- center horizontal didn't work here
+								// cb.setGravity(Gravity.CENTER); // <-- center
+								// horizontal didn't work here
 								singleCheckBoxLayout.addView(cb);
-								//singleCheckBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
+								// singleCheckBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
 								columnLayout.addView(singleCheckBoxLayout);
 							}
-							//here
+							// here
 							AllColumns.addView(columnLayout);
-							//theMatrixLayout.addView(columnLayout);
+							// theMatrixLayout.addView(columnLayout);
 						}
 						// </prepare columnSet>
 
 						// </matrix stuffs>
 
 						int aaaaa = maxHeight;
-						
-						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
-						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+
+						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
+								activity);
+						horizontalScrollView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
 						horizontalScrollView.addView(AllColumns);
-						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
-						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
+						horizontalScrollView.setTag(R.id.layout_id,
+								"horizontalScrollView");
+						horizontalScrollView
+								.requestDisallowInterceptTouchEvent(false);
 						theMatrixLayout.addView(horizontalScrollView);
 						matrixChecklistLayout.addView(theMatrixLayout);
 
@@ -1717,12 +1830,14 @@ public class JSONReader {
 
 						layoutList.add(parentLayout);
 					}
-					//</matrix_checklist>
-					
-					//<matrix_>
+					// </matrix_checklist>
+
+					// <matrix_>
 					else if (fields.get(key).equals("matrix_option")) {
 						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						scroll.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1740,7 +1855,8 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -1749,23 +1865,33 @@ public class JSONReader {
 						parentLayout.addView(upLayout);
 
 						ArrayList<RadioButton> radioButtonList = new ArrayList<RadioButton>();
-						
-						LinearLayout matrixOptionLayout = new LinearLayout(activity);
+
+						LinearLayout matrixOptionLayout = new LinearLayout(
+								activity);
 						LayoutParams matrixRadioLayoutParams = new LayoutParams(
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						matrixRadioLayoutParams.setMargins(5, 20, 5, 0);
-						matrixOptionLayout.setLayoutParams(matrixRadioLayoutParams);
-						matrixOptionLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						matrixOptionLayout.setOrientation(LinearLayout.VERTICAL);
+						matrixOptionLayout
+								.setLayoutParams(matrixRadioLayoutParams);
+						matrixOptionLayout
+								.setGravity(Gravity.CENTER_HORIZONTAL);
+						matrixOptionLayout
+								.setOrientation(LinearLayout.VERTICAL);
 						matrixOptionLayout.setPadding(0, 10, 0, 10);
-						matrixOptionLayout.setTag(R.id.layout_id,"matrixOptionLayout");
-						matrixOptionLayout.setTag(R.id.field_id, fields.get("field_id"));
-						matrixOptionLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						matrixOptionLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						matrixOptionLayout.setTag(R.id.field_label_id, fields.get("field_label"));
+						matrixOptionLayout.setTag(R.id.layout_id,
+								"matrixOptionLayout");
+						matrixOptionLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						matrixOptionLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						matrixOptionLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						matrixOptionLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
 						matrixOptionLayout.setTag(R.id.field_err_msg, "-");
-						matrixOptionLayout.setTag(R.id.field_ref, fields.get("field_ref"));
+						matrixOptionLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
 						matrixOptionLayout.setTag(R.id.next_cond,
 								fields.get("next_cond"));
 						String field_label = fields.get("field_label")
@@ -1780,7 +1906,7 @@ public class JSONReader {
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
 						matrixOptionLayout.addView(tvLabel);
-						
+
 						// adding description
 						String description = fields.get("field_desc")
 								.toString();
@@ -1791,12 +1917,16 @@ public class JSONReader {
 						tvdescription.setPadding(0, 5, 0, 5);
 						setTypeFace(tvdescription);
 						matrixOptionLayout.addView(tvdescription);
-						
-						LinearLayout theMatrixLayout = new LinearLayout(activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+
+						LinearLayout theMatrixLayout = new LinearLayout(
+								activity);
+						theMatrixLayout.setLayoutParams(new LayoutParams(
+								LayoutParams.WRAP_CONTENT,
+								LayoutParams.WRAP_CONTENT));
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-						theMatrixLayout.setTag(R.id.layout_id, "theMatrixLayout");
-						
+						theMatrixLayout.setTag(R.id.layout_id,
+								"theMatrixLayout");
+
 						// <dataset_v stuffs>
 						JSONObject field_dataset_v = (JSONObject) fields
 								.get("field_dataset_v");
@@ -1828,8 +1958,10 @@ public class JSONReader {
 
 						ArrayList<HashMap<String, String>> h_values_list = new ArrayList<HashMap<String, String>>();
 						for (int v = 0; v < h_values.length(); v++) {
-							String value = h_values.getJSONObject(v).getString("value");
-							String label = h_values.getJSONObject(v).getString("label");
+							String value = h_values.getJSONObject(v).getString(
+									"value");
+							String label = h_values.getJSONObject(v).getString(
+									"label");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("value", value);
 							map.put("label", label);
@@ -1838,7 +1970,8 @@ public class JSONReader {
 						// </dataset_h stuffs>
 
 						// < matrix stuffs >
-						JSONArray matrix_values = (JSONArray) fields.get("matrix_values");
+						JSONArray matrix_values = (JSONArray) fields
+								.get("matrix_values");
 
 						int v_count = v_values_list.size();
 						int h_count = h_values_list.size();
@@ -1850,8 +1983,10 @@ public class JSONReader {
 							ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
 
 							for (int count = 0; count < matrix_values.length(); count++) {
-								JSONObject cell_values = matrix_values.getJSONObject(count);
-								String fieldSkip = cell_values.getString("field_skip");
+								JSONObject cell_values = matrix_values
+										.getJSONObject(count);
+								String fieldSkip = cell_values
+										.getString("field_skip");
 								String value = cell_values.getString("value");
 								String index_ = cell_values.getString("index");
 								String[] parts = index_.split(",");
@@ -1870,16 +2005,20 @@ public class JSONReader {
 							columnSetCollection.add(columnSet);
 						}
 						// <producing row_label_set>
-						LinearLayout row_label_column_set = new LinearLayout(activity);
-						row_label_column_set.setTag(R.id.layout_id, "rowLabelColumn");
+						LinearLayout row_label_column_set = new LinearLayout(
+								activity);
+						row_label_column_set.setTag(R.id.layout_id,
+								"rowLabelColumn");
 						int cell_row_width = 200;
 						int cell_column_width = 150;
-						int cell_column_height= 70;
+						int cell_column_height = 70;
 
 						LayoutParams rowLabelLayoutParams = new LayoutParams(
 								cell_row_width, LayoutParams.WRAP_CONTENT);
-						row_label_column_set.setLayoutParams(rowLabelLayoutParams);
-						row_label_column_set.setOrientation(LinearLayout.VERTICAL);
+						row_label_column_set
+								.setLayoutParams(rowLabelLayoutParams);
+						row_label_column_set
+								.setOrientation(LinearLayout.VERTICAL);
 						row_label_column_set.setGravity(Gravity.CENTER);
 
 						LinearLayout blankLayout = new LinearLayout(activity);
@@ -1888,7 +2027,8 @@ public class JSONReader {
 						blankLayout.setLayoutParams(blankLayoutParams);
 						blankLayout.setGravity(Gravity.CENTER);
 						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(cell_row_width, cell_column_height));
+						blankText.setLayoutParams(new LayoutParams(
+								cell_row_width, cell_column_height));
 						blankText.setText("     ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
@@ -1899,25 +2039,24 @@ public class JSONReader {
 									activity);
 
 							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_row_width,
-									cell_column_height);
+									cell_row_width, cell_column_height);
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
 							LayoutParams rowLabelParams = new LayoutParams(
-									cell_row_width,
-									cell_column_height);
+									cell_row_width, cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
 							rowLabel.setText(v_values_list.get(r).get("label")
 									.toString());
-							rowLabel.setGravity(Gravity.START|Gravity.CENTER_VERTICAL);
-							//rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
+							rowLabel.setGravity(Gravity.START
+									| Gravity.CENTER_VERTICAL);
+							// rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
 							// value may be useless here
 
 							row_label_column_set.addView(rowLabel);
-							
+
 						}
-						
+
 						theMatrixLayout.addView(row_label_column_set);
 						theMatrixLayout.setPadding(10, 0, 0, 0);
 						// </producing row_label_set>
@@ -1926,99 +2065,130 @@ public class JSONReader {
 
 						// <prepare AllColumns
 						LinearLayout AllColumns = new LinearLayout(activity);
-						AllColumns.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+						AllColumns.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
 						AllColumns.setOrientation(LinearLayout.HORIZONTAL);
 						AllColumns.setTag(R.id.layout_id, "AllColumns");
-						
+
 						// <prepare columnSet>
-						for (int column = 0; column < columnSetCollection.size(); column++) {
-							ArrayList<MatrixCell> columnSet = columnSetCollection.get(column);
-							LinearLayout columnLayout = new LinearLayout(activity);
+						for (int column = 0; column < columnSetCollection
+								.size(); column++) {
+							ArrayList<MatrixCell> columnSet = columnSetCollection
+									.get(column);
+							LinearLayout columnLayout = new LinearLayout(
+									activity);
 							LayoutParams columnLayoutParams = new LayoutParams(
-									cell_column_width,LayoutParams.MATCH_PARENT);
+									cell_column_width,
+									LayoutParams.MATCH_PARENT);
 							columnLayout.setLayoutParams(columnLayoutParams);
 							columnLayout.setOrientation(LinearLayout.VERTICAL);
 							columnLayout.setGravity(Gravity.CENTER);
 							columnLayout.setTag(R.id.layout_id, "columnLayout");
 
 							// adding columnTitle
-							String columnTitle = h_values_list.get(column).get("label");
+							String columnTitle = h_values_list.get(column).get(
+									"label");
 							TextView tvColumnTitle = new TextView(activity);
-							tvColumnTitle.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+							tvColumnTitle.setLayoutParams(new LayoutParams(
+									cell_column_width, cell_column_height));
 							tvColumnTitle.setText(columnTitle);
-							//tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
+							// tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
 							tvColumnTitle.setGravity(Gravity.CENTER);
 							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
 							// following code dosen't work
-//							if(tvColumnTitle.getLayoutParams().height>maxHeight){
-//								maxHeight = tvColumnTitle.getHeight();
-//							}
+							// if(tvColumnTitle.getLayoutParams().height>maxHeight){
+							// maxHeight = tvColumnTitle.getHeight();
+							// }
 
 							columnLayout.addView(tvColumnTitle);
 
 							for (int cs = 0; cs < columnSet.size(); cs++) {
 								MatrixCell cell = columnSet.get(cs);
-								
-								LinearLayout singleRadioLayout = new LinearLayout(activity);
-								singleRadioLayout.setLayoutParams(new LayoutParams(cell_column_width, cell_column_height));
+
+								LinearLayout singleRadioLayout = new LinearLayout(
+										activity);
+								singleRadioLayout
+										.setLayoutParams(new LayoutParams(
+												cell_column_width,
+												cell_column_height));
 								singleRadioLayout.setGravity(Gravity.CENTER);
-								singleRadioLayout.setTag(R.id.layout_id, "cell");
+								singleRadioLayout
+										.setTag(R.id.layout_id, "cell");
 								RadioButton rb = new RadioButton(activity);
-								LayoutParams RadioParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+								LayoutParams RadioParams = new LayoutParams(
+										LayoutParams.WRAP_CONTENT,
+										LayoutParams.WRAP_CONTENT);
 								rb.setLayoutParams(RadioParams);
 								rb.setTag(R.id.matrix_cell, cell);
 								rb.setTag(R.id.is_radiobutton_selected, false);
-								//rb.setGravity(Gravity.CENTER); // <-- center horizontal didn't work here
+								// rb.setGravity(Gravity.CENTER); // <-- center
+								// horizontal didn't work here
 								singleRadioLayout.addView(rb);
 								radioButtonList.add(rb);
-								//singleRadioLayout.setBackgroundColor(Color.parseColor("#5abde4"));
+								// singleRadioLayout.setBackgroundColor(Color.parseColor("#5abde4"));
 								columnLayout.addView(singleRadioLayout);
 							}
-							//here
+							// here
 							AllColumns.addView(columnLayout);
-							//theMatrixLayout.addView(columnLayout);
+							// theMatrixLayout.addView(columnLayout);
 						}
 						// </prepare columnSet>
 
 						// </matrix stuffs>
 
-						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(activity);
-						horizontalScrollView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
+						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
+								activity);
+						horizontalScrollView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.WRAP_CONTENT));
 						horizontalScrollView.addView(AllColumns);
-						horizontalScrollView.setTag(R.id.layout_id, "horizontalScrollView");
-						horizontalScrollView.requestDisallowInterceptTouchEvent(false);
+						horizontalScrollView.setTag(R.id.layout_id,
+								"horizontalScrollView");
+						horizontalScrollView
+								.requestDisallowInterceptTouchEvent(false);
 						theMatrixLayout.addView(horizontalScrollView);
 						matrixOptionLayout.addView(theMatrixLayout);
 
-						//<setting onClickListener to individual RadioButton>
-						for(int v=0; v<v_values_list.size(); v++){ // 4
+						// <setting onClickListener to individual RadioButton>
+						for (int v = 0; v < v_values_list.size(); v++) { // 4
 							final ArrayList<RadioButton> singleRowAtC = new ArrayList<RadioButton>();
 							// <collecting cell by v index>
-							for(RadioButton rb: radioButtonList){
-								MatrixCell cell = (MatrixCell) rb.getTag(R.id.matrix_cell);
-								if(cell.getV_index()==v){
+							for (RadioButton rb : radioButtonList) {
+								MatrixCell cell = (MatrixCell) rb
+										.getTag(R.id.matrix_cell);
+								if (cell.getV_index() == v) {
 									singleRowAtC.add(rb);
 								}
 							}
 							// </collecting cell by v index>
 
 							// <setting Listener>
-							for(int s=0; s<singleRowAtC.size(); s++){ //4
+							for (int s = 0; s < singleRowAtC.size(); s++) { // 4
 								final RadioButton rb = singleRowAtC.get(s);
 								rb.setOnClickListener(new OnClickListener() {
 
 									@Override
-									public void onClick(View v) {			
-										rb.setTag(R.id.is_radiobutton_selected, true);
-										MatrixCell cell = (MatrixCell) rb.getTag(R.id.matrix_cell);	
+									public void onClick(View v) {
+										rb.setTag(R.id.is_radiobutton_selected,
+												true);
+										MatrixCell cell = (MatrixCell) rb
+												.getTag(R.id.matrix_cell);
 										String uniqueValue = cell.getValue();
-										for(int ss=0; ss<singleRowAtC.size(); ss++){
-											RadioButton loopButton = singleRowAtC.get(ss);
-											MatrixCell loopCell = (MatrixCell) loopButton.getTag(R.id.matrix_cell);
-											if(!uniqueValue.equals(loopCell.getValue())){
-												RadioButton otherButton = singleRowAtC.get(ss);
+										for (int ss = 0; ss < singleRowAtC
+												.size(); ss++) {
+											RadioButton loopButton = singleRowAtC
+													.get(ss);
+											MatrixCell loopCell = (MatrixCell) loopButton
+													.getTag(R.id.matrix_cell);
+											if (!uniqueValue.equals(loopCell
+													.getValue())) {
+												RadioButton otherButton = singleRowAtC
+														.get(ss);
 												otherButton.setChecked(false);
-												otherButton.setTag(R.id.is_radiobutton_selected, false);
+												otherButton
+														.setTag(R.id.is_radiobutton_selected,
+																false);
 											}
 										}
 									}
@@ -2027,8 +2197,8 @@ public class JSONReader {
 							// </setting Listener>
 						}
 
-						//</setting onClickListener to individual RadioButton>
-						
+						// </setting onClickListener to individual RadioButton>
+
 						// error msg
 						TextView errorMsg = new TextView(activity);
 						errorMsg.setLayoutParams(errorMsgLayoutParams);
@@ -2041,7 +2211,7 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
-					//</matrix_>
+					// </matrix_>
 					// image_checklist
 					else if (fields.get(key).equals("image_checklist")) {
 
@@ -2085,23 +2255,36 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						imageChecklistParams.setMargins(5, 20, 5, 0);
-						imagechecklistLayout.setLayoutParams(imageChecklistParams);
-						imagechecklistLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						imagechecklistLayout
+								.setLayoutParams(imageChecklistParams);
+						imagechecklistLayout
+								.setGravity(Gravity.CENTER_HORIZONTAL);
 						// drawingLayout
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
-						imagechecklistLayout.setOrientation(LinearLayout.VERTICAL);
+						imagechecklistLayout
+								.setOrientation(LinearLayout.VERTICAL);
 						imagechecklistLayout.setPadding(0, 10, 0, 0);
-						imagechecklistLayout.setTag(R.id.layout_id, "imageChecklistLayout");
-						imagechecklistLayout.setTag(R.id.field_id, fields.get("field_id"));
-						imagechecklistLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						imagechecklistLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						imagechecklistLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						imagechecklistLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						imagechecklistLayout.setTag(R.id.field_ref, fields.get("field_ref"));
-						imagechecklistLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String field_label = fields.get("field_label").toString();
+						imagechecklistLayout.setTag(R.id.layout_id,
+								"imageChecklistLayout");
+						imagechecklistLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						imagechecklistLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						imagechecklistLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						imagechecklistLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						imagechecklistLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						imagechecklistLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						imagechecklistLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
+						String field_required = fields.get("field_required")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label + " : ");
 
@@ -2126,21 +2309,30 @@ public class JSONReader {
 						imagechecklistLayout.addView(tvdescription);
 
 						GridView imageGridView = new GridView(activity);
-						imageGridView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-						//imageGridView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+						imageGridView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+						// imageGridView.setBackgroundColor(Color.parseColor("#FFFFFF"));
 						imageGridView.setNumColumns(2);
 						imageGridView.setColumnWidth(GridView.AUTO_FIT);
 						imageGridView.setVerticalSpacing(5);
 						imageGridView.setHorizontalSpacing(5);
-						imageGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-						ArrayList<HashMap<String, String>> imageFieldList = new ArrayList<HashMap<String,String>>();
-						JSONArray dataset_values = (JSONArray) fields.get("dataset_values");
-						for(int dv=0; dv<dataset_values.length(); dv++){
-							String value = dataset_values.getJSONObject(dv).getString("value");
-							String field_skip = dataset_values.getJSONObject(dv).getString("field_skip");
-							String image = dataset_values.getJSONObject(dv).getString("image");
-							String label = dataset_values.getJSONObject(dv).getString("label");
-							String extra = dataset_values.getJSONObject(dv).getString("extra");
+						imageGridView
+								.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+						ArrayList<HashMap<String, String>> imageFieldList = new ArrayList<HashMap<String, String>>();
+						JSONArray dataset_values = (JSONArray) fields
+								.get("dataset_values");
+						for (int dv = 0; dv < dataset_values.length(); dv++) {
+							String value = dataset_values.getJSONObject(dv)
+									.getString("value");
+							String field_skip = dataset_values
+									.getJSONObject(dv).getString("field_skip");
+							String image = dataset_values.getJSONObject(dv)
+									.getString("image");
+							String label = dataset_values.getJSONObject(dv)
+									.getString("label");
+							String extra = dataset_values.getJSONObject(dv)
+									.getString("extra");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("value", value);
 							map.put("field_skip", field_skip);
@@ -2149,16 +2341,21 @@ public class JSONReader {
 							map.put("extra", extra);
 							imageFieldList.add(map);
 						}
-						imageGridView.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
-						ImageAdapter imageAdapter = new ImageAdapter(activity, imageFieldList);
+						imageGridView
+								.setChoiceMode(GridView.CHOICE_MODE_MULTIPLE);
+						ImageAdapter imageAdapter = new ImageAdapter(activity,
+								imageFieldList);
 						imageGridView.setAdapter(imageAdapter);
 						ArrayList<String> valuesList = new ArrayList<String>();
-						imageGridView.setTag(R.id.selected_grid_values,valuesList);
-						imageGridView.setTag(R.id.grid_view_type, "multipleSelection");
-						
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+						imageGridView.setTag(R.id.selected_grid_values,
+								valuesList);
+						imageGridView.setTag(R.id.grid_view_type,
+								"multipleSelection");
+
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-						
+
 						imagechecklistLayout.addView(imageGridView);
 						// error msg
 						TextView errorMsg = new TextView(activity);
@@ -2167,19 +2364,19 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						imagechecklistLayout.addView(errorMsg);
-						
-						//scroll.addView(imagechecklistLayout);
+
+						// scroll.addView(imagechecklistLayout);
 						parentLayout.addView(imagechecklistLayout);
 						layoutList.add(parentLayout);
 					}
 					// </image checklist>
-					
-					//<image option>
+
+					// <image option>
 					else if (fields.get(key).equals("image_option")) {
-//						ScrollView scroll = new ScrollView(activity);
-//						scroll.setLayoutParams(new LayoutParams(
-//								LayoutParams.MATCH_PARENT,
-//								LayoutParams.MATCH_PARENT));
+						// ScrollView scroll = new ScrollView(activity);
+						// scroll.setLayoutParams(new LayoutParams(
+						// LayoutParams.MATCH_PARENT,
+						// LayoutParams.MATCH_PARENT));
 
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -2216,23 +2413,36 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						imageChecklistParams.setMargins(5, 20, 5, 0);
-						imagechecklistLayout.setLayoutParams(imageChecklistParams);
-						imagechecklistLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						imagechecklistLayout
+								.setLayoutParams(imageChecklistParams);
+						imagechecklistLayout
+								.setGravity(Gravity.CENTER_HORIZONTAL);
 						// drawingLayout
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
-						imagechecklistLayout.setOrientation(LinearLayout.VERTICAL);
+						imagechecklistLayout
+								.setOrientation(LinearLayout.VERTICAL);
 						imagechecklistLayout.setPadding(0, 10, 0, 0);
-						imagechecklistLayout.setTag(R.id.layout_id, "imageOptionLayout");
-						imagechecklistLayout.setTag(R.id.field_id, fields.get("field_id"));
-						imagechecklistLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						imagechecklistLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						imagechecklistLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						imagechecklistLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						imagechecklistLayout.setTag(R.id.field_ref, fields.get("field_ref"));
-						imagechecklistLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String field_label = fields.get("field_label").toString();
+						imagechecklistLayout.setTag(R.id.layout_id,
+								"imageOptionLayout");
+						imagechecklistLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						imagechecklistLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						imagechecklistLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						imagechecklistLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						imagechecklistLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						imagechecklistLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						imagechecklistLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
+						String field_required = fields.get("field_required")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label + " : ");
 
@@ -2257,21 +2467,30 @@ public class JSONReader {
 						imagechecklistLayout.addView(tvdescription);
 
 						GridView imageGridView = new GridView(activity);
-						imageGridView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-						//imageGridView.setBackgroundColor(Color.parseColor("#F7F7CD"));
+						imageGridView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+						// imageGridView.setBackgroundColor(Color.parseColor("#F7F7CD"));
 						imageGridView.setNumColumns(2);
 						imageGridView.setColumnWidth(GridView.AUTO_FIT);
 						imageGridView.setVerticalSpacing(5);
 						imageGridView.setHorizontalSpacing(5);
-						imageGridView.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-						ArrayList<HashMap<String, String>> imageFieldList = new ArrayList<HashMap<String,String>>();
-						JSONArray dataset_values = (JSONArray) fields.get("dataset_values");
-						for(int dv=0; dv<dataset_values.length(); dv++){
-							String value = dataset_values.getJSONObject(dv).getString("value");
-							String field_skip = dataset_values.getJSONObject(dv).getString("field_skip");
-							String image = dataset_values.getJSONObject(dv).getString("image");
-							String label = dataset_values.getJSONObject(dv).getString("label");
-							String extra = dataset_values.getJSONObject(dv).getString("extra");
+						imageGridView
+								.setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
+						ArrayList<HashMap<String, String>> imageFieldList = new ArrayList<HashMap<String, String>>();
+						JSONArray dataset_values = (JSONArray) fields
+								.get("dataset_values");
+						for (int dv = 0; dv < dataset_values.length(); dv++) {
+							String value = dataset_values.getJSONObject(dv)
+									.getString("value");
+							String field_skip = dataset_values
+									.getJSONObject(dv).getString("field_skip");
+							String image = dataset_values.getJSONObject(dv)
+									.getString("image");
+							String label = dataset_values.getJSONObject(dv)
+									.getString("label");
+							String extra = dataset_values.getJSONObject(dv)
+									.getString("extra");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("value", value);
 							map.put("field_skip", field_skip);
@@ -2280,16 +2499,21 @@ public class JSONReader {
 							map.put("extra", extra);
 							imageFieldList.add(map);
 						}
-						imageGridView.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
-						ImageAdapter imageAdapter = new ImageAdapter(activity, imageFieldList);
+						imageGridView
+								.setChoiceMode(GridView.CHOICE_MODE_SINGLE);
+						ImageAdapter imageAdapter = new ImageAdapter(activity,
+								imageFieldList);
 						imageGridView.setAdapter(imageAdapter);
 						ArrayList<String> valuesList = new ArrayList<String>();
-						imageGridView.setTag(R.id.selected_grid_values,valuesList);
-						imageGridView.setTag(R.id.grid_view_type, "singleSelection");
-						
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+						imageGridView.setTag(R.id.selected_grid_values,
+								valuesList);
+						imageGridView.setTag(R.id.grid_view_type,
+								"singleSelection");
+
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-						
+
 						imagechecklistLayout.addView(imageGridView);
 						// error msg
 						TextView errorMsg = new TextView(activity);
@@ -2299,13 +2523,13 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						imagechecklistLayout.addView(errorMsg);
 
-						//scroll.addView(imagechecklistLayout);
+						// scroll.addView(imagechecklistLayout);
 						parentLayout.addView(imagechecklistLayout);
 						layoutList.add(parentLayout);
 					}
-					//</image option>
-					
-					//<Rating>
+					// </image option>
+
+					// <Rating>
 					else if (fields.get(key).equals("rating")) {
 
 						ScrollView scroll = new ScrollView(activity);
@@ -2327,12 +2551,14 @@ public class JSONReader {
 						upLayout.setPadding(0, 10, 20, 0);
 						int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
 						int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
-						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(relative_MATCH_PARENT, relative_WRAP_CONTENT);
+						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(
+								relative_MATCH_PARENT, relative_WRAP_CONTENT);
 						upLayout.setLayoutParams(upLayoutParams);
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -2353,20 +2579,33 @@ public class JSONReader {
 						ratingLayout.setOrientation(LinearLayout.VERTICAL);
 						ratingLayout.setPadding(0, 10, 0, 0);
 						ratingLayout.setTag(R.id.layout_id, "ratingLayout");
-						ratingLayout.setTag(R.id.field_id, fields.get("field_id"));
-						ratingLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						ratingLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						ratingLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						ratingLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						ratingLayout.setTag(R.id.field_ref,	fields.get("field_ref"));
-						ratingLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String field_label = fields.get("field_label").toString();
+						ratingLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						ratingLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						ratingLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						ratingLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						ratingLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						ratingLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						ratingLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
-						String minLabel = fields.get("field_min_label").toString();
-						String maxLabel = fields.get("field_max_label").toString();
-						String minValue = fields.get("field_min_value").toString();
-						String maxValue = fields.get("field_max_value").toString();
+						String field_required = fields.get("field_required")
+								.toString();
+						String minLabel = fields.get("field_min_label")
+								.toString();
+						String maxLabel = fields.get("field_max_label")
+								.toString();
+						String minValue = fields.get("field_min_value")
+								.toString();
+						String maxValue = fields.get("field_max_value")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label + " : ");
 						tvLabel.setTag("label");
@@ -2376,7 +2615,8 @@ public class JSONReader {
 						ratingLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc").toString();
+						String description = fields.get("field_desc")
+								.toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setPadding(10, 0, 0, 0);
 						tvdescription.setText(description);
@@ -2386,50 +2626,69 @@ public class JSONReader {
 						ratingLayout.addView(tvdescription);
 
 						RatingBar ratingBar = new RatingBar(activity);
-						RelativeLayout.LayoutParams ratingBarLayoutParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						ratingBarLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+						RelativeLayout.LayoutParams ratingBarLayoutParams = new RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						ratingBarLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 						ratingBar.setLayoutParams(ratingBarLayoutParams);
 						ratingBar.setRating(1);
 						ratingBar.setNumStars(Integer.parseInt(maxValue));
 						ratingBar.setStepSize(1);
-						// etc.... 
-						//ratingLayout.addView(ratingBar);
-						ratingBar.setBackgroundColor(Color.parseColor("#ffffff"));
+						// etc....
+						// ratingLayout.addView(ratingBar);
+						ratingBar.setBackgroundColor(Color
+								.parseColor("#ffffff"));
 
-						RelativeLayout minMaxLabelLayout = new RelativeLayout(activity);
-						minMaxLabelLayout.setBackgroundColor(Color.parseColor("#ffffff"));
-						minMaxLabelLayout.setTag(R.id.layout_id, "ratingAndMinMaxLabelLayout");
+						RelativeLayout minMaxLabelLayout = new RelativeLayout(
+								activity);
+						minMaxLabelLayout.setBackgroundColor(Color
+								.parseColor("#ffffff"));
+						minMaxLabelLayout.setTag(R.id.layout_id,
+								"ratingAndMinMaxLabelLayout");
 						minMaxLabelLayout.setPadding(5, 8, 5, 10);
-						RelativeLayout.LayoutParams ratingAndMinMaxLabelLayoutParams = new RelativeLayout.LayoutParams(relative_MATCH_PARENT, relative_MATCH_PARENT);
-						minMaxLabelLayout.setLayoutParams(ratingAndMinMaxLabelLayoutParams);
+						RelativeLayout.LayoutParams ratingAndMinMaxLabelLayoutParams = new RelativeLayout.LayoutParams(
+								relative_MATCH_PARENT, relative_MATCH_PARENT);
+						minMaxLabelLayout
+								.setLayoutParams(ratingAndMinMaxLabelLayoutParams);
 
 						TextView tvMinLabel = new TextView(activity);
-						RelativeLayout.LayoutParams tvMinLabelParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvMinLabelParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+						RelativeLayout.LayoutParams tvMinLabelParams = new RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvMinLabelParams
+								.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 						tvMinLabel.setLayoutParams(tvMinLabelParams);
 						tvMinLabel.setText(minLabel);
 						tvMinLabel.setTextSize(13);
 						minMaxLabelLayout.addView(tvMinLabel);
 
 						TextView tvMaxLabel = new TextView(activity);
-						RelativeLayout.LayoutParams tvMaxLabelParams = new RelativeLayout.LayoutParams(relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvMaxLabelParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						RelativeLayout.LayoutParams tvMaxLabelParams = new RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvMaxLabelParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						tvMaxLabel.setLayoutParams(tvMaxLabelParams);
 						tvMaxLabel.setText(maxLabel);
 						tvMaxLabel.setTextSize(13);
 						minMaxLabelLayout.addView(tvMaxLabel);
 
-						LinearLayout ratingAndLabelLayout = new LinearLayout(activity);
-						LayoutParams ratingAndLabelLayoutParams = new LayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+						LinearLayout ratingAndLabelLayout = new LinearLayout(
+								activity);
+						LayoutParams ratingAndLabelLayoutParams = new LayoutParams(
+								LayoutParams.WRAP_CONTENT,
+								LayoutParams.WRAP_CONTENT);
 
-						ratingAndLabelLayout.setLayoutParams(ratingAndLabelLayoutParams);
-						ratingAndLabelLayout.setOrientation(LinearLayout.VERTICAL);
-						ratingAndLabelLayout.setTag(R.id.layout_id, "ratingAndLabelLayout");
+						ratingAndLabelLayout
+								.setLayoutParams(ratingAndLabelLayoutParams);
+						ratingAndLabelLayout
+								.setOrientation(LinearLayout.VERTICAL);
+						ratingAndLabelLayout.setTag(R.id.layout_id,
+								"ratingAndLabelLayout");
 						ratingAndLabelLayout.addView(ratingBar);
 						ratingAndLabelLayout.addView(minMaxLabelLayout);
 
 						ratingLayout.addView(ratingAndLabelLayout);
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 
 						// error msg
@@ -2443,9 +2702,9 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
-					//</Rating>
-					
-					//<rating set>
+					// </Rating>
+
+					// <rating set>
 					else if (fields.get(key).equals("rating_set")) {
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -2488,17 +2747,27 @@ public class JSONReader {
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
 						ratingSetLayout.setOrientation(LinearLayout.VERTICAL);
 						ratingSetLayout.setPadding(0, 10, 0, 0);
-						ratingSetLayout.setTag(R.id.layout_id, "ratingSetLayout");
-						ratingSetLayout.setTag(R.id.field_id, fields.get("field_id"));
-						ratingSetLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						ratingSetLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						ratingSetLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						ratingSetLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						ratingSetLayout.setTag(R.id.field_ref, fields.get("field_ref"));
-						ratingSetLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String field_label = fields.get("field_label").toString();
+						ratingSetLayout.setTag(R.id.layout_id,
+								"ratingSetLayout");
+						ratingSetLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						ratingSetLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						ratingSetLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						ratingSetLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						ratingSetLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						ratingSetLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						ratingSetLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
+						String field_required = fields.get("field_required")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label + " : ");
 
@@ -2524,19 +2793,30 @@ public class JSONReader {
 
 						// list view here
 						ListView listView = new ListView(activity);
-						listView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-						
-						ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String,String>>();
-						String minLabel = fields.get("field_min_label").toString();
-						String maxLabel = fields.get("field_max_label").toString();
-						String maxValue = fields.get("field_max_value").toString();
-						JSONArray datasetValues = (JSONArray) fields.get("dataset_values");
-						for(int dv=0; dv<datasetValues.length(); dv++){
-							String value = datasetValues.getJSONObject(dv).getString("value");
-							String field_skip = datasetValues.getJSONObject(dv).getString("field_skip");
-							//String image = datasetValues.getJSONObject(dv).getString("image");
-							String label = datasetValues.getJSONObject(dv).getString("label");
-							String extra = datasetValues.getJSONObject(dv).getString("extra");
+						listView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+
+						ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String, String>>();
+						String minLabel = fields.get("field_min_label")
+								.toString();
+						String maxLabel = fields.get("field_max_label")
+								.toString();
+						String maxValue = fields.get("field_max_value")
+								.toString();
+						JSONArray datasetValues = (JSONArray) fields
+								.get("dataset_values");
+						for (int dv = 0; dv < datasetValues.length(); dv++) {
+							String value = datasetValues.getJSONObject(dv)
+									.getString("value");
+							String field_skip = datasetValues.getJSONObject(dv)
+									.getString("field_skip");
+							// String image =
+							// datasetValues.getJSONObject(dv).getString("image");
+							String label = datasetValues.getJSONObject(dv)
+									.getString("label");
+							String extra = datasetValues.getJSONObject(dv)
+									.getString("extra");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("minLabel", minLabel);
 							map.put("maxLabel", maxLabel);
@@ -2548,28 +2828,29 @@ public class JSONReader {
 							map.put("extra", extra);
 							listData.add(map);
 						}
-						RatingSetAdapter ratingSetAdapter = new RatingSetAdapter(activity, listData);
+						RatingSetAdapter ratingSetAdapter = new RatingSetAdapter(
+								activity, listData);
 						listView.setAdapter(ratingSetAdapter);
-						
-						
+
 						ratingSetLayout.addView(listView);
-						
+
 						// error msg
 						TextView errorMsg = new TextView(activity);
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
 						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						ratingSetLayout.addView(errorMsg);
-						
+
 						parentLayout.addView(ratingSetLayout);
 						layoutList.add(parentLayout);
 					}
-					//</rating set>
-					
-					//<rating_set_image>
+					// </rating set>
+
+					// <rating_set_image>
 					else if (fields.get(key).equals("rating_set_image")) {
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -2606,23 +2887,36 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 						ratingSetLayoutParams.setMargins(5, 20, 5, 0);
-						ratingSetImageLayout.setLayoutParams(ratingSetLayoutParams);
-						ratingSetImageLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						ratingSetImageLayout
+								.setLayoutParams(ratingSetLayoutParams);
+						ratingSetImageLayout
+								.setGravity(Gravity.CENTER_HORIZONTAL);
 						// drawingLayout
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
-						ratingSetImageLayout.setOrientation(LinearLayout.VERTICAL);
+						ratingSetImageLayout
+								.setOrientation(LinearLayout.VERTICAL);
 						ratingSetImageLayout.setPadding(0, 10, 0, 0);
-						ratingSetImageLayout.setTag(R.id.layout_id, "ratingSetImageLayout");
-						ratingSetImageLayout.setTag(R.id.field_id, fields.get("field_id"));
-						ratingSetImageLayout.setTag(R.id.field_name_id, fields.get("field_name"));
-						ratingSetImageLayout.setTag(R.id.field_required_id, fields.get("field_required"));
-						ratingSetImageLayout.setTag(R.id.field_label_id, fields.get("field_label"));
-						ratingSetImageLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
-						ratingSetImageLayout.setTag(R.id.field_ref, fields.get("field_ref"));
-						ratingSetImageLayout.setTag(R.id.next_cond, fields.get("next_cond"));
-						String field_label = fields.get("field_label").toString();
+						ratingSetImageLayout.setTag(R.id.layout_id,
+								"ratingSetImageLayout");
+						ratingSetImageLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						ratingSetImageLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						ratingSetImageLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						ratingSetImageLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						ratingSetImageLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						ratingSetImageLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						ratingSetImageLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String field_label = fields.get("field_label")
+								.toString();
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
+						String field_required = fields.get("field_required")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label + " : ");
 
@@ -2648,19 +2942,30 @@ public class JSONReader {
 
 						// list view here
 						ListView listView = new ListView(activity);
-						listView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-						
-						ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String,String>>();
-						String minLabel = fields.get("field_min_label").toString();
-						String maxLabel = fields.get("field_max_label").toString();
-						String maxValue = fields.get("field_max_value").toString();
-						JSONArray datasetValues = (JSONArray) fields.get("dataset_values");
-						for(int dv=0; dv<datasetValues.length(); dv++){
-							String value = datasetValues.getJSONObject(dv).getString("value");
-							String field_skip = datasetValues.getJSONObject(dv).getString("field_skip");
-							String image = datasetValues.getJSONObject(dv).getString("image");
-							String label = datasetValues.getJSONObject(dv).getString("label");
-							String extra = datasetValues.getJSONObject(dv).getString("extra");
+						listView.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+
+						ArrayList<HashMap<String, String>> listData = new ArrayList<HashMap<String, String>>();
+						String minLabel = fields.get("field_min_label")
+								.toString();
+						String maxLabel = fields.get("field_max_label")
+								.toString();
+						String maxValue = fields.get("field_max_value")
+								.toString();
+						JSONArray datasetValues = (JSONArray) fields
+								.get("dataset_values");
+						for (int dv = 0; dv < datasetValues.length(); dv++) {
+							String value = datasetValues.getJSONObject(dv)
+									.getString("value");
+							String field_skip = datasetValues.getJSONObject(dv)
+									.getString("field_skip");
+							String image = datasetValues.getJSONObject(dv)
+									.getString("image");
+							String label = datasetValues.getJSONObject(dv)
+									.getString("label");
+							String extra = datasetValues.getJSONObject(dv)
+									.getString("extra");
 							HashMap<String, String> map = new HashMap<String, String>();
 							map.put("minLabel", minLabel);
 							map.put("maxLabel", maxLabel);
@@ -2672,26 +2977,303 @@ public class JSONReader {
 							map.put("extra", extra);
 							listData.add(map);
 						}
-						RatingSetAdapter ratingSetAdapter = new RatingSetAdapter(activity, listData);
+						RatingSetAdapter ratingSetAdapter = new RatingSetAdapter(
+								activity, listData);
 						listView.setAdapter(ratingSetAdapter);
-						
+
 						ratingSetImageLayout.addView(listView);
-						
+
 						// error msg
 						TextView errorMsg = new TextView(activity);
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(LayoutParams.MATCH_PARENT, 60);
+						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 						errorMsg.setLayoutParams(errorMsgLayoutParams2);
 						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						ratingSetImageLayout.addView(errorMsg);
-						
+
 						parentLayout.addView(ratingSetImageLayout);
 						layoutList.add(parentLayout);
 					}
-					//</rating_set_image>
-					
+					// </rating_set_image>
+
+					// <text_set>
+					else if (fields.get(key).equals("text_set")) {
+
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+
+						LinearLayout parentLayout = new LinearLayout(activity);
+						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						LayoutParams parentLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
+						parentLayout.setLayoutParams(parentLayoutParams);
+						parentLayout.setOrientation(LinearLayout.VERTICAL);
+						RelativeLayout upLayout = new RelativeLayout(activity);
+						upLayout.setPadding(0, 10, 20, 0);
+						int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
+						int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
+						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(
+								relative_MATCH_PARENT, relative_WRAP_CONTENT);
+
+						upLayout.setLayoutParams(upLayoutParams);
+
+						TextView index = new TextView(activity);
+						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvLayoutParams
+								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						index.setLayoutParams(tvLayoutParams);
+						index.setText("index/index");
+						index.setTag("index");
+						upLayout.addView(index);
+						// upLayout.addView(getLine(lineColor));
+						parentLayout.addView(upLayout);
+
+						LinearLayout textSetLayout = new LinearLayout(activity);
+						// LayoutParams cbLayoutParams = new LayoutParams(
+						// LayoutParams.MATCH_PARENT,
+						// LayoutParams.WRAP_CONTENT);
+						// cbLayoutParams.setMargins(0, 25, 0, 25);
+						// checkBoxLayout.setLayoutParams(cbLayoutParams);
+						textSetLayout.setLayoutParams(innerLayoutParams);
+						// checkBoxLayout
+						// .setBackgroundResource(R.drawable.linear_layout_ui);
+						textSetLayout.setOrientation(LinearLayout.VERTICAL);
+						textSetLayout.setTag(R.id.layout_id, "textSetLayout");
+						textSetLayout.setTag(R.id.field_id,
+								fields.get("field_id"));
+						textSetLayout.setTag(R.id.field_name_id,
+								fields.get("field_name"));
+						textSetLayout.setTag(R.id.field_required_id,
+								fields.get("field_required"));
+						textSetLayout.setTag(R.id.field_label_id,
+								fields.get("field_label"));
+						textSetLayout.setTag(R.id.field_err_msg,
+								fields.get("field_err_msg"));
+						textSetLayout.setTag(R.id.field_ref,
+								fields.get("field_ref"));
+						textSetLayout.setTag(R.id.next_cond,
+								fields.get("next_cond"));
+						String checkLabel = fields.get("field_label")
+								.toString();
+
+						TextView tvLabel = new TextView(activity);
+						tvLabel.setText(checkLabel + " ");
+						tvLabel.setTextSize(labelTextSize);
+						String fieldName = fields.get("field_name").toString();
+						String fieldRequired = fields.get("field_required")
+								.toString();
+						String fieldLabel = fields.get("field_label")
+								.toString();
+						tvLabel.setTag("label");
+						tvLabel.setTag(R.id.field_name_id, fieldName);
+						tvLabel.setTag(R.id.field_required_id, fieldRequired);
+						tvLabel.setTag(R.id.field_label_id, fieldLabel);
+						tvLabel.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvLabel);
+						textSetLayout.addView(tvLabel);
+
+						// adding description
+						String description = fields.get("field_desc")
+								.toString();
+						TextView tvdescription = new TextView(activity);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(descriptionTextSize);
+						tvdescription.setLayoutParams(descriptionLayoutParams);
+						setTypeFace(tvdescription);
+						textSetLayout.addView(tvdescription);
+
+						JSONArray dataset = (JSONArray) fields
+								.get("dataset_values");
+						// int default_value = Integer.parseInt(fields.get(
+						// "field_default_value").toString());
+						int default_value = 1;
+						int length = dataset.length();
+
+						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+
+						int checkboxCount = 0;
+						for (int j = 0; j < length; j++) {
+							JSONObject obj = new JSONObject();
+							obj = dataset.getJSONObject(j);
+							String text = obj.getString("label");
+							String tag = obj.getString("value");
+							CheckBox cb = new CheckBox(activity);
+							cb.setText(text);
+							cb.setTextSize(radioButtonTextSize); // same as
+																	// radio
+							cb.setTag(tag);
+							cb.setTypeface(typeface.getTypeFace());
+							LayoutParams cbParams = new LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							cbParams.setMargins(15, 5, 15, 5);
+							cb.setLayoutParams(cbParams);
+							setTypeFace(cb);
+							if (default_value == (j + 1)) {
+								cb.setChecked(true);
+							}
+							checkBoxList.add(cb);
+							// checkBoxLayout.addView(cb);
+							checkboxCount++;
+						}
+						// error msg
+						TextView errorMsg = new TextView(activity);
+						errorMsg.setLayoutParams(errorMsgLayoutParams);
+						setTypeFace(errorMsg);
+						errorMsg.setTextSize(12);
+						errorMsg.setTag("errorMsg");
+						textSetLayout.addView(errorMsg);
+
+						Collections.shuffle(checkBoxList);
+						for (CheckBox cb : checkBoxList) {
+							textSetLayout.addView(cb);
+						}
+
+						scroll.addView(textSetLayout);
+						parentLayout.addView(scroll);
+						layoutList.add(parentLayout);
+					}
+					// </text_set>
+
+					// <number_set>
+					else if (fields.get(key).equals("number_set")) {
+
+						ScrollView scroll = new ScrollView(activity);
+						scroll.setLayoutParams(new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT));
+
+						LinearLayout parentLayout = new LinearLayout(activity);
+						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+						LayoutParams parentLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.MATCH_PARENT);
+						parentLayout.setLayoutParams(parentLayoutParams);
+						parentLayout.setOrientation(LinearLayout.VERTICAL);
+						RelativeLayout upLayout = new RelativeLayout(activity);
+						upLayout.setPadding(0, 10, 20, 0);
+						int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
+						int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
+						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(
+								relative_MATCH_PARENT, relative_WRAP_CONTENT);
+
+						upLayout.setLayoutParams(upLayoutParams);
+
+						TextView index = new TextView(activity);
+						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
+								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						index.setLayoutParams(tvLayoutParams);
+						index.setText("index/index");
+						index.setTag("index");
+						upLayout.addView(index);
+						// upLayout.addView(getLine(lineColor));
+						parentLayout.addView(upLayout);
+
+						LinearLayout numberSetLayout = new LinearLayout(activity);
+						// LayoutParams cbLayoutParams = new LayoutParams(
+						// LayoutParams.MATCH_PARENT,
+						// LayoutParams.WRAP_CONTENT);
+						// cbLayoutParams.setMargins(0, 25, 0, 25);
+						// checkBoxLayout.setLayoutParams(cbLayoutParams);
+						numberSetLayout.setLayoutParams(innerLayoutParams);
+						// checkBoxLayout
+						// .setBackgroundResource(R.drawable.linear_layout_ui);
+						numberSetLayout.setOrientation(LinearLayout.VERTICAL);
+						numberSetLayout.setTag(R.id.layout_id, "checkBoxLayout");
+						numberSetLayout.setTag(R.id.field_id, fields.get("field_id"));
+						numberSetLayout.setTag(R.id.field_name_id, fields.get("field_name"));
+						numberSetLayout.setTag(R.id.field_required_id, fields.get("field_required"));
+						numberSetLayout.setTag(R.id.field_label_id, fields.get("field_label"));
+						numberSetLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
+						numberSetLayout.setTag(R.id.field_ref, fields.get("field_ref"));
+						numberSetLayout.setTag(R.id.next_cond, fields.get("next_cond"));
+						String checkLabel = fields.get("field_label").toString();
+
+						TextView tvLabel = new TextView(activity);
+						tvLabel.setText(checkLabel + " ");
+						tvLabel.setTextSize(labelTextSize);
+						String fieldName = fields.get("field_name").toString();
+						String fieldRequired = fields.get("field_required")
+								.toString();
+						String fieldLabel = fields.get("field_label")
+								.toString();
+						tvLabel.setTag("label");
+						tvLabel.setTag(R.id.field_name_id, fieldName);
+						tvLabel.setTag(R.id.field_required_id, fieldRequired);
+						tvLabel.setTag(R.id.field_label_id, fieldLabel);
+						tvLabel.setLayoutParams(labelLayoutParams);
+						setTypeFace(tvLabel);
+						numberSetLayout.addView(tvLabel);
+
+						// adding description
+						String description = fields.get("field_desc").toString();
+						TextView tvdescription = new TextView(activity);
+						tvdescription.setText(description);
+						tvdescription.setTextSize(descriptionTextSize);
+						tvdescription.setLayoutParams(descriptionLayoutParams);
+						setTypeFace(tvdescription);
+						numberSetLayout.addView(tvdescription);
+
+						JSONArray dataset = (JSONArray) fields
+								.get("dataset_values");
+						// int default_value = Integer.parseInt(fields.get(
+						// "field_default_value").toString());
+						int default_value = 1;
+						int length = dataset.length();
+						
+						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+						
+						
+						int checkboxCount = 0;
+						for (int j = 0; j < length; j++) {
+							JSONObject obj = new JSONObject();
+							obj = dataset.getJSONObject(j);
+							String text = obj.getString("label");
+							String tag = obj.getString("value");
+							CheckBox cb = new CheckBox(activity);
+							cb.setText(text);
+							cb.setTextSize(radioButtonTextSize); // same as radio
+							cb.setTag(tag);
+							cb.setTypeface(typeface.getTypeFace());
+							LayoutParams cbParams = new LayoutParams(
+									LayoutParams.WRAP_CONTENT,
+									LayoutParams.WRAP_CONTENT);
+							cbParams.setMargins(15, 5, 15, 5);
+							cb.setLayoutParams(cbParams);
+							setTypeFace(cb);
+							if (default_value == (j + 1)) {
+								cb.setChecked(true);
+							}
+							checkBoxList.add(cb);
+							//checkBoxLayout.addView(cb);
+							checkboxCount++;
+						}
+						// error msg
+						TextView errorMsg = new TextView(activity);
+						errorMsg.setLayoutParams(errorMsgLayoutParams);
+						setTypeFace(errorMsg);
+						errorMsg.setTextSize(12);
+						errorMsg.setTag("errorMsg");
+						numberSetLayout.addView(errorMsg);
+
+						Collections.shuffle(checkBoxList);
+						for(CheckBox cb: checkBoxList){
+							numberSetLayout.addView(cb);
+						}
+
+						scroll.addView(numberSetLayout);
+						parentLayout.addView(scroll);
+						layoutList.add(parentLayout);
+					}
+					// </number_set>
 					
 				}
 			}
@@ -2788,20 +3370,27 @@ public class JSONReader {
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
 					if (jChild.has("next_cond_type")) {
-						fields.put("next_cond_type", jChild.getString("next_cond_type"));
+						fields.put("next_cond_type",
+								jChild.getString("next_cond_type"));
 					}
-					fields.put("field_audio_required", jChild.getBoolean("field_audio_required"));
+					fields.put("field_audio_required",
+							jChild.getBoolean("field_audio_required"));
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
 					else
 						fields.put("field_desc", "-");
-					fields.put("field_required", jChild.getBoolean("field_required"));
-					fields.put("field_default_value", jChild.get("field_default_value"));
+					fields.put("field_required",
+							jChild.getBoolean("field_required"));
+					fields.put("field_default_value",
+							jChild.get("field_default_value"));
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
-					JSONObject field_dataset = jChild.getJSONObject("field_dataset");
-					JSONArray dataset_values = field_dataset.getJSONArray("dataset_values");
-					String dataset_name = field_dataset.getString("dataset_name");
+					JSONObject field_dataset = jChild
+							.getJSONObject("field_dataset");
+					JSONArray dataset_values = field_dataset
+							.getJSONArray("dataset_values");
+					String dataset_name = field_dataset
+							.getString("dataset_name");
 					fields.put("dataset_values", dataset_values);
 					fields.put("dataset_name", dataset_name);
 				} else if (field_type.equals("checklist")) {
@@ -2954,51 +3543,43 @@ public class JSONReader {
 							jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-				}
-				else if (field_type.equals("matrix_option")) {
+				} else if (field_type.equals("matrix_option")) {
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_desc", jChild.getString("field_desc"));
 					fields.put("field_type", jChild.getString("field_type"));
-					fields.put("matrix_values", jChild.getJSONObject("field_matrix").getJSONArray("matrix_values"));
-					fields.put("field_dataset_v", jChild.getJSONObject("field_dataset_v"));
-					fields.put("field_required", jChild.getString("field_required"));
+					fields.put(
+							"matrix_values",
+							jChild.getJSONObject("field_matrix").getJSONArray(
+									"matrix_values"));
+					fields.put("field_dataset_v",
+							jChild.getJSONObject("field_dataset_v"));
+					fields.put("field_required",
+							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_ref", jChild.getString("field_ref"));
-					fields.put("field_dataset_h", jChild.getJSONObject("field_dataset_h"));
+					fields.put("field_dataset_h",
+							jChild.getJSONObject("field_dataset_h"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_id", jChild.getString("field_id"));
 				} else if (field_type.equals("matrix_checklist")) {
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_desc", jChild.getString("field_desc"));
 					fields.put("field_type", jChild.getString("field_type"));
-					fields.put("matrix_values", jChild.getJSONObject("field_matrix").getJSONArray("matrix_values"));
-					fields.put("field_dataset_v", jChild.getJSONObject("field_dataset_v"));
-					fields.put("field_required", jChild.getString("field_required"));
+					fields.put(
+							"matrix_values",
+							jChild.getJSONObject("field_matrix").getJSONArray(
+									"matrix_values"));
+					fields.put("field_dataset_v",
+							jChild.getJSONObject("field_dataset_v"));
+					fields.put("field_required",
+							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_ref", jChild.getString("field_ref"));
-					fields.put("field_dataset_h", jChild.getJSONObject("field_dataset_h"));
+					fields.put("field_dataset_h",
+							jChild.getJSONObject("field_dataset_h"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_id", jChild.getString("field_id"));
-				}
-				else if (field_type.equals("image_checklist")) {
-					fields.put("field_id", jChild.getString("field_id"));
-					fields.put("field_name", jChild.getString("field_name"));
-					fields.put("field_type", jChild.getString("field_type"));
-					fields.put("field_label", jChild.getString("field_label"));
-					fields.put("field_help", jChild.getString("field_help"));
-					fields.put("field_ref", jChild.getString("field_ref"));
-					fields.put("next_cond", jChild.getJSONArray("next_cond"));
-					String field_desc = jChild.getString("field_desc");
-					if (field_desc.length() > 0)
-						fields.put("field_desc", field_desc);
-					else
-						fields.put("field_desc", "-");
-					fields.put("field_required", jChild.getString("field_required"));
-					fields.put("field_default_value", jChild.getString("field_default_value"));
-					JSONArray dataset_values = jChild.getJSONObject("field_dataset").getJSONArray("dataset_values");
-					fields.put("dataset_values", dataset_values);
-				}
-				else if (field_type.equals("image_option")) {
+				} else if (field_type.equals("image_checklist")) {
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_type", jChild.getString("field_type"));
@@ -3011,12 +3592,34 @@ public class JSONReader {
 						fields.put("field_desc", field_desc);
 					else
 						fields.put("field_desc", "-");
-					fields.put("field_required", jChild.getString("field_required"));
-					fields.put("field_default_value", jChild.getString("field_default_value"));
-					JSONArray dataset_values = jChild.getJSONObject("field_dataset").getJSONArray("dataset_values");
+					fields.put("field_required",
+							jChild.getString("field_required"));
+					fields.put("field_default_value",
+							jChild.getString("field_default_value"));
+					JSONArray dataset_values = jChild.getJSONObject(
+							"field_dataset").getJSONArray("dataset_values");
 					fields.put("dataset_values", dataset_values);
-				}
-				else if(field_type.equals("rating")){
+				} else if (field_type.equals("image_option")) {
+					fields.put("field_id", jChild.getString("field_id"));
+					fields.put("field_name", jChild.getString("field_name"));
+					fields.put("field_type", jChild.getString("field_type"));
+					fields.put("field_label", jChild.getString("field_label"));
+					fields.put("field_help", jChild.getString("field_help"));
+					fields.put("field_ref", jChild.getString("field_ref"));
+					fields.put("next_cond", jChild.getJSONArray("next_cond"));
+					String field_desc = jChild.getString("field_desc");
+					if (field_desc.length() > 0)
+						fields.put("field_desc", field_desc);
+					else
+						fields.put("field_desc", "-");
+					fields.put("field_required",
+							jChild.getString("field_required"));
+					fields.put("field_default_value",
+							jChild.getString("field_default_value"));
+					JSONArray dataset_values = jChild.getJSONObject(
+							"field_dataset").getJSONArray("dataset_values");
+					fields.put("dataset_values", dataset_values);
+				} else if (field_type.equals("rating")) {
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_type", jChild.getString("field_type"));
@@ -3025,13 +3628,20 @@ public class JSONReader {
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
 					fields.put("field_desc", jChild.getString("field_desc"));
-					fields.put("field_required", jChild.getString("field_required"));
-					fields.put("field_max_label", jChild.getString("field_max_label"));
-					fields.put("field_max_value", jChild.getString("field_max_value"));
-					fields.put("field_min_label", jChild.getString("field_min_label"));
-					fields.put("field_min_value", jChild.getString("field_min_value"));
-					fields.put("field_default_value", jChild.getString("field_default_value"));
-				}else if(field_type.equals("rating_set") || field_type.equals("rating_set_image")){
+					fields.put("field_required",
+							jChild.getString("field_required"));
+					fields.put("field_max_label",
+							jChild.getString("field_max_label"));
+					fields.put("field_max_value",
+							jChild.getString("field_max_value"));
+					fields.put("field_min_label",
+							jChild.getString("field_min_label"));
+					fields.put("field_min_value",
+							jChild.getString("field_min_value"));
+					fields.put("field_default_value",
+							jChild.getString("field_default_value"));
+				} else if (field_type.equals("rating_set")
+						|| field_type.equals("rating_set_image")) {
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_type", jChild.getString("field_type"));
@@ -3040,17 +3650,53 @@ public class JSONReader {
 					fields.put("field_ref", jChild.getString("field_ref"));
 					fields.put("next_cond", jChild.getJSONArray("next_cond"));
 					fields.put("field_desc", jChild.getString("field_desc"));
-					fields.put("field_required", jChild.getString("field_required"));
-					fields.put("field_max_label", jChild.getString("field_max_label"));
-					fields.put("field_max_value", jChild.getString("field_max_value"));
-					fields.put("field_min_label", jChild.getString("field_min_label"));
-					fields.put("field_min_value", jChild.getString("field_min_value"));
-					fields.put("field_default_value", jChild.getString("field_default_value"));
-					fields.put("field_audio_required", jChild.getString("field_audio_required"));
-					JSONArray dataset_values = jChild.getJSONObject("field_dataset").getJSONArray("dataset_values");
+					fields.put("field_required",
+							jChild.getString("field_required"));
+					fields.put("field_max_label",
+							jChild.getString("field_max_label"));
+					fields.put("field_max_value",
+							jChild.getString("field_max_value"));
+					fields.put("field_min_label",
+							jChild.getString("field_min_label"));
+					fields.put("field_min_value",
+							jChild.getString("field_min_value"));
+					fields.put("field_default_value",
+							jChild.getString("field_default_value"));
+					fields.put("field_audio_required",
+							jChild.getString("field_audio_required"));
+					JSONArray dataset_values = jChild.getJSONObject(
+							"field_dataset").getJSONArray("dataset_values");
 					fields.put("dataset_values", dataset_values);
 				}
-				if(!fields.isEmpty())
+				else if (field_type.equals("text_set") || field_type.equals("number_set")) {
+					fields.put("field_id", jChild.getString("field_id"));
+					fields.put("field_name", jChild.getString("field_name"));
+					fields.put("field_type", jChild.getString("field_type"));
+					fields.put("field_label", jChild.getString("field_label"));
+					fields.put("field_help", jChild.getString("field_help"));
+					fields.put("field_ref", jChild.getString("field_ref"));
+					fields.put("next_cond", jChild.getJSONArray("next_cond"));
+					String field_desc = jChild.getString("field_desc");
+					if (field_desc.length() > 0)
+						fields.put("field_desc", field_desc);
+					else
+						fields.put("field_desc", "-");
+					fields.put("field_required",
+							jChild.getBoolean("field_required"));
+					// fields.put("field_default_value",
+					// jChild.getInt("field_default_value"));
+					fields.put("field_default_value", 1);
+					HashMap<String, String> field_data_set = new HashMap<String, String>();
+					JSONObject field_dataset = jChild
+							.getJSONObject("field_dataset");
+					JSONArray dataset_values = field_dataset
+							.getJSONArray("dataset_values");
+					String dataset_name = field_dataset
+							.getString("dataset_name");
+					fields.put("dataset_values", dataset_values);
+					fields.put("dataset_name", dataset_name);
+				}
+				if (!fields.isEmpty())
 					fieldList.add(fields);
 			}
 		} catch (JSONException e) {

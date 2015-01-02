@@ -525,10 +525,8 @@ public class MainActivity extends Activity {
 																			// needed
 																			// in
 																			// future
-								boolean test = form_meta
-										.getBoolean("form_location_required");
-								form.setForm_location_required(form_meta
-										.getBoolean("form_location_required"));
+								boolean test = form_meta.getBoolean("form_location_required");
+								form.setForm_location_required(form_meta.getBoolean("form_location_required"));
 
 							}
 							// org
@@ -618,10 +616,6 @@ public class MainActivity extends Activity {
 //							else if(fieldType.equals("rating_image_set")){
 //								
 //							}
-							else {
-								form.setImageSynced(true); 
-								dbHelper.updateForm(form);
-							}
 						}
 					}
 

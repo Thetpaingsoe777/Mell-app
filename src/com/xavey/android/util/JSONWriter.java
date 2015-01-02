@@ -17,6 +17,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
@@ -296,7 +297,6 @@ public class JSONWriter {
 						tvFieldValue.setTextSize(15);
 						tvFieldValue.setLayoutParams(lp);
 						// tvFieldValue.setWidth(500);
-
 						horizontalLayout.addView(tvFieldName);
 						horizontalLayout.addView(tvFieldValue);
 						horizontalLayout.setLayoutParams(new LayoutParams(
@@ -319,16 +319,16 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if(fields.get(key).equals("")){
-						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+					else if(fields.get(key).equals("rating")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if(fields.get(key).equals("")){
-						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+					else if(fields.get(key).equals("rating_set")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if(fields.get(key).equals("")){
-						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+					else if(fields.get(key).equals("rating_set_image")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
 				}
@@ -337,12 +337,12 @@ public class JSONWriter {
 
 		LayoutParams mainLP = new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT);
-		
+
 		lL.setLayoutParams(mainLP);
 		lL.setGravity(Gravity.CENTER_HORIZONTAL);
 		return lL;
 	}
-	
+
 	// this method remove fields that are not used (skipped)
 	private ArrayList<HashMap<String, Object>> filterFormFieldsByUsedFieldIDs(
 			ArrayList<HashMap<String, Object>> formFields,
@@ -507,8 +507,6 @@ public class JSONWriter {
 		lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		lp.setMargins(10, 5, 10, 15);
 		
-		
-		
 		lp = new LayoutParams(200, 200);
 		ImageView imageView = new ImageView(activity);
 		ImageSavingManager.loadImageFromLocal(fieldPath, imageView);
@@ -525,7 +523,62 @@ public class JSONWriter {
 		
 		return horizontalLayout;
 	}
-	
+
+	/*private LinearLayout writeHorizontalViewForRatingSetImage(HashMap<String, Object> fields, HashMap<String, String> docFields ){
+		// following link may be needed at future
+		// http://stackoverflow.com/questions/11111129/android-textview-individual-line-spacing-for-each-line
+		
+		LinearLayout horizontalLayout = new LinearLayout(activity);
+		horizontalLayout.setBackgroundColor(Color.WHITE);
+		horizontalLayout.setOrientation(LinearLayout.VERTICAL);
+
+		String fieldName = fields.get("field_name").toString();
+		String fieldLabel = fields.get("field_label").toString();
+		String fieldValue = docFields.get("field_value");
+		// String docName = docFields.get("field_name");
+
+		LayoutParams lp;
+		lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lp.setMargins(10, 5, 10, 15);
+		TextView tvFieldName = new TextView(activity);
+		tvFieldName.setText(fieldLabel + " ");
+		tvFieldName.setTextSize(15);
+		tvFieldName.setLayoutParams(lp);
+		tvFieldName.setGravity(Gravity.CENTER_VERTICAL);
+		tvFieldName.setBackgroundColor(Color.LTGRAY); // just for development test
+		tvFieldName.setPadding(0, 10, 0, 10);
+		// tvFieldName.setWidth(500);
+
+		// may be change as uneditable Edittext later or may not
+		lp = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		lp.setMargins(10, 5, 10, 15);
+		
+		TextView tvFieldValue = new TextView(activity);
+		//tvFieldValue.setTypeface(zawGyiTypeface);
+		tvFieldValue.setText(" - "+fieldValue);
+		tvFieldValue.setTextSize(15);
+		tvFieldValue.setLayoutParams(lp);
+		// tvFieldValue.setWidth(500);
+		tvFieldValue.setGravity(Gravity.CENTER_VERTICAL);
+		tvFieldValue.setPadding(0, 10, 0, 10);
+		
+		ImageView imageView = new ImageView(activity);
+		LayoutParams imageParams = new LayoutParams(150,150);
+		imageView.setLayoutParams(imageParams);
+		imageView.setScaleType(ScaleType.FIT_CENTER);
+		
+		horizontalLayout.addView(tvFieldName);
+		horizontalLayout.addView(imageView);
+		horizontalLayout.addView(tvFieldValue);
+		horizontalLayout.setLayoutParams(new LayoutParams(
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.WRAP_CONTENT));
+		
+		horizontalLayout.addView(produceALine(1, "#ADAABD"));
+		
+		return horizontalLayout;
+	}*/
+
 	public Bitmap convertByteArrayToBitmap(byte[] byteArrayImg) {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		Bitmap bmp = BitmapFactory.decodeByteArray(byteArrayImg, 0,

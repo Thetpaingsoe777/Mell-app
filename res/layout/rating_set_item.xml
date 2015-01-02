@@ -42,12 +42,12 @@
         android:background="#ffffff"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
-        
+
         <RatingBar
             android:id="@+id/ratingBar_ratingSet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        
+
         <RelativeLayout
             android:id="@+id/minMaxLayout_ratingSet"
             android:layout_width="match_parent"
@@ -76,5 +76,4 @@
                 android:textStyle="italic" />
         </RelativeLayout>
     </LinearLayout>
-
 </RelativeLayout>

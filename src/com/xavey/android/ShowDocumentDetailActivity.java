@@ -100,7 +100,6 @@ public class ShowDocumentDetailActivity extends Activity {
 						syncManager.submitDocument(currentDocument, currentForm);
 						finish();
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
