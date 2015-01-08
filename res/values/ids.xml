@@ -11,7 +11,6 @@
     <item type="id" name="field_err_msg"/>
 	<item type="id" name="next_ref"/>
     <item type="id" name="next_ref_cond"/>
-    <item type="id" name="next_cond_type"/>
     <item type="id" name="field_skip"/> <!-- just for radio (yet) -->
     <item type="id" name="radio_value"/>
     <item type="id" name="extra"/> <!-- just for radio (yet) -->

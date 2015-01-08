@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
@@ -34,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -51,8 +53,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.xavey.android.adapter.NumberSetAdapter;
 import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
+import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
@@ -135,7 +139,8 @@ public class OneQuestionOneView extends FragmentActivity {
 		 */
 
 		if (layoutList != null) {
-			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(), layoutList);
+			qAdapter = new QuestionPagerAdapter(getSupportFragmentManager(),
+					layoutList);
 			vPager.setAdapter(qAdapter);
 
 			vPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -178,7 +183,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
 					}
-					LinearLayout currentParentLayout = layoutList.get(currentPosition);
+					LinearLayout currentParentLayout = layoutList
+							.get(currentPosition);
 					for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
 						View view = currentParentLayout.getChildAt(i);
 						if (view.getClass().getName()
@@ -187,15 +193,21 @@ public class OneQuestionOneView extends FragmentActivity {
 							LinearLayout linearLayout = (LinearLayout) scroll
 									.getChildAt(0);
 							if (linearLayout.getTag(R.id.layout_id) != null
-									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString()
+											.equals("recordingLayout"))
 								currentLayout = linearLayout;
 						}
-						if(view.getClass().getName().equals("android.widget.LinearLayout")){
-							LinearLayout linearLayout = (LinearLayout) currentParentLayout.getChildAt(i);
+						if (view.getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) currentParentLayout
+									.getChildAt(i);
 							if (linearLayout.getTag(R.id.layout_id) != null
-									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString()
+											.equals("recordingLayout"))
 								currentLayout = linearLayout;
-							
+
 						}
 						if (view.getClass().getName()
 								.equals("android.widget.RelativeLayout")) {
@@ -209,12 +221,16 @@ public class OneQuestionOneView extends FragmentActivity {
 					boolean isSubmitLayout = isSubmitLayout(nextLayout);
 					if (!isSubmitLayout)
 						if (nextInnerLayout.getTag(R.id.layout_id) != null) {
-							currentLayoutID = nextInnerLayout.getTag(R.id.layout_id).toString();
-							currentFieldID = nextInnerLayout.getTag(R.id.field_id).toString();
-							if(nextInnerLayout.getTag(R.id.next_ref)!=null)
-								currentNextRef = nextInnerLayout.getTag(R.id.next_ref).toString();
-							if(nextInnerLayout.getTag(R.id.next_ref_cond)!=null)
-								currentNextCond = (JSONArray) nextInnerLayout.getTag(R.id.next_ref_cond);
+							currentLayoutID = nextInnerLayout.getTag(
+									R.id.layout_id).toString();
+							currentFieldID = nextInnerLayout.getTag(
+									R.id.field_id).toString();
+							if (nextInnerLayout.getTag(R.id.next_ref) != null)
+								currentNextRef = nextInnerLayout.getTag(
+										R.id.next_ref).toString();
+							if (nextInnerLayout.getTag(R.id.next_ref_cond) != null)
+								currentNextCond = (JSONArray) nextInnerLayout
+										.getTag(R.id.next_ref_cond);
 						} else {
 							for (int i = 0; i < currentNextCond.length(); i++) {
 								currentNextCond.remove(i);
@@ -230,26 +246,40 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * .show();
 					 */
 
-					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString().equals("radioLayout");
-					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("datetimeLayout");
-					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("submitLayout");
-//					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout");
-//					isNeedToValid = isNeedToValid || currentLayout.getTag(R.id.layout_id).toString().equals("textLayout");
+					boolean isNeedToValid = currentLayout
+							.getTag(R.id.layout_id).toString()
+							.equals("radioLayout");
+					isNeedToValid = isNeedToValid
+							|| currentLayout.getTag(R.id.layout_id).toString()
+									.equals("datetimeLayout");
+					isNeedToValid = isNeedToValid
+							|| currentLayout.getTag(R.id.layout_id).toString()
+									.equals("submitLayout");
+					// isNeedToValid = isNeedToValid ||
+					// currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout");
+					// isNeedToValid = isNeedToValid ||
+					// currentLayout.getTag(R.id.layout_id).toString().equals("textLayout");
 					LinearLayoutManager lLManager = new LinearLayoutManager();
 
-					TextView errorMsg = lLManager.getErrorMsgTextView(currentLayout);
+					TextView errorMsg = lLManager
+							.getErrorMsgTextView(currentLayout);
 
-					LayoutParams errorMsgLayoutOpen = new LayoutParams(LayoutParams.MATCH_PARENT, 30);
+					LayoutParams errorMsgLayoutOpen = new LayoutParams(
+							LayoutParams.MATCH_PARENT, 30);
 					errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
 
-					LayoutParams errorMsgLayoutHide = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
+					LayoutParams errorMsgLayoutHide = new LayoutParams(
+							LayoutParams.MATCH_PARENT, 0);
 					errorMsgLayoutHide.setMargins(10, 20, 10, 20);
-					
-//					boolean isSkipLogicInvolved = currentLayout.getTag(R.id.next_ref)!=null;
-//					boolean isRenderLogicInvolved = currentLayout.getTag(R.id.render_ref)!=null;
+
+					// boolean isSkipLogicInvolved =
+					// currentLayout.getTag(R.id.next_ref)!=null;
+					// boolean isRenderLogicInvolved =
+					// currentLayout.getTag(R.id.render_ref)!=null;
 
 					if (!isNeedToValid) {
-						HashMap<String, String> test = lLManager.test(currentLayout);
+						HashMap<String, String> test = lLManager
+								.test(currentLayout);
 						String value = "";
 						if (test.containsKey("value"))
 							value = test.get("value");
@@ -258,7 +288,8 @@ public class OneQuestionOneView extends FragmentActivity {
 							field_required = test.get("field_required");
 						}
 						String field_label = test.get("field_label");
-						boolean isNotTyped = field_required.equals("true") && value.equals("#no_value#");
+						boolean isNotTyped = field_required.equals("true")
+								&& value.equals("#no_value#");
 						if (!isNotTyped) {
 							// user typed values
 							if (ApplicationValues.IS_RECORDING_NOW) {
@@ -276,7 +307,8 @@ public class OneQuestionOneView extends FragmentActivity {
 								currentPosition = previousIndex;
 							}
 
-							String tagID = currentLayout.getTag(R.id.layout_id).toString();
+							String tagID = currentLayout.getTag(R.id.layout_id)
+									.toString();
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
 								String field_max_value = test
@@ -289,7 +321,8 @@ public class OneQuestionOneView extends FragmentActivity {
 								String field_err_msg = test
 										.get("field_err_msg");
 								int userTypedValue = Integer.parseInt(value_);
-								int maxValue = Integer.parseInt(field_max_value);
+								int maxValue = Integer
+										.parseInt(field_max_value);
 								int minValue = Integer
 										.parseInt(field_min_value);
 								if (userTypedValue > maxValue
@@ -355,7 +388,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										currentPosition = newPosition;
 										previousIndex = currentPosition;
 										// hide keyboard
-										LinearLayout nextLayout_ = layoutList.get(newPosition);
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
@@ -375,64 +409,72 @@ public class OneQuestionOneView extends FragmentActivity {
 									if (errorMsg != null)
 										errorMsg.setText("");
 								}
-							}
-							else if(tagID.equals("numberSetLayout") || tagID.equals("textSetLayout")){
+							} else if (tagID.equals("numberSetLayout")
+									|| tagID.equals("textSetLayout")) {
 
-//								if(currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout")){
-//									String render_ref = "";
-//									LinearLayout refLayout = null;
-//									int extraCountFromRefLayout = 0;
-//									if(currentLayout.getTag(R.id.render_ref)!=null){
-//										render_ref = currentLayout.getTag(R.id.render_ref).toString();
-//										refLayout = getRefLayout(render_ref, layoutList);
-//										for(int i=0; i<refLayout.getChildCount(); i++){
-//											View refChild = refLayout.getChildAt(i);
-//											
-//										}
-//									}
-//									
-//									//get the list view here...
-//									for(int i=0; i<currentLayout.getChildCount(); i++){
-//										String className = currentLayout.getChildAt(i).getClass().getName();
-//										if(className.equals("android.widget.ListView")){
-//											ListView listView = (ListView) currentLayout.getChildAt(i);
-//											listView.getChildCount();
-//										}
-//										
-//									}
-//									
-//									if(currentLayout.getTag(R.id.render_ref)!=null){
-//										// get the number 
-//										// changed the listView here
-//									}
-								
+								// if(currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout")){
+								// String render_ref = "";
+								// LinearLayout refLayout = null;
+								// int extraCountFromRefLayout = 0;
+								// if(currentLayout.getTag(R.id.render_ref)!=null){
+								// render_ref =
+								// currentLayout.getTag(R.id.render_ref).toString();
+								// refLayout = getRefLayout(render_ref,
+								// layoutList);
+								// for(int i=0; i<refLayout.getChildCount();
+								// i++){
+								// View refChild = refLayout.getChildAt(i);
+								//
+								// }
+								// }
+								//
+								// //get the list view here...
+								// for(int i=0; i<currentLayout.getChildCount();
+								// i++){
+								// String className =
+								// currentLayout.getChildAt(i).getClass().getName();
+								// if(className.equals("android.widget.ListView")){
+								// ListView listView = (ListView)
+								// currentLayout.getChildAt(i);
+								// listView.getChildCount();
+								// }
+								//
+								// }
+								//
+								// if(currentLayout.getTag(R.id.render_ref)!=null){
+								// // get the number
+								// // changed the listView here
+								// }
+
 								boolean isValid = true;
-								
-								if(!isValid){
+
+								if (!isValid) {
 									// block
 									if (direction.equals(LEFT_TO_RIGHT)) {
 										navigator.addLast(0);
 										used_field_ids.addLast(currentFieldID);
 										vPager.setCurrentItem(currentPosition);
-										errorMsg.setText(field_label + " is required !");
+										errorMsg.setText(field_label
+												+ " is required !");
 										errorMsg.setTextColor(Color.RED);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
 										int last_range = navigator.getLast();
-										newPosition = currentPosition - last_range;
+										newPosition = currentPosition
+												- last_range;
 										vPager.setCurrentItem(newPosition);
 										currentPosition = newPosition;
 										navigator.removeLast();
 										used_field_ids.removeLast();
 									}
-								}
-								else{
+								} else {
 									if (direction.equals(LEFT_TO_RIGHT)) {
 										// pass
 
 										newPosition = getNextRoute(newPosition);
 										renderNextLayout(newPosition);
-										int range = newPosition	- currentPosition;
+										int range = newPosition
+												- currentPosition;
 										if (range != 0)
 											navigator.addLast(range);
 										used_field_ids.addLast(currentFieldID);
@@ -440,7 +482,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										currentPosition = newPosition;
 										previousIndex = currentPosition;
 										// hide keyboard
-										LinearLayout nextLayout_ = layoutList.get(newPosition);
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
@@ -458,13 +501,11 @@ public class OneQuestionOneView extends FragmentActivity {
 											hideKeyboard(nextLayout_);
 									}
 								}
-								
-								//<here is for textSetLayout (just copy from above)
-								
-								
-								
-							}
 
+								// <here is for textSetLayout (just copy from
+								// above)
+
+							}
 
 							else {
 								// user typed and field_type is not number...
@@ -550,10 +591,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						// pass
 						// another question is where to go if radio layout
 						// (skip logic)
-						
-						
-						
-						
 
 						if (currentLayout.getTag(R.id.layout_id).toString()
 								.equals("radioLayout")) {
@@ -600,6 +637,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												// skip to submit
 
 												newPosition = layoutList.size() - 1;
+												
 												int range = newPosition
 														- currentPosition;
 												navigator.addLast(range);
@@ -616,7 +654,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											} else {
 
 												// skip logic
-												skipID = Integer.parseInt(field_skip);
+												skipID = Integer
+														.parseInt(field_skip);
 												newPosition = skipID - 1;
 												newPosition = getNextRoute(newPosition);
 												renderNextLayout(newPosition);
@@ -645,8 +684,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 											newPosition = getNextRoute(newPosition);
 											renderNextLayout(newPosition);
-											int range = newPosition
-													- currentPosition;
+											int range = newPosition	- currentPosition;
 											navigator.addLast(range);
 											used_field_ids
 													.addLast(currentFieldID);
@@ -723,7 +761,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				private int getNextRoute(int newPosition) {
 					boolean isNeedToSkip = true;
-					LinearLayout currentLayoutTest = layoutList.get(currentPosition);
+					LinearLayout currentLayoutTest = layoutList
+							.get(currentPosition);
 					while (isNeedToSkip) {
 						LinearLayout nextLayout_ = layoutList.get(newPosition);
 
@@ -772,7 +811,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										.readValueFromLayout(ref_layout);
 								isNeedToSkip = isNeedToSkip(next_cond,
 										value_from_ref_layout);
-								newPosition++;
+								if(isNeedToSkip)
+									newPosition++;
 							}
 						} else {
 							isNeedToSkip = false;
@@ -781,72 +821,114 @@ public class OneQuestionOneView extends FragmentActivity {
 
 					return newPosition;
 				}
-				
-				public void renderNextLayout(int newPosition){
-					ArrayList<LinearLayout> layoutList_ = layoutList;
-					LinearLayout nextLayout = layoutList.get(newPosition);
-					LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
-					String nextLayoutID = nextInnerLayout.getTag(R.id.layout_id).toString();
-					String render_ref = "";
 
-				
-					if(nextInnerLayout.getTag(R.id.render_ref)!=null){
-						render_ref = nextInnerLayout.getTag(R.id.render_ref).toString();
-						int renderRefID = Integer.parseInt(render_ref);
-						LinearLayout renderRefLayout = layoutList.get(renderRefID);
-						LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
-						String renderLayoutID = nextInnerLayout.getTag(R.id.layout_id).toString();
-						
-						//following are all render Layout IDs...
-						//<radoiLayout>
-						if(renderLayoutID.equals("radioLayout")){
-							for(int i=0;i<renderInnerLayout.getChildCount();i++){
-								View v = renderInnerLayout.getChildAt(i);
-								if(v.getClass().getName().equals("android.widget.RadioGroup")){
-									RadioGroup radioGroup = (RadioGroup) v;
-									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-									for(int j=0; j<radioGroup.getChildCount(); j++){
-										LinearLayout layoutLine = (LinearLayout) radioGroup.getChildAt(j);
-										RadioButton childButton = null;
-										EditText childEditText = null;
-										for (int k = 0; k < layoutLine.getChildCount(); k++) {
-											String childClassName = layoutLine.getChildAt(k).getClass().getName().toString();
-											if (childClassName
-													.equals("android.widget.RadioButton")) {
-												childButton = (RadioButton) layoutLine
-														.getChildAt(k);
-											} else if (childClassName.equals("android.widget.EditText")) {
-												childEditText = (EditText) layoutLine
-														.getChildAt(k);
+				public void renderNextLayout(int newPosition) {
+
+					if (newPosition != layoutList.size() - 1) {
+						ArrayList<LinearLayout> layoutList_ = layoutList;
+						LinearLayout nextLayout = layoutList.get(newPosition);
+						LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
+						String nextLayoutID = nextInnerLayout.getTag(
+								R.id.layout_id).toString();
+						String render_ref = "";
+						String render_ref_type = "";
+
+						if (nextInnerLayout.getTag(R.id.render_ref) != null) {
+							render_ref = nextInnerLayout
+									.getTag(R.id.render_ref).toString();
+							render_ref_type = nextInnerLayout.getTag(
+									R.id.render_ref_type).toString();
+
+							int renderRefID = Integer.parseInt(render_ref) - 1; // -1
+																				// to
+																				// get
+																				// real
+																				// id
+							LinearLayout renderRefLayout = layoutList
+									.get(renderRefID);
+							LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
+							String renderLayoutID = renderInnerLayout.getTag(
+									R.id.layout_id).toString();
+
+							if (render_ref_type.equals("extra_equal_no_item")) {
+								// following are all render Layout IDs...
+								// <radioLayout>
+								if (renderLayoutID.equals("radioLayout")) {
+									for (int i = 0; i < renderInnerLayout
+											.getChildCount(); i++) {
+										View v = renderInnerLayout
+												.getChildAt(i);
+										if (v.getClass()
+												.getName()
+												.equals("android.widget.RadioGroup")) {
+											RadioGroup radioGroup = (RadioGroup) v;
+											RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
+											int extra = Integer
+													.parseInt(getSelectedExtraValueBySelectedButton(selectedButton));
+											// ^ we got the extra from render
+											// layout
+											// so let's put it in
+											// nextInnerLayout
+
+											// if(nextLayoutID.equals(""))
+
+											for (int a = 0; a < nextInnerLayout
+													.getChildCount(); a++) {
+												View view = nextInnerLayout
+														.getChildAt(a);
+												if (view.getClass()
+														.getName()
+														.equals("android.widget.ListView")) {
+													ListView listView = (ListView) view;
+													Adapter adapter = listView
+															.getAdapter();
+													if (nextLayoutID
+															.equals("numberSetLayout")) {
+														NumberSetAdapter numberSetAdapter = (NumberSetAdapter) adapter;
+														ArrayList<HashMap<String, String>> data = numberSetAdapter.getRefData();
+														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String,String>>();
+														
+														if(extra>data.size()){
+															extra = data.size();
+														}
+														
+														for(int k=0; k<extra; k++){
+															HashMap<String,String> map = data.get(k);
+															newData.add(map);
+														}
+														data = newData;
+														numberSetAdapter.setData(newData);
+														numberSetAdapter.notifyDataSetChanged();
+														
+														
+													} else if (nextLayoutID
+															.equals("textSetLayout")) {
+														TextSetAdapter textSetAdapter = (TextSetAdapter) adapter;
+													}
+												}
 											}
 										}
 									}
 								}
+								// </radioLayout>
 							}
+
+							/*
+							 * //<numberSetLayout>
+							 * if(renderLayoutID.equals("numberSetLayout")){
+							 * for(int i=0; i<nextInnerLayout.getChildCount();
+							 * i++){ View child = nextInnerLayout.getChildAt(0);
+							 * if(child.getClass
+							 * ().getName().equals("android.widget.ListView")){
+							 * ListView listView = (ListView) child;
+							 * listView.getChildCount(); } } }
+							 * //</numberSetLayout>
+							 */
+						} else {
+							// nothing to do here since there is no render_ref
 						}
-						//</radioLayout>
-						
-						/*//<numberSetLayout>
-						if(renderLayoutID.equals("numberSetLayout")){
-							for(int i=0; i<nextInnerLayout.getChildCount(); i++){
-								View child = nextInnerLayout.getChildAt(0);
-								if(child.getClass().getName().equals("android.widget.ListView")){
-									ListView listView = (ListView) child;
-									listView.getChildCount();
-								}
-							}
-						}
-						//</numberSetLayout>
-*/
-					}else{
-						// nothing to do here since there is no render_ref
 					}
-					
-					
-					
-					
 				}
-				
 
 				private boolean isFieldInvolvedNextCondType(
 						LinearLayout parrentlayout) {
@@ -867,9 +949,9 @@ public class OneQuestionOneView extends FragmentActivity {
 											.toString()
 											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
-								if (innerLayout.getTag(R.id.next_cond_type) != null)
+								if (innerLayout.getTag(R.id.next_ref_type) != null)
 									next_cond_type = innerLayout.getTag(
-											R.id.next_cond_type).toString();
+											R.id.next_ref_type).toString();
 							}
 						}
 					}
@@ -898,8 +980,9 @@ public class OneQuestionOneView extends FragmentActivity {
 											.toString()
 											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
-								if(innerLayout.getTag(R.id.next_ref)!=null)
-									next_ref = innerLayout.getTag(R.id.next_ref).toString();
+								if (innerLayout.getTag(R.id.next_ref) != null)
+									next_ref = innerLayout
+											.getTag(R.id.next_ref).toString();
 							}
 						}
 					}
@@ -907,6 +990,22 @@ public class OneQuestionOneView extends FragmentActivity {
 						return true;
 					else
 						return false;
+				}
+
+				private String getSelectedExtraValueBySelectedButton(
+						RadioButton selectedButton) {
+					String extraValue = "";
+					LinearLayout selectedLayoutLine = (LinearLayout) selectedButton
+							.getParent();
+					for (int i = 0; i < selectedLayoutLine.getChildCount(); i++) {
+						View v = selectedLayoutLine.getChildAt(i);
+						if (v.getClass().getName()
+								.equals("android.widget.EditText")) {
+							EditText selectedExtra = (EditText) v;
+							extraValue = selectedExtra.getText().toString();
+						}
+					}
+					return extraValue;
 				}
 
 				private String getReferenceFromParrentLayout(
@@ -928,8 +1027,9 @@ public class OneQuestionOneView extends FragmentActivity {
 											.toString()
 											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
-								if(innerLayout.getTag(R.id.next_ref)!=null)
-									reference = innerLayout.getTag(R.id.next_ref).toString();
+								if (innerLayout.getTag(R.id.next_ref) != null)
+									reference = innerLayout.getTag(
+											R.id.next_ref).toString();
 							}
 						}
 					}
@@ -951,14 +1051,15 @@ public class OneQuestionOneView extends FragmentActivity {
 					LinearLayout innerLayout = null;
 					LinearLayout innerLayout2 = null;
 					for (int i = 0; i < parrentLayout.getChildCount(); i++) {
-						String className = parrentLayout.getChildAt(i).getClass()
-								.getName();
+						String className = parrentLayout.getChildAt(i)
+								.getClass().getName();
 						View v = parrentLayout.getChildAt(i);
 
 						if (className.equals("android.widget.ScrollView")) {
 							ScrollView scroll = (ScrollView) v;
 							innerLayout = (LinearLayout) scroll.getChildAt(0);
-							String layoutID = innerLayout.getTag(R.id.layout_id).toString();
+							String layoutID = innerLayout
+									.getTag(R.id.layout_id).toString();
 							if (innerLayout.getTag(R.id.layout_id) != null
 									&& !layoutID.equals("recordingLayout")) {
 								return innerLayout;
@@ -968,15 +1069,20 @@ public class OneQuestionOneView extends FragmentActivity {
 							// }
 						}
 						// following else is for layouts without ScrollView
-						else if(className.equals("android.widget.LinearLayout")){
-							innerLayout2 = (LinearLayout) parrentLayout.getChildAt(i);
-							if(innerLayout2.getTag(R.id.layout_id)!=null && innerLayout2.getTag(R.id.layout_id).toString()!="recordingLayout"){
-									Log.i("child count",innerLayout2.getChildCount()+"");
-									return innerLayout2;
+						else if (className
+								.equals("android.widget.LinearLayout")) {
+							innerLayout2 = (LinearLayout) parrentLayout
+									.getChildAt(i);
+							if (innerLayout2.getTag(R.id.layout_id) != null
+									&& innerLayout2.getTag(R.id.layout_id)
+											.toString() != "recordingLayout") {
+								Log.i("child count",
+										innerLayout2.getChildCount() + "");
+								return innerLayout2;
 							}
 						}
 					}
-					if(innerLayout!=null)
+					if (innerLayout != null)
 						return innerLayout;
 					else
 						return innerLayout2;
@@ -1005,10 +1111,12 @@ public class OneQuestionOneView extends FragmentActivity {
 									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
-									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")) {
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
 								nextConditionType = innerLayout.getTag(
-										R.id.next_cond_type).toString();
+										R.id.next_ref_type).toString();
 							}
 						}
 					}
@@ -1023,13 +1131,19 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (parrentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout"))
 								return null;
-						} else if (parrentLayout.getChildAt(i).getClass().getName().equals("android.widget.LinearLayout")) {
-							LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
+						} else if (parrentLayout.getChildAt(i).getClass()
+								.getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout linearLayout = (LinearLayout) parrentLayout
+									.getChildAt(i);
 							LinearLayout innerLayout = null;
 							if (linearLayout.getTag(R.id.layout_id) != null
-									&& !linearLayout.getTag(R.id.layout_id).toString().equals("recordingLayout")) {
+									&& !linearLayout.getTag(R.id.layout_id)
+											.toString()
+											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
-								nextCondition = (JSONArray) innerLayout.getTag(R.id.next_ref_cond);
+								nextCondition = (JSONArray) innerLayout
+										.getTag(R.id.next_ref_cond);
 							}
 						}
 					}
@@ -1303,8 +1417,9 @@ public class OneQuestionOneView extends FragmentActivity {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//testing...
-				//toast.xaveyToast(null, "lat: "+ gps.getLatitude() +"\nlong: "+gps.getLongitude());
+				// testing...
+				// toast.xaveyToast(null, "lat: "+ gps.getLatitude()
+				// +"\nlong: "+gps.getLongitude());
 
 				Document document = new Document();
 				ArrayList<LinearLayout> completeList = getCompleteList(
@@ -1344,7 +1459,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 						String userTypedValue = "";
 						if (incompleteMap.containsKey(fieldID)) { // <--filter
-							userTypedValue = incompleteMap.get(fieldID).toString();
+							userTypedValue = incompleteMap.get(fieldID)
+									.toString();
 							try {
 								JSONObject child = new JSONObject();
 								child.put("field_id", fieldID);
@@ -1352,7 +1468,8 @@ public class OneQuestionOneView extends FragmentActivity {
 								child.put("field_value", userTypedValue);
 								child.put("field_label", fieldLabel);
 								if (fieldValueAudio.length() > 0) {
-									child.put("field_value_audio", fieldValueAudio);
+									child.put("field_value_audio",
+											fieldValueAudio);
 								}
 								jsonArray.put(child);
 							} catch (JSONException e) {
@@ -1370,7 +1487,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					document.setCreated_at(getCurrentDateTime());
 					document.setDocument_json(document_json.toString());
 					document.setForm_id(currentForm.getForm_id());
-					document.setCreated_worker(ApplicationValues.loginUser.getUser_id());
+					document.setCreated_worker(ApplicationValues.loginUser
+							.getUser_id());
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -1392,7 +1510,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					image.setImage_path(image_path);
 					dbHelper.addNewImage(image);
 				}
-				SyncManager syncManager = new SyncManager(OneQuestionOneView.this);
+				SyncManager syncManager = new SyncManager(
+						OneQuestionOneView.this);
 
 				// document_json(structure) is needed everytime before
 				// upload
@@ -1400,7 +1519,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
 							document, currentForm);
 					// here.. may be shock
-					document.setDocument_json_to_submit(mainArray.getJSONObject(0).toString());
+					document.setDocument_json_to_submit(mainArray
+							.getJSONObject(0).toString());
 					// following line won't be needed , but not sure..., fix
 					// later
 					document.setSubmitted("0");
@@ -1410,8 +1530,9 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				// ---------------------------------------------------------
 
-				// ----- 
-				isInternetAvailable = connectionDetector.isConnectingToInternet();
+				// -----
+				isInternetAvailable = connectionDetector
+						.isConnectingToInternet();
 				if (isInternetAvailable) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
@@ -1499,21 +1620,27 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
 			LinearLayout linearLayout = null;
-			for (int p=0; p<parentLayout.getChildCount(); p++) {
+			for (int p = 0; p < parentLayout.getChildCount(); p++) {
 				View child = parentLayout.getChildAt(p);
-				if(child.getClass().getName().equals("android.widget.ScrollView")){ 
+				if (child.getClass().getName()
+						.equals("android.widget.ScrollView")) {
 					ScrollView scrollView = (ScrollView) child;
-					for(int a=0; a<scrollView.getChildCount(); a++){
+					for (int a = 0; a < scrollView.getChildCount(); a++) {
 						View scrollChild = scrollView.getChildAt(a);
-						if (scrollChild.getTag(R.id.layout_id) != null && scrollChild.getClass().getName().equals("android.widget.LinearLayout")) {
-							if (!scrollChild.getTag(R.id.layout_id).toString().equals("recordingLayout"))
+						if (scrollChild.getTag(R.id.layout_id) != null
+								&& scrollChild.getClass().getName()
+										.equals("android.widget.LinearLayout")) {
+							if (!scrollChild.getTag(R.id.layout_id).toString()
+									.equals("recordingLayout"))
 								linearLayout = (LinearLayout) scrollChild;
 						}
 					}
-				}
-				else if(child.getClass().getName().equals("android.widget.LinearLayout")){
+				} else if (child.getClass().getName()
+						.equals("android.widget.LinearLayout")) {
 					LinearLayout linearLayout_ = (LinearLayout) child;
-					if(linearLayout_.getTag(R.id.layout_id)!=null && !linearLayout_.getTag(R.id.layout_id).toString().equals("recordingLayout")){
+					if (linearLayout_.getTag(R.id.layout_id) != null
+							&& !linearLayout_.getTag(R.id.layout_id).toString()
+									.equals("recordingLayout")) {
 						linearLayout = linearLayout_;
 					}
 				}
@@ -1525,7 +1652,8 @@ public class OneQuestionOneView extends FragmentActivity {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String value = "";
 				EditText edt1 = null;
-				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
+				String field_label = linearLayout.getTag(R.id.field_label_id)
+						.toString();
 
 				for (int j = 0; j < linearLayout.getChildCount(); j++) {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(j)
@@ -1574,10 +1702,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						RadioGroup radioGroup = (RadioGroup) linearLayout
 								.getChildAt(y);
 						RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-						String value = selectedButton.getTag(R.id.radio_value).toString();
+						String value = selectedButton.getTag(R.id.radio_value)
+								.toString();
 
 						for (int u = 0; u < radioGroup.getChildCount(); u++) {
-							LinearLayout layoutLine = (LinearLayout) radioGroup.getChildAt(u);
+							LinearLayout layoutLine = (LinearLayout) radioGroup
+									.getChildAt(u);
 							RadioButton childButton = null;
 							EditText childEditText = null;
 							for (int v = 0; v < layoutLine.getChildCount(); v++) {
@@ -1612,7 +1742,8 @@ public class OneQuestionOneView extends FragmentActivity {
 				// JSONArray checkedValues = new JSONArray();
 				String checkedValues = "";
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
+				String field_label = linearLayout.getTag(R.id.field_label_id)
+						.toString();
 				for (int z = 0; z < linearLayout.getChildCount(); z++) {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(z)
 							.getClass();
@@ -1635,7 +1766,9 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				if (checkedValues.length() > 0)
-					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+					checkedValues = checkedValues.substring(1); // <- it deletes
+																// the 1st char
+																// of the String
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
@@ -1755,47 +1888,74 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
-			}else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixCheckListLayout")) {
+			} else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("matrixCheckListLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String checkedValues="";
-				//ArrayList<MatrixCell> selectedCellList = new ArrayList<MatrixCell>();
+				String checkedValues = "";
+				// ArrayList<MatrixCell> selectedCellList = new
+				// ArrayList<MatrixCell>();
 				key.toCharArray();
-				for(int x=0; x<linearLayout.getChildCount(); x++){
+				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
-					if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id).toString().equals("theMatrixLayout")){
+					if (view.getClass().getName()
+							.equals("android.widget.LinearLayout")
+							&& view.getTag(R.id.layout_id).toString()
+									.equals("theMatrixLayout")) {
 						LinearLayout theMatrixLayout = (LinearLayout) view;
 						LinearLayout rowLabelColumn = null;
 						MYHorizontalScrollView horizontalScrollView = null;
-						for(int y=0; y<theMatrixLayout.getChildCount(); y++){
+						for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
 							View v = theMatrixLayout.getChildAt(y);
 
-							if(v.getTag(R.id.layout_id).toString().equals("rowLabelColumn")){
+							if (v.getTag(R.id.layout_id).toString()
+									.equals("rowLabelColumn")) {
 								rowLabelColumn = (LinearLayout) v;
-							}
-							else if(v.getTag(R.id.layout_id).toString().equals("horizontalScrollView")){
+							} else if (v.getTag(R.id.layout_id).toString()
+									.equals("horizontalScrollView")) {
 								horizontalScrollView = (MYHorizontalScrollView) v;
 							}
 						}
-						// both rowLabelColumn and horizontalScrollView must be already assigned in this line
-						if(((LinearLayout) horizontalScrollView.getChildAt(0)).getTag(R.id.layout_id).toString().equals("AllColumns")){
-							LinearLayout AllColumns = (LinearLayout) horizontalScrollView.getChildAt(0);
-							for(int ac=0; ac<AllColumns.getChildCount(); ac++){
-								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns.getChildAt(ac);
+						// both rowLabelColumn and horizontalScrollView must be
+						// already assigned in this line
+						if (((LinearLayout) horizontalScrollView.getChildAt(0))
+								.getTag(R.id.layout_id).toString()
+								.equals("AllColumns")) {
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView
+									.getChildAt(0);
+							for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
+										.getChildAt(ac);
 								String columnTitle = "";
-								for(int sc=0; sc<singleColumnAt_ac.getChildCount(); sc++){
-									View singleCheckBoxLayout = singleColumnAt_ac.getChildAt(sc);
-									String cellTag = singleCheckBoxLayout.getTag(R.id.layout_id).toString();
-									if(cellTag.equals("columnTitle")){
-										columnTitle = ((TextView)singleCheckBoxLayout).getText().toString();
-									}
-									else if(cellTag.equals("cell")){
+								for (int sc = 0; sc < singleColumnAt_ac
+										.getChildCount(); sc++) {
+									View singleCheckBoxLayout = singleColumnAt_ac
+											.getChildAt(sc);
+									String cellTag = singleCheckBoxLayout
+											.getTag(R.id.layout_id).toString();
+									if (cellTag.equals("columnTitle")) {
+										columnTitle = ((TextView) singleCheckBoxLayout)
+												.getText().toString();
+									} else if (cellTag.equals("cell")) {
 										LinearLayout cellLayout = (LinearLayout) singleCheckBoxLayout;
-										for(int c=0; c<cellLayout.getChildCount(); c++){
-											if(cellLayout.getChildAt(c).getClass().getName().toString().equals("android.widget.CheckBox")){
-												CheckBox cb = (CheckBox) cellLayout.getChildAt(c);
-												if(cb.isChecked()){
-													MatrixCell cell = (MatrixCell) cb.getTag(R.id.matrix_cell);
-													checkedValues += "|"+"h"+cell.getH_index()+""+"v"+cell.getV_index()+":"+cell.getValue(); // <-h0v0
+										for (int c = 0; c < cellLayout
+												.getChildCount(); c++) {
+											if (cellLayout
+													.getChildAt(c)
+													.getClass()
+													.getName()
+													.toString()
+													.equals("android.widget.CheckBox")) {
+												CheckBox cb = (CheckBox) cellLayout
+														.getChildAt(c);
+												if (cb.isChecked()) {
+													MatrixCell cell = (MatrixCell) cb
+															.getTag(R.id.matrix_cell);
+													checkedValues += "|" + "h"
+															+ cell.getH_index()
+															+ "" + "v"
+															+ cell.getV_index()
+															+ ":"
+															+ cell.getValue(); // <-h0v0
 												}
 											}
 										}
@@ -1805,55 +1965,89 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 						// -------------
 						if (checkedValues.length() > 0)
-							checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+							checkedValues = checkedValues.substring(1); // <- it
+																		// deletes
+																		// the
+																		// 1st
+																		// char
+																		// of
+																		// the
+																		// String
 						else
 							checkedValues = "-";
 					}
 				}
 				map.put(key, checkedValues);
 			}
-			
-			else if (linearLayout.getTag(R.id.layout_id).toString().equals("matrixOptionLayout")) {
+
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("matrixOptionLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String checkedValues="";
-				//ArrayList<MatrixCell> selectedCellList = new ArrayList<MatrixCell>();
+				String checkedValues = "";
+				// ArrayList<MatrixCell> selectedCellList = new
+				// ArrayList<MatrixCell>();
 				key.toCharArray();
-				for(int x=0; x<linearLayout.getChildCount(); x++){
+				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
-					if(view.getClass().getName().equals("android.widget.LinearLayout") && view.getTag(R.id.layout_id).toString().equals("theMatrixLayout")){
+					if (view.getClass().getName()
+							.equals("android.widget.LinearLayout")
+							&& view.getTag(R.id.layout_id).toString()
+									.equals("theMatrixLayout")) {
 						LinearLayout theMatrixLayout = (LinearLayout) view;
 						LinearLayout rowLabelColumn = null;
 						MYHorizontalScrollView horizontalScrollView = null;
-						for(int y=0; y<theMatrixLayout.getChildCount(); y++){
+						for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
 							View v = theMatrixLayout.getChildAt(y);
 
-							if(v.getTag(R.id.layout_id).toString().equals("rowLabelColumn")){
+							if (v.getTag(R.id.layout_id).toString()
+									.equals("rowLabelColumn")) {
 								rowLabelColumn = (LinearLayout) v;
-							}
-							else if(v.getTag(R.id.layout_id).toString().equals("horizontalScrollView")){
+							} else if (v.getTag(R.id.layout_id).toString()
+									.equals("horizontalScrollView")) {
 								horizontalScrollView = (MYHorizontalScrollView) v;
 							}
 						}
-						// both rowLabelColumn and horizontalScrollView must be already assigned in this line
-						if(((LinearLayout) horizontalScrollView.getChildAt(0)).getTag(R.id.layout_id).toString().equals("AllColumns")){
-							LinearLayout AllColumns = (LinearLayout) horizontalScrollView.getChildAt(0);
-							for(int ac=0; ac<AllColumns.getChildCount(); ac++){
-								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns.getChildAt(ac);
+						// both rowLabelColumn and horizontalScrollView must be
+						// already assigned in this line
+						if (((LinearLayout) horizontalScrollView.getChildAt(0))
+								.getTag(R.id.layout_id).toString()
+								.equals("AllColumns")) {
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView
+									.getChildAt(0);
+							for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
+										.getChildAt(ac);
 								String columnTitle = "";
-								for(int sc=0; sc<singleColumnAt_ac.getChildCount(); sc++){
-									View singleRadioButtonLayout = singleColumnAt_ac.getChildAt(sc);
-									String cellTag = singleRadioButtonLayout.getTag(R.id.layout_id).toString();
-									if(cellTag.equals("columnTitle")){
-										columnTitle = ((TextView)singleRadioButtonLayout).getText().toString();
-									}
-									else if(cellTag.equals("cell")){
+								for (int sc = 0; sc < singleColumnAt_ac
+										.getChildCount(); sc++) {
+									View singleRadioButtonLayout = singleColumnAt_ac
+											.getChildAt(sc);
+									String cellTag = singleRadioButtonLayout
+											.getTag(R.id.layout_id).toString();
+									if (cellTag.equals("columnTitle")) {
+										columnTitle = ((TextView) singleRadioButtonLayout)
+												.getText().toString();
+									} else if (cellTag.equals("cell")) {
 										LinearLayout cellLayout = (LinearLayout) singleRadioButtonLayout;
-										for(int c=0; c<cellLayout.getChildCount(); c++){
-											if(cellLayout.getChildAt(c).getClass().getName().toString().equals("android.widget.RadioButton")){
-												RadioButton rb = (RadioButton) cellLayout.getChildAt(c);
-												if(rb.isChecked()){
-													MatrixCell cell = (MatrixCell) rb.getTag(R.id.matrix_cell);
-													checkedValues += "|"+"h"+cell.getH_index()+""+"v"+cell.getV_index()+":"+cell.getValue(); // <-h0v0
+										for (int c = 0; c < cellLayout
+												.getChildCount(); c++) {
+											if (cellLayout
+													.getChildAt(c)
+													.getClass()
+													.getName()
+													.toString()
+													.equals("android.widget.RadioButton")) {
+												RadioButton rb = (RadioButton) cellLayout
+														.getChildAt(c);
+												if (rb.isChecked()) {
+													MatrixCell cell = (MatrixCell) rb
+															.getTag(R.id.matrix_cell);
+													checkedValues += "|" + "h"
+															+ cell.getH_index()
+															+ "" + "v"
+															+ cell.getV_index()
+															+ ":"
+															+ cell.getValue(); // <-h0v0
 												}
 											}
 										}
@@ -1863,32 +2057,44 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 						// -------------
 						if (checkedValues.length() > 0)
-							checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+							checkedValues = checkedValues.substring(1); // <- it
+																		// deletes
+																		// the
+																		// 1st
+																		// char
+																		// of
+																		// the
+																		// String
 						else
 							checkedValues = "-";
 					}
 				}
 				map.put(key, checkedValues);
-			}
-			else if (linearLayout.getTag(R.id.layout_id).toString()
+			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("imageChecklistLayout")) {
 				// JSONArray checkedValues = new JSONArray();
 				String checkedValues = "";
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
-				
-				for(int l=0; l<linearLayout.getChildCount(); l++){
-					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
-					if(subClass.getName().equals("android.widget.GridView")){
-						GridView gridView = (GridView) linearLayout.getChildAt(l);
-						ArrayList<String> selectedValueList = (ArrayList<String>) gridView.getTag(R.id.selected_grid_values);
-						for(String selectedValue : selectedValueList){
+				String field_label = linearLayout.getTag(R.id.field_label_id)
+						.toString();
+
+				for (int l = 0; l < linearLayout.getChildCount(); l++) {
+					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l)
+							.getClass();
+					if (subClass.getName().equals("android.widget.GridView")) {
+						GridView gridView = (GridView) linearLayout
+								.getChildAt(l);
+						ArrayList<String> selectedValueList = (ArrayList<String>) gridView
+								.getTag(R.id.selected_grid_values);
+						for (String selectedValue : selectedValueList) {
 							checkedValues += "|" + selectedValue;
 						}
 					}
 				}
 				if (checkedValues.length() > 0)
-					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+					checkedValues = checkedValues.substring(1); // <- it deletes
+																// the 1st char
+																// of the String
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
@@ -1898,91 +2104,124 @@ public class OneQuestionOneView extends FragmentActivity {
 					.equals("imageOptionLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String checkedValues = "";
-				String field_label = linearLayout.getTag(R.id.field_label_id).toString();
-				
-				for(int l=0; l<linearLayout.getChildCount(); l++){
-					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l).getClass();
-					if(subClass.getName().equals("android.widget.GridView")){
-						GridView gridView = (GridView) linearLayout.getChildAt(l);
-//						TextView selectedItem = (TextView) gridView.getSelectedItem();
-//						ArrayList<E>
-						ArrayList<String> selectedValueList = (ArrayList<String>) gridView.getTag(R.id.selected_grid_values);
-						for(String selectedValue : selectedValueList){
+				String field_label = linearLayout.getTag(R.id.field_label_id)
+						.toString();
+
+				for (int l = 0; l < linearLayout.getChildCount(); l++) {
+					Class<?> subClass = (Class<?>) linearLayout.getChildAt(l)
+							.getClass();
+					if (subClass.getName().equals("android.widget.GridView")) {
+						GridView gridView = (GridView) linearLayout
+								.getChildAt(l);
+						// TextView selectedItem = (TextView)
+						// gridView.getSelectedItem();
+						// ArrayList<E>
+						ArrayList<String> selectedValueList = (ArrayList<String>) gridView
+								.getTag(R.id.selected_grid_values);
+						for (String selectedValue : selectedValueList) {
 							checkedValues += "|" + selectedValue;
 						}
 					}
 				}
 				if (checkedValues.length() > 0)
-					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+					checkedValues = checkedValues.substring(1); // <- it deletes
+																// the 1st char
+																// of the String
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
 			}
 			// </image option layout>
-			
+
 			// <rating>
 			else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("ratingLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String startCount = "";
-				
-				for(int cc=0; cc<linearLayout.getChildCount(); cc++){
+
+				for (int cc = 0; cc < linearLayout.getChildCount(); cc++) {
 					View child = linearLayout.getChildAt(cc);
-					if(child.getClass().getName().toString().equals("android.widget.LinearLayout")){
-						if(child.getTag(R.id.layout_id).toString().equals("ratingAndLabelLayout")){
+					if (child.getClass().getName().toString()
+							.equals("android.widget.LinearLayout")) {
+						if (child.getTag(R.id.layout_id).toString()
+								.equals("ratingAndLabelLayout")) {
 							LinearLayout ratingAndLabelLayout = (LinearLayout) child;
-							for(int z=0; z<ratingAndLabelLayout.getChildCount(); z++){
+							for (int z = 0; z < ratingAndLabelLayout
+									.getChildCount(); z++) {
 								View v = ratingAndLabelLayout.getChildAt(z);
-								if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
+								if (v.getClass().getName().toString()
+										.equals("android.widget.RatingBar")) {
 									RatingBar ratingBar = (RatingBar) v;
-									startCount = (int)ratingBar.getRating() + "";
+									startCount = (int) ratingBar.getRating()
+											+ "";
 								}
 							}
 						}
 					}
 				}
-				
+
 				map.put(key, startCount);
 			}
 			// </rating>
-			
+
 			// <rating_set> and <rating_set_image>
-			else if (linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetLayout")||linearLayout.getTag(R.id.layout_id).toString().equals("ratingSetImageLayout")) {
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("ratingSetLayout")
+					|| linearLayout.getTag(R.id.layout_id).toString()
+							.equals("ratingSetImageLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
-				String checkedValues="";
-				for(int i_=0; i_<linearLayout.getChildCount(); i_++){
+				String checkedValues = "";
+				for (int i_ = 0; i_ < linearLayout.getChildCount(); i_++) {
 					View view = linearLayout.getChildAt(i_);
-					if(view.getClass().getName().toString().equals("android.widget.ListView")){
+					if (view.getClass().getName().toString()
+							.equals("android.widget.ListView")) {
 						ListView listView = (ListView) view;
-						RatingSetAdapter adapter = (RatingSetAdapter) listView.getAdapter();
-						ArrayList<HashMap<String, String>> data = adapter.getData();
-						
-						for(int lv=0; lv<listView.getChildCount(); lv++){
-							HashMap<String,String> dataMap = data.get(lv);
+						RatingSetAdapter adapter = (RatingSetAdapter) listView
+								.getAdapter();
+						ArrayList<HashMap<String, String>> data = adapter
+								.getData();
+
+						for (int lv = 0; lv < listView.getChildCount(); lv++) {
+							HashMap<String, String> dataMap = data.get(lv);
 							String value = dataMap.get("value");
-							RelativeLayout relativeLayout = (RelativeLayout) listView.getChildAt(lv);
-							for(int rl=0; rl<relativeLayout.getChildCount(); rl++){
+							RelativeLayout relativeLayout = (RelativeLayout) listView
+									.getChildAt(lv);
+							for (int rl = 0; rl < relativeLayout
+									.getChildCount(); rl++) {
 								View child_ = relativeLayout.getChildAt(rl);
-								if(child_.getClass().getName().toString().equals("android.widget.LinearLayout")){
-									if(child_.getTag(R.id.layout_id)!=null && child_.getTag(R.id.layout_id).toString().equals("ratingBarLayout")){
+								if (child_.getClass().getName().toString()
+										.equals("android.widget.LinearLayout")) {
+									if (child_.getTag(R.id.layout_id) != null
+											&& child_.getTag(R.id.layout_id)
+													.toString()
+													.equals("ratingBarLayout")) {
 										LinearLayout ratingBarLayout = (LinearLayout) child_;
-										for(int rb=0; rb<ratingBarLayout.getChildCount(); rb++){
-											View v = ratingBarLayout.getChildAt(rb);
-											if(v.getClass().getName().toString().equals("android.widget.RatingBar")){
+										for (int rb = 0; rb < ratingBarLayout
+												.getChildCount(); rb++) {
+											View v = ratingBarLayout
+													.getChildAt(rb);
+											if (v.getClass()
+													.getName()
+													.toString()
+													.equals("android.widget.RatingBar")) {
 												RatingBar ratingBar = (RatingBar) v;
-												int rating = (int) ratingBar.getRating();
-												checkedValues += "|" + value + ":" + rating;
+												int rating = (int) ratingBar
+														.getRating();
+												checkedValues += "|" + value
+														+ ":" + rating;
 											}
 										}
 									}
 								}
 							}
 						}
-						
+
 					}
 				}
 				if (checkedValues.length() > 0)
-					checkedValues = checkedValues.substring(1); // <- it deletes the 1st char of the String
+					checkedValues = checkedValues.substring(1); // <- it deletes
+																// the 1st char
+																// of the String
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
@@ -2026,11 +2265,12 @@ public class OneQuestionOneView extends FragmentActivity {
 		getScreenInfo();
 		TypeFaceManager tfManager = new TypeFaceManager(this);
 		byte[] logoByteArray = ApplicationValues.loginUser.getLogoImage();
-		if(logoByteArray!=null){
-			Bitmap logoBitMap = BitmapFactory.decodeByteArray(logoByteArray , 0, logoByteArray .length);
+		if (logoByteArray != null) {
+			Bitmap logoBitMap = BitmapFactory.decodeByteArray(logoByteArray, 0,
+					logoByteArray.length);
 			BitmapDrawable bd = new BitmapDrawable(getResources(), logoBitMap);
 			getActionBar().setIcon(bd);
-		}else{
+		} else {
 			getActionBar().setIcon(R.drawable.home);
 		}
 		getActionBar().setTitle("Home");
@@ -2056,14 +2296,16 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout innerLayout = null;
 		int childCount = parrentLayout.getChildCount();
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
-			String className = parrentLayout.getChildAt(i).getClass().getName().toString();
+			String className = parrentLayout.getChildAt(i).getClass().getName()
+					.toString();
 			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);
-			}
-			else if(className.equals("android.widget.LinearLayout")){
-				LinearLayout linearLayout = (LinearLayout) parrentLayout.getChildAt(i);
-				if(linearLayout.getTag(R.id.layout_id)!=null && linearLayout.getTag(R.id.layout_id).toString()!="recordingLayout")
+			} else if (className.equals("android.widget.LinearLayout")) {
+				LinearLayout linearLayout = (LinearLayout) parrentLayout
+						.getChildAt(i);
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& linearLayout.getTag(R.id.layout_id).toString() != "recordingLayout")
 					innerLayout = linearLayout;
 			}
 		}
@@ -2076,8 +2318,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				|| innerLayoutID.equals("photoLayout")
 				|| innerLayoutID.equals("martixOptionSingleLayout")
 				|| innerLayoutID.equals("imageOptionLayout")
-				|| innerLayoutID.equals("imageChecklistLayout")
-				) {
+				|| innerLayoutID.equals("imageChecklistLayout")) {
 			InputMethodManager inputManager = (InputMethodManager) this
 					.getSystemService(Context.INPUT_METHOD_SERVICE);
 			// check if no view has focus:

@@ -3008,10 +3008,7 @@ public class JSONReader {
 					// <text_set>
 					else if (fields.get(key).equals("text_set")) {
 
-						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
+						
 
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -3140,19 +3137,13 @@ public class JSONReader {
 						errorMsg.setTag("errorMsg");
 						textSetLayout.addView(errorMsg);
 
-						scroll.addView(textSetLayout);
-						parentLayout.addView(scroll);
+						parentLayout.addView(textSetLayout);
 						layoutList.add(parentLayout);
 					}
 					// </text_set>
 
 					// <number_set>
 					else if (fields.get(key).equals("number_set")) {
-
-						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
 
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -3173,8 +3164,7 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -3207,12 +3197,10 @@ public class JSONReader {
 								fields.get("field_err_msg"));
 						numberSetLayout.setTag(R.id.next_ref,
 								fields.get("next_ref"));
-						numberSetLayout.setTag(R.id.next_ref_cond,
-								fields.get("next_ref_cond"));
-						numberSetLayout.setTag(R.id.next_ref_type,
-								fields.get("next_ref_type"));
-						numberSetLayout.setTag(R.id.render_ref,
-								fields.get("render_ref"));
+						numberSetLayout.setTag(R.id.next_ref_cond, fields.get("next_ref_cond"));
+						numberSetLayout.setTag(R.id.next_ref_type, fields.get("next_ref_type"));
+						numberSetLayout.setTag(R.id.render_ref, fields.get("render_ref"));
+						numberSetLayout.setTag(R.id.render_ref_type, fields.get("render_ref_type"));
 
 						String checkLabel = fields.get("field_label")
 								.toString();
@@ -3230,8 +3218,7 @@ public class JSONReader {
 						numberSetLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc")
-								.toString();
+						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -3246,8 +3233,7 @@ public class JSONReader {
 
 						ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 
-						JSONArray datasetValues = (JSONArray) fields
-								.get("dataset_values");
+						JSONArray datasetValues = (JSONArray) fields.get("dataset_values");
 						for (int dv = 0; dv < datasetValues.length(); dv++) {
 							String value = datasetValues.getJSONObject(dv)
 									.getString("value");
@@ -3280,8 +3266,7 @@ public class JSONReader {
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
 						numberSetLayout.addView(errorMsg);
-						scroll.addView(numberSetLayout);
-						parentLayout.addView(scroll);
+						parentLayout.addView(numberSetLayout);
 						layoutList.add(parentLayout);
 					}
 					// </number_set>
@@ -3741,26 +3726,19 @@ public class JSONReader {
 						fields.put("field_desc", field_desc);
 					else
 						fields.put("field_desc", "-");
-					fields.put("field_required",
-							jChild.getBoolean("field_required"));
-					if (jChild.has("render_ref")) {
+					fields.put("field_required", jChild.getBoolean("field_required"));
+					if (jChild.has("render_ref"))
 						fields.put("render_ref", jChild.getString("render_ref"));
-					}
-					if (jChild.has("render_ref_type")) {
-						fields.put("render_ref_type",
-								jChild.getString("render_ref_type"));
-					}
+					if (jChild.has("render_ref_type"))
+						fields.put("render_ref_type", jChild.getString("render_ref_type"));
 
 					// fields.put("field_default_value",
 					// jChild.getInt("field_default_value"));
 					fields.put("field_default_value", 1);
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
-					JSONObject field_dataset = jChild
-							.getJSONObject("field_dataset");
-					JSONArray dataset_values = field_dataset
-							.getJSONArray("dataset_values");
-					String dataset_name = field_dataset
-							.getString("dataset_name");
+					JSONObject field_dataset = jChild.getJSONObject("field_dataset");
+					JSONArray dataset_values = field_dataset.getJSONArray("dataset_values");
+					String dataset_name = field_dataset.getString("dataset_name");
 					fields.put("dataset_values", dataset_values);
 					fields.put("dataset_name", dataset_name);
 				}
@@ -4047,12 +4025,12 @@ public class JSONReader {
 
 	public String readValueFromLayout(LinearLayout parentLayout) {
 		// -1 don't care the last room cuz the last room is submitLayout
-		LinearLayout linearLayout = null;
+		LinearLayout linearLayout = getInnerLayout(parentLayout);
 		for (int p = 0; p < parentLayout.getChildCount(); p++) {
 			View child = parentLayout.getChildAt(p);
-			if (child.getTag(R.id.layout_id) != null
-					&& child.getClass().getName()
-							.equals("android.widget.LinearLayout")) {
+			if (child.getClass().getName()
+					.equals("android.widget.LinearLayout") || child.getClass().getName()
+					.equals("android.widget.LinearLayout") && child.getTag(R.id.layout_id) != null) {
 				linearLayout = (LinearLayout) parentLayout.getChildAt(p);
 			}
 		}
@@ -4192,6 +4170,47 @@ public class JSONReader {
 			return date + "  " + time;
 		}
 		return "";
+	}
+	
+	private LinearLayout getInnerLayout(LinearLayout parrentLayout) {
+		LinearLayout innerLayout = null;
+		LinearLayout innerLayout2 = null;
+		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+			String className = parrentLayout.getChildAt(i)
+					.getClass().getName();
+			View v = parrentLayout.getChildAt(i);
+
+			if (className.equals("android.widget.ScrollView")) {
+				ScrollView scroll = (ScrollView) v;
+				innerLayout = (LinearLayout) scroll.getChildAt(0);
+				String layoutID = innerLayout
+						.getTag(R.id.layout_id).toString();
+				if (innerLayout.getTag(R.id.layout_id) != null
+						&& !layoutID.equals("recordingLayout")) {
+					return innerLayout;
+				}
+				// else{
+				// return null;
+				// }
+			}
+			// following else is for layouts without ScrollView
+			else if (className
+					.equals("android.widget.LinearLayout")) {
+				innerLayout2 = (LinearLayout) parrentLayout
+						.getChildAt(i);
+				if (innerLayout2.getTag(R.id.layout_id) != null
+						&& innerLayout2.getTag(R.id.layout_id)
+								.toString() != "recordingLayout") {
+					Log.i("child count",
+							innerLayout2.getChildCount() + "");
+					return innerLayout2;
+				}
+			}
+		}
+		if (innerLayout != null)
+			return innerLayout;
+		else
+			return innerLayout2;
 	}
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {

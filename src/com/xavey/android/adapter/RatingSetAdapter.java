@@ -35,7 +35,7 @@ public class RatingSetAdapter extends BaseAdapter {
 		dbHelper = new XaveyDBHelper(activity);
 		xaveyUtils = new XaveyUtils(activity);
 	}
-	
+
 	public ArrayList<HashMap<String, String>> getData() {
 		return data;
 	}
