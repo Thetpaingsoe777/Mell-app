@@ -1,5 +1,9 @@
 package com.xavey.android.util;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +26,12 @@ public class XaveyUtils {
 	public Bitmap convertByteArrayToBitmap(byte[] byteArray){
 		Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray , 0, byteArray.length);
 		return bitmap;
+	}
+	
+	public ArrayList<String> removeDuplicateString(ArrayList<String> arrayList){
+		Set<String> se = new HashSet<String>(arrayList);
+		arrayList.clear();
+		return new ArrayList<String>(se);
 	}
 	
 }

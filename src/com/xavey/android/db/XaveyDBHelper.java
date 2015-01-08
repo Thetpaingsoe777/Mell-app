@@ -991,7 +991,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		String query = "select * from " + SYNCED_IMAGE_TABLE + " where " + IMAGE_ID
 				+ "=?" + " and " + SYNC_ID + "=?";
-		Cursor cursor = db.rawQuery(query, new String[] { imageID });
+		Cursor cursor = db.rawQuery(query, new String[] { imageID, syncID });
 		if (cursor.getCount() == 0)
 			return false;
 		else

@@ -51,6 +51,7 @@ import com.xavey.android.util.SyncManager;
 import com.xavey.android.util.ToastManager;
 import com.xavey.android.util.UUIDGenerator;
 import com.xavey.android.util.XaveyProperties;
+import com.xavey.android.util.XaveyUtils;
 
 public class MainActivity extends Activity {
 
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 	SessionManager session;
 	public static Menu optionMenu;
 	XaveyDBHelper dbHelper;
+	XaveyUtils xaveyUtils;
 	ConnectionDetector connectionDetector;
 
 	public static String LOGIN_USER_ID = "";
@@ -211,6 +213,7 @@ public class MainActivity extends Activity {
 		// formFieldList = new ArrayList<HashMap<String, String>>();
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		toastManager = new ToastManager(this);
+		xaveyUtils = new XaveyUtils(this);
 	}
 
 	private void addDrawerItem() {
@@ -583,14 +586,15 @@ public class MainActivity extends Activity {
 						}
 					}
 
-					// assign all forms' imageSynced to false
-					for (Form form : result) {
-						form.setImageSynced(false);
-					}
+//					// assign all forms' imageSynced to false
+//					for (Form form : result) {
+//						form.setImageSynced(false);
+//					}
 
 					// get the forms that involved images
-					ArrayList<HashMap<String,String>> imageIncludedFormList = new ArrayList<HashMap<String,String>>();
-
+					ArrayList<HashMap<String,String>> imageIDandFormIDList = new ArrayList<HashMap<String,String>>();
+					//boolean isFormNeedToSyncImage = false;
+					ArrayList<String> imageIncludedFormIDList = new ArrayList<String>();
 					for (Form form : result) {
 						String form_fields_string = form.getForm_fields();
 						JSONArray jsonArray = new JSONArray(form_fields_string);
@@ -604,13 +608,15 @@ public class MainActivity extends Activity {
 								// getting ImageID here
 								JSONObject fieldDataset = field.getJSONObject("field_dataset");
 								JSONArray dataSetValues = fieldDataset.getJSONArray("dataset_values");
-
+								imageIncludedFormIDList.add(form.getForm_id());
+								form.setImageSynced(false);
+								
 								for (int j = 0; j < dataSetValues.length(); j++) {
 									String imageID = dataSetValues.getJSONObject(j).getString("image");
 									HashMap<String, String> map = new HashMap<String, String>();
 									map.put("form_id", form.getForm_id());
 									map.put("image_id", imageID);
-									imageIncludedFormList.add(map);
+									imageIDandFormIDList.add(map);
 								}
 							}
 //							else if(fieldType.equals("rating_image_set")){
@@ -619,9 +625,22 @@ public class MainActivity extends Activity {
 						}
 					}
 
-					// AsyncTask
-					SyncImagesDownloadTask syncImageTask = new SyncImagesDownloadTask();
-					syncImageTask.execute(imageIncludedFormList);
+					imageIncludedFormIDList = xaveyUtils.removeDuplicateString(imageIncludedFormIDList);
+					
+					for(Form form: result){
+						String formID = form.getForm_id();
+						if(imageIncludedFormIDList.contains(formID)){
+							form.setImageSynced(false);
+							dbHelper.updateForm(form);
+							SyncImagesDownloadTask syncImageTask = new SyncImagesDownloadTask();
+							syncImageTask.execute(imageIDandFormIDList);
+						}
+						else{
+							form.setImageSynced(true);
+							dbHelper.updateForm(form);
+						}
+					}
+					
 				}
 
 				if (Dialog != null) {
@@ -687,7 +706,7 @@ public class MainActivity extends Activity {
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
-				
+				e2.getMessage();
 			}
 			int userResponseCode_ = c_.getResponseCode();
 			// -----------------------------------------------------------------
@@ -698,10 +717,8 @@ public class MainActivity extends Activity {
 						.getString("token");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				toastManager.xaveyToast(null,
-						"JSON Exception at MainActivity... response code");
+				toastManager.xaveyToast(null, "JSON Exception at MainActivity... response code");
 			}
-
 			
 			HashMap<String, Object> syncedForms = new HashMap<String, Object>();
 
