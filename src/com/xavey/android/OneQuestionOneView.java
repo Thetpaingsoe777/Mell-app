@@ -278,16 +278,21 @@ public class OneQuestionOneView extends FragmentActivity {
 					// currentLayout.getTag(R.id.render_ref)!=null;
 
 					if (!isNeedToValid) {
-						HashMap<String, String> test = lLManager
-								.test(currentLayout);
+						HashMap<String, Object> test= null;
+						try {
+							test = lLManager.test(currentLayout);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						String value = "";
 						if (test.containsKey("value"))
-							value = test.get("value");
+							value = test.get("value").toString();
 						String field_required = "false";
 						if (test.containsKey("")) {
-							field_required = test.get("field_required");
+							field_required = test.get("field_required").toString();
 						}
-						String field_label = test.get("field_label");
+						String field_label = test.get("field_label").toString();
 						boolean isNotTyped = field_required.equals("true")
 								&& value.equals("#no_value#");
 						if (!isNotTyped) {
@@ -312,14 +317,14 @@ public class OneQuestionOneView extends FragmentActivity {
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
 								String field_max_value = test
-										.get("field_max_value");
+										.get("field_max_value").toString();
 								String field_min_value = test
-										.get("field_min_value");
+										.get("field_min_value").toString();
 								// String field_default_value =
 								// test.get("field_default_value"); // no need
 								// yet
 								String field_err_msg = test
-										.get("field_err_msg");
+										.get("field_err_msg").toString();
 								int userTypedValue = Integer.parseInt(value_);
 								int maxValue = Integer
 										.parseInt(field_max_value);
@@ -412,42 +417,35 @@ public class OneQuestionOneView extends FragmentActivity {
 							} else if (tagID.equals("numberSetLayout")
 									|| tagID.equals("textSetLayout")) {
 
-								// if(currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout")){
-								// String render_ref = "";
-								// LinearLayout refLayout = null;
-								// int extraCountFromRefLayout = 0;
-								// if(currentLayout.getTag(R.id.render_ref)!=null){
-								// render_ref =
-								// currentLayout.getTag(R.id.render_ref).toString();
-								// refLayout = getRefLayout(render_ref,
-								// layoutList);
-								// for(int i=0; i<refLayout.getChildCount();
-								// i++){
-								// View refChild = refLayout.getChildAt(i);
-								//
-								// }
-								// }
-								//
-								// //get the list view here...
-								// for(int i=0; i<currentLayout.getChildCount();
-								// i++){
-								// String className =
-								// currentLayout.getChildAt(i).getClass().getName();
-								// if(className.equals("android.widget.ListView")){
-								// ListView listView = (ListView)
-								// currentLayout.getChildAt(i);
-								// listView.getChildCount();
-								// }
-								//
-								// }
-								//
-								// if(currentLayout.getTag(R.id.render_ref)!=null){
-								// // get the number
-								// // changed the listView here
-								// }
 
+								test.containsKey("");
 								boolean isValid = true;
-
+								
+								// <>check validation true false and validation for blank fees here 1st
+								
+								// </>
+								
+								// and then check the max and min
+								int minValue = 0;
+								if(test.containsKey("field_min_value"))
+									minValue = Integer.parseInt(test.get("field_min_value").toString());
+								int maxValue = 0;
+								if(test.containsKey("field_max_value"))
+									maxValue = Integer.parseInt(test.get("field_max_value").toString());
+							
+								// following data will be used later for each validation 
+								/*ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test.get("data");
+								
+								for(HashMap<String, String> dataMap : data){
+									dataMap.get("");
+								}*/
+								
+								int total = Integer.parseInt(test.get("total").toString());
+								if(total>maxValue && total<minValue)
+									isValid = false;
+								
+								toast.xaveyToast(null, "Total value must be less than "+ maxValue +"\nand greater than "+ minValue);
+								
 								if (!isValid) {
 									// block
 									if (direction.equals(LEFT_TO_RIGHT)) {
@@ -900,10 +898,23 @@ public class OneQuestionOneView extends FragmentActivity {
 														numberSetAdapter.setData(newData);
 														numberSetAdapter.notifyDataSetChanged();
 														
-														
 													} else if (nextLayoutID
 															.equals("textSetLayout")) {
 														TextSetAdapter textSetAdapter = (TextSetAdapter) adapter;
+														ArrayList<HashMap<String, String>> data = textSetAdapter.getRefData();
+														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String,String>>();
+														
+														if(extra>data.size()){
+															extra = data.size();
+														}
+														
+														for(int k=0; k<extra; k++){
+															HashMap<String,String> map = data.get(k);
+															newData.add(map);
+														}
+														data = newData;
+														textSetAdapter.setData(newData);
+														textSetAdapter.notifyDataSetChanged();
 													}
 												}
 											}

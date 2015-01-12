@@ -1,8 +1,11 @@
 package com.xavey.android.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.view.View;
 import android.widget.CheckBox;
@@ -10,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -20,6 +24,8 @@ import com.xavey.android.R;
 
 public class LinearLayoutManager {
 
+	XaveyUtils xaveyUtils = new XaveyUtils(null);
+	
 	public TextView getErrorMsgTextView(LinearLayout linearLayout){
 		TextView errMsg = null;
 		// tag errorMsg
@@ -81,8 +87,8 @@ public class LinearLayoutManager {
 		return false;
 	}
 
-	public HashMap<String, String> test(LinearLayout linearLayout){
-		HashMap<String, String> map = new HashMap<String, String>();
+	public HashMap<String, Object> test(LinearLayout linearLayout) throws JSONException{
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		String layoutID = linearLayout.getTag(R.id.layout_id).toString();
 		String fieldName = linearLayout.getTag(R.id.field_name_id).toString();
 		String fieldLabel = linearLayout.getTag(R.id.field_label_id).toString();
@@ -172,16 +178,96 @@ public class LinearLayoutManager {
 			else
 				map.put("value", "#no_value#");
 		}
+		else if(layoutID.equals("textSetLayout")||layoutID.equals("numberSetLayout")){
+			String field_min_value = "";
+			String field_max_value = "";
+			if(linearLayout.getTag(R.id.field_min_value)!=null)
+				field_min_value = linearLayout.getTag(R.id.field_min_value).toString();
+			if(linearLayout.getTag(R.id.field_max_value)!=null)
+				field_max_value = linearLayout.getTag(R.id.field_max_value).toString();
+			if(field_min_value.length()>0){
+				map.put("field_min_value", field_min_value);
+			}
+			if(field_max_value.length()>0){
+				map.put("field_max_value", field_max_value);
+			}
+			
+			JSONArray dataValues = (JSONArray) linearLayout.getTag(R.id.dataset_values);
+			
+			// data is only for validation
+			ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String,String>>(); 
+			
+			ArrayList<Integer> userTypedNumberList = new ArrayList<Integer>();
+			
+			for(int i=0; i<linearLayout.getChildCount(); i++){
+				String className = linearLayout.getChildAt(i).getClass().getName();
+				if(className.equals("android.widget.ListView")){
+					ListView listView = (ListView) linearLayout.getChildAt(i);
+					
+					for(int j=0; j<listView.getChildCount(); j++){
+						LinearLayout lL = (LinearLayout) listView.getChildAt(j);
+
+						for(int k=0; k<lL.getChildCount(); k++){
+							View kChild = lL.getChildAt(k);
+							if(kChild.getClass().getName().equals("android.widget.EditText")){
+								EditText editText = (EditText) kChild;
+								String userTypedValue_ = editText.getText().toString();
+								String field_value = dataValues.getJSONObject(j).getString("value");
+								HashMap<String, String> map_ = new HashMap<String, String>();
+								if(userTypedValue_.length()==0)
+									userTypedValue_ = "#noValue#";
+								map_.put(field_value, userTypedValue_);
+								data.add(map_);
+								
+								if(!userTypedValue_.equals("#noValue#") && xaveyUtils.isNumeric(userTypedValue_) ){
+									int inte = Integer.parseInt(userTypedValue_);
+									userTypedNumberList.add(inte);
+								}
+							}
+						}
+					}
+				}
+			}
+			int total = 0;
+			for(int number: userTypedNumberList){
+				total += number;
+			}
+			map.put("data", data);
+			map.put("total", total);
+			
+			
+			
+			
+			String maxValue = "";
+			String minValue = "";
+			String errorMsg = "";
+			
+			if(linearLayout.getTag(R.id.field_max_value)!=null){
+				maxValue = linearLayout.getTag(R.id.field_max_value).toString();
+				map.put("field_max_value", maxValue);
+			}
+			
+			if(linearLayout.getTag(R.id.field_min_value)!=null){
+				minValue = linearLayout.getTag(R.id.field_min_value).toString();
+				map.put("field_min_value", minValue);
+			}
+			
+			if(linearLayout.getTag(R.id.field_err_msg)!=null){
+				errorMsg = linearLayout.getTag(R.id.field_err_msg).toString();
+				map.put("field_err_msg", errorMsg);
+			}
+		}
+		
 		else{
 			//for others field rather number and text
 		}
 		map.put("field_name", fieldName);
 		map.put("field_label", fieldLabel);
-		
+
 		if(linearLayout.getTag(R.id.field_required_id)!=null){
 			map.put("field_required", linearLayout.getTag(R.id.field_required_id).toString());
 		}
-		
+
 		return map;
 	}
 	

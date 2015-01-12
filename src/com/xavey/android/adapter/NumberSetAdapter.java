@@ -42,8 +42,9 @@ public class NumberSetAdapter extends BaseAdapter {
 	}
 
 	public ArrayList<HashMap<String, String>> getRefData() {
-		return refData;
+		return refData;	
 	}
+	
 
 	@Override
 	public int getCount() {

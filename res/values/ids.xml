@@ -43,4 +43,7 @@
     <item type="id" name="render_ref"/>
     <item type="id" name="render_ref_type"/>
     
+    <!-- dataset values -->
+    <item type="id" name="dataset_values"/>
+    
 </resources>

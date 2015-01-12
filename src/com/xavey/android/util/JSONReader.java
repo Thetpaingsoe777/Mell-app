@@ -3063,6 +3063,9 @@ public class JSONReader {
 								fields.get("next_ref"));
 						textSetLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
+						textSetLayout.setTag(R.id.field_min_value, fields.get("field_min_value"));
+						JSONArray dataset_values = (JSONArray) fields.get("dataset_values");
+						textSetLayout.setTag(R.id.dataset_values, dataset_values);
 						String checkLabel = fields.get("field_label")
 								.toString();
 
@@ -3172,8 +3175,7 @@ public class JSONReader {
 						// upLayout.addView(getLine(lineColor));
 						parentLayout.addView(upLayout);
 
-						LinearLayout numberSetLayout = new LinearLayout(
-								activity);
+						LinearLayout numberSetLayout = new LinearLayout(activity);
 						// LayoutParams cbLayoutParams = new LayoutParams(
 						// LayoutParams.MATCH_PARENT,
 						// LayoutParams.WRAP_CONTENT);
@@ -3183,28 +3185,24 @@ public class JSONReader {
 						// checkBoxLayout
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
 						numberSetLayout.setOrientation(LinearLayout.VERTICAL);
-						numberSetLayout.setTag(R.id.layout_id,
-								"numberSetLayout");
-						numberSetLayout.setTag(R.id.field_id,
-								fields.get("field_id"));
-						numberSetLayout.setTag(R.id.field_name_id,
-								fields.get("field_name"));
-						numberSetLayout.setTag(R.id.field_required_id,
-								fields.get("field_required"));
-						numberSetLayout.setTag(R.id.field_label_id,
-								fields.get("field_label"));
-						numberSetLayout.setTag(R.id.field_err_msg,
-								fields.get("field_err_msg"));
-						numberSetLayout.setTag(R.id.next_ref,
-								fields.get("next_ref"));
+						numberSetLayout.setTag(R.id.layout_id, "numberSetLayout");
+						numberSetLayout.setTag(R.id.field_id, fields.get("field_id"));
+						numberSetLayout.setTag(R.id.field_name_id, fields.get("field_name"));
+						numberSetLayout.setTag(R.id.field_required_id, fields.get("field_required"));
+						numberSetLayout.setTag(R.id.field_label_id, fields.get("field_label"));
+						numberSetLayout.setTag(R.id.field_err_msg, fields.get("field_err_msg"));
+						numberSetLayout.setTag(R.id.next_ref, fields.get("next_ref"));
 						numberSetLayout.setTag(R.id.next_ref_cond, fields.get("next_ref_cond"));
 						numberSetLayout.setTag(R.id.next_ref_type, fields.get("next_ref_type"));
 						numberSetLayout.setTag(R.id.render_ref, fields.get("render_ref"));
 						numberSetLayout.setTag(R.id.render_ref_type, fields.get("render_ref_type"));
-
-						String checkLabel = fields.get("field_label")
-								.toString();
-
+						if(fields.containsKey("field_min_value"))
+							numberSetLayout.setTag(R.id.field_min_value, fields.get("field_min_value"));
+						if(fields.containsKey("field_max_value"))
+							numberSetLayout.setTag(R.id.field_max_value, fields.get("field_max_value"));
+						JSONArray dataset_values = (JSONArray) fields.get("dataset_values");
+						numberSetLayout.setTag(R.id.dataset_values, dataset_values);
+						String checkLabel = fields.get("field_label").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(checkLabel + " ");
 						tvLabel.setTextSize(labelTextSize);
@@ -3713,6 +3711,10 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_help", jChild.getString("field_help"));
+					if(jChild.has("field_min_value"))
+						fields.put("field_min_value", jChild.getString("field_min_value"));
+					if(jChild.has("field_max_value"))
+						fields.put("field_max_value", jChild.getString("field_max_value"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
 					if (jChild.has("next_ref_type"))

@@ -22,11 +22,13 @@ public class TextSetAdapter extends BaseAdapter {
 	private static LayoutInflater inflater = null;
 	XaveyDBHelper dbHelper;
 	private ArrayList<HashMap<String, String>> data;
+	private ArrayList<HashMap<String, String>> refData;
 
 	public TextSetAdapter(Activity activity,
 			ArrayList<HashMap<String, String>> data) {
 		this.activity = activity;
 		this.data = data;
+		this.refData = data;
 		dbHelper = new XaveyDBHelper(this.activity);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -37,6 +39,10 @@ public class TextSetAdapter extends BaseAdapter {
 
 	public void setData(ArrayList<HashMap<String, String>> data) {
 		this.data = data;
+	}
+
+	public ArrayList<HashMap<String, String>> getRefData() {
+		return refData;
 	}
 
 	@Override
