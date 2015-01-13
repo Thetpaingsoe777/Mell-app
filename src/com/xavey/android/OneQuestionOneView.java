@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,7 +23,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
 import android.support.v4.app.FragmentActivity;
@@ -43,8 +43,8 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
@@ -278,7 +278,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					// currentLayout.getTag(R.id.render_ref)!=null;
 
 					if (!isNeedToValid) {
-						HashMap<String, Object> test= null;
+						HashMap<String, Object> test = null;
 						try {
 							test = lLManager.test(currentLayout);
 						} catch (JSONException e) {
@@ -290,9 +290,13 @@ public class OneQuestionOneView extends FragmentActivity {
 							value = test.get("value").toString();
 						String field_required = "false";
 						if (test.containsKey("")) {
-							field_required = test.get("field_required").toString();
+							field_required = test.get("field_required")
+									.toString();
 						}
 						String field_label = test.get("field_label").toString();
+						String field_error_msg = "";
+						if(test.containsKey("field_err_msg"))
+							field_error_msg = test.get("field_err_msg").toString();
 						boolean isNotTyped = field_required.equals("true")
 								&& value.equals("#no_value#");
 						if (!isNotTyped) {
@@ -316,10 +320,10 @@ public class OneQuestionOneView extends FragmentActivity {
 									.toString();
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
-								String field_max_value = test
-										.get("field_max_value").toString();
-								String field_min_value = test
-										.get("field_min_value").toString();
+								String field_max_value = test.get(
+										"field_max_value").toString();
+								String field_min_value = test.get(
+										"field_min_value").toString();
 								// String field_default_value =
 								// test.get("field_default_value"); // no need
 								// yet
@@ -417,43 +421,77 @@ public class OneQuestionOneView extends FragmentActivity {
 							} else if (tagID.equals("numberSetLayout")
 									|| tagID.equals("textSetLayout")) {
 
-
-								test.containsKey("");
 								boolean isValid = true;
-								
-								// <>check validation true false and validation for blank fees here 1st
-								
-								// </>
-								
-								// and then check the max and min
-								int minValue = 0;
-								if(test.containsKey("field_min_value"))
-									minValue = Integer.parseInt(test.get("field_min_value").toString());
-								int maxValue = 0;
-								if(test.containsKey("field_max_value"))
-									maxValue = Integer.parseInt(test.get("field_max_value").toString());
-							
-								// following data will be used later for each validation 
-								/*ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test.get("data");
-								
-								for(HashMap<String, String> dataMap : data){
-									dataMap.get("");
-								}*/
-								
-								int total = Integer.parseInt(test.get("total").toString());
-								if(total>maxValue && total<minValue)
-									isValid = false;
-								
-								toast.xaveyToast(null, "Total value must be less than "+ maxValue +"\nand greater than "+ minValue);
-								
+
+								boolean isFieldRequired = Boolean
+										.parseBoolean(test
+												.get("field_required")
+												.toString());
+								if (isFieldRequired) {
+									boolean isAllFieldsFilled = true;
+									ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test
+											.get("data");
+									ArrayList<String> missingLabels = (ArrayList<String>) test
+											.get("missing_labels");
+									if (missingLabels.size() != 0) {
+										isAllFieldsFilled = false;
+										String allMissingLabels = "";
+										for (String missingLabel : missingLabels) {
+											allMissingLabels += ", "
+													+ missingLabel;
+										}
+										allMissingLabels = allMissingLabels.substring(2);
+										toast.xaveyToast(null, allMissingLabels
+												+ " are missing.");
+									}
+									// check here
+									if (!isAllFieldsFilled) {
+										isValid = false;
+									} else {
+										// check if within range or not
+										// and then check the max and min
+										String layoutID = test.get("layout_id")
+												.toString();
+										if (layoutID.equals("numberSetLayout")) {
+											int minValue = 0;
+											if (test.containsKey("field_min_value"))
+												minValue = Integer
+														.parseInt(test
+																.get("field_min_value")
+																.toString());
+											int maxValue = 0;
+											if (test.containsKey("field_max_value"))
+												maxValue = Integer
+														.parseInt(test
+																.get("field_max_value")
+																.toString());
+
+											int total = Integer.parseInt(test
+													.get("total").toString());
+											if (total > maxValue
+													|| total < minValue){
+												isValid = false;
+
+												toast.xaveyToast(
+														null,
+														"Total value must be less than "
+																+ maxValue
+																+ "\nand greater than "
+																+ minValue);
+												errorMsg.setText(field_error_msg);
+											}
+												
+										}
+									}
+								}
+
 								if (!isValid) {
 									// block
 									if (direction.equals(LEFT_TO_RIGHT)) {
 										navigator.addLast(0);
 										used_field_ids.addLast(currentFieldID);
 										vPager.setCurrentItem(currentPosition);
-										errorMsg.setText(field_label
-												+ " is required !");
+										errorMsg.setText(field_error_msg);
 										errorMsg.setTextColor(Color.RED);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
@@ -499,7 +537,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											hideKeyboard(nextLayout_);
 									}
 								}
-
+								if (errorMsg != null)
+									errorMsg.setText("");
 								// <here is for textSetLayout (just copy from
 								// above)
 
@@ -558,9 +597,10 @@ public class OneQuestionOneView extends FragmentActivity {
 											.get(newPosition);
 									if (!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
+									if (errorMsg != null)
+										errorMsg.setText("");
 								}
-								if (errorMsg != null)
-									errorMsg.setText("");
+								
 							}
 						} else {
 							// user didn't type anything
@@ -570,7 +610,10 @@ public class OneQuestionOneView extends FragmentActivity {
 								navigator.addLast(0);
 								used_field_ids.addLast(currentFieldID);
 								vPager.setCurrentItem(currentPosition);
-								errorMsg.setText(field_label + " is required !");
+								if(field_error_msg.length()>0)
+									errorMsg.setText(field_error_msg);
+								else
+									errorMsg.setText("Some fields are required..");
 								errorMsg.setTextColor(Color.RED);
 								currentPosition = previousIndex;
 							} else { // RIGHT_TO_LEFT
@@ -635,7 +678,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												// skip to submit
 
 												newPosition = layoutList.size() - 1;
-												
+
 												int range = newPosition
 														- currentPosition;
 												navigator.addLast(range);
@@ -682,7 +725,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 											newPosition = getNextRoute(newPosition);
 											renderNextLayout(newPosition);
-											int range = newPosition	- currentPosition;
+											int range = newPosition
+													- currentPosition;
 											navigator.addLast(range);
 											used_field_ids
 													.addLast(currentFieldID);
@@ -809,7 +853,7 @@ public class OneQuestionOneView extends FragmentActivity {
 										.readValueFromLayout(ref_layout);
 								isNeedToSkip = isNeedToSkip(next_cond,
 										value_from_ref_layout);
-								if(isNeedToSkip)
+								if (isNeedToSkip)
 									newPosition++;
 							}
 						} else {
@@ -883,38 +927,46 @@ public class OneQuestionOneView extends FragmentActivity {
 													if (nextLayoutID
 															.equals("numberSetLayout")) {
 														NumberSetAdapter numberSetAdapter = (NumberSetAdapter) adapter;
-														ArrayList<HashMap<String, String>> data = numberSetAdapter.getRefData();
-														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String,String>>();
-														
-														if(extra>data.size()){
+														ArrayList<HashMap<String, String>> data = numberSetAdapter
+																.getRefData();
+														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String, String>>();
+
+														if (extra > data.size()) {
 															extra = data.size();
 														}
-														
-														for(int k=0; k<extra; k++){
-															HashMap<String,String> map = data.get(k);
+
+														for (int k = 0; k < extra; k++) {
+															HashMap<String, String> map = data
+																	.get(k);
 															newData.add(map);
 														}
 														data = newData;
-														numberSetAdapter.setData(newData);
-														numberSetAdapter.notifyDataSetChanged();
-														
+														numberSetAdapter
+																.setData(newData);
+														numberSetAdapter
+																.notifyDataSetChanged();
+
 													} else if (nextLayoutID
 															.equals("textSetLayout")) {
 														TextSetAdapter textSetAdapter = (TextSetAdapter) adapter;
-														ArrayList<HashMap<String, String>> data = textSetAdapter.getRefData();
-														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String,String>>();
-														
-														if(extra>data.size()){
+														ArrayList<HashMap<String, String>> data = textSetAdapter
+																.getRefData();
+														ArrayList<HashMap<String, String>> newData = new ArrayList<HashMap<String, String>>();
+
+														if (extra > data.size()) {
 															extra = data.size();
 														}
-														
-														for(int k=0; k<extra; k++){
-															HashMap<String,String> map = data.get(k);
+
+														for (int k = 0; k < extra; k++) {
+															HashMap<String, String> map = data
+																	.get(k);
 															newData.add(map);
 														}
 														data = newData;
-														textSetAdapter.setData(newData);
-														textSetAdapter.notifyDataSetChanged();
+														textSetAdapter
+																.setData(newData);
+														textSetAdapter
+																.notifyDataSetChanged();
 													}
 												}
 											}
@@ -2238,6 +2290,37 @@ public class OneQuestionOneView extends FragmentActivity {
 				map.put(key, checkedValues);
 			}
 			// </rating set>
+			
+			//<textSet>
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("textSetLayout") || linearLayout.getTag(R.id.layout_id).toString()
+					.equals("numberSetLayout") ) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String values = "";
+				LinearLayoutManager linearLayoutManager = new LinearLayoutManager();
+				try {
+					HashMap<String, Object> test_ = linearLayoutManager.test(linearLayout);
+					ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_.get("data");
+					
+					for(HashMap<String,String> singleMap : data){
+						Set<String> keys = singleMap.keySet();
+						String singleKey = keys.toArray()[0].toString();
+						String singleValue = singleMap.get(singleKey);
+						values += "|" + singleKey +":" + singleValue;
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				if(values.length()>0)
+					values = values.substring(1);
+				else
+					values = "-";
+
+				map.put(key, values);
+			}
+			//<textset and numberset/>
 		}
 		return map;
 	}// </getValueFromEachLayout>
