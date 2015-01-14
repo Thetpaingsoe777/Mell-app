@@ -183,8 +183,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
 					}
-					LinearLayout currentParentLayout = layoutList
-							.get(currentPosition);
+					LinearLayout currentParentLayout = layoutList.get(currentPosition);
 					for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
 						View view = currentParentLayout.getChildAt(i);
 						if (view.getClass().getName()
@@ -350,7 +349,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										// errorMsg.setLayoutParams(errorMsgLayoutOpen);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
-										int last_range = navigator.getLast();
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
 										vPager.setCurrentItem(newPosition);
@@ -402,7 +403,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
-										int last_range = navigator.getLast();
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
 										vPager.setCurrentItem(newPosition);
@@ -495,7 +498,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										errorMsg.setTextColor(Color.RED);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
-										int last_range = navigator.getLast();
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
 										vPager.setCurrentItem(newPosition);
@@ -523,7 +528,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
-										int last_range = navigator.getLast();
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
 										vPager.setCurrentItem(newPosition);
@@ -600,7 +607,6 @@ public class OneQuestionOneView extends FragmentActivity {
 									if (errorMsg != null)
 										errorMsg.setText("");
 								}
-								
 							}
 						} else {
 							// user didn't type anything
@@ -641,21 +647,47 @@ public class OneQuestionOneView extends FragmentActivity {
 								if (className
 										.equals("android.widget.RadioGroup")) {
 									// radio
-									RadioGroup radioGroup = (RadioGroup) currentLayout
-											.getChildAt(i);
+									
+									boolean extra_value_required = true;
+									boolean isExtraValueTRUE = false;
+									
+									RadioGroup radioGroup = (RadioGroup) currentLayout.getChildAt(i);
 
 									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
+									if(selectedButton.getTag(R.id.extra)!=null){
+										isExtraValueTRUE = Boolean.parseBoolean(selectedButton.getTag(R.id.extra).toString());
+									}
+									boolean isExtraValueTyped = false;
+									
+									if(extra_value_required){
+										LinearLayout selectedButtonLine  = (LinearLayout) selectedButton.getParent();
+										for(int k=0; k<selectedButtonLine.getChildCount(); k++){
+											View buttonLineChild = selectedButtonLine.getChildAt(k);
+											if(buttonLineChild.getClass().getName().equals("android.widget.Edittext")){
+												EditText selectedExtra = (EditText) buttonLineChild;
+												if(selectedExtra.getText().toString().length()>0)
+													isExtraValueTyped = true;
+											}
+										}
+									}
+									
+									
 
-									String fieldID = currentLayout.getTag(
-											R.id.field_id).toString();
+									String fieldID = currentLayout.getTag(R.id.field_id).toString();
 									Log.i("fieldID", fieldID);
 
 									if (direction.equals(LEFT_TO_RIGHT)) {
 
-										String field_skip = selectedButton
-												.getTag(R.id.field_skip)
-												.toString();
-										if (ApplicationValues.IS_RECORDING_NOW) {
+										String field_skip = selectedButton.getTag(R.id.field_skip).toString();
+
+										if(extra_value_required && isExtraValueTRUE && !isExtraValueTyped ){
+											// blocka
+											navigator.addLast(0);
+											used_field_ids.addLast(currentFieldID);
+											vPager.setCurrentItem(currentPosition);
+											toast.xaveyToast(null, "Extra value is needed for selected radio button");
+											currentPosition = previousIndex;
+										}else if (ApplicationValues.IS_RECORDING_NOW) {
 											// still recording...
 											// block..
 											// there is no direction
@@ -663,14 +695,10 @@ public class OneQuestionOneView extends FragmentActivity {
 											// bcuz it will block both direction
 											// if recording is not ending
 											navigator.addLast(0);
-											used_field_ids
-													.addLast(currentFieldID);
+											used_field_ids.addLast(currentFieldID);
 											vPager.setCurrentItem(currentPosition);
 											toast.xaveyToast(null,
 													"Audio recording is needed to stop.");
-											// errorMsg.setText("Audio recording is need to stop.");
-											// errorMsg.setTextColor(Color.RED);
-											// errorMsg.setLayoutParams(errorMsgLayoutOpen);
 											currentPosition = previousIndex;
 										} else if (field_skip.length() > 0) {
 											if (field_skip.equals("submit")) {
@@ -682,8 +710,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												int range = newPosition
 														- currentPosition;
 												navigator.addLast(range);
-												used_field_ids
-														.addLast(currentFieldID);
+												used_field_ids.addLast(currentFieldID);
 												vPager.setCurrentItem(newPosition);
 												currentPosition = newPosition;
 												previousIndex = currentPosition;
@@ -701,8 +728,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												newPosition = getNextRoute(newPosition);
 												renderNextLayout(newPosition);
 												previousIndex = currentPosition;
-												int range = newPosition
-														- currentPosition;
+												int range = newPosition	- currentPosition;
 												if (range != 0) // <-- don't
 																// know why
 																// but a
@@ -711,8 +737,7 @@ public class OneQuestionOneView extends FragmentActivity {
 																// so i
 																// filtered
 													navigator.addLast(range);
-												used_field_ids
-														.addLast(currentFieldID);
+												used_field_ids.addLast(currentFieldID);
 												vPager.setCurrentItem(newPosition);
 												currentPosition = newPosition;
 												// hide keyboard
@@ -741,7 +766,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 
 									} else { // RIGHT_TO_LEFT
-										int last_range = navigator.getLast();
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
 										vPager.setCurrentItem(newPosition);
@@ -781,7 +808,9 @@ public class OneQuestionOneView extends FragmentActivity {
 									hideKeyboard(nextLayout_);
 
 							} else { // RIGHT_TO_LEFT
-								int last_range = navigator.getLast();
+								int last_range = 0 ;
+								if(navigator.getLast()!=null)
+									last_range = navigator.getLast();
 								if (currentPosition - last_range > 0) {
 									newPosition = currentPosition - last_range;
 									navigator.removeLast();
@@ -2391,7 +2420,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		int childCount = parrentLayout.getChildCount();
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
 			String className = parrentLayout.getChildAt(i).getClass().getName()
-					.toString();
+					.toString(); 
 			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);
@@ -2422,7 +2451,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						InputMethodManager.HIDE_NOT_ALWAYS);
 			}
 		}
-
 	}
 
 	@Override
