@@ -19,6 +19,7 @@
     <item type="id" name="is_radiobutton_selected"/>
     <item type="id" name="radio_random_value"/>
     <item type="id" name="next_ref_type"/>
+    <item type="id" name="field_random"/>
     
     <!-- for photos and drawings tag -->
     <item type="id" name="available_state"/>
@@ -29,6 +30,12 @@
     
     <!-- matrix -->
     <item type="id" name="matrix_cell"/>
+    <item type="id" name="dataset_max_range"/>
+    <item type="id" name="dataset_field_skip"/>
+    <item type="id" name="dataset_value"/>
+    <item type="id" name="dataset_label"/>
+    <item type="id" name="dataset_extra"/>
+    <item type="id" name="dataset_error_message"/>
     
     <!-- gridview -->
     <item type="id" name="grid_item_value"/>

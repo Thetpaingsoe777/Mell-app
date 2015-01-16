@@ -235,7 +235,7 @@ public class LinearLayoutManager {
 								map_.put(field_value, userTypedValue_);
 								data.add(map_);
 								
-								if(!userTypedValue_.equals("#noValue#") && xaveyUtils.isNumeric(userTypedValue_) ){
+								if(!userTypedValue_.equals("#noValue#")){
 									int inte = Integer.parseInt(userTypedValue_);
 									userTypedNumberList.add(inte);
 								}

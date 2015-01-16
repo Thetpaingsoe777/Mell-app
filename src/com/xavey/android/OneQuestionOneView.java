@@ -550,6 +550,142 @@ public class OneQuestionOneView extends FragmentActivity {
 								// above)
 
 							}
+							
+							else if (tagID.equals("matrixCheckListLayout")
+									|| tagID.equals("matrixOptionLayout")) {
+
+								boolean isValid = true;
+								
+								boolean isFieldRequired = Boolean.parseBoolean(test.get("field_required").toString());
+								
+								boolean isSelectedCountValid = true;
+								
+								if (isFieldRequired) {
+									for(int i=0; i<currentLayout.getChildCount(); i++){
+										View child_ = currentLayout.getChildAt(i);
+										if(child_.getTag(R.id.layout_id)!=null && 
+												child_.getTag(R.id.layout_id).toString().equals("theMatrixLayout")
+												){
+											LinearLayout theMatrixLayout = (LinearLayout) child_;
+											theMatrixLayout.getChildCount();
+											for(int j=0; j<theMatrixLayout.getChildCount(); j++){
+												View matrix_child = theMatrixLayout.getChildAt(j);
+												if(matrix_child.getClass().getName().equals("com.xavey.android.util.MYHorizontalScrollView")){
+													MYHorizontalScrollView scrollView = (MYHorizontalScrollView) matrix_child;
+													for(int k=0; k<scrollView.getChildCount(); k++){
+														View scroll_child = scrollView.getChildAt(k);
+														if(scroll_child.getTag(R.id.layout_id).toString().equals("AllColumns")){
+															LinearLayout AllColumns = (LinearLayout) scroll_child;
+															boolean validity = true;
+
+															while(validity){
+																for(int l=0; l<AllColumns.getChildCount(); l++){
+																	View AllColumnsChild = AllColumns.getChildAt(0);
+																	if(AllColumnsChild.getClass().getName().equals("android.widget.LinearLayout")){
+																		LinearLayout eachColumn = (LinearLayout) AllColumnsChild;
+																		int selectedCount = 0;
+																		int validNumber = 5; // <-- will get from tag
+																		String columnErorMsg = "Invalid count"; // <-- will get from tag
+																		
+																		for(int m=0; m<eachColumn.getChildCount(); m++){
+																			View eachColumnChild = eachColumn.getChildAt(m);
+																			if(eachColumnChild.getTag(R.id.layout_id).toString().equals("cell")){
+																				LinearLayout cell = (LinearLayout) eachColumnChild;
+																				for(int n=0; n<cell.getChildCount(); n++){
+																					View cellChild = cell.getChildAt(n);
+																					if(cellChild.getClass().getName().equals("android.widget.RadioButton")){
+																						RadioButton radioBtn = (RadioButton) cellChild;
+																						if(radioBtn.isChecked()){
+																							selectedCount++;
+																						}
+																					}
+																				}
+																			}
+																		}
+
+																		if(selectedCount>validNumber){
+																			validity = false;
+																		}
+
+																	}
+																}
+																validity = false;
+															}
+															
+															
+															
+															
+														}
+													}
+													
+												}
+											}
+										}
+									}
+								}
+
+								if (!isValid) {
+									// block
+									if (direction.equals(LEFT_TO_RIGHT)) {
+										navigator.addLast(0);
+										used_field_ids.addLast(currentFieldID);
+										vPager.setCurrentItem(currentPosition);
+										errorMsg.setText(field_error_msg);
+										errorMsg.setTextColor(Color.RED);
+										currentPosition = previousIndex;
+									} else { // RIGHT_TO_LEFT
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
+										newPosition = currentPosition
+												- last_range;
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										navigator.removeLast();
+										used_field_ids.removeLast();
+									}
+								} else {
+									if (direction.equals(LEFT_TO_RIGHT)) {
+										// pass
+
+										newPosition = getNextRoute(newPosition);
+										renderNextLayout(newPosition);
+										int range = newPosition
+												- currentPosition;
+										if (range != 0)
+											navigator.addLast(range);
+										used_field_ids.addLast(currentFieldID);
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										previousIndex = currentPosition;
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									} else { // RIGHT_TO_LEFT
+										int last_range = 0 ;
+										if(navigator.getLast()!=null)
+											last_range = navigator.getLast();
+										newPosition = currentPosition
+												- last_range;
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										navigator.removeLast();
+										used_field_ids.removeLast();
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									}
+								}
+								if (errorMsg != null)
+									errorMsg.setText("");
+								// <here is for textSetLayout (just copy from
+								// above)
+								
+							}
 
 							else {
 								// user typed and field_type is not number...
@@ -753,8 +889,7 @@ public class OneQuestionOneView extends FragmentActivity {
 											int range = newPosition
 													- currentPosition;
 											navigator.addLast(range);
-											used_field_ids
-													.addLast(currentFieldID);
+											used_field_ids.addLast(currentFieldID);
 											vPager.setCurrentItem(newPosition);
 											currentPosition = newPosition;
 											previousIndex = currentPosition;
@@ -2465,5 +2600,4 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 }
