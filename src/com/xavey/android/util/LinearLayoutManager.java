@@ -32,7 +32,6 @@ public class LinearLayoutManager {
 		for(int i=0; i<linearLayout.getChildCount(); i++){
 			if(isViewErrorMsg(linearLayout.getChildAt(i))){
 				errMsg = (TextView) linearLayout.getChildAt(i);
-				
 			}
 		}
 		return errMsg;
@@ -274,7 +273,10 @@ public class LinearLayoutManager {
 				map.put("field_err_msg", errorMsg);
 			}
 		}
-		
+//		else if(layoutID.equals("matrixCheckListLayout") || layoutID.equals("matrixOptionLayout")){
+//			
+//		}
+
 		else{
 			//for others field rather number and text
 		}

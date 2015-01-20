@@ -868,8 +868,7 @@ public class JSONReader {
 									+ getCurrentDocumentID());
 							LinearLayout recordingLayout = recordingManager
 									.getRecordingLayout();
-							recordingLayout.setTag(R.id.layout_id,
-									"recordingLayout");
+							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
 							parentLayout.addView(recordingLayout);
 						}
 						layoutList.add(parentLayout);
@@ -1873,8 +1872,6 @@ public class JSONReader {
 
 						// </matrix stuffs>
 
-						int aaaaa = maxHeight;
-
 						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
 								activity);
 						horizontalScrollView.setLayoutParams(new LayoutParams(
@@ -1903,12 +1900,12 @@ public class JSONReader {
 					}
 					// </matrix_checklist>
 
-					// <matrix_>
+					// <matrix_option>
 					else if (fields.get(key).equals("matrix_option")) {
 						ScrollView scroll = new ScrollView(activity);
 						scroll.setLayoutParams(new LayoutParams(
 								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
+								LayoutParams.WRAP_CONTENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -1965,11 +1962,10 @@ public class JSONReader {
 								fields.get("next_ref"));
 						matrixOptionLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
-						String field_label = fields.get("field_label")
-								.toString();
+						String field_label = fields.get("field_label").toString();
+						
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required")
-								.toString();
+						String field_required = fields.get("field_required").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label);
 						tvLabel.setTextSize(labelTextSize);
@@ -1979,8 +1975,7 @@ public class JSONReader {
 						matrixOptionLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc")
-								.toString();
+						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -2183,6 +2178,7 @@ public class JSONReader {
 							columnLayout.setGravity(Gravity.CENTER);
 							columnLayout.setTag(R.id.layout_id, "columnLayout");
 
+							columnLayout.setTag("");
 							// getting h_values_ here...
 							String max_range = "";
 							if (h_values_list.get(labelCell.getH_index()).get(
@@ -2341,13 +2337,16 @@ public class JSONReader {
 						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
-						matrixOptionLayout.addView(errorMsg);
 
+						scroll.setBackgroundColor(Color.GREEN);
 						scroll.addView(matrixOptionLayout);
 						parentLayout.addView(scroll);
+						parentLayout.addView(errorMsg);
+						//int height = parentLayout.getChildAt(0).getHeight() + parentLayout.getChildAt(1).getHeight();
+						//parentLayout.getChildAt(2).setTop(900);
 						layoutList.add(parentLayout);
 					}
-					// </matrix_>
+					// </matrix_option>
 					// image_checklist
 					else if (fields.get(key).equals("image_checklist")) {
 
@@ -2499,10 +2498,10 @@ public class JSONReader {
 						setTypeFace(errorMsg);
 						errorMsg.setTextSize(12);
 						errorMsg.setTag("errorMsg");
-						imagechecklistLayout.addView(errorMsg);
 
 						// scroll.addView(imagechecklistLayout);
 						parentLayout.addView(imagechecklistLayout);
+						parentLayout.addView(errorMsg);
 						layoutList.add(parentLayout);
 					}
 					// </image checklist>
@@ -3620,15 +3619,13 @@ public class JSONReader {
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_type", jChild.getString("field_type"));
-					fields.put("field_required",
-							jChild.getString("field_required"));
+					fields.put("field_required", jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
 					if (jChild.has("next_ref_cond"))
-						fields.put("next_ref_cond",
-								jChild.getJSONArray("next_ref_cond"));
+						fields.put("next_ref_cond", jChild.getJSONArray("next_ref_cond"));
 				} else if (field_type.equals("photo")) {
 					if (jChild.getString("field_default_value").length() > 0)
 						fields.put("field_default_value",

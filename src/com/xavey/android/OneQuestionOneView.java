@@ -43,6 +43,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -175,15 +176,19 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
-					} else {
+					} else if (newPosition < currentPosition){
 						// right to left
 						direction = RIGHT_TO_LEFT;
+					}else{
+						String s ="";
+						s.length();
 					}
 					int lastJump = -1;
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
 					}
-					LinearLayout currentParentLayout = layoutList.get(currentPosition);
+					LinearLayout currentParentLayout = layoutList
+							.get(currentPosition);
 					for (int i = 0; i < currentParentLayout.getChildCount(); i++) {
 						View view = currentParentLayout.getChildAt(i);
 						if (view.getClass().getName()
@@ -260,8 +265,11 @@ public class OneQuestionOneView extends FragmentActivity {
 					// currentLayout.getTag(R.id.layout_id).toString().equals("textLayout");
 					LinearLayoutManager lLManager = new LinearLayoutManager();
 
+					// LinearLayout currentParentLayout = (LinearLayout)
+					// currentLayout.getParent();
+
 					TextView errorMsg = lLManager
-							.getErrorMsgTextView(currentLayout);
+							.getErrorMsgTextView(currentParentLayout);
 
 					LayoutParams errorMsgLayoutOpen = new LayoutParams(
 							LayoutParams.MATCH_PARENT, 30);
@@ -294,8 +302,10 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 						String field_label = test.get("field_label").toString();
 						String field_error_msg = "";
-						if(test.containsKey("field_err_msg"))
-							field_error_msg = test.get("field_err_msg").toString();
+						if (test.containsKey("field_err_msg"))
+							field_error_msg = test.get("field_err_msg")
+									.toString();
+						String dataset_error_msg = "";
 						boolean isNotTyped = field_required.equals("true")
 								&& value.equals("#no_value#");
 						if (!isNotTyped) {
@@ -349,8 +359,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										// errorMsg.setLayoutParams(errorMsgLayoutOpen);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -403,8 +413,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -443,7 +453,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											allMissingLabels += ", "
 													+ missingLabel;
 										}
-										allMissingLabels = allMissingLabels.substring(2);
+										allMissingLabels = allMissingLabels
+												.substring(2);
 										toast.xaveyToast(null, allMissingLabels
 												+ " are missing.");
 									}
@@ -472,7 +483,7 @@ public class OneQuestionOneView extends FragmentActivity {
 											int total = Integer.parseInt(test
 													.get("total").toString());
 											if (total > maxValue
-													|| total < minValue){
+													|| total < minValue) {
 												isValid = false;
 
 												toast.xaveyToast(
@@ -483,7 +494,7 @@ public class OneQuestionOneView extends FragmentActivity {
 																+ minValue);
 												errorMsg.setText(field_error_msg);
 											}
-												
+
 										}
 									}
 								}
@@ -498,8 +509,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										errorMsg.setTextColor(Color.RED);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -528,8 +539,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -550,52 +561,107 @@ public class OneQuestionOneView extends FragmentActivity {
 								// above)
 
 							}
-							
+
 							else if (tagID.equals("matrixCheckListLayout")
 									|| tagID.equals("matrixOptionLayout")) {
 
 								boolean isValid = true;
-								
-								boolean isFieldRequired = Boolean.parseBoolean(test.get("field_required").toString());
-								
+
+								boolean isFieldRequired = Boolean
+										.parseBoolean(test
+												.get("field_required")
+												.toString());
+
 								boolean isSelectedCountValid = true;
-								
+								boolean whileController = true;
+
 								if (isFieldRequired) {
-									for(int i=0; i<currentLayout.getChildCount(); i++){
-										View child_ = currentLayout.getChildAt(i);
-										if(child_.getTag(R.id.layout_id)!=null && 
-												child_.getTag(R.id.layout_id).toString().equals("theMatrixLayout")
-												){
+									for (int i = 0; i < currentLayout
+											.getChildCount(); i++) {
+										View child_ = currentLayout
+												.getChildAt(i);
+										if (child_.getTag(R.id.layout_id) != null
+												&& child_
+														.getTag(R.id.layout_id)
+														.toString()
+														.equals("theMatrixLayout")) {
 											LinearLayout theMatrixLayout = (LinearLayout) child_;
 											theMatrixLayout.getChildCount();
-											for(int j=0; j<theMatrixLayout.getChildCount(); j++){
-												View matrix_child = theMatrixLayout.getChildAt(j);
-												if(matrix_child.getClass().getName().equals("com.xavey.android.util.MYHorizontalScrollView")){
+											for (int j = 0; j < theMatrixLayout
+													.getChildCount(); j++) {
+												View matrix_child = theMatrixLayout
+														.getChildAt(j);
+												if (matrix_child
+														.getClass()
+														.getName()
+														.equals("com.xavey.android.util.MYHorizontalScrollView")) {
 													MYHorizontalScrollView scrollView = (MYHorizontalScrollView) matrix_child;
-													for(int k=0; k<scrollView.getChildCount(); k++){
-														View scroll_child = scrollView.getChildAt(k);
-														if(scroll_child.getTag(R.id.layout_id).toString().equals("AllColumns")){
+													for (int k = 0; k < scrollView
+															.getChildCount(); k++) {
+														View scroll_child = scrollView
+																.getChildAt(k);
+														if (scroll_child
+																.getTag(R.id.layout_id)
+																.toString()
+																.equals("AllColumns")) {
 															LinearLayout AllColumns = (LinearLayout) scroll_child;
-															boolean validity = true;
 
-															while(validity){
-																for(int l=0; l<AllColumns.getChildCount(); l++){
-																	View AllColumnsChild = AllColumns.getChildAt(0);
-																	if(AllColumnsChild.getClass().getName().equals("android.widget.LinearLayout")){
-																		LinearLayout eachColumn = (LinearLayout) AllColumnsChild;
+															while (whileController) {
+																for (int l = 0; l < AllColumns
+																		.getChildCount(); l++) {
+																	View AllColumnsChild = AllColumns
+																			.getChildAt(l);
+																	if (AllColumnsChild
+																			.getTag(R.id.layout_id)
+																			.toString()
+																			.equals("columnLayout")) {
+																		LinearLayout columnLayout = (LinearLayout) AllColumnsChild;
 																		int selectedCount = 0;
-																		int validNumber = 5; // <-- will get from tag
-																		String columnErorMsg = "Invalid count"; // <-- will get from tag
-																		
-																		for(int m=0; m<eachColumn.getChildCount(); m++){
-																			View eachColumnChild = eachColumn.getChildAt(m);
-																			if(eachColumnChild.getTag(R.id.layout_id).toString().equals("cell")){
+																		String maxRangeString = columnLayout
+																				.getTag(R.id.dataset_max_range)
+																				.toString();
+																		int maxRange = 6;
+																		if (maxRangeString
+																				.equals("#no_value#")) {
+																			Toast.makeText(
+																					getApplicationContext(),
+																					"error : ",
+																					2000);
+																		} else
+																			maxRange = Integer
+																					.parseInt(maxRangeString); // <--
+																												// will
+																												// get
+																												// from
+																												// tag
+																		String columnErorMsg = columnLayout
+																				.getTag(R.id.dataset_error_message)
+																				.toString(); // <--
+																								// will
+																								// get
+																								// from
+																								// tag
+
+																		for (int m = 0; m < columnLayout
+																				.getChildCount(); m++) {
+																			View eachColumnChild = columnLayout
+																					.getChildAt(m);
+																			if (eachColumnChild
+																					.getTag(R.id.layout_id)
+																					.toString()
+																					.equals("cell")) {
 																				LinearLayout cell = (LinearLayout) eachColumnChild;
-																				for(int n=0; n<cell.getChildCount(); n++){
-																					View cellChild = cell.getChildAt(n);
-																					if(cellChild.getClass().getName().equals("android.widget.RadioButton")){
+																				for (int n = 0; n < cell
+																						.getChildCount(); n++) {
+																					View cellChild = cell
+																							.getChildAt(n);
+																					if (cellChild
+																							.getClass()
+																							.getName()
+																							.equals("android.widget.RadioButton")) {
 																						RadioButton radioBtn = (RadioButton) cellChild;
-																						if(radioBtn.isChecked()){
+																						if (radioBtn
+																								.isChecked()) {
 																							selectedCount++;
 																						}
 																					}
@@ -603,39 +669,39 @@ public class OneQuestionOneView extends FragmentActivity {
 																			}
 																		}
 
-																		if(selectedCount>validNumber){
-																			validity = false;
+																		if (selectedCount > maxRange) {
+																			isSelectedCountValid = false;
+																			dataset_error_msg = columnErorMsg;
+																			break;
 																		}
 
 																	}
 																}
-																validity = false;
+																whileController = false;
 															}
-															
-															
-															
-															
 														}
 													}
-													
 												}
 											}
 										}
 									}
 								}
 
-								if (!isValid) {
+								if (!isValid || !isSelectedCountValid) {
 									// block
 									if (direction.equals(LEFT_TO_RIGHT)) {
 										navigator.addLast(0);
 										used_field_ids.addLast(currentFieldID);
 										vPager.setCurrentItem(currentPosition);
-										errorMsg.setText(field_error_msg);
+										if (dataset_error_msg.length() > 0)
+											errorMsg.setText(dataset_error_msg);
+										else
+											errorMsg.setText(field_error_msg);
 										errorMsg.setTextColor(Color.RED);
 										currentPosition = previousIndex;
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -664,8 +730,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
+										int last_range = 0;
+										if (navigator.getLast() != null)
 											last_range = navigator.getLast();
 										newPosition = currentPosition
 												- last_range;
@@ -680,11 +746,11 @@ public class OneQuestionOneView extends FragmentActivity {
 											hideKeyboard(nextLayout_);
 									}
 								}
-								if (errorMsg != null)
-									errorMsg.setText("");
+								// if (errorMsg != null)
+								// errorMsg.setText("");
 								// <here is for textSetLayout (just copy from
 								// above)
-								
+
 							}
 
 							else {
@@ -752,7 +818,7 @@ public class OneQuestionOneView extends FragmentActivity {
 								navigator.addLast(0);
 								used_field_ids.addLast(currentFieldID);
 								vPager.setCurrentItem(currentPosition);
-								if(field_error_msg.length()>0)
+								if (field_error_msg.length() > 0)
 									errorMsg.setText(field_error_msg);
 								else
 									errorMsg.setText("Some fields are required..");
@@ -776,54 +842,70 @@ public class OneQuestionOneView extends FragmentActivity {
 						// (skip logic)
 
 						if (currentLayout.getTag(R.id.layout_id).toString()
-								.equals("radioLayout")) {
+								.equals("radioLayout")) { //TODO: radio checking if else
 							for (int i = 0; i < currentLayout.getChildCount(); i++) {
 								String className = currentLayout.getChildAt(i)
 										.getClass().getName().toString();
 								if (className
 										.equals("android.widget.RadioGroup")) {
 									// radio
-									
+
 									boolean extra_value_required = true;
 									boolean isExtraValueTRUE = false;
-									
-									RadioGroup radioGroup = (RadioGroup) currentLayout.getChildAt(i);
+
+									RadioGroup radioGroup = (RadioGroup) currentLayout
+											.getChildAt(i);
 
 									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-									if(selectedButton.getTag(R.id.extra)!=null){
-										isExtraValueTRUE = Boolean.parseBoolean(selectedButton.getTag(R.id.extra).toString());
+									if (selectedButton.getTag(R.id.extra) != null) {
+										isExtraValueTRUE = Boolean
+												.parseBoolean(selectedButton
+														.getTag(R.id.extra)
+														.toString());
 									}
 									boolean isExtraValueTyped = false;
-									
-									if(extra_value_required){
-										LinearLayout selectedButtonLine  = (LinearLayout) selectedButton.getParent();
-										for(int k=0; k<selectedButtonLine.getChildCount(); k++){
-											View buttonLineChild = selectedButtonLine.getChildAt(k);
-											if(buttonLineChild.getClass().getName().equals("android.widget.Edittext")){
+
+									if (extra_value_required) {
+										LinearLayout selectedButtonLine = (LinearLayout) selectedButton
+												.getParent();
+										for (int k = 0; k < selectedButtonLine
+												.getChildCount(); k++) {
+											View buttonLineChild = selectedButtonLine
+													.getChildAt(k);
+											if (buttonLineChild
+													.getClass()
+													.getName()
+													.equals("android.widget.Edittext")) {
 												EditText selectedExtra = (EditText) buttonLineChild;
-												if(selectedExtra.getText().toString().length()>0)
+												if (selectedExtra.getText()
+														.toString().length() > 0)
 													isExtraValueTyped = true;
 											}
 										}
 									}
-									
-									
 
-									String fieldID = currentLayout.getTag(R.id.field_id).toString();
+									String fieldID = currentLayout.getTag(
+											R.id.field_id).toString();
 									Log.i("fieldID", fieldID);
 
 									if (direction.equals(LEFT_TO_RIGHT)) {
 
-										String field_skip = selectedButton.getTag(R.id.field_skip).toString();
+										String field_skip = selectedButton
+												.getTag(R.id.field_skip)
+												.toString();
 
-										if(extra_value_required && isExtraValueTRUE && !isExtraValueTyped ){
+										if (extra_value_required
+												&& isExtraValueTRUE
+												&& !isExtraValueTyped) {
 											// blocka
 											navigator.addLast(0);
-											used_field_ids.addLast(currentFieldID);
+											used_field_ids
+													.addLast(currentFieldID);
 											vPager.setCurrentItem(currentPosition);
-											toast.xaveyToast(null, "Extra value is needed for selected radio button");
+											toast.xaveyToast(null,
+													"Extra value is needed for selected radio button");
 											currentPosition = previousIndex;
-										}else if (ApplicationValues.IS_RECORDING_NOW) {
+										} else if (ApplicationValues.IS_RECORDING_NOW) {
 											// still recording...
 											// block..
 											// there is no direction
@@ -831,7 +913,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											// bcuz it will block both direction
 											// if recording is not ending
 											navigator.addLast(0);
-											used_field_ids.addLast(currentFieldID);
+											used_field_ids
+													.addLast(currentFieldID);
 											vPager.setCurrentItem(currentPosition);
 											toast.xaveyToast(null,
 													"Audio recording is needed to stop.");
@@ -846,7 +929,8 @@ public class OneQuestionOneView extends FragmentActivity {
 												int range = newPosition
 														- currentPosition;
 												navigator.addLast(range);
-												used_field_ids.addLast(currentFieldID);
+												used_field_ids
+														.addLast(currentFieldID);
 												vPager.setCurrentItem(newPosition);
 												currentPosition = newPosition;
 												previousIndex = currentPosition;
@@ -864,7 +948,8 @@ public class OneQuestionOneView extends FragmentActivity {
 												newPosition = getNextRoute(newPosition);
 												renderNextLayout(newPosition);
 												previousIndex = currentPosition;
-												int range = newPosition	- currentPosition;
+												int range = newPosition
+														- currentPosition;
 												if (range != 0) // <-- don't
 																// know why
 																// but a
@@ -873,7 +958,8 @@ public class OneQuestionOneView extends FragmentActivity {
 																// so i
 																// filtered
 													navigator.addLast(range);
-												used_field_ids.addLast(currentFieldID);
+												used_field_ids
+														.addLast(currentFieldID);
 												vPager.setCurrentItem(newPosition);
 												currentPosition = newPosition;
 												// hide keyboard
@@ -889,7 +975,8 @@ public class OneQuestionOneView extends FragmentActivity {
 											int range = newPosition
 													- currentPosition;
 											navigator.addLast(range);
-											used_field_ids.addLast(currentFieldID);
+											used_field_ids
+													.addLast(currentFieldID);
 											vPager.setCurrentItem(newPosition);
 											currentPosition = newPosition;
 											previousIndex = currentPosition;
@@ -901,20 +988,39 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 
 									} else { // RIGHT_TO_LEFT
-										int last_range = 0 ;
-										if(navigator.getLast()!=null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList
-												.get(newPosition);
-										if (!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
+
+										if (ApplicationValues.IS_RECORDING_NOW) {
+											// still recording...
+											// block..
+											// there is no direction
+											// validation...
+											// bcuz it will block both direction
+											// if recording is not ending
+											navigator.addLast(0);
+											used_field_ids
+													.addLast(currentFieldID);
+											vPager.setCurrentItem(currentPosition);
+											toast.xaveyToast(null,
+													"Audio recording is needed to stop.");
+											currentPosition = previousIndex;
+										} else {
+
+											int last_range = 0;
+											if (navigator.getLast() != null)
+												last_range = navigator
+														.getLast();
+											newPosition = currentPosition
+													- last_range;
+											vPager.setCurrentItem(newPosition);
+											currentPosition = newPosition;
+											navigator.removeLast();
+											used_field_ids.removeLast();
+											// hide keyboard
+											LinearLayout nextLayout_ = layoutList
+													.get(newPosition);
+											if (!isSubmitLayout(nextLayout_))
+												hideKeyboard(nextLayout_);
+										}
 									}
 									if (errorMsg != null)
 										errorMsg.setLayoutParams(new LayoutParams(
@@ -943,8 +1049,8 @@ public class OneQuestionOneView extends FragmentActivity {
 									hideKeyboard(nextLayout_);
 
 							} else { // RIGHT_TO_LEFT
-								int last_range = 0 ;
-								if(navigator.getLast()!=null)
+								int last_range = 0;
+								if (navigator.getLast() != null)
 									last_range = navigator.getLast();
 								if (currentPosition - last_range > 0) {
 									newPosition = currentPosition - last_range;
@@ -2454,37 +2560,40 @@ public class OneQuestionOneView extends FragmentActivity {
 				map.put(key, checkedValues);
 			}
 			// </rating set>
-			
-			//<textSet>
+
+			// <textSet>
 			else if (linearLayout.getTag(R.id.layout_id).toString()
-					.equals("textSetLayout") || linearLayout.getTag(R.id.layout_id).toString()
-					.equals("numberSetLayout") ) {
+					.equals("textSetLayout")
+					|| linearLayout.getTag(R.id.layout_id).toString()
+							.equals("numberSetLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String values = "";
 				LinearLayoutManager linearLayoutManager = new LinearLayoutManager();
 				try {
-					HashMap<String, Object> test_ = linearLayoutManager.test(linearLayout);
-					ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_.get("data");
-					
-					for(HashMap<String,String> singleMap : data){
+					HashMap<String, Object> test_ = linearLayoutManager
+							.test(linearLayout);
+					ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_
+							.get("data");
+
+					for (HashMap<String, String> singleMap : data) {
 						Set<String> keys = singleMap.keySet();
 						String singleKey = keys.toArray()[0].toString();
 						String singleValue = singleMap.get(singleKey);
-						values += "|" + singleKey +":" + singleValue;
+						values += "|" + singleKey + ":" + singleValue;
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-				if(values.length()>0)
+
+				if (values.length() > 0)
 					values = values.substring(1);
 				else
 					values = "-";
 
 				map.put(key, values);
 			}
-			//<textset and numberset/>
+			// <textset and numberset/>
 		}
 		return map;
 	}// </getValueFromEachLayout>
@@ -2555,7 +2664,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		int childCount = parrentLayout.getChildCount();
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
 			String className = parrentLayout.getChildAt(i).getClass().getName()
-					.toString(); 
+					.toString();
 			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) parrentLayout.getChildAt(i);
 				innerLayout = (LinearLayout) scroll.getChildAt(0);

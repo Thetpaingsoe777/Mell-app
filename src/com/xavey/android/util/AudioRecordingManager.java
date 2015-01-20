@@ -125,25 +125,25 @@ public class AudioRecordingManager {
 		recorder.setOnErrorListener(errorListener);
 		recorder.setOnInfoListener(infoListener);
 
-		ApplicationValues.IS_RECORDING_NOW = true;
-		
 		try {
+			ApplicationValues.IS_RECORDING_NOW = true;
 			recorder.prepare();
 			recorder.start();
-		} catch (IllegalStateException e) {
+		}catch (Exception e){
 			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			ApplicationValues.IS_RECORDING_NOW = false;
 		}
 	}
 
-	public void stopRecording() {	
+	public void stopRecording() {
+		ApplicationValues.IS_RECORDING_NOW = false;
 		//boolean isAudioAlreadyExist = dbHelper.isAudioAlreadyExistInDB(getAudioInfo().getAudio_path());
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
 			recorder.release();
 			recorder = null;
+			
 //			if(!isAudioAlreadyExist){
 //				dbHelper.addNewAudio(getAudioInfo());
 //			}
