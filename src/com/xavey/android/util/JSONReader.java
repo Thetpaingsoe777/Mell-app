@@ -92,6 +92,8 @@ public class JSONReader {
 
 	// Layout setting here
 	// get incoming JSONString and return a linear layout
+	
+	LayoutParams errorMsgLayoutParams = null;
 
 	public ArrayList<LinearLayout> readForm2(Form form) throws JSONException {
 
@@ -130,7 +132,7 @@ public class JSONReader {
 		extraValueLayoutParamsDisappear.setMargins(25, 0, 25, 5);
 		editTextLayoutParams.setMargins(15, 10, 15, 10);
 
-		LayoutParams errorMsgLayoutParams = new LayoutParams(
+		errorMsgLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 		errorMsgLayoutParams.setMargins(10, 10, 10, 0);
 
@@ -241,18 +243,8 @@ public class JSONReader {
 						setTypeFace(ed1);
 						textLayout.addView(ed1);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						errorMsg.setPadding(0, 5, 0, 5);
-						setTypeFace(errorMsg);
-						errorMsg.setGravity(Gravity.CENTER_VERTICAL);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						textLayout.addView(errorMsg);
-
 						scroll.addView(textLayout);
-						parentLayout.addView(scroll);
+						addErrorMsg(parentLayout);
 
 						// audio stuff
 						boolean isAudioRequired = Boolean.parseBoolean(fields
@@ -379,17 +371,9 @@ public class JSONReader {
 								.getInstance("0123456789."));
 						numberLayout.addView(ed1);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						numberLayout.addView(errorMsg);
-
 						scroll.addView(numberLayout);
 						parentLayout.addView(scroll);
-
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("datetime")) {
 						ScrollView scroll = new ScrollView(activity);
@@ -490,6 +474,8 @@ public class JSONReader {
 
 						scroll.addView(datetimeLayout);
 						parentLayout.addView(scroll);
+						
+						addErrorMsg(parentLayout);
 
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("option")) {
@@ -868,9 +854,13 @@ public class JSONReader {
 									+ getCurrentDocumentID());
 							LinearLayout recordingLayout = recordingManager
 									.getRecordingLayout();
-							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
+							recordingLayout.setTag(R.id.layout_id,
+									"recordingLayout");
 							parentLayout.addView(recordingLayout);
 						}
+
+						addErrorMsg(parentLayout);
+
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("checklist")) {
 
@@ -996,13 +986,6 @@ public class JSONReader {
 							// checkBoxLayout.addView(cb);
 							checkboxCount++;
 						}
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						checkBoxLayout.addView(errorMsg);
 
 						if (field_random) {
 							Collections.shuffle(checkBoxList);
@@ -1014,6 +997,7 @@ public class JSONReader {
 
 						scroll.addView(checkBoxLayout);
 						parentLayout.addView(scroll);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("location")) {
 
@@ -1149,18 +1133,10 @@ public class JSONReader {
 						});
 						setTypeFace(btnGPS);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						locationLayout.addView(errorMsg);
 						locationLayout.addView(btnGPS);
-
 						scroll.addView(locationLayout);
 						parentLayout.addView(scroll);
-
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("drawing")) {
 
@@ -1298,19 +1274,12 @@ public class JSONReader {
 						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
 								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						drawingLayout.addView(errorMsg);
+ 
 						drawingLayout.addView(button);
 
 						scroll.addView(drawingLayout);
 						parentLayout.addView(scroll);
-
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("photo")) {
 
@@ -1430,18 +1399,11 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						photoLayout.addView(errorMsg);
 						photoLayout.addView(button);
-
 						scroll.addView(photoLayout);
 
 						parentLayout.addView(scroll);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("note")) {
 
@@ -1885,17 +1847,9 @@ public class JSONReader {
 						theMatrixLayout.addView(horizontalScrollView);
 						matrixChecklistLayout.addView(theMatrixLayout);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						matrixChecklistLayout.addView(errorMsg);
-
 						scroll.addView(matrixChecklistLayout);
 						parentLayout.addView(scroll);
-
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </matrix_checklist>
@@ -1962,10 +1916,12 @@ public class JSONReader {
 								fields.get("next_ref"));
 						matrixOptionLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
-						String field_label = fields.get("field_label").toString();
-						
+						String field_label = fields.get("field_label")
+								.toString();
+
 						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required").toString();
+						String field_required = fields.get("field_required")
+								.toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(field_label);
 						tvLabel.setTextSize(labelTextSize);
@@ -1975,7 +1931,8 @@ public class JSONReader {
 						matrixOptionLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc").toString();
+						String description = fields.get("field_desc")
+								.toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -2331,19 +2288,12 @@ public class JSONReader {
 
 						// </setting onClickListener to individual RadioButton>
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-
-						scroll.setBackgroundColor(Color.GREEN);
 						scroll.addView(matrixOptionLayout);
 						parentLayout.addView(scroll);
-						parentLayout.addView(errorMsg);
-						//int height = parentLayout.getChildAt(0).getHeight() + parentLayout.getChildAt(1).getHeight();
-						//parentLayout.getChildAt(2).setTop(900);
+						addErrorMsg(parentLayout);
+						// int height = parentLayout.getChildAt(0).getHeight() +
+						// parentLayout.getChildAt(1).getHeight();
+						// parentLayout.getChildAt(2).setTop(900);
 						layoutList.add(parentLayout);
 					}
 					// </matrix_option>
@@ -2487,21 +2437,14 @@ public class JSONReader {
 						imageGridView.setTag(R.id.grid_view_type,
 								"multipleSelection");
 
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
-								LayoutParams.MATCH_PARENT, 60);
-						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-
+//						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
+//								LayoutParams.MATCH_PARENT, 60);
+//						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 						imagechecklistLayout.addView(imageGridView);
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
 
 						// scroll.addView(imagechecklistLayout);
 						parentLayout.addView(imagechecklistLayout);
-						parentLayout.addView(errorMsg);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </image checklist>
@@ -2826,15 +2769,9 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT, 60);
 						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						ratingLayout.addView(errorMsg);
 						scroll.addView(ratingLayout);
 						parentLayout.addView(scroll);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </Rating>
@@ -2968,19 +2905,8 @@ public class JSONReader {
 						listView.setAdapter(ratingSetAdapter);
 
 						ratingSetLayout.addView(listView);
-
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
-								LayoutParams.MATCH_PARENT, 60);
-						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						ratingSetLayout.addView(errorMsg);
-
 						parentLayout.addView(ratingSetLayout);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </rating set>
@@ -3117,18 +3043,8 @@ public class JSONReader {
 						listView.setAdapter(ratingSetAdapter);
 						ratingSetImageLayout.addView(listView);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
-								LayoutParams.MATCH_PARENT, 60);
-						errorMsgLayoutParams2.setMargins(15, 20, 15, 0);
-						errorMsg.setLayoutParams(errorMsgLayoutParams2);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						ratingSetImageLayout.addView(errorMsg);
-
 						parentLayout.addView(ratingSetImageLayout);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </rating_set_image>
@@ -3261,15 +3177,8 @@ public class JSONReader {
 						listView.setAdapter(textSetAdapter);
 						textSetLayout.addView(listView);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						textSetLayout.addView(errorMsg);
-
 						parentLayout.addView(textSetLayout);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </text_set>
@@ -3406,14 +3315,8 @@ public class JSONReader {
 						listView.setAdapter(numberSetAdapter);
 						numberSetLayout.addView(listView);
 
-						// error msg
-						TextView errorMsg = new TextView(activity);
-						errorMsg.setLayoutParams(errorMsgLayoutParams);
-						setTypeFace(errorMsg);
-						errorMsg.setTextSize(12);
-						errorMsg.setTag("errorMsg");
-						numberSetLayout.addView(errorMsg);
 						parentLayout.addView(numberSetLayout);
+						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
 					}
 					// </number_set>
@@ -3619,13 +3522,15 @@ public class JSONReader {
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_type", jChild.getString("field_type"));
-					fields.put("field_required", jChild.getString("field_required"));
+					fields.put("field_required",
+							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
 					if (jChild.has("next_ref_cond"))
-						fields.put("next_ref_cond", jChild.getJSONArray("next_ref_cond"));
+						fields.put("next_ref_cond",
+								jChild.getJSONArray("next_ref_cond"));
 				} else if (field_type.equals("photo")) {
 					if (jChild.getString("field_default_value").length() > 0)
 						fields.put("field_default_value",
@@ -4425,6 +4330,15 @@ public class JSONReader {
 
 	public void setCurrentDocumentID(String currentDocumentID) {
 		this.currentDocumentID = currentDocumentID;
+	}
+
+	public void addErrorMsg(LinearLayout parentLayout) {
+		TextView errorMsg = new TextView(activity);
+		errorMsg.setLayoutParams(errorMsgLayoutParams);
+		setTypeFace(errorMsg);
+		errorMsg.setTextSize(12);
+		errorMsg.setTag("errorMsg");
+		parentLayout.addView(errorMsg);
 	}
 
 	private View getLine(String colorCode) {

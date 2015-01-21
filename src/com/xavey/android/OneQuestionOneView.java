@@ -79,7 +79,8 @@ import com.xavey.android.util.UUIDGenerator;
 public class OneQuestionOneView extends FragmentActivity {
 
 	private QuestionPagerAdapter qAdapter; // 19-9-2014
-
+	private final String LEFT_TO_RIGHT = "L_R";
+	private final String RIGHT_TO_LEFT = "R_L";
 	ViewPager vPager;
 	// int pageTotal;
 
@@ -158,9 +159,6 @@ public class OneQuestionOneView extends FragmentActivity {
 				int skipID = 0;
 				String direction = "";
 
-				private final String LEFT_TO_RIGHT = "L_R";
-				private final String RIGHT_TO_LEFT = "R_L";
-
 				// int previousIndex = 0;
 
 				// just for testing
@@ -176,11 +174,11 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
-					} else if (newPosition < currentPosition){
+					} else if (newPosition < currentPosition) {
 						// right to left
 						direction = RIGHT_TO_LEFT;
-					}else{
-						String s ="";
+					} else {
+						String s = "";
 						s.length();
 					}
 					int lastJump = -1;
@@ -268,13 +266,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					// LinearLayout currentParentLayout = (LinearLayout)
 					// currentLayout.getParent();
 
-					TextView errorMsg = lLManager
-							.getErrorMsgTextView(currentParentLayout);
-
-					LayoutParams errorMsgLayoutOpen = new LayoutParams(
-							LayoutParams.MATCH_PARENT, 30);
-					errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
-
 					LayoutParams errorMsgLayoutHide = new LayoutParams(
 							LayoutParams.MATCH_PARENT, 0);
 					errorMsgLayoutHide.setMargins(10, 20, 10, 20);
@@ -316,13 +307,19 @@ public class OneQuestionOneView extends FragmentActivity {
 								// there is no direction validation...
 								// bcuz it will block both direction if
 								// recording is not ending
-								navigator.addLast(0);
-								used_field_ids.addLast(currentFieldID);
-								vPager.setCurrentItem(currentPosition);
-								errorMsg.setText("Audo recording is need to stop.");
-								errorMsg.setTextColor(Color.RED);
+								// navigator.addLast(0);
+								// used_field_ids.addLast(currentFieldID);
+								// vPager.setCurrentItem(currentPosition);
+								// errorMsg.setText("Audo recording is need to stop.");
+								// errorMsg.setTextColor(Color.RED);
 								// errorMsg.setLayoutParams(errorMsgLayoutOpen);
-								currentPosition = previousIndex;
+								// currentPosition = previousIndex;
+								boolean forceStopL_R = true;
+								navStayStill(direction, currentFieldID,
+										field_error_msg, lLManager,
+										newPosition, currentPosition,
+										forceStopL_R);
+
 							}
 
 							String tagID = currentLayout.getTag(R.id.layout_id)
@@ -348,27 +345,30 @@ public class OneQuestionOneView extends FragmentActivity {
 									// out of range ..
 									// block
 									// block for only left to right cuz invalid
-									if (direction.equals(LEFT_TO_RIGHT)) {
-										// int range =
-										// newPosition-currentPosition;
-										navigator.addLast(0);
-										used_field_ids.addLast(currentFieldID);
-										vPager.setCurrentItem(currentPosition);
-										errorMsg.setText("" + field_err_msg);
-										errorMsg.setTextColor(Color.RED);
-										// errorMsg.setLayoutParams(errorMsgLayoutOpen);
-										currentPosition = previousIndex;
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-									}
+									/*
+									 * if (direction.equals(LEFT_TO_RIGHT)) { //
+									 * int range = //
+									 * newPosition-currentPosition;
+									 * navigator.addLast(0);
+									 * used_field_ids.addLast(currentFieldID);
+									 * vPager.setCurrentItem(currentPosition);
+									 * errorMsg.setText("" + field_err_msg);
+									 * errorMsg.setTextColor(Color.RED); //
+									 * errorMsg
+									 * .setLayoutParams(errorMsgLayoutOpen);
+									 * currentPosition = previousIndex; } else {
+									 * // RIGHT_TO_LEFT int last_range = 0; if
+									 * (navigator.getLast() != null) last_range
+									 * = navigator.getLast(); newPosition =
+									 * currentPosition - last_range;
+									 * vPager.setCurrentItem(newPosition);
+									 * currentPosition = newPosition;
+									 * navigator.removeLast();
+									 * used_field_ids.removeLast(); }
+									 */
+									navStayStill(direction, currentFieldID,
+											field_error_msg, lLManager,
+											newPosition, currentPosition, false);
 								} else {
 									// in range
 									// pass
@@ -428,8 +428,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									}
-									if (errorMsg != null)
-										errorMsg.setText("");
+									// if (errorMsg != null)
+									// errorMsg.setText("");
 								}
 							} else if (tagID.equals("numberSetLayout")
 									|| tagID.equals("textSetLayout")) {
@@ -492,71 +492,82 @@ public class OneQuestionOneView extends FragmentActivity {
 																+ maxValue
 																+ "\nand greater than "
 																+ minValue);
-												errorMsg.setText(field_error_msg);
+												// TODO:Check whether can
+												// migrate to navStayStill
+												// errorMsg.setText(field_error_msg);
 											}
 
 										}
 									}
 								}
+								if (direction.equals(RIGHT_TO_LEFT)) { // RIGHT_TO_LEFT
+									int last_range = 0;
+									if (navigator.getLast() != null)
+										last_range = navigator.getLast();
+									newPosition = currentPosition - last_range;
+									vPager.setCurrentItem(newPosition);
+									currentPosition = newPosition;
+									navigator.removeLast();
+									used_field_ids.removeLast();
+									// hide keyboard
+									LinearLayout nextLayout_ = layoutList
+											.get(newPosition);
+									if (!isSubmitLayout(nextLayout_))
+										hideKeyboard(nextLayout_);
+								} else { //LEFT TO RIGHT
+									if (!isValid) {
 
-								if (!isValid) {
-									// block
-									if (direction.equals(LEFT_TO_RIGHT)) {
-										navigator.addLast(0);
-										used_field_ids.addLast(currentFieldID);
-										vPager.setCurrentItem(currentPosition);
-										errorMsg.setText(field_error_msg);
-										errorMsg.setTextColor(Color.RED);
-										currentPosition = previousIndex;
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-									}
-								} else {
-									if (direction.equals(LEFT_TO_RIGHT)) {
-										// pass
+										// block
+										/*
+										 * if (direction.equals(LEFT_TO_RIGHT))
+										 * { navigator.addLast(0);
+										 * used_field_ids
+										 * .addLast(currentFieldID);
+										 * vPager.setCurrentItem
+										 * (currentPosition);
+										 * errorMsg.setText(field_error_msg);
+										 * errorMsg.setTextColor(Color.RED);
+										 * currentPosition = previousIndex; }
+										 * else { // RIGHT_TO_LEFT int
+										 * last_range = 0; if
+										 * (navigator.getLast() != null)
+										 * last_range = navigator.getLast();
+										 * newPosition = currentPosition -
+										 * last_range;
+										 * vPager.setCurrentItem(newPosition);
+										 * currentPosition = newPosition;
+										 * navigator.removeLast();
+										 * used_field_ids.removeLast(); }
+										 */
+										navStayStill(direction, currentFieldID,
+												field_error_msg, lLManager,
+												newPosition, currentPosition,
+												false);
+									} else {
+											// pass // LEFT to RIGHT
 
-										newPosition = getNextRoute(newPosition);
-										renderNextLayout(newPosition);
-										int range = newPosition
-												- currentPosition;
-										if (range != 0)
-											navigator.addLast(range);
-										used_field_ids.addLast(currentFieldID);
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										previousIndex = currentPosition;
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList
-												.get(newPosition);
-										if (!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList
-												.get(newPosition);
-										if (!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
+											newPosition = getNextRoute(newPosition);
+											renderNextLayout(newPosition);
+											int range = newPosition
+													- currentPosition;
+											if (range != 0)
+												navigator.addLast(range);
+											used_field_ids
+													.addLast(currentFieldID);
+											vPager.setCurrentItem(newPosition);
+											currentPosition = newPosition;
+											previousIndex = currentPosition;
+											// hide keyboard
+											LinearLayout nextLayout_ = layoutList
+													.get(newPosition);
+											if (!isSubmitLayout(nextLayout_))
+												hideKeyboard(nextLayout_);
+										
 									}
 								}
-								if (errorMsg != null)
-									errorMsg.setText("");
+								// TODO:navStayStill
+								// if (errorMsg != null)
+								// errorMsg.setText("");
 								// <here is for textSetLayout (just copy from
 								// above)
 
@@ -689,27 +700,28 @@ public class OneQuestionOneView extends FragmentActivity {
 
 								if (!isValid || !isSelectedCountValid) {
 									// block
-									if (direction.equals(LEFT_TO_RIGHT)) {
-										navigator.addLast(0);
-										used_field_ids.addLast(currentFieldID);
-										vPager.setCurrentItem(currentPosition);
-										if (dataset_error_msg.length() > 0)
-											errorMsg.setText(dataset_error_msg);
-										else
-											errorMsg.setText(field_error_msg);
-										errorMsg.setTextColor(Color.RED);
-										currentPosition = previousIndex;
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-									}
+									/*
+									 * if (direction.equals(LEFT_TO_RIGHT)) {
+									 * navigator.addLast(0);
+									 * used_field_ids.addLast(currentFieldID);
+									 * vPager.setCurrentItem(currentPosition);
+									 * if (dataset_error_msg.length() > 0)
+									 * errorMsg.setText(dataset_error_msg); else
+									 * errorMsg.setText(field_error_msg);
+									 * errorMsg.setTextColor(Color.RED);
+									 * currentPosition = previousIndex; } else {
+									 * // RIGHT_TO_LEFT int last_range = 0; if
+									 * (navigator.getLast() != null) last_range
+									 * = navigator.getLast(); newPosition =
+									 * currentPosition - last_range;
+									 * vPager.setCurrentItem(newPosition);
+									 * currentPosition = newPosition;
+									 * navigator.removeLast();
+									 * used_field_ids.removeLast(); }
+									 */
+									navStayStill(direction, currentFieldID,
+											field_error_msg, lLManager,
+											newPosition, currentPosition, false);
 								} else {
 									if (direction.equals(LEFT_TO_RIGHT)) {
 										// pass
@@ -806,32 +818,35 @@ public class OneQuestionOneView extends FragmentActivity {
 											.get(newPosition);
 									if (!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
-									if (errorMsg != null)
-										errorMsg.setText("");
+									// TODO : navStayStill
+									// if (errorMsg != null)
+									// errorMsg.setText("");
 								}
 							}
 						} else {
 							// user didn't type anything
 							// block
 
-							if (direction.equals(LEFT_TO_RIGHT)) {
-								navigator.addLast(0);
-								used_field_ids.addLast(currentFieldID);
-								vPager.setCurrentItem(currentPosition);
-								if (field_error_msg.length() > 0)
-									errorMsg.setText(field_error_msg);
-								else
-									errorMsg.setText("Some fields are required..");
-								errorMsg.setTextColor(Color.RED);
-								currentPosition = previousIndex;
-							} else { // RIGHT_TO_LEFT
-								int last_range = navigator.getLast();
-								newPosition = currentPosition - last_range;
-								vPager.setCurrentItem(newPosition);
-								currentPosition = newPosition;
-								navigator.removeLast();
-								used_field_ids.removeLast();
-							}
+							/*
+							 * if (direction.equals(LEFT_TO_RIGHT)) {
+							 * navigator.addLast(0);
+							 * used_field_ids.addLast(currentFieldID);
+							 * vPager.setCurrentItem(currentPosition); if
+							 * (field_error_msg.length() > 0)
+							 * errorMsg.setText(field_error_msg); else
+							 * errorMsg.setText("Some fields are required..");
+							 * errorMsg.setTextColor(Color.RED); currentPosition
+							 * = previousIndex; } else { // RIGHT_TO_LEFT int
+							 * last_range = navigator.getLast(); newPosition =
+							 * currentPosition - last_range;
+							 * vPager.setCurrentItem(newPosition);
+							 * currentPosition = newPosition;
+							 * navigator.removeLast();
+							 * used_field_ids.removeLast(); }
+							 */
+							navStayStill(direction, currentFieldID,
+									field_error_msg, lLManager, newPosition,
+									currentPosition, false);
 						}
 					} else {
 						// here will be fragments they are not concerned with
@@ -842,7 +857,8 @@ public class OneQuestionOneView extends FragmentActivity {
 						// (skip logic)
 
 						if (currentLayout.getTag(R.id.layout_id).toString()
-								.equals("radioLayout")) { //TODO: radio checking if else
+								.equals("radioLayout")) { // TODO: radio
+															// checking if else
 							for (int i = 0; i < currentLayout.getChildCount(); i++) {
 								String className = currentLayout.getChildAt(i)
 										.getClass().getName().toString();
@@ -897,7 +913,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (extra_value_required
 												&& isExtraValueTRUE
 												&& !isExtraValueTyped) {
-											// blocka
+											// block
+											// TODO : To put into staystill
 											navigator.addLast(0);
 											used_field_ids
 													.addLast(currentFieldID);
@@ -912,13 +929,26 @@ public class OneQuestionOneView extends FragmentActivity {
 											// validation...
 											// bcuz it will block both direction
 											// if recording is not ending
-											navigator.addLast(0);
-											used_field_ids
-													.addLast(currentFieldID);
-											vPager.setCurrentItem(currentPosition);
-											toast.xaveyToast(null,
-													"Audio recording is needed to stop.");
-											currentPosition = previousIndex;
+
+											/*
+											 * navigator.addLast(0);
+											 * used_field_ids
+											 * .addLast(currentFieldID);
+											 * vPager.setCurrentItem
+											 * (currentPosition);
+											 * toast.xaveyToast(null,
+											 * "Audio recording is needed to stop."
+											 * ); currentPosition =
+											 * previousIndex;
+											 */
+											boolean forceStopL_R = true;
+											navStayStill(
+													direction,
+													currentFieldID,
+													"Audio recording is needed to stop.",
+													lLManager, newPosition,
+													currentPosition,
+													forceStopL_R);
 										} else if (field_skip.length() > 0) {
 											if (field_skip.equals("submit")) {
 												// skip logic
@@ -996,13 +1026,25 @@ public class OneQuestionOneView extends FragmentActivity {
 											// validation...
 											// bcuz it will block both direction
 											// if recording is not ending
-											navigator.addLast(0);
-											used_field_ids
-													.addLast(currentFieldID);
-											vPager.setCurrentItem(currentPosition);
-											toast.xaveyToast(null,
-													"Audio recording is needed to stop.");
-											currentPosition = previousIndex;
+											/*
+											 * navigator.addLast(0);
+											 * used_field_ids
+											 * .addLast(currentFieldID);
+											 * vPager.setCurrentItem
+											 * (currentPosition);
+											 * toast.xaveyToast(null,
+											 * "Audio recording is needed to stop."
+											 * ); currentPosition =
+											 * previousIndex;
+											 */
+											boolean forceStopL_R = true;
+											navStayStill(
+													direction,
+													currentFieldID,
+													"Audio recording is needed to stop.",
+													lLManager, newPosition,
+													currentPosition,
+													forceStopL_R);
 										} else {
 
 											int last_range = 0;
@@ -1022,9 +1064,12 @@ public class OneQuestionOneView extends FragmentActivity {
 												hideKeyboard(nextLayout_);
 										}
 									}
-									if (errorMsg != null)
-										errorMsg.setLayoutParams(new LayoutParams(
-												LayoutParams.WRAP_CONTENT, 0));
+									/*
+									 * TODO : navStayStill if (errorMsg != null)
+									 * errorMsg.setLayoutParams(new
+									 * LayoutParams( LayoutParams.WRAP_CONTENT,
+									 * 0));
+									 */
 								}
 							}
 						} else {
@@ -1065,8 +1110,9 @@ public class OneQuestionOneView extends FragmentActivity {
 								if (isSubmitLayout(nextLayout_))
 									hideKeyboard(nextLayout_);
 							}
-							if (errorMsg != null)
-								errorMsg.setText("");
+							// TODO : navStayStill
+							// if (errorMsg != null)
+							// errorMsg.setText("");
 						}
 					}
 				}
@@ -2597,6 +2643,48 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return map;
 	}// </getValueFromEachLayout>
+
+	// block navigation control
+	private void navStayStill(String direction, String currentFieldID,
+			String field_error_msg, LinearLayoutManager lLManager,
+			int newPosition, int currentPosition, boolean force_stop_r_l) {
+
+		LinearLayout currentParentLayout = layoutList.get(currentPosition);
+		TextView errorMsg = lLManager.getErrorMsgTextView(currentParentLayout);
+		LayoutParams errorMsgLayoutOpen = new LayoutParams(
+				LayoutParams.MATCH_PARENT, 30);
+		errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
+		errorMsg.setTextColor(Color.RED);
+
+		if (direction.equals(LEFT_TO_RIGHT)) {
+			// navigator.addLast(0);
+			used_field_ids.addLast(currentFieldID);
+			vPager.setCurrentItem(currentPosition);
+			if (field_error_msg.length() > 0)
+				errorMsg.setText(field_error_msg);
+			else
+				errorMsg.setText("Some fields are required..");
+			currentPosition = previousIndex;
+		} else {
+			if (force_stop_r_l) { // RIGHT_TO_LEFT
+				used_field_ids.addLast(currentFieldID);
+				vPager.setCurrentItem(currentPosition);
+				if (field_error_msg.length() > 0)
+					errorMsg.setText(field_error_msg);
+				else
+					errorMsg.setText("Some fields are required..");
+				currentPosition = previousIndex;
+			} else {
+				int last_range = navigator.getLast();
+				newPosition = currentPosition - last_range;
+				vPager.setCurrentItem(newPosition);
+				currentPosition = newPosition;
+				// navigator.removeLast();
+				used_field_ids.removeLast();
+			}
+		}
+
+	}
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
 		RadioButton selectedButton = null;
