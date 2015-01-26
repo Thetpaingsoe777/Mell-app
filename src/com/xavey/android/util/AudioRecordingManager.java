@@ -1,7 +1,6 @@
 package com.xavey.android.util;
 
 import java.io.File;
-import java.io.IOException;
 
 import android.app.Activity;
 import android.media.MediaRecorder;
@@ -13,9 +12,9 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.xavey.android.ApplicationValues;
+import com.xavey.android.R;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Audio;
-import com.xavey.android.R;
 
 public class AudioRecordingManager {
 	Activity activity_;
@@ -44,11 +43,10 @@ public class AudioRecordingManager {
 		btnStart.setLayoutParams(params);
 		btnStop.setLayoutParams(params);
 		final ToastManager xToast = new ToastManager(activity_);
-		
+
 		final LinearLayout recordingLayout = new LinearLayout(activity_);
-		
+
 		btnStart.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				xToast.xaveyToast(null, "Start Recording....");

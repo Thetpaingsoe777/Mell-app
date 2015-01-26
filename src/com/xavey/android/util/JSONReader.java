@@ -231,6 +231,7 @@ public class JSONReader {
 						ed1.setTextSize(16);
 						ed1.setTypeface(typeface.getTypeFace());
 						String fieldName = fields.get("field_name").toString();
+						String fieldID = fields.get("field_id").toString();
 						String fieldHelp = "-";
 						if (fields.containsKey("field_help"))
 							fieldHelp = fields.get("field_help").toString();
@@ -255,12 +256,11 @@ public class JSONReader {
 							recordingManager = new AudioRecordingManager(
 									activity);
 							recordingManager.setAudioInfo(audioinfo);
-							recordingManager.setFileName(fieldName + " - "
+							recordingManager.setFileName(fieldID + "-"
 									+ getCurrentDocumentID());
 							LinearLayout recordingLayout = recordingManager
 									.getRecordingLayout();
-							recordingLayout.setTag(R.id.layout_id,
-									"recordingLayout");
+							recordingLayout.setTag(R.id.layout_id, "recordingLayout");
 							parentLayout.addView(recordingLayout);
 						}
 
@@ -292,8 +292,7 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -562,14 +561,12 @@ public class JSONReader {
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(radioLabel);
 						tvLabel.setTextSize(labelTextSize);
+						String fieldID = fields.get("field_id").toString();
 						String fieldName = fields.get("field_name").toString();
 						String fieldRequired = fields.get("field_required")
 								.toString();
 						String fieldLabel = fields.get("field_label")
 								.toString();
-						tvLabel.setTag(R.id.field_name_id, fieldName);
-						tvLabel.setTag(R.id.field_required_id, fieldRequired);
-						tvLabel.setTag(R.id.field_label_id, fieldLabel);
 						tvLabel.setGravity(Gravity.CENTER_VERTICAL);
 						tvLabel.setLayoutParams(labelLayoutParams);
 						setTypeFace(tvLabel);
@@ -850,7 +847,7 @@ public class JSONReader {
 							recordingManager = new AudioRecordingManager(
 									activity);
 							recordingManager.setAudioInfo(audioinfo);
-							recordingManager.setFileName(fieldName + " - "
+							recordingManager.setFileName(fieldID + "-"
 									+ getCurrentDocumentID());
 							LinearLayout recordingLayout = recordingManager
 									.getRecordingLayout();

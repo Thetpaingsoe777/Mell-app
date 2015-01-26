@@ -98,6 +98,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 	boolean isAllRequiredFieldFilled = true;
 	ArrayList<HashMap<String, String>> imagesToSubmit = new ArrayList<HashMap<String, String>>();
+	ArrayList<HashMap<String, String>> audiosToSubmit = new ArrayList<HashMap<String, String>>();
 
 	// DM
 	DisplayMetrics dm;
@@ -1826,15 +1827,15 @@ public class OneQuestionOneView extends FragmentActivity {
 									"field_audio_required").toString());
 						}
 
-						if (is_audio_required) {
-							String audio_file = recordingManager
-									.getFilename(fieldName + " - "
-											+ currentDocumentID);
-							File file = new File(audio_file);
-							if (file.exists()) {
-								fieldValueAudio = audio_file;
-							}
-						}
+//						if (is_audio_required) {
+//							String audio_file = recordingManager
+//									.getFilename(fieldName + " - "
+//											+ currentDocumentID);
+//							File file = new File(audio_file);
+//							if (file.exists()) {
+//								fieldValueAudio = audio_file;
+//							}
+//						}
 
 						String userTypedValue = "";
 						if (incompleteMap.containsKey(fieldID)) { // <--filter
@@ -1846,10 +1847,26 @@ public class OneQuestionOneView extends FragmentActivity {
 								child.put("field_name", fieldName);
 								child.put("field_value", userTypedValue);
 								child.put("field_label", fieldLabel);
-								if (fieldValueAudio.length() > 0) {
-									child.put("field_value_audio",
-											fieldValueAudio);
+								
+								String audioPath = "";
+								String mp4FileName = fieldID +"-"+currentDocumentID+".mp4";
+								
+								File file = new File(ApplicationValues.XAVEY_DIRECTORY, "AudioRecorder");
+								if(file.exists()){
+									audioPath = file.getAbsolutePath() + "/" + mp4FileName;
+									File audioFile = new File(audioPath);
+									if(audioFile.exists()){
+										child.put("field_audio", audioFile);
+									}
 								}
+								
+								
+							
+//								if (fieldValueAudio.length() > 0) {
+//									child.put("field_value_audio",
+//											fieldValueAudio);
+//								}
+								
 								jsonArray.put(child);
 							} catch (JSONException e) {
 								e.printStackTrace();
@@ -2010,8 +2027,9 @@ public class OneQuestionOneView extends FragmentActivity {
 								&& scrollChild.getClass().getName()
 										.equals("android.widget.LinearLayout")) {
 							if (!scrollChild.getTag(R.id.layout_id).toString()
-									.equals("recordingLayout"))
+									.equals("recordingLayout")){
 								linearLayout = (LinearLayout) scrollChild;
+							}								
 						}
 					}
 				} else if (child.getClass().getName()
@@ -2115,6 +2133,19 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 						map.put(key, value);
 					}
+					// finding recorded wav tag
+					/*LinearLayout radioParentLayout =  (LinearLayout) linearLayout.getParent().getParent();
+					for(int rp=0; rp<radioParentLayout.getChildCount(); rp++){
+						View radioParentChild =  radioParentLayout.getChildAt(rp);
+						String rpChildTag = "";
+						if(radioParentChild.getTag(R.id.layout_id)!=null){
+							rpChildTag = radioParentChild.getTag(R.id.layout_id).toString();
+						}
+						if(rpChildTag.equals("recordingLayout")){
+							LinearLayout recordingLayout = (LinearLayout) radioParentChild;
+							String wav_path = recordingLayout.getTag(R.id.audio_path).toString();
+						}
+					}*/
 				}
 			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("checkBoxLayout")) {
