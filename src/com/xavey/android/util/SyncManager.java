@@ -21,7 +21,7 @@ import com.xavey.android.LoginActivity;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.Image;
+import com.xavey.android.model.XMedia;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
 import com.xavey.android.model.User;
@@ -258,7 +258,7 @@ public class SyncManager {
 
 		private ProgressDialog Dialog = new ProgressDialog(activity_);
 		private ArrayList<HashMap<String, String>> uploadedImages = new ArrayList<HashMap<String, String>>();
-		ArrayList<Image> imagesToStoreLocally = new ArrayList<Image>();
+		ArrayList<XMedia> imagesToStoreLocally = new ArrayList<XMedia>();
 
 		XaveyProperties xavey_properties;
 		String imageUploadURL="";
@@ -321,11 +321,12 @@ public class SyncManager {
 							e.printStackTrace();
 						}
 						hashMap.put(image_field_name, image_id);
-						Image image = new Image();
+						XMedia image = new XMedia();
 						image.setDoc_id(documentToSubmit.getDocument_id());
-						image.setImage_id(image_id);
-						image.setImage_name(image_field_name);
-						image.setImage_path(image_path);
+						image.setMedia_id(image_id);
+						image.setMedia_name(image_field_name);
+						image.setMedia_path(image_path);
+						image.setMedia_type("image");
 						image.setServerError(serverError);
 						imagesToStoreLocally.add(image);
 					}
@@ -385,11 +386,11 @@ public class SyncManager {
 				documentToSubmit.setSubmitted("1");
 				dbHelper.updateDocument(documentToSubmit);
 				dbHelper.updateDocumentSubmitted(documentToSubmit, "1");
-				for (Image image : imagesToStoreLocally) {
-					if(!dbHelper.isImageAlreadyExistInDB(image.getImage_path()))
-						dbHelper.addNewImage(image);
+				for (XMedia image : imagesToStoreLocally) {
+					if(!dbHelper.isMediaAlreadyExistInDB(image.getMedia_path()))
+						dbHelper.addNewMedia(image);
 					else
-						dbHelper.updateImageByPath(image);
+						dbHelper.updateMediaByPath(image);
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block

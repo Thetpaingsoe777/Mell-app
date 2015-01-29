@@ -16,6 +16,7 @@
     <item type="id" name="extra"/> <!-- just for radio (yet) -->
     <item type="id" name="extra_value"/>
     <item type="id" name="extra_status"/>
+    <item type="id" name="extra_required"/>
     <item type="id" name="is_radiobutton_selected"/>
     <item type="id" name="radio_random_value"/>
     <item type="id" name="next_ref_type"/>

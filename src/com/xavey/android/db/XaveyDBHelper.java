@@ -14,9 +14,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.Image;
 import com.xavey.android.model.SyncImage;
 import com.xavey.android.model.User;
+import com.xavey.android.model.XMedia;
 import com.xavey.android.util.JSONReader;
 
 public class XaveyDBHelper extends SQLiteOpenHelper {
@@ -80,11 +80,12 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private final ArrayList<Document> documentList = new ArrayList<Document>();
 
 	// IMAGE TABLE
-	private static final String IMAGE_TABLE = "image";
-	private static final String IMAGE_NAME = "image_name";
-	private static final String IMAGE_PATH = "image_path";
-	private static final String IMAGE_ID = "image_id";
+	private static final String MEDIA_TABLE = "media";
+	private static final String MEDIA_NAME = "media_name";
+	private static final String MEDIA_PATH = "media_path";
+	private static final String MEDIA_ID = "media_id";
 	private static final String DOC_ID = "doc_id";
+	private static final String MEDIA_TYPE = "media_type";
 
 	// Audio TABLE
 	private static final String AUDIO_TABLE = "audio";
@@ -95,7 +96,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	// Synced Image Table
 	private static final String SYNCED_IMAGE_TABLE = "synced_image";
 	//ID
-	//IMAGE_ID
+	private static final String IMAGE_ID = "image_id";
 	private static final String SYNC_ID = "sync_id";
 	private static final String IMAGE_BYTE = "image_byte";
 	
@@ -134,9 +135,14 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				+ " INTEGER," + CREATED_WORKER + " TEXT," + SUBMITTED
 				+ " INTEGER" + ")";
 
-		String CREATE_IMAGE_TABLE = "CREATE TABLE " + IMAGE_TABLE + "(" + ID
-				+ " INTEGER PRIMARY KEY," + IMAGE_NAME + " TEXT," + IMAGE_PATH
-				+ " TEXT," + IMAGE_ID + " INTEGER," + DOC_ID + " INTEGER" + ")";
+		String CREATE_IMAGE_TABLE = "CREATE TABLE " + MEDIA_TABLE + "(" 
+									+ ID + " INTEGER PRIMARY KEY," 
+									+ MEDIA_NAME + " TEXT, " 
+									+ MEDIA_PATH + " TEXT, " 
+									+ IMAGE_ID + " INTEGER, " 
+									+ DOC_ID + " INTEGER, "
+									+ MEDIA_TYPE + " TEXT"
+									+ ")";
 
 		String CREATE_AUDIO_TABLE = "CREATE TABLE " + AUDIO_TABLE + "(" + ID
 				+ " INTEGER PRIMARY KEY," + AUDIO_NAME + " TEXT," + AUDIO_PATH
@@ -167,7 +173,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + DOCUMENT_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + WORKER_FORM_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE);
-		db.execSQL("DROP TABLE IF EXISTS " + IMAGE_TABLE);
+		db.execSQL("DROP TABLE IF EXISTS " + MEDIA_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SYNCED_IMAGE_TABLE);
 		onCreate(db);
 	}
@@ -303,9 +309,9 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			return true;
 	}
 
-	public boolean isImageAlreadyExistInDB(String imagePath) {
+	public boolean isMediaAlreadyExistInDB(String imagePath) {
 		SQLiteDatabase db = this.getReadableDatabase();
-		String query = "select * from " + IMAGE_TABLE + " where " + IMAGE_PATH
+		String query = "select * from " + MEDIA_TABLE + " where " + MEDIA_PATH
 				+ "=?";
 		Cursor cursor = db.rawQuery(query, new String[] { imagePath });
 		if (cursor.getCount() == 0)
@@ -806,32 +812,34 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	}
 
 	// Image
-	public void addNewImage(Image image) {
+	public void addNewMedia(XMedia media) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(IMAGE_ID, image.getImage_id());
-		values.put(IMAGE_NAME, image.getImage_name());
-		values.put(IMAGE_PATH, image.getImage_path());
-		values.put(DOC_ID, image.getDoc_id());
-		db.insert(IMAGE_TABLE, null, values);
+		values.put(MEDIA_ID, media.getMedia_id());
+		values.put(MEDIA_NAME, media.getMedia_name());
+		values.put(MEDIA_PATH, media.getMedia_path());
+		values.put(DOC_ID, media.getDoc_id());
+		values.put(MEDIA_TYPE, media.getMedia_type());
+		db.insert(MEDIA_TABLE, null, values);
 		db.close();
 	}
 
-	public ArrayList<Image> getAllImagesByDocumentID(String documentID) {
-		ArrayList<Image> imageList = new ArrayList<Image>();
-		String selectQuery = "SELECT * FROM " + IMAGE_TABLE + " WHERE "
+	public ArrayList<XMedia> getAllMediaByDocumentID(String documentID) {
+		ArrayList<XMedia> imageList = new ArrayList<XMedia>();
+		String selectQuery = "SELECT * FROM " + MEDIA_TABLE + " WHERE "
 				+ DOC_ID + "=?";
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(selectQuery, new String[] { documentID });
 		if (cursor.moveToFirst()) {
 			do {
-				Image image = new Image();
-				image.setId(cursor.getString(0));
-				image.setImage_name(cursor.getString(1));
-				image.setImage_path(cursor.getString(2));
-				image.setImage_id(cursor.getString(3));
-				image.setDoc_id(cursor.getString(4));
-				imageList.add(image);
+				XMedia media = new XMedia();
+				media.setId(cursor.getString(0));
+				media.setMedia_name(cursor.getString(1));
+				media.setMedia_path(cursor.getString(2));
+				media.setMedia_id(cursor.getString(3));
+				media.setDoc_id(cursor.getString(4));
+				media.setMedia_type(cursor.getString(5));
+				imageList.add(media);
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
@@ -839,65 +847,68 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		return imageList;
 	}
 
-	public int updateImageByPath(Image image) {
+	public int updateMediaByPath(XMedia media) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(IMAGE_ID, image.getImage_id());
-		return db.update(IMAGE_TABLE, values, IMAGE_PATH + "=?",
-				new String[] { image.getImage_path() });
+		values.put(MEDIA_ID, media.getMedia_id());
+		return db.update(MEDIA_TABLE, values, MEDIA_PATH + "=?",
+				new String[] { media.getMedia_path() });
 	}
 
-	public Image getImageByImageID(String image_id) {
-		Image image = new Image();
+	public XMedia getImageByImageID(String media_id) {
+		XMedia media = new XMedia();
 		SQLiteDatabase db = this.getReadableDatabase();
-		String rawQuery = "SELECT * FROM " + IMAGE_TABLE + " WHERE " + IMAGE_ID
+		String rawQuery = "SELECT * FROM " + MEDIA_TABLE + " WHERE " + MEDIA_ID
 				+ "=?";
-		String[] parameters = new String[] { image_id };
+		String[] parameters = new String[] { media_id };
 		Cursor cursor = db.rawQuery(rawQuery, parameters);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			image.setId(cursor.getString(0));
-			image.setImage_name(cursor.getString(1));
-			image.setImage_path(cursor.getString(2));
-			image.setImage_id(cursor.getString(3));
-			image.setDoc_id(cursor.getString(4));
+			media.setId(cursor.getString(0));
+			media.setMedia_name(cursor.getString(1));
+			media.setMedia_path(cursor.getString(2));
+			media.setMedia_id(cursor.getString(3));
+			media.setDoc_id(cursor.getString(4));
+			media.setMedia_type(cursor.getString(5));
 		}
 		cursor.close();
 		db.close();
-		return image;
+		return media;
 	}
 
 	// following method is useful cuz we assumed that the image_name
 	// (field_name) is currently unique
-	public Image getImagePathByImageName(String image_name) {
-		Image image = new Image();
+	public XMedia getImagePathByImageName(String image_name) {
+		XMedia media = new XMedia();
 		SQLiteDatabase db = this.getReadableDatabase();
-		String rawQuery = "SELECT * FROM " + IMAGE_TABLE + " WHERE "
-				+ IMAGE_NAME + "=?";
+		String rawQuery = "SELECT * FROM " + MEDIA_TABLE + " WHERE "
+				+ MEDIA_NAME + "=?";
 		String[] parameters = new String[] { image_name };
 		Cursor cursor = db.rawQuery(rawQuery, parameters);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			image.setId(cursor.getString(0));
-			image.setImage_name(cursor.getString(1));
-			image.setImage_path(cursor.getString(2));
-			image.setImage_id(cursor.getString(3));
-			image.setDoc_id(cursor.getString(4));
+			media.setId(cursor.getString(0));
+			media.setMedia_name(cursor.getString(1));
+			media.setMedia_path(cursor.getString(2));
+			media.setMedia_id(cursor.getString(3));
+			media.setDoc_id(cursor.getString(4));
+			media.setMedia_type(cursor.getString(5));
 		}
 		cursor.close();
 		db.close();
-		return image;
+		return media;
 	}
 
-	public int updateImage(Image image) {
+	public int updateImage(XMedia media) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
-		values.put(IMAGE_ID, image.getImage_id());
-		values.put(IMAGE_NAME, image.getImage_name());
-		values.put(IMAGE_PATH, image.getImage_path());
-		values.put(DOC_ID, image.getDoc_id());
-		return db.update(IMAGE_TABLE, values, IMAGE_ID + "=?",
-				new String[] { image.getImage_id() });
+		values.put(MEDIA_ID, media.getMedia_id());
+		values.put(MEDIA_NAME, media.getMedia_name());
+		values.put(MEDIA_PATH, media.getMedia_path());
+		values.put(DOC_ID, media.getDoc_id());
+		values.put(MEDIA_TYPE, media.getMedia_type());
+		return db.update(MEDIA_TABLE, values, MEDIA_ID + "=?",
+				new String[] { media.getMedia_id() });
 	}
 
 	// AUDIO

@@ -235,8 +235,10 @@ public class LinearLayoutManager {
 								data.add(map_);
 								
 								if(!userTypedValue_.equals("#noValue#")){
-									int inte = Integer.parseInt(userTypedValue_);
-									userTypedNumberList.add(inte);
+									if(layoutID.equals("numberSetLayout")){
+										int inte = Integer.parseInt(userTypedValue_);
+										userTypedNumberList.add(inte);
+									}
 								}
 							}
 						}

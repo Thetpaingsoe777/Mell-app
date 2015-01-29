@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.Image;
+import com.xavey.android.model.XMedia;
 
 // for date picker
 // http://android-devblog.blogspot.com/2010/05/wheel-ui-contol.html
@@ -481,14 +481,14 @@ public class JSONWriter {
 		String fieldName = fields.get("field_name").toString();
 		String fieldLabel = fields.get("field_label").toString();
 		String imageID = docFields.get("field_value");
-		Image image = new Image();
+		XMedia image = new XMedia();
 		if(imageID.equals("unavailable")||imageID.endsWith(".jpeg")||imageID.endsWith(".jpg")){
 			image = dbHelper.getImagePathByImageName(fieldName);
 		}
 		else{
 			image = dbHelper.getImageByImageID(imageID);
 		}
-		String fieldPath = image.getImage_path();
+		String fieldPath = image.getMedia_path();
 		// String docName = docFields.get("field_name");
 
 		LayoutParams lp;

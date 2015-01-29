@@ -40,7 +40,7 @@ import com.xavey.android.adapter.CustomDrawerAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.Image;
+import com.xavey.android.model.XMedia;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
 import com.xavey.android.model.SyncImage;
@@ -137,14 +137,14 @@ public class MainActivity extends Activity {
 					SyncManager syncManager = new SyncManager(MainActivity.this);
 					String formID = doc.getForm_id();
 					Form form = dbHelper.getFormByFormID(formID);
-					ArrayList<Image> imageList = dbHelper
-							.getAllImagesByDocumentID(doc.getDocument_id());
+					ArrayList<XMedia> imageList = dbHelper
+							.getAllMediaByDocumentID(doc.getDocument_id());
 					try {
 						if (imageList.size() > 0) {
 							ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-							for (Image image : imageList) {
-								String image_path = image.getImage_path();
-								String field_name = image.getImage_name();
+							for (XMedia image : imageList) {
+								String image_path = image.getMedia_path();
+								String field_name = image.getMedia_name();
 								HashMap<String, String> map = new HashMap<String, String>();
 								map.put("imagePath", image_path);
 								map.put("field_name", field_name);

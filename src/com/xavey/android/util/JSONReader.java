@@ -601,15 +601,10 @@ public class JSONReader {
 							String text = obj.getString("label");
 							String tag = obj.getString("value");
 							String skip = obj.getString("field_skip");
-							boolean extra = obj.getBoolean("extra"); // thinking
-																		// there
-																		// is
-																		// always
-																		// extra
-																		// ,
-																		// true
-																		// and
-																		// false
+							boolean extra = obj.getBoolean("extra"); 
+							boolean extra_required=false;
+							if(obj.has("extra_required"))
+								extra_required = obj.getBoolean("extra_required");
 
 							RadioButton radioButton = new RadioButton(activity);
 							radioButton.setId(Utils.generateViewId()); // View.generateViewId();
@@ -627,6 +622,8 @@ public class JSONReader {
 							radioButton.setTag(R.id.extra, extra);
 							radioButton.setTag(R.id.is_radiobutton_selected,
 									false);
+							if(extra_required)
+								radioButton.setTag(R.id.extra_required, extra_required);
 							radioButton.setSelected(false);
 
 							if (tag.equals(field_default_value)) {
@@ -744,21 +741,15 @@ public class JSONReader {
 													singleEditTextFromAll
 															.setLayoutParams(extraValueLayoutParamsDisappear);
 												} else {
-													singleButtonFromAll
-															.setChecked(true);
-													singleButtonFromAll
-															.setTag(R.id.is_radiobutton_selected,
+													singleButtonFromAll.setChecked(true);
+													singleButtonFromAll.setTag(R.id.is_radiobutton_selected,
 																	true);
-													radioButtonLine_
-															.setTag(R.id.is_radiobutton_selected,
-																	true);
-													singleEditTextFromAll
-															.requestFocus();
+													radioButtonLine_.setTag(R.id.is_radiobutton_selected, true);
+													singleEditTextFromAll.requestFocus();
 													if (extra) { // if extra
 																	// value
 																	// true;
-														singleEditTextFromAll
-																.setLayoutParams(extraValueLayoutParamsAppear);
+														singleEditTextFromAll.setLayoutParams(extraValueLayoutParamsAppear);
 													}
 												}
 											}

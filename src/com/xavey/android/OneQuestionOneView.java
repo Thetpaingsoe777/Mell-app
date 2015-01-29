@@ -61,7 +61,7 @@ import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.Image;
+import com.xavey.android.model.XMedia;
 import com.xavey.android.model.MatrixCell;
 import com.xavey.android.util.AudioRecordingManager;
 import com.xavey.android.util.ConnectionDetector;
@@ -288,7 +288,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (test.containsKey("value"))
 							value = test.get("value").toString();
 						String field_required = "false";
-						if (test.containsKey("")) {
+						if (test.containsKey("field_required")) {
 							field_required = test.get("field_required")
 									.toString();
 						}
@@ -320,27 +320,20 @@ public class OneQuestionOneView extends FragmentActivity {
 										field_error_msg, lLManager,
 										newPosition, currentPosition,
 										forceStopL_R);
-
 							}
 
-							String tagID = currentLayout.getTag(R.id.layout_id)
-									.toString();
+							String tagID = currentLayout.getTag(R.id.layout_id).toString();
 							if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
-								String field_max_value = test.get(
-										"field_max_value").toString();
-								String field_min_value = test.get(
-										"field_min_value").toString();
+								String field_max_value = test.get("field_max_value").toString();
+								String field_min_value = test.get("field_min_value").toString();
 								// String field_default_value =
 								// test.get("field_default_value"); // no need
 								// yet
-								String field_err_msg = test
-										.get("field_err_msg").toString();
+								String field_err_msg = test.get("field_err_msg").toString();
 								int userTypedValue = Integer.parseInt(value_);
-								int maxValue = Integer
-										.parseInt(field_max_value);
-								int minValue = Integer
-										.parseInt(field_min_value);
+								int maxValue = Integer.parseInt(field_max_value);
+								int minValue = Integer.parseInt(field_min_value);
 								if (userTypedValue > maxValue
 										|| userTypedValue < minValue) {
 									// out of range ..
@@ -483,6 +476,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 											int total = Integer.parseInt(test
 													.get("total").toString());
+											
+											if(maxValue!=0)
 											if (total > maxValue
 													|| total < minValue) {
 												isValid = false;
@@ -867,37 +862,25 @@ public class OneQuestionOneView extends FragmentActivity {
 										.equals("android.widget.RadioGroup")) {
 									// radio
 
-									boolean extra_value_required = true;
+									boolean extra_value_required = false;
 									boolean isExtraValueTRUE = false;
-
+									boolean isExtraValueTyped = false;
+									
 									RadioGroup radioGroup = (RadioGroup) currentLayout
 											.getChildAt(i);
 
 									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 									if (selectedButton.getTag(R.id.extra) != null) {
+										//Extra Value
 										isExtraValueTRUE = Boolean
 												.parseBoolean(selectedButton
 														.getTag(R.id.extra)
 														.toString());
-									}
-									boolean isExtraValueTyped = false;
-
-									if (extra_value_required) {
-										LinearLayout selectedButtonLine = (LinearLayout) selectedButton
-												.getParent();
-										for (int k = 0; k < selectedButtonLine
-												.getChildCount(); k++) {
-											View buttonLineChild = selectedButtonLine
-													.getChildAt(k);
-											if (buttonLineChild
-													.getClass()
-													.getName()
-													.equals("android.widget.Edittext")) {
-												EditText selectedExtra = (EditText) buttonLineChild;
-												if (selectedExtra.getText()
-														.toString().length() > 0)
-													isExtraValueTyped = true;
-											}
+										if(selectedButton.getTag(R.id.extra_required)!=null){
+											extra_value_required = Boolean
+													.parseBoolean(selectedButton
+															.getTag(R.id.extra_required)
+															.toString());
 										}
 									}
 
@@ -907,41 +890,61 @@ public class OneQuestionOneView extends FragmentActivity {
 
 									if (direction.equals(LEFT_TO_RIGHT)) {
 
-										String field_skip = selectedButton
-												.getTag(R.id.field_skip)
-												.toString();
+										String field_skip = selectedButton.getTag(R.id.field_skip).toString();
+										
+										if (extra_value_required) {
+											LinearLayout selectedButtonLine = (LinearLayout) selectedButton
+													.getParent();
+											for (int k = 0; k < selectedButtonLine
+													.getChildCount(); k++) {
+												View buttonLineChild = selectedButtonLine
+														.getChildAt(k);
+												if (buttonLineChild
+														.getClass()
+														.getName()
+														.equals("android.widget.EditText")) {
+													EditText selectedExtra = (EditText) buttonLineChild;
+													if (selectedExtra.getText()
+															.toString().length() > 0)
+														isExtraValueTyped = true;
+												}
+											}
+										}
 
-										if (extra_value_required
-												&& isExtraValueTRUE
-												&& !isExtraValueTyped) {
-											// block
-											// TODO : To put into staystill
-											navigator.addLast(0);
-											used_field_ids
-													.addLast(currentFieldID);
-											vPager.setCurrentItem(currentPosition);
-											toast.xaveyToast(null,
-													"Extra value is needed for selected radio button");
-											currentPosition = previousIndex;
+
+										if (isExtraValueTRUE && extra_value_required) {
+											if(!isExtraValueTyped){
+													// block
+												navStayStill(LEFT_TO_RIGHT, fieldID, "Extra value is needed for selected radio button", lLManager, newPosition, currentPosition, false);
+											}else{
+												// pass
+												newPosition = getNextRoute(newPosition);
+												renderNextLayout(newPosition);
+												int range = newPosition
+														- currentPosition;
+												if (range != 0)
+													navigator.addLast(range);
+												used_field_ids.addLast(currentFieldID);
+												vPager.setCurrentItem(newPosition);
+												currentPosition = newPosition;
+												previousIndex = currentPosition;
+												// hide keyboard
+												LinearLayout nextLayout_ = layoutList
+														.get(newPosition);
+												if (!isSubmitLayout(nextLayout_))
+													hideKeyboard(nextLayout_);
+											}
+//											else{
+//												// block
+//												navigator.addLast(0);
+//												used_field_ids
+//														.addLast(currentFieldID);
+//												vPager.setCurrentItem(currentPosition);
+//												toast.xaveyToast(null,	"");
+//												currentPosition = previousIndex;
+//											}
+											
 										} else if (ApplicationValues.IS_RECORDING_NOW) {
-											// still recording...
-											// block..
-											// there is no direction
-											// validation...
-											// bcuz it will block both direction
-											// if recording is not ending
-
-											/*
-											 * navigator.addLast(0);
-											 * used_field_ids
-											 * .addLast(currentFieldID);
-											 * vPager.setCurrentItem
-											 * (currentPosition);
-											 * toast.xaveyToast(null,
-											 * "Audio recording is needed to stop."
-											 * ); currentPosition =
-											 * previousIndex;
-											 */
 											boolean forceStopL_R = true;
 											navStayStill(
 													direction,
@@ -1203,11 +1206,9 @@ public class OneQuestionOneView extends FragmentActivity {
 																				// get
 																				// real
 																				// id
-							LinearLayout renderRefLayout = layoutList
-									.get(renderRefID);
+							LinearLayout renderRefLayout = layoutList.get(renderRefID);
 							LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
-							String renderLayoutID = renderInnerLayout.getTag(
-									R.id.layout_id).toString();
+							String renderLayoutID = renderInnerLayout.getTag(R.id.layout_id).toString();
 
 							if (render_ref_type.equals("extra_equal_no_item")) {
 								// following are all render Layout IDs...
@@ -1222,6 +1223,11 @@ public class OneQuestionOneView extends FragmentActivity {
 												.equals("android.widget.RadioGroup")) {
 											RadioGroup radioGroup = (RadioGroup) v;
 											RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
+											boolean extraRequired = false;
+											if(selectedButton.getTag(R.id.extra_required)!=null){
+												extraRequired = Boolean.parseBoolean(selectedButton.getTag(R.id.extra_required).toString());
+											}
+
 											int extra = Integer
 													.parseInt(getSelectedExtraValueBySelectedButton(selectedButton));
 											// ^ we got the extra from render
@@ -1387,6 +1393,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 					return extraValue;
 				}
+				
 
 				private String getReferenceFromParrentLayout(
 						LinearLayout parrentLayout) {
@@ -1900,12 +1907,33 @@ public class OneQuestionOneView extends FragmentActivity {
 				for (HashMap<String, String> image_map : imagesToSubmit) {
 					String image_name = image_map.get("field_name");
 					String image_path = image_map.get("imagePath");
-					Image image = new Image();
-					image.setDoc_id(docID);
-					image.setImage_name(image_name);
-					image.setImage_path(image_path);
-					dbHelper.addNewImage(image);
+					XMedia media = new XMedia();
+					media.setDoc_id(docID);
+					media.setMedia_name(image_name);
+					media.setMedia_path(image_path);
+					media.setMedia_type("image");
+					dbHelper.addNewMedia(media);
 				}
+				
+				// fill the audios to audiosToSubmit here
+				for(int j=0; j<jsonArray.length(); j++){
+					try {
+						JSONObject obj = jsonArray.getJSONObject(j);
+						if(obj.has("field_audio")){
+							String audioPath = obj.getString("field_audio");
+							String fieldID = obj.getString("field_id");
+							String documentID = document.getDocument_id();
+							HashMap<String, String> map = new HashMap<String, String>();
+							map.put("audio_path", audioPath);
+							map.put("field_id", fieldID);
+							map.put("document_id", documentID);
+							audiosToSubmit.add(map);
+						}
+					} catch (JSONException e) {
+						//
+					}
+				}
+
 				SyncManager syncManager = new SyncManager(
 						OneQuestionOneView.this);
 
