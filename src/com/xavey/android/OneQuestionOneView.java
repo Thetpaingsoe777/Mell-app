@@ -98,7 +98,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 	boolean isAllRequiredFieldFilled = true;
 	ArrayList<HashMap<String, String>> imagesToSubmit = new ArrayList<HashMap<String, String>>();
-	ArrayList<HashMap<String, String>> audiosToSubmit = new ArrayList<HashMap<String, String>>();
+	//ArrayList<HashMap<String, String>> audiosToSubmit = new ArrayList<HashMap<String, String>>();
 
 	// DM
 	DisplayMetrics dm;
@@ -1129,8 +1129,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						LinearLayout nextLayout_ = layoutList.get(newPosition);
 
 						boolean isInvolvedRef = isFieldInvolvedReference(nextLayout_);
-						//boolean isFieldInvolvedNextCondType = isFieldInvolvedNextCondType(nextLayout_);
-
+						boolean isFieldInvolvedNextCondType = isFieldInvolvedNextCondType(nextLayout_);
 						String nextConditionType = "nothing";
 
 						if (isInvolvedRef) {
@@ -1138,8 +1137,8 @@ public class OneQuestionOneView extends FragmentActivity {
 							LinearLayout ref_layout = getRefLayout(next_ref,
 									layoutList);
 							JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
-
-							if (next_cond!=null && next_cond.length()>0) {
+							boolean secondCondition = next_cond!=null && next_cond.length()>0; 
+							if (isFieldInvolvedNextCondType) {
 								nextConditionType = getNextConditionTypeFromParrentLayout(nextLayout_);
 								if (nextConditionType.equals("count")) {
 									// count is here
@@ -1161,19 +1160,19 @@ public class OneQuestionOneView extends FragmentActivity {
 									isNeedToSkip = isNeedToSkip(next_cond, count + "");
 									if (isNeedToSkip)
 										newPosition++;
-								}
-							} else {
-								isNeedToSkip = false;
-								//String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-								//isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
-								//if (isNeedToSkip)
-								//	newPosition++;
-							}
+								} // count end here
+								 else {
+										isNeedToSkip = false;
+										String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
+										isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
+										if (isNeedToSkip)
+											newPosition++;
+									}
+							}// nothing to do with it if it doesn't involve
 						} else {
 							isNeedToSkip = false;
 						}
 					}
-
 					return newPosition;
 				}
 
@@ -1345,9 +1344,9 @@ public class OneQuestionOneView extends FragmentActivity {
 											.toString()
 											.equals("recordingLayout")) {
 								innerLayout = linearLayout;
-								if (innerLayout.getTag(R.id.next_ref_type) != null)
+								if (innerLayout.getTag(R.id.next_ref_cond) != null)
 									next_cond_type = innerLayout.getTag(
-											R.id.next_ref_type).toString();
+											R.id.next_ref_cond).toString();
 							}
 						}
 					}
@@ -1577,7 +1576,8 @@ public class OneQuestionOneView extends FragmentActivity {
 								e.printStackTrace();
 							}
 							if (cond.equals(value)) {
-								isNeedToSkip = isNeedToSkip || true;
+								//isNeedToSkip = isNeedToSkip || true;
+								return true;
 							}
 						}
 					}
@@ -1662,7 +1662,8 @@ public class OneQuestionOneView extends FragmentActivity {
 			String imagePath = bundle.getString("signPath");
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			hashMap.put("field_name", field_name);
-			hashMap.put("imagePath", imagePath);
+			hashMap.put("media_path", imagePath);
+			hashMap.put("media_type", "image");
 			imagesToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
@@ -1708,7 +1709,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			hashMap.put("field_name", field_name);
-			hashMap.put("imagePath", imagePath);
+			hashMap.put("media_path", imagePath);
+			hashMap.put("media_type", "image");
 			imagesToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
@@ -1764,7 +1766,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			hashMap.put("field_name", field_name);
-			hashMap.put("imagePath", imagePath);
+			hashMap.put("media_path", imagePath);
 			imagesToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
@@ -1776,6 +1778,12 @@ public class OneQuestionOneView extends FragmentActivity {
 							.equals("android.widget.LinearLayout")
 							&& view.getTag(R.id.layout_id) != null) {
 						childLayout = (LinearLayout) view;
+						break;
+					}else if(view.getClass().getName()
+							.equals("android.widget.LinearLayout")){
+						ScrollView sv = (ScrollView) view;
+						childLayout = (LinearLayout) sv.getChildAt(0);
+						break;
 					}
 				}
 				if (childLayout.getTag(R.id.layout_id).toString()
@@ -1877,9 +1885,7 @@ public class OneQuestionOneView extends FragmentActivity {
 										child.put("field_audio", audioFile);
 									}
 								}
-								
-								
-							
+
 //								if (fieldValueAudio.length() > 0) {
 //									child.put("field_value_audio",
 //											fieldValueAudio);
@@ -1913,18 +1919,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				// offline mode
 				document.setSubmitted("0");
-				// save image too.
-				String docID = document.getDocument_id();
-				for (HashMap<String, String> image_map : imagesToSubmit) {
-					String image_name = image_map.get("field_name");
-					String image_path = image_map.get("imagePath");
-					XMedia media = new XMedia();
-					media.setDoc_id(docID);
-					media.setMedia_name(image_name);
-					media.setMedia_path(image_path);
-					media.setMedia_type("image");
-					dbHelper.addNewMedia(media);
-				}
+				
 				
 				// fill the audios to audiosToSubmit here
 				for(int j=0; j<jsonArray.length(); j++){
@@ -1933,17 +1928,47 @@ public class OneQuestionOneView extends FragmentActivity {
 						if(obj.has("field_audio")){
 							String audioPath = obj.getString("field_audio");
 							String fieldID = obj.getString("field_id");
+							String fieldName = obj.getString("field_name");
 							String documentID = document.getDocument_id();
 							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("audio_path", audioPath);
+							map.put("media_path", audioPath);
 							map.put("field_id", fieldID);
+							map.put("field_name", fieldName);
 							map.put("document_id", documentID);
-							audiosToSubmit.add(map);
+							map.put("media_type", "audio");
+							imagesToSubmit.add(map);
 						}
 					} catch (JSONException e) {
 						//
 					}
 				}
+				
+				// save image too.
+				String docID = document.getDocument_id();
+				for (HashMap<String, String> image_map : imagesToSubmit) {
+					String media_name = image_map.get("field_name");
+					String media_path = image_map.get("media_path");
+					XMedia media = new XMedia();
+					media.setDoc_id(docID);
+					media.setMedia_name(media_name);
+					media.setMedia_path(media_path);
+					media.setMedia_type(image_map.get("media_type"));
+					dbHelper.addNewMedia(media);
+				}
+				
+				/*// save audio
+				for (HashMap<String, String> audio_map : audiosToSubmit) {
+					String media_name = audio_map.get("field_name");
+					String media_path = audio_map.get("audio_path");
+					XMedia media = new XMedia();
+					media.setDoc_id(docID);
+					media.setMedia_name(media_name);
+					media.setMedia_path(media_path);
+					media.setMedia_type("audio");
+					dbHelper.addNewMedia(media);
+				}*/
+				
+				
 
 				SyncManager syncManager = new SyncManager(
 						OneQuestionOneView.this);

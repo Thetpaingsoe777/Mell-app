@@ -135,11 +135,11 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				+ " INTEGER," + CREATED_WORKER + " TEXT," + SUBMITTED
 				+ " INTEGER" + ")";
 
-		String CREATE_IMAGE_TABLE = "CREATE TABLE " + MEDIA_TABLE + "(" 
+		String CREATE_MEDIA_TABLE = "CREATE TABLE " + MEDIA_TABLE + "(" 
 									+ ID + " INTEGER PRIMARY KEY," 
 									+ MEDIA_NAME + " TEXT, " 
 									+ MEDIA_PATH + " TEXT, " 
-									+ IMAGE_ID + " INTEGER, " 
+									+ MEDIA_ID + " INTEGER, " 
 									+ DOC_ID + " INTEGER, "
 									+ MEDIA_TYPE + " TEXT"
 									+ ")";
@@ -162,7 +162,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_USER_TABLE);
 		db.execSQL(CREATE_WORKER_FORM_TABLE);
 		db.execSQL(CREATE_DOCUMENT_TABLE);
-		db.execSQL(CREATE_IMAGE_TABLE);
+		db.execSQL(CREATE_MEDIA_TABLE);
 		db.execSQL(CREATE_AUDIO_TABLE);
 		db.execSQL(CREATE_SYNCED_IMAGE_TABLE);
 	}

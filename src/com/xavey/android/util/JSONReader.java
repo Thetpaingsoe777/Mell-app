@@ -4083,10 +4083,12 @@ public class JSONReader {
 			View child = parentLayout.getChildAt(p);
 			if (child.getClass().getName()
 					.equals("android.widget.LinearLayout")
-					|| child.getClass().getName()
-							.equals("android.widget.LinearLayout")
+					&& !child.getTag(R.id.layout_id)
+					.toString()
+					.equals("recordingLayout")
 					&& child.getTag(R.id.layout_id) != null) {
 				linearLayout = (LinearLayout) parentLayout.getChildAt(p);
+				break;
 			}
 		}
 

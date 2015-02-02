@@ -301,7 +301,7 @@ public class SyncManager {
 					ArrayList<HashMap<String, String>> imagesToSubmit_ = params[0];
 					for (HashMap<String, String> map : imagesToSubmit_) {
 						String image_field_name = map.get("field_name");
-						String image_path = map.get("imagePath");
+						String image_path = map.get("media_path");
 						RestClient c = new RestClient(imageUploadURL, image_path);
 						c.AddHeader("x-access-token", ApplicationValues.loginUser.getToken());
 						try {
@@ -355,7 +355,13 @@ public class SyncManager {
 					String field_name = child.getString("field_name");
 					String field_label = child.getString("field_label");
 					String field_value = child.getString("field_value");
-					if (field_value.equals("unavailable") || field_value.endsWith(".jpeg") || field_value.endsWith(".jpg")) {
+					boolean isAudio = false;
+					boolean isImage = false;
+					//TODO: add other audio extension;
+					isAudio = (field_value.endsWith(".mp4") || field_value.endsWith(".mp3"));
+					isImage = (field_value.endsWith(".jpeg") || field_value.endsWith(".jpg") || field_value.endsWith(".png"));
+					//:TODO include PNG extension
+					if (isAudio||isImage) {
 						for (int j = 0; j < result.size(); j++) {
 							HashMap<String, String> resultMap = result.get(j);
 							JSONObject updatedObject = new JSONObject();
@@ -363,7 +369,10 @@ public class SyncManager {
 								String serverID = resultMap.get(field_name);
 								updatedObject.put("field_name", field_name);
 								updatedObject.put("field_label", field_label);
-								updatedObject.put("field_value", serverID);
+								if(isAudio)
+									updatedObject.put("field_audio_value", serverID);
+								else
+									updatedObject.put("field_value", serverID);
 								completeDataArray.put(updatedObject);
 							}
 						}
