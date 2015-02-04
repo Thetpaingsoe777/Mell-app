@@ -438,10 +438,12 @@ public class MainActivity extends Activity {
 			String authenResponse = c_.getResponse();
 			String newToken = "";
 			try {
-				JSONObject authenResponse_ = new JSONObject(authenResponse);
-				newToken = authenResponse_.getString("token");
-				user.setToken(newToken);
-				dbHelper.updateUser(user);
+				if(userResponseCode==200){
+					JSONObject authenResponse_ = new JSONObject(authenResponse);
+					newToken = authenResponse_.getString("token");
+					user.setToken(newToken);
+					dbHelper.updateUser(user);
+				}
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

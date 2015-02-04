@@ -238,27 +238,28 @@ public class SyncManager {
 	// this method will replace submitDocument method
 	// now writing
 	public void submitDocument2(Document document, Form form,
-			ArrayList<HashMap<String, String>> imagesToSubmit)
+			ArrayList<HashMap<String, String>> mediaToSubmit)
 			throws JSONException {
 		// getJSONArrayToSubmit(); ကိုခေါ်ပြီးတဲ့အချိန်မှာ documentArrayToSubmit
 		// ထဲမှာ value ရောက်နေပြီးဖြစ်တယ်...
 		documentArrayToSubmit = jsonReader.getJSONArrayToSubmit(document, form);
+		document.setDocument_json_to_submit(documentArrayToSubmit.toString());
 
 		setDocumentToSubmit(document);
 		setFormToSubmit(form);
 
-		ImageAsyncTask imgAsyncTask = new ImageAsyncTask();
-		imgAsyncTask.execute(imagesToSubmit);
+		MediaAsyncTask imgAsyncTask = new MediaAsyncTask();
+		imgAsyncTask.execute(mediaToSubmit);
 
 	}
 
-	private class ImageAsyncTask
+	private class MediaAsyncTask
 			extends
 			AsyncTask<ArrayList<HashMap<String, String>>, ArrayList<HashMap<String, String>>, ArrayList<HashMap<String, String>>> {
 
 		private ProgressDialog Dialog = new ProgressDialog(activity_);
 		private ArrayList<HashMap<String, String>> uploadedImages = new ArrayList<HashMap<String, String>>();
-		ArrayList<XMedia> imagesToStoreLocally = new ArrayList<XMedia>();
+		ArrayList<XMedia> mediaToStoreLocally = new ArrayList<XMedia>();
 
 		XaveyProperties xavey_properties;
 		String mediaUploadURL="";
@@ -301,8 +302,8 @@ public class SyncManager {
 					ArrayList<HashMap<String, String>> imagesToSubmit_ = params[0];
 					for (HashMap<String, String> map : imagesToSubmit_) {
 						String image_field_name = map.get("field_name");
-						String image_path = map.get("media_path");
-						RestClient c = new RestClient(mediaUploadURL, image_path);
+						String media_path = map.get("media_path");
+						RestClient c = new RestClient(mediaUploadURL, media_path);
 						c.AddHeader("x-access-token", ApplicationValues.loginUser.getToken());
 						try {
 							c.Execute(RequestMethod.POST);
@@ -321,14 +322,14 @@ public class SyncManager {
 							e.printStackTrace();
 						}
 						hashMap.put(image_field_name, image_id);
-						XMedia image = new XMedia();
-						image.setDoc_id(documentToSubmit.getDocument_id());
-						image.setMedia_id(image_id);
-						image.setMedia_name(image_field_name);
-						image.setMedia_path(image_path);
-						image.setMedia_type("image");
-						image.setServerError(serverError);
-						imagesToStoreLocally.add(image);
+						XMedia media = new XMedia();
+						media.setDoc_id(documentToSubmit.getDocument_id());
+						media.setMedia_id(image_id);
+						media.setMedia_name(image_field_name);
+						media.setMedia_path(media_path);
+						media.setMedia_type(isAudio(media_path)?"audio":(isImage(media_path)?"image":"unknown"));
+						media.setServerError(serverError);
+						mediaToStoreLocally.add(media);
 					}
 					uploadedImages.add(hashMap);
 				}
@@ -358,8 +359,8 @@ public class SyncManager {
 					boolean isAudio = false;
 					boolean isImage = false;
 					//TODO: add other audio extension;
-					isAudio = (field_value.endsWith(".mp4") || field_value.endsWith(".mp3"));
-					isImage = (field_value.endsWith(".jpeg") || field_value.endsWith(".jpg") || field_value.endsWith(".png"));
+					isAudio = isAudio(field_value);
+					isImage = isImage(field_value);
 					//:TODO include PNG extension
 					if (isAudio||isImage) {
 						for (int j = 0; j < result.size(); j++) {
@@ -370,8 +371,8 @@ public class SyncManager {
 								updatedObject.put("field_name", field_name);
 								updatedObject.put("field_label", field_label);
 								if(isAudio)
-									updatedObject.put("field_audio_value", serverID);
-								else
+									updatedObject.put("field_audio", serverID);
+								else if(isImage)
 									updatedObject.put("field_value", serverID);
 								completeDataArray.put(updatedObject);
 							}
@@ -395,11 +396,12 @@ public class SyncManager {
 				documentToSubmit.setSubmitted("1");
 				dbHelper.updateDocument(documentToSubmit);
 				dbHelper.updateDocumentSubmitted(documentToSubmit, "1");
-				for (XMedia image : imagesToStoreLocally) {
+				for (XMedia image : mediaToStoreLocally) {
 					if(!dbHelper.isMediaAlreadyExistInDB(image.getMedia_path()))
 						dbHelper.addNewMedia(image);
-					else
+					else{
 						dbHelper.updateMediaByPath(image);
+					}
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -407,10 +409,18 @@ public class SyncManager {
 			}
 		}
 	}
-	
+
 	public String getDeviceUniqueID(Activity activity){		String device_unique_id = Secure.getString(activity.getContentResolver(),
 			    Secure.ANDROID_ID);
 		return device_unique_id;
+	}
+	
+	private boolean isAudio(String media_name){
+		return (media_name.endsWith(".mp4") || media_name.endsWith(".mp3"));
+	}
+	
+	private boolean isImage(String media_name){
+		return (media_name.endsWith(".jpeg") || media_name.endsWith(".jpg") || media_name.endsWith(".png"));
 	}
 
 /*	private long uniqueCurrentTimeMS() {

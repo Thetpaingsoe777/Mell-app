@@ -545,10 +545,10 @@ public class JSONReader {
 							radioLayout.setTag(R.id.next_ref_type,
 									fields.get("next_ref_type"));
 						}
-						String field_default_value = fields.get(
-								"field_default_value").toString();
-						radioLayout.setTag(R.id.field_default_value,
-								field_default_value);
+//						String field_default_value = fields.get(
+//								"field_default_value").toString();
+//						radioLayout.setTag(R.id.field_default_value,
+//								field_default_value);
 						if (fields.containsKey("render_ref"))
 							radioLayout.setTag(R.id.render_ref,
 									fields.get("render_ref"));
@@ -626,12 +626,12 @@ public class JSONReader {
 								radioButton.setTag(R.id.extra_required, extra_required);
 							radioButton.setSelected(false);
 
-							if (tag.equals(field_default_value)) {
-								radioButton.setSelected(true);
-								radioButton.setChecked(true);
-								radioButton.setTag(
-										R.id.is_radiobutton_selected, true);
-							}
+//							if (tag.equals(field_default_value)) {
+//								radioButton.setSelected(true);
+//								radioButton.setChecked(true);
+//								radioButton.setTag(
+//										R.id.is_radiobutton_selected, true);
+//							}
 							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
 									RadioGroup.LayoutParams.MATCH_PARENT,
 									RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -3821,9 +3821,9 @@ public class JSONReader {
 				fields.put("field_name", jChild.getString("field_name"));
 				fields.put("field_value", jChild.getString("field_value"));
 				fields.put("field_label", jChild.getString("field_label"));
-				if (jChild.has("field_value_audio")) {
-					fields.put("field_value_audio",
-							jChild.getString("field_value_audio"));
+				if (jChild.has("field_audio")) {
+					fields.put("field_audio",
+							jChild.getString("field_audio"));
 				}
 				fieldList.add(fields);
 			}
@@ -4017,9 +4017,9 @@ public class JSONReader {
 			fieldNode.put("field_label", map.get("field_label"));
 			fieldNode.put("field_name", map.get("field_name"));
 			fieldNode.put("field_value", map.get("field_value"));
-			if (map.containsKey("field_value_audio")) {
+			if (map.containsKey("field_audio")) {
 				fieldNode
-						.put("field_value_audio", map.get("field_value_audio"));
+						.put("field_audio", map.get("field_audio"));
 			}
 			dataArray.put(fieldNode);
 		}
