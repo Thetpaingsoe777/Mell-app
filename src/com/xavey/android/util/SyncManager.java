@@ -261,13 +261,13 @@ public class SyncManager {
 		ArrayList<XMedia> imagesToStoreLocally = new ArrayList<XMedia>();
 
 		XaveyProperties xavey_properties;
-		String imageUploadURL="";
+		String mediaUploadURL="";
 		
 		protected void onPreExecute() {
 /*			 Dialog.setMessage("Uploading ..");
 			 Dialog.show();*/
 			xavey_properties = new XaveyProperties();
-			imageUploadURL = xavey_properties.getServerImageUploadURL();
+			mediaUploadURL = xavey_properties.getServerImageUploadURL();
 		}
 
 		
@@ -302,7 +302,7 @@ public class SyncManager {
 					for (HashMap<String, String> map : imagesToSubmit_) {
 						String image_field_name = map.get("field_name");
 						String image_path = map.get("media_path");
-						RestClient c = new RestClient(imageUploadURL, image_path);
+						RestClient c = new RestClient(mediaUploadURL, image_path);
 						c.AddHeader("x-access-token", ApplicationValues.loginUser.getToken());
 						try {
 							c.Execute(RequestMethod.POST);

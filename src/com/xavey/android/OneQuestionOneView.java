@@ -97,7 +97,7 @@ public class OneQuestionOneView extends FragmentActivity {
 	TypeFaceManager typeface;
 
 	boolean isAllRequiredFieldFilled = true;
-	ArrayList<HashMap<String, String>> imagesToSubmit = new ArrayList<HashMap<String, String>>();
+	ArrayList<HashMap<String, String>> mediaToSubmit = new ArrayList<HashMap<String, String>>();
 	//ArrayList<HashMap<String, String>> audiosToSubmit = new ArrayList<HashMap<String, String>>();
 
 	// DM
@@ -1664,7 +1664,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			hashMap.put("field_name", field_name);
 			hashMap.put("media_path", imagePath);
 			hashMap.put("media_type", "image");
-			imagesToSubmit.add(hashMap);
+			mediaToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
 				LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
@@ -1711,7 +1711,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			hashMap.put("field_name", field_name);
 			hashMap.put("media_path", imagePath);
 			hashMap.put("media_type", "image");
-			imagesToSubmit.add(hashMap);
+			mediaToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
 				LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
@@ -1767,7 +1767,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			HashMap<String, String> hashMap = new HashMap<String, String>();
 			hashMap.put("field_name", field_name);
 			hashMap.put("media_path", imagePath);
-			imagesToSubmit.add(hashMap);
+			mediaToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
 				LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
@@ -1780,7 +1780,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						childLayout = (LinearLayout) view;
 						break;
 					}else if(view.getClass().getName()
-							.equals("android.widget.LinearLayout")){
+							.equals("android.widget.ScrollView")){
 						ScrollView sv = (ScrollView) view;
 						childLayout = (LinearLayout) sv.getChildAt(0);
 						break;
@@ -1936,7 +1936,7 @@ public class OneQuestionOneView extends FragmentActivity {
 							map.put("field_name", fieldName);
 							map.put("document_id", documentID);
 							map.put("media_type", "audio");
-							imagesToSubmit.add(map);
+							mediaToSubmit.add(map);
 						}
 					} catch (JSONException e) {
 						//
@@ -1945,7 +1945,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				
 				// save image too.
 				String docID = document.getDocument_id();
-				for (HashMap<String, String> image_map : imagesToSubmit) {
+				for (HashMap<String, String> image_map : mediaToSubmit) {
 					String media_name = image_map.get("field_name");
 					String media_path = image_map.get("media_path");
 					XMedia media = new XMedia();
@@ -1996,9 +1996,9 @@ public class OneQuestionOneView extends FragmentActivity {
 				if (isInternetAvailable) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
-						if (imagesToSubmit.size() > 0) {
+						if (mediaToSubmit.size() > 0) {
 							syncManager.submitDocument2(document, currentForm,
-									imagesToSubmit); // <--
+									mediaToSubmit); // <--
 						} else {
 							syncManager.submitDocument(document, currentForm);
 						}

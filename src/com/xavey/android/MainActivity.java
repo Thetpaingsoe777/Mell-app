@@ -798,6 +798,7 @@ public class MainActivity extends Activity {
 	
 					} catch (Exception e) {
 						toastManager.xaveyToast(null, "Error Dowonloading image : "+imageName+"\n"+e.getMessage());
+						onResume();
 					}
 					syncedForms.put("formID", formID);
 				}
