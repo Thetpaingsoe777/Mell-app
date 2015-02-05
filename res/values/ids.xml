@@ -54,4 +54,7 @@
     <!-- dataset values -->
     <item type="id" name="dataset_values"/>
     
+    <!-- recording purpose only -->
+    <item type="id" name="recording_manager" />
+    
 </resources>

@@ -129,6 +129,26 @@ public class LinearLayoutManager {
 			map.put("field_min_value", minValue);
 			map.put("field_err_msg", errorMsg);
 		}
+		else if(layoutID.equals("radioLayout")){
+			boolean isChecked = false;
+			for(int i=0; i<linearLayout.getChildCount(); i++){
+				String className = linearLayout.getChildAt(i).getClass().getName();
+				if(className.equals("android.widget.RadioGroup")){
+					RadioGroup rg = (RadioGroup) linearLayout.getChildAt(i);
+					RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(rg);
+					if(selectedButton!=null)
+						isChecked = true;
+					else 
+						isChecked = false;
+				}
+			}
+			if(isChecked)
+				map.put("value", "checked");
+			else
+				map.put("value", "#no_value#");
+		}
+		
+		
 		else if(layoutID.equals("checkBoxLayout")){
 			boolean isChecked = false;
 			for(int i=0; i<linearLayout.getChildCount(); i++){
@@ -558,6 +578,25 @@ public class LinearLayoutManager {
 				map.put(key, "unavailable");
 			}
 		return map;
+	}
+	
+	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
+		RadioButton selectedButton = null;
+		for (int i = 0; i < radioGroup.getChildCount(); i++) {
+			LinearLayout radioButtonLine = (LinearLayout) radioGroup
+					.getChildAt(i);
+			for (int z = 0; z < radioButtonLine.getChildCount(); z++) {
+				View view = radioButtonLine.getChildAt(z);
+				String className = view.getClass().getName().toString();
+				if (className.equals("android.widget.RadioButton")) {
+					RadioButton radioButton = (RadioButton) view;
+					if (radioButton.isChecked()) {
+						return radioButton;
+					}
+				}
+			}
+		}
+		return selectedButton;
 	}
 
 }

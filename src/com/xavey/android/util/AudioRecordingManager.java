@@ -30,13 +30,16 @@ public class AudioRecordingManager {
 			AUDIO_RECORDER_FILE_EXT_3GP };
 	XaveyDBHelper dbHelper = new XaveyDBHelper(activity_);
 	
+	Button btnStart;
+	Button btnStop;
+	
 	public AudioRecordingManager(Activity activity){
 		activity_ = activity;
 	}
 	
 	public LinearLayout getRecordingLayout(){
-		final Button btnStart = new Button(activity_);
-		final Button btnStop = new Button(activity_);
+		btnStart = new Button(activity_);
+		btnStop = new Button(activity_);
 		btnStart.setText("record");
 		btnStop.setText("stop");
 		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -45,7 +48,6 @@ public class AudioRecordingManager {
 		final ToastManager xToast = new ToastManager(activity_);
 
 		final LinearLayout recordingLayout = new LinearLayout(activity_);
-
 		btnStart.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -55,7 +57,7 @@ public class AudioRecordingManager {
 				btnStart.setEnabled(!isRecording);
 				btnStop.setEnabled(isRecording);
 				startRecording();
-				String audio_path = getFilename();
+				String audio_path = getFilename();	
 				recordingLayout.setTag(R.id.audio_path, audio_path);
 			}
 		});
@@ -151,6 +153,9 @@ public class AudioRecordingManager {
 		}
 	}
 
+	public void triggerStopClick(){
+		btnStop.performClick();
+	}
 	public Audio getAudioInfo() {
 		audioInfo.setAudio_path(getFilename());
 		return audioInfo;

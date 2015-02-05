@@ -81,6 +81,9 @@ public class OneQuestionOneView extends FragmentActivity {
 	private QuestionPagerAdapter qAdapter; // 19-9-2014
 	private final String LEFT_TO_RIGHT = "L_R";
 	private final String RIGHT_TO_LEFT = "R_L";
+	private boolean isValidating = false;
+	int currentPosition = 0;
+	LinearLayout currentLayout = null;
 	ViewPager vPager;
 	// int pageTotal;
 
@@ -152,10 +155,9 @@ public class OneQuestionOneView extends FragmentActivity {
 				String fieldRequired;
 				String layoutID;
 				int index = 0;
-				LinearLayout currentLayout = null;
+				
 				LinearLayout nextLayout = null;
 				RelativeLayout currentUpperLayout = null;
-				int currentPosition = 0;
 
 				// private int field_id;
 				int skipID = 0;
@@ -172,7 +174,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				ToastManager toast = new ToastManager(OneQuestionOneView.this);
 
 				@Override
-				public void onPageSelected(int newPosition) {
+				public void onPageSelected(int newPosition){
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
@@ -183,6 +185,19 @@ public class OneQuestionOneView extends FragmentActivity {
 						String s = "";
 						s.length();
 					}
+					
+					if(direction==RIGHT_TO_LEFT && isValidating  ){
+						isValidating = false;
+						navRightToLeft(newPosition);
+						//break from this method
+					}
+					else if(direction==LEFT_TO_RIGHT){
+						isValidating = true;
+						validateOnPageSelected(newPosition);
+					}
+				}
+				
+				private void validateOnPageSelected(int newPosition) {
 					int lastJump = -1;
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
@@ -250,11 +265,10 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * .show();
 					 */
 
-					boolean isNeedToValid = currentLayout
-							.getTag(R.id.layout_id).toString()
-							.equals("radioLayout");
-					isNeedToValid = isNeedToValid
-							|| currentLayout.getTag(R.id.layout_id).toString()
+//					boolean isNeedToValid = currentLayout
+//							.getTag(R.id.layout_id).toString()
+//							.equals("radioLayout");
+					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString()
 									.equals("datetimeLayout");
 					isNeedToValid = isNeedToValid
 							|| currentLayout.getTag(R.id.layout_id).toString()
@@ -373,8 +387,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								} else {
 									// in range
 									// pass
-									if (direction.equals(LEFT_TO_RIGHT)) {
-
 										// logic testing
 										// reverse
 										/*
@@ -413,22 +425,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												.get(newPosition);
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList
-												.get(newPosition);
-										if (!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
-									}
+									
 									// if (errorMsg != null)
 									// errorMsg.setText("");
 								}
@@ -503,21 +500,7 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 									}
 								}
-								if (direction.equals(RIGHT_TO_LEFT)) { // RIGHT_TO_LEFT
-									int last_range = 0;
-									if (navigator.getLast() != null)
-										last_range = navigator.getLast();
-									newPosition = currentPosition - last_range;
-									vPager.setCurrentItem(newPosition);
-									currentPosition = newPosition;
-									navigator.removeLast();
-									used_field_ids.removeLast();
-									// hide keyboard
-									LinearLayout nextLayout_ = layoutList
-											.get(newPosition);
-									if (!isSubmitLayout(nextLayout_))
-										hideKeyboard(nextLayout_);
-								} else { // LEFT TO RIGHT
+
 									if (!isValid) {
 
 										// block
@@ -566,7 +549,6 @@ public class OneQuestionOneView extends FragmentActivity {
 											hideKeyboard(nextLayout_);
 
 									}
-								}
 								// TODO:navStayStill
 								// if (errorMsg != null)
 								// errorMsg.setText("");
@@ -574,7 +556,222 @@ public class OneQuestionOneView extends FragmentActivity {
 								// above)
 
 							}
+							// latested updated
+							// I moved the code here since it needs validation
+							// radio start
+							else if(tagID.equals("radioLayout")){
+								for (int i = 0; i < currentLayout.getChildCount(); i++) {
+									String className = currentLayout.getChildAt(i)
+											.getClass().getName().toString();
+									
+									boolean isFieldRequired = Boolean.parseBoolean(currentLayout.getTag(R.id.field_required_id).toString());
+									boolean isSelectedAnyRadio = false;
+									String errMessage="";
+									if (className
+											.equals("android.widget.RadioGroup")) {
+										// radio
 
+										boolean extra_value_required = false;
+										boolean isExtraValueTRUE = false;
+										boolean isExtraValueTyped = false;
+										
+										RadioGroup radioGroup = (RadioGroup) currentLayout
+												.getChildAt(i);
+
+										
+										
+										RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
+										
+										isSelectedAnyRadio = selectedButton != null ? true : false; 
+										
+										if (isSelectedAnyRadio && selectedButton.getTag(R.id.extra) != null) {
+											// Extra Value
+											isExtraValueTRUE = Boolean
+													.parseBoolean(selectedButton
+															.getTag(R.id.extra)
+															.toString());
+											if (selectedButton
+													.getTag(R.id.extra_required) != null) {
+												extra_value_required = Boolean
+														.parseBoolean(selectedButton
+																.getTag(R.id.extra_required)
+																.toString());
+											}
+										}
+
+										String fieldID = currentLayout.getTag(
+												R.id.field_id).toString();
+										Log.i("fieldID", fieldID);
+
+											boolean forceStopL_R = false;
+
+											String field_skip = "";
+											if(selectedButton!=null && selectedButton.getTag(R.id.field_skip)!=null)
+												field_skip = selectedButton
+														.getTag(R.id.field_skip)
+														.toString();
+											if (extra_value_required) {
+												LinearLayout selectedButtonLine = (LinearLayout) selectedButton
+														.getParent();
+												for (int k = 0; k < selectedButtonLine
+														.getChildCount(); k++) {
+													View buttonLineChild = selectedButtonLine
+															.getChildAt(k);
+													if (buttonLineChild
+															.getClass()
+															.getName()
+															.equals("android.widget.EditText")) {
+														EditText selectedExtra = (EditText) buttonLineChild;
+														if (selectedExtra.getText()
+																.toString()
+																.length() > 0)
+															isExtraValueTyped = true;
+													}
+												}
+											}
+											
+											//start stay still validation
+											if(isFieldRequired && !isSelectedAnyRadio){
+												//TODO Get error message from Question
+												errMessage = "Required Parent.";
+											}
+
+											if (isExtraValueTRUE
+													&& extra_value_required) {
+												if (!isExtraValueTyped) {
+													errMessage ="Required Child Extra";
+												}
+											}
+											if (ApplicationValues.IS_RECORDING_NOW) {
+												 forceStopL_R = true;
+												/*navStayStill(
+														direction,
+														currentFieldID,*/
+													errMessage=	"Audio recording is needed to stop.";
+														/*lLManager, newPosition,
+														currentPosition,
+														forceStopL_R);*/
+											}
+											//end stay still validation
+											
+											if(errMessage.length()>0){	// block
+												navStayStill(
+														direction,
+														fieldID,
+														errMessage,
+														lLManager, newPosition,
+														currentPosition, forceStopL_R);
+											}
+										else {
+											// pass
+											 if (field_skip.length() > 0) {
+												if (field_skip.equals("submit")) {
+													// skip to submit
+													newPosition = layoutList.size() - 1;
+
+													int range = newPosition
+															- currentPosition;
+													navigator.addLast(range);
+													used_field_ids
+															.addLast(currentFieldID);
+													vPager.setCurrentItem(newPosition);
+													currentPosition = newPosition;
+													previousIndex = currentPosition;
+													// hide keyboard
+													LinearLayout nextLayout_ = layoutList
+															.get(newPosition);
+													if (!isSubmitLayout(nextLayout_))
+														hideKeyboard(nextLayout_);
+												} else {
+
+													// skip to other questions logic
+													skipID = Integer
+															.parseInt(field_skip);
+													newPosition = skipID - 1;
+													newPosition = getNextRoute(newPosition);
+													renderNextLayout(newPosition);
+													previousIndex = currentPosition;
+													int range = newPosition	- currentPosition;
+													if (range != 0) // <-- don't
+																	// know why
+																	// but a
+																	// zero came
+																	// sometimes,
+																	// so i
+																	// filtered
+														navigator.addLast(range);
+													used_field_ids
+															.addLast(currentFieldID);
+													vPager.setCurrentItem(newPosition);
+													currentPosition = newPosition;
+													// hide keyboard
+													LinearLayout nextLayout_ = layoutList
+															.get(newPosition);
+													if (!isSubmitLayout(nextLayout_))
+														hideKeyboard(nextLayout_);
+												}
+											 }
+											 else{
+													newPosition = getNextRoute(newPosition);
+													renderNextLayout(newPosition);
+													int range = newPosition
+															- currentPosition;
+													if (range != 0)
+														navigator.addLast(range);
+													used_field_ids
+															.addLast(currentFieldID);
+													vPager.setCurrentItem(newPosition);
+													currentPosition = newPosition;
+													previousIndex = currentPosition;
+													// hide keyboard
+													LinearLayout nextLayout_ = layoutList
+															.get(newPosition);
+													if (!isSubmitLayout(nextLayout_))
+														hideKeyboard(nextLayout_);
+												}
+										}
+												// else{
+												// // block
+												// navigator.addLast(0);
+												// used_field_ids
+												// .addLast(currentFieldID);
+												// vPager.setCurrentItem(currentPosition);
+												// toast.xaveyToast(null, "");
+												// currentPosition = previousIndex;
+												// }
+
+											 /*else 
+											} 
+											} else {
+
+												newPosition = getNextRoute(newPosition);
+												renderNextLayout(newPosition);
+												int range = newPosition
+														- currentPosition;
+												navigator.addLast(range);
+												used_field_ids
+														.addLast(currentFieldID);
+												vPager.setCurrentItem(newPosition);
+												currentPosition = newPosition;
+												previousIndex = currentPosition;
+												// hide keyboard
+												LinearLayout nextLayout_ = layoutList
+														.get(newPosition);
+												if (!isSubmitLayout(nextLayout_))
+													hideKeyboard(nextLayout_);
+											}*/
+
+										
+										/*
+										 * TODO : navStayStill if (errorMsg != null)
+										 * errorMsg.setLayoutParams(new
+										 * LayoutParams( LayoutParams.WRAP_CONTENT,
+										 * 0));
+										 */
+									}
+								}
+							}
+							// radio ends
 							else if (tagID.equals("matrixCheckListLayout")
 									|| tagID.equals("matrixOptionLayout")) {
 
@@ -725,7 +922,6 @@ public class OneQuestionOneView extends FragmentActivity {
 											field_error_msg, lLManager,
 											newPosition, currentPosition, false);
 								} else {
-									if (direction.equals(LEFT_TO_RIGHT)) {
 										// pass
 
 										newPosition = getNextRoute(newPosition);
@@ -743,22 +939,6 @@ public class OneQuestionOneView extends FragmentActivity {
 												.get(newPosition);
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
-									} else { // RIGHT_TO_LEFT
-										int last_range = 0;
-										if (navigator.getLast() != null)
-											last_range = navigator.getLast();
-										newPosition = currentPosition
-												- last_range;
-										vPager.setCurrentItem(newPosition);
-										currentPosition = newPosition;
-										navigator.removeLast();
-										used_field_ids.removeLast();
-										// hide keyboard
-										LinearLayout nextLayout_ = layoutList
-												.get(newPosition);
-										if (!isSubmitLayout(nextLayout_))
-											hideKeyboard(nextLayout_);
-									}
 								}
 								// if (errorMsg != null)
 								// errorMsg.setText("");
@@ -771,8 +951,7 @@ public class OneQuestionOneView extends FragmentActivity {
 								// user typed and field_type is not number...
 								// so no need validation let them go
 
-								if (direction.equals(LEFT_TO_RIGHT)) {
-
+								
 									// logic testing
 									// reverse
 									/*
@@ -808,22 +987,7 @@ public class OneQuestionOneView extends FragmentActivity {
 											.get(newPosition);
 									if (!isSubmitLayout(nextLayout_))
 										hideKeyboard(nextLayout_);
-								} else { // RIGHT_TO_LEFT
-									int last_range = navigator.getLast();
-									newPosition = currentPosition - last_range;
-									vPager.setCurrentItem(newPosition);
-									currentPosition = newPosition;
-									navigator.removeLast();
-									used_field_ids.removeLast();
-									// hide keyboard
-									LinearLayout nextLayout_ = layoutList
-											.get(newPosition);
-									if (!isSubmitLayout(nextLayout_))
-										hideKeyboard(nextLayout_);
-									// TODO : navStayStill
-									// if (errorMsg != null)
-									// errorMsg.setText("");
-								}
+								
 							}
 						} else {
 							// user didn't type anything
@@ -851,9 +1015,7 @@ public class OneQuestionOneView extends FragmentActivity {
 									currentPosition, false);
 						}
 					} else {
-						// here will be fragments they are not concerned with
-						// any
-						// validation
+						// here will be fragments that doesn't need validation
 						// pass
 						// another question is where to go if radio layout
 						// (skip logic)
@@ -894,8 +1056,6 @@ public class OneQuestionOneView extends FragmentActivity {
 									String fieldID = currentLayout.getTag(
 											R.id.field_id).toString();
 									Log.i("fieldID", fieldID);
-
-									if (direction.equals(LEFT_TO_RIGHT)) {
 
 										String field_skip = selectedButton
 												.getTag(R.id.field_skip)
@@ -1037,54 +1197,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												hideKeyboard(nextLayout_);
 										}
 
-									} else { // RIGHT_TO_LEFT
-
-										if (ApplicationValues.IS_RECORDING_NOW) {
-											// still recording...
-											// block..
-											// there is no direction
-											// validation...
-											// bcuz it will block both direction
-											// if recording is not ending
-											/*
-											 * navigator.addLast(0);
-											 * used_field_ids
-											 * .addLast(currentFieldID);
-											 * vPager.setCurrentItem
-											 * (currentPosition);
-											 * toast.xaveyToast(null,
-											 * "Audio recording is needed to stop."
-											 * ); currentPosition =
-											 * previousIndex;
-											 */
-											boolean forceStopL_R = true;
-											navStayStill(
-													direction,
-													currentFieldID,
-													"Audio recording is needed to stop.",
-													lLManager, newPosition,
-													currentPosition,
-													forceStopL_R);
-										} else {
-
-											int last_range = 0;
-											if (navigator.getLast() != null)
-												last_range = navigator
-														.getLast();
-											newPosition = currentPosition
-													- last_range;
-											vPager.setCurrentItem(newPosition);
-											currentPosition = newPosition;
-											navigator.removeLast();
-											used_field_ids.removeLast();
-											// hide keyboard
-											LinearLayout nextLayout_ = layoutList
-													.get(newPosition);
-											if (!isSubmitLayout(nextLayout_))
-												hideKeyboard(nextLayout_);
-										}
-									}
-									/*
+																		/*
 									 * TODO : navStayStill if (errorMsg != null)
 									 * errorMsg.setLayoutParams(new
 									 * LayoutParams( LayoutParams.WRAP_CONTENT,
@@ -1095,8 +1208,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						} else {
 							// not radio
 							// no need validation
-
-							if (direction.equals(LEFT_TO_RIGHT)) {
 
 								newPosition = getNextRoute(newPosition);
 								renderNextLayout(newPosition);
@@ -1113,23 +1224,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								if (!isSubmitLayout(nextLayout_))
 									hideKeyboard(nextLayout_);
 
-							} else { // RIGHT_TO_LEFT
-								int last_range = 0;
-								if (navigator.getLast() != null)
-									last_range = navigator.getLast();
-								if (currentPosition - last_range > 0) {
-									newPosition = currentPosition - last_range;
-									navigator.removeLast();
-									used_field_ids.removeLast();
-								}
-								vPager.setCurrentItem(newPosition);
-								currentPosition = newPosition;
-								// hide keyboard
-								LinearLayout nextLayout_ = layoutList
-										.get(newPosition);
-								if (isSubmitLayout(nextLayout_))
-									hideKeyboard(nextLayout_);
-							}
 							// TODO : navStayStill
 							// if (errorMsg != null)
 							// errorMsg.setText("");
@@ -1477,16 +1571,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					return reference;
 				}
 
-				private boolean isSubmitLayout(LinearLayout linearLayout) {
-					boolean isSubmitLayout = false;
-					if (linearLayout.getTag(R.id.layout_id) != null) {
-						if (linearLayout.getTag(R.id.layout_id).toString()
-								.equals("submitLayout")) {
-							isSubmitLayout = true;
-						}
-					}
-					return isSubmitLayout;
-				}
+				
 
 				private LinearLayout getInnerLayout(LinearLayout parrentLayout) {
 					LinearLayout innerLayout = null;
@@ -2837,7 +2922,66 @@ public class OneQuestionOneView extends FragmentActivity {
 				used_field_ids.removeLast();
 			}
 		}
+	}
 
+	private void navRightToLeft(int newPosition){
+		
+		if(ApplicationValues.IS_RECORDING_NOW){
+			LinearLayout thisLayout = layoutList.get(currentPosition);
+			LinearLayout recordingLayout = null;
+			for(int i=0; i<thisLayout.getChildCount(); i++){
+				if(thisLayout.getChildAt(i).getTag(R.id.layout_id)!=null && thisLayout.getChildAt(i).getTag(R.id.layout_id).toString().equals("recordingLayout")){
+					recordingLayout = (LinearLayout) thisLayout.getChildAt(i);
+					break;
+				}
+			}
+			if(recordingLayout!=null){
+				AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout.getTag(R.id.recording_manager);
+				currentRecording.triggerStopClick();
+			}
+		
+		int last_range = 0;
+		if (navigator.getLast() != null)
+			last_range = navigator.getLast();
+		newPosition = currentPosition - last_range;
+		vPager.setCurrentItem(newPosition);
+		currentPosition = newPosition;
+		navigator.removeLast();
+		used_field_ids.removeLast();
+		// hide keyboard
+		LinearLayout nextLayout_ = layoutList.get(newPosition);
+		if (!isSubmitLayout(nextLayout_))
+			hideKeyboard(nextLayout_);
+		}
+		/*
+		 if (ApplicationValues.IS_RECORDING_NOW) {
+		// still recording...
+		// block..
+		// there is no direction
+		// validation...
+		// bcuz it will block both direction
+		// if recording is not ending
+		/*
+		 * navigator.addLast(0);
+		 * used_field_ids
+		 * .addLast(currentFieldID);
+		 * vPager.setCurrentItem
+		 * (currentPosition);
+		 * toast.xaveyToast(null,
+		 * "Audio recording is needed to stop."
+		 * ); currentPosition =
+		 * previousIndex;
+		 
+		boolean forceStopL_R = true;
+		navStayStill(
+				direction,
+				currentFieldID,
+				"Audio recording is needed to stop.",
+				lLManager, newPosition,
+				currentPosition,
+				forceStopL_R);
+	}
+		 */
 	}
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
@@ -2950,5 +3094,16 @@ public class OneQuestionOneView extends FragmentActivity {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private boolean isSubmitLayout(LinearLayout linearLayout) {
+		boolean isSubmitLayout = false;
+		if (linearLayout.getTag(R.id.layout_id) != null) {
+			if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("submitLayout")) {
+				isSubmitLayout = true;
+			}
+		}
+		return isSubmitLayout;
 	}
 }

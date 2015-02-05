@@ -620,8 +620,7 @@ public class JSONReader {
 							radioButton.setTag(R.id.radio_value, tag);
 							radioButton.setTag(R.id.field_skip, skip);
 							radioButton.setTag(R.id.extra, extra);
-							radioButton.setTag(R.id.is_radiobutton_selected,
-									false);
+							radioButton.setTag(R.id.is_radiobutton_selected, false);
 							if(extra_required)
 								radioButton.setTag(R.id.extra_required, extra_required);
 							radioButton.setSelected(false);
@@ -654,18 +653,13 @@ public class JSONReader {
 									activity);
 							radioButtonLine.setTag(R.id.layout_id,
 									"radioButtonLine");
-							radioButtonLine
-									.setLayoutParams(radioButtonLineLayoutParams);
-							radioButtonLine
-									.setOrientation(LinearLayout.VERTICAL);
-							radioButton
-									.setOnClickListener(new OnClickListener() {
+							radioButtonLine.setLayoutParams(radioButtonLineLayoutParams);
+							radioButtonLine.setOrientation(LinearLayout.VERTICAL);
+							radioButton.setOnClickListener(new OnClickListener() {
 										@Override
 										public void onClick(View v) {
 											RadioButton clicked_button = (RadioButton) v;
-											clicked_button
-													.setTag(R.id.is_radiobutton_selected,
-															true);
+											clicked_button.setTag(R.id.is_radiobutton_selected,true);
 
 											// disable all other
 											Random r = new Random();
@@ -815,11 +809,13 @@ public class JSONReader {
 							rg.addView(eachButtonLine);
 						}
 
-						if (getSelectedRadioButtonMyRadioGroup(rg) == null) {
-							RadioButton firstButton = getRadioButtonByIndexMyRadioGroup(
-									rg, 0);
-							firstButton.setChecked(true);
-						}
+						// the clients don't want a default selected value
+						// so nothing will be selected here
+//						if (getSelectedRadioButtonMyRadioGroup(rg) == null) {
+//							RadioButton firstButton = getRadioButtonByIndexMyRadioGroup(
+//									rg, 0);
+//							firstButton.setChecked(true);
+//						}
 
 						radioLayout.addView(rg);
 						radioLayout.setGravity(Gravity.CENTER);
@@ -844,11 +840,11 @@ public class JSONReader {
 									.getRecordingLayout();
 							recordingLayout.setTag(R.id.layout_id,
 									"recordingLayout");
+							recordingLayout.setTag(R.id.recording_manager, recordingManager);
 							parentLayout.addView(recordingLayout);
 						}
 
 						addErrorMsg(parentLayout);
-
 						layoutList.add(parentLayout);
 					} else if (fields.get(key).equals("checklist")) {
 
