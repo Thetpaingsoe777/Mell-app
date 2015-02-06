@@ -432,7 +432,7 @@ public class MainActivity extends Activity {
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
-				toastManager.xaveyToast(null, e2.getMessage());
+				//toastManager.xaveyToast(null, e2.getMessage());
 			}
 			int userResponseCode = c_.getResponseCode();
 			String authenResponse = c_.getResponse();
