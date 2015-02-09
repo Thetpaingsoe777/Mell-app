@@ -185,7 +185,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						String s = "";
 						s.length();
 					}
-					
 					if(direction==RIGHT_TO_LEFT && !isValidating  ){
 						//isValidating = false;
 						navRightToLeft(newPosition);
@@ -1145,6 +1144,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			hashMap.put("field_name", field_name);
 			hashMap.put("media_path", imagePath);
 			hashMap.put("media_type", "image");
+			hashMap.put("media_id","");
 			mediaToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
@@ -1445,6 +1445,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					String media_name = image_map.get("field_name");
 					String media_path = image_map.get("media_path");
 					XMedia media = new XMedia();
+					media.setMedia_id("media_id");
 					media.setDoc_id(docID);
 					media.setMedia_name(media_name);
 					media.setMedia_path(media_path);
@@ -2809,9 +2810,9 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout nextLayout_ = layoutList.get(newPosition);
 		if (!isSubmitLayout(nextLayout_))
 			hideKeyboard(nextLayout_);
-		
+
 		/*
-		 if (ApplicationValues.IS_RECORDING_NOW) {
+		 if (ApplicationValues.) {
 		// still recording...
 		// block..
 		// there is no direction

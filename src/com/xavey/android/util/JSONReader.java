@@ -92,7 +92,7 @@ public class JSONReader {
 
 	// Layout setting here
 	// get incoming JSONString and return a linear layout
-	
+
 	LayoutParams errorMsgLayoutParams = null;
 
 	public ArrayList<LinearLayout> readForm2(Form form) throws JSONException {

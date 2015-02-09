@@ -48,7 +48,7 @@ public class CustomDrawerAdapter extends ArrayAdapter<DrawerItem> {
 
 		} else {
 			drawerHolder = (DrawerItemHolder) view.getTag();
-
+			
 		}
 
 		DrawerItem dItem = (DrawerItem) this.drawerItemList.get(position);

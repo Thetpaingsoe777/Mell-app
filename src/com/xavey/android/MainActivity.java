@@ -192,8 +192,8 @@ public class MainActivity extends Activity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		addDrawerItem();
-		adapter_ = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
-				itemList);
+		itemList.remove(1);
+		adapter_ = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, itemList);
 		mDrawerList.setAdapter(adapter_);
 		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -243,10 +243,15 @@ public class MainActivity extends Activity {
 			current_position = 0;
 			break;
 		case 1:
-			fragment = new CSVExportFragment();
-			args.putString("CSV Export", itemList.get(position).getItemName());
-			setTitle("CSV Export");
-			current_position = 1;
+//			fragment = new CSVExportFragment();
+//			args.putString("CSV Export", itemList.get(position).getItemName());
+//			setTitle("CSV Export");
+//			current_position = 1;
+			fragment = new HistoryFragment();
+			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position)
+					.getItemName());
+			setTitle(itemList.get(position).getItemName());
+			current_position = 2;
 			break;
 		case 2:
 			fragment = new HistoryFragment();

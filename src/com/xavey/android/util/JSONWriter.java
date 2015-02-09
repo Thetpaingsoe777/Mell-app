@@ -132,8 +132,7 @@ public class JSONWriter {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-		
+
 		String formJSON = form.getForm_json();
 
 		LinearLayout lL = new LinearLayout(activity);
@@ -289,7 +288,7 @@ public class JSONWriter {
 						tvFieldName.setTextSize(15);
 						tvFieldName.setLayoutParams(lp);
 						// tvFieldName.setWidth(500);
-						
+
 						// may be change as uneditable Edittext later or may not
 						lp = new LayoutParams(LayoutParams.WRAP_CONTENT, 40);
 						TextView tvFieldValue = new TextView(activity);

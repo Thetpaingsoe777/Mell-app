@@ -25,8 +25,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.LinearLayout.LayoutParams;
 
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.RequestMethod;
@@ -44,13 +46,17 @@ public class LoginActivity extends Activity {
 	DisplayMetrics dm;
 	int width;
 	int height;
-	ImageView xaveyLogo;
+	//ImageView xaveyLogo;
 	Button btnLogin;
 	EditText edtUserName, edtPassword;
 	TextView txtMsg;
 	SessionManager session;
 	Intent itt;
 	XaveyDBHelper dbHelper;
+	
+	//ImageView xaveyLogo;
+
+
 
 	// private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
 	// @Override
@@ -181,6 +187,9 @@ public class LoginActivity extends Activity {
 		edtUserName.setBackgroundResource(R.drawable.rounded_edittext);
 		edtPassword = (EditText) findViewById(R.id.edtPwd);
 		edtPassword.setBackgroundResource(R.drawable.rounded_edittext);
+		//xaveyLogo = (ImageView) findViewById(R.id.xaveyLogo);
+		RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(width-20, height/3);
+		//xaveyLogo.setLayoutParams(logoParams);
 	}
 
 	// test mode only
