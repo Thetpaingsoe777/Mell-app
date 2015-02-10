@@ -229,7 +229,7 @@ public class LoginActivity extends Activity {
 
 		protected void onPreExecute() {
 			Dialog.setMessage("Please wait..");
-			Dialog.show();
+			//Dialog.show();
 			xavey_properties = new XaveyProperties();
 			authenticateURL = xavey_properties.getAuthenticateURL();
 			localAuthenticate = xavey_properties.getLocalAuthenticateURL();

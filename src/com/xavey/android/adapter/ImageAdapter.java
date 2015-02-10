@@ -83,7 +83,7 @@ public class ImageAdapter extends BaseAdapter {
 		byte[] byteArray = syncImage.getImgByte();
 		BitmapDrawable bd = xaveyUtils
 				.convertByteArrayToBitmapDrawable(byteArray);
-		bd.setBounds(0, 0, 200, 200);
+		bd.setBounds(0, 0, 450, 450);
 		holder.imageTitle.setCompoundDrawables(null, bd, null, null);
 		holder.imageTitle.setText(label);
 		// holder.imageTitle.setTag(R.id.grid_item_value, value);

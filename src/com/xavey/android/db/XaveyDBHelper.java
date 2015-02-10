@@ -163,12 +163,30 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_WORKER_FORM_TABLE);
 		db.execSQL(CREATE_DOCUMENT_TABLE);
 		db.execSQL(CREATE_MEDIA_TABLE);
-		db.execSQL(CREATE_AUDIO_TABLE);
+		//db.execSQL(CREATE_AUDIO_TABLE);
 		db.execSQL(CREATE_SYNCED_IMAGE_TABLE);
+		
+		/*ArrayList<Form> existingFormList = getAllForms();
+		ArrayList<User> existingUserList = getAllUsers();
+		ArrayList<Document> existingDocument = getAllDocuments();*/
+		
+		
+		// getAllWorkerForms();
+		
+		//ArrayList<XMedia> existingMedia = getAllMedia();
+		// getAllSyncImage
+		
+		
+		
+		
+		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		
+		// store data here
+		
 		db.execSQL("DROP TABLE IF EXISTS " + FORM_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + DOCUMENT_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + WORKER_FORM_TABLE);
@@ -811,7 +829,10 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		return relatedDocumentList;
 	}
 
-	// Image
+	// Media
+	
+	
+	
 	public void addNewMedia(XMedia media) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -822,6 +843,29 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(MEDIA_TYPE, media.getMedia_type());
 		db.insert(MEDIA_TABLE, null, values);
 		db.close();
+	}
+	
+	public ArrayList<XMedia> getAllMedia(){
+		ArrayList<XMedia> imageList = new ArrayList<XMedia>();
+		String selectQuery = "SELECT * FROM " + MEDIA_TABLE + " WHERE "
+				+ DOC_ID + "=?";
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] {});
+		if (cursor.moveToFirst()) {
+			do {
+				XMedia media = new XMedia();
+				media.setId(cursor.getString(0));
+				media.setMedia_name(cursor.getString(1));
+				media.setMedia_path(cursor.getString(2));
+				media.setMedia_id(cursor.getString(3));
+				media.setDoc_id(cursor.getString(4));
+				media.setMedia_type(cursor.getString(5));
+				imageList.add(media);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return imageList;
 	}
 
 	public ArrayList<XMedia> getAllMediaByDocumentID(String documentID) {

@@ -155,7 +155,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				String fieldRequired;
 				String layoutID;
 				int index = 0;
-				
+
 				LinearLayout nextLayout = null;
 				RelativeLayout currentUpperLayout = null;
 
@@ -174,7 +174,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				ToastManager toast = new ToastManager(OneQuestionOneView.this);
 
 				@Override
-				public void onPageSelected(int newPosition){
+				public void onPageSelected(int newPosition) {
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
@@ -185,17 +185,16 @@ public class OneQuestionOneView extends FragmentActivity {
 						String s = "";
 						s.length();
 					}
-					if(direction==RIGHT_TO_LEFT && !isValidating  ){
-						//isValidating = false;
+					if (direction == RIGHT_TO_LEFT && !isValidating) {
+						// isValidating = false;
 						navRightToLeft(newPosition);
-						//break from this method
-					}
-					else if(direction==LEFT_TO_RIGHT){
+						// break from this method
+					} else if (direction == LEFT_TO_RIGHT) {
 						isValidating = true;
 						validateOnPageSelected(newPosition);
 					}
 				}
-				
+
 				private void validateOnPageSelected(int newPosition) {
 					int lastJump = -1;
 					if (navigator.size() != 0) {
@@ -264,11 +263,12 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * .show();
 					 */
 
-//					boolean isNeedToValid = currentLayout
-//							.getTag(R.id.layout_id).toString()
-//							.equals("radioLayout");
-					boolean isNeedToValid = currentLayout.getTag(R.id.layout_id).toString()
-									.equals("datetimeLayout");
+					// boolean isNeedToValid = currentLayout
+					// .getTag(R.id.layout_id).toString()
+					// .equals("radioLayout");
+					boolean isNeedToValid = currentLayout
+							.getTag(R.id.layout_id).toString()
+							.equals("datetimeLayout");
 					isNeedToValid = isNeedToValid
 							|| currentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout");
@@ -386,31 +386,28 @@ public class OneQuestionOneView extends FragmentActivity {
 								} else {
 									// in range
 									// pass
-										// logic testing
-										// reverse
-										/*
-										 * LinearLayout nextLayout_ =
-										 * layoutList.get(newPosition); boolean
-										 * isInvolvedRef =
-										 * isFieldInvolvedReference
-										 * (nextLayout_); if(isInvolvedRef){
-										 * String next_ref =
-										 * getReferenceFromParrentLayout
-										 * (nextLayout_); LinearLayout
-										 * ref_layout = getRefLayout(next_ref,
-										 * layoutList); JSONArray next_cond =
-										 * getNextConditionFromParrentLayout
-										 * (nextLayout_); String
-										 * value_from_ref_layout =
-										 * jsonReader.readValueFromLayout
-										 * (ref_layout); boolean isNeedToSkip =
-										 * isNeedToSkip(next_cond,
-										 * value_from_ref_layout);
-										 * newPosition++; }
-										 */
-										// ------------------------------------------------------
-										navLeftToRight(newPosition,currentFieldID);
-									
+									// logic testing
+									// reverse
+									/*
+									 * LinearLayout nextLayout_ =
+									 * layoutList.get(newPosition); boolean
+									 * isInvolvedRef = isFieldInvolvedReference
+									 * (nextLayout_); if(isInvolvedRef){ String
+									 * next_ref = getReferenceFromParrentLayout
+									 * (nextLayout_); LinearLayout ref_layout =
+									 * getRefLayout(next_ref, layoutList);
+									 * JSONArray next_cond =
+									 * getNextConditionFromParrentLayout
+									 * (nextLayout_); String
+									 * value_from_ref_layout =
+									 * jsonReader.readValueFromLayout
+									 * (ref_layout); boolean isNeedToSkip =
+									 * isNeedToSkip(next_cond,
+									 * value_from_ref_layout); newPosition++; }
+									 */
+									// ------------------------------------------------------
+									navLeftToRight(newPosition, currentFieldID);
+
 									// if (errorMsg != null)
 									// errorMsg.setText("");
 								}
@@ -486,41 +483,35 @@ public class OneQuestionOneView extends FragmentActivity {
 									}
 								}
 
-									if (!isValid) {
+								if (!isValid) {
 
-										// block
-										/*
-										 * if (direction.equals(LEFT_TO_RIGHT))
-										 * { navigator.addLast(0);
-										 * used_field_ids
-										 * .addLast(currentFieldID);
-										 * vPager.setCurrentItem
-										 * (currentPosition);
-										 * errorMsg.setText(field_error_msg);
-										 * errorMsg.setTextColor(Color.RED);
-										 * currentPosition = previousIndex; }
-										 * else { // RIGHT_TO_LEFT int
-										 * last_range = 0; if
-										 * (navigator.getLast() != null)
-										 * last_range = navigator.getLast();
-										 * newPosition = currentPosition -
-										 * last_range;
-										 * vPager.setCurrentItem(newPosition);
-										 * currentPosition = newPosition;
-										 * navigator.removeLast();
-										 * used_field_ids.removeLast(); }
-										 */
-										navStayStill(direction, currentFieldID,
-												field_error_msg, lLManager,
-												newPosition, currentPosition,
-												false);
-									} else {
-										// pass // LEFT to RIGHT
+									// block
+									/*
+									 * if (direction.equals(LEFT_TO_RIGHT)) {
+									 * navigator.addLast(0); used_field_ids
+									 * .addLast(currentFieldID);
+									 * vPager.setCurrentItem (currentPosition);
+									 * errorMsg.setText(field_error_msg);
+									 * errorMsg.setTextColor(Color.RED);
+									 * currentPosition = previousIndex; } else {
+									 * // RIGHT_TO_LEFT int last_range = 0; if
+									 * (navigator.getLast() != null) last_range
+									 * = navigator.getLast(); newPosition =
+									 * currentPosition - last_range;
+									 * vPager.setCurrentItem(newPosition);
+									 * currentPosition = newPosition;
+									 * navigator.removeLast();
+									 * used_field_ids.removeLast(); }
+									 */
+									navStayStill(direction, currentFieldID,
+											field_error_msg, lLManager,
+											newPosition, currentPosition, false);
+								} else {
+									// pass // LEFT to RIGHT
 
-										navLeftToRight(newPosition,currentFieldID);
+									navLeftToRight(newPosition, currentFieldID);
 
-
-									}
+								}
 								// TODO:navStayStill
 								// if (errorMsg != null)
 								// errorMsg.setText("");
@@ -531,14 +522,19 @@ public class OneQuestionOneView extends FragmentActivity {
 							// latested updated
 							// I moved the code here since it needs validation
 							// radio start
-							else if(tagID.equals("radioLayout")){
-								for (int i = 0; i < currentLayout.getChildCount(); i++) {
-									String className = currentLayout.getChildAt(i)
-											.getClass().getName().toString();
-									
-									boolean isFieldRequired = Boolean.parseBoolean(currentLayout.getTag(R.id.field_required_id).toString());
+							else if (tagID.equals("radioLayout")) {
+								for (int i = 0; i < currentLayout
+										.getChildCount(); i++) {
+									String className = currentLayout
+											.getChildAt(i).getClass().getName()
+											.toString();
+
+									boolean isFieldRequired = Boolean
+											.parseBoolean(currentLayout.getTag(
+													R.id.field_required_id)
+													.toString());
 									boolean isSelectedAnyRadio = false;
-									String errMessage="";
+									String errMessage = "";
 									if (className
 											.equals("android.widget.RadioGroup")) {
 										// radio
@@ -546,17 +542,18 @@ public class OneQuestionOneView extends FragmentActivity {
 										boolean extra_value_required = false;
 										boolean isExtraValueTRUE = false;
 										boolean isExtraValueTyped = false;
-										
+
 										RadioGroup radioGroup = (RadioGroup) currentLayout
 												.getChildAt(i);
 
-										
-										
 										RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-										
-										isSelectedAnyRadio = selectedButton != null ? true : false; 
-										
-										if (isSelectedAnyRadio && selectedButton.getTag(R.id.extra) != null) {
+
+										isSelectedAnyRadio = selectedButton != null ? true
+												: false;
+
+										if (isSelectedAnyRadio
+												&& selectedButton
+														.getTag(R.id.extra) != null) {
 											// Extra Value
 											isExtraValueTRUE = Boolean
 													.parseBoolean(selectedButton
@@ -575,71 +572,75 @@ public class OneQuestionOneView extends FragmentActivity {
 												R.id.field_id).toString();
 										Log.i("fieldID", fieldID);
 
-											boolean forceStopL_R = false;
+										boolean forceStopL_R = false;
 
-											String field_skip = "";
-											if(selectedButton!=null && selectedButton.getTag(R.id.field_skip)!=null)
-												field_skip = selectedButton
-														.getTag(R.id.field_skip)
-														.toString();
-											if (extra_value_required) {
-												LinearLayout selectedButtonLine = (LinearLayout) selectedButton
-														.getParent();
-												for (int k = 0; k < selectedButtonLine
-														.getChildCount(); k++) {
-													View buttonLineChild = selectedButtonLine
-															.getChildAt(k);
-													if (buttonLineChild
-															.getClass()
-															.getName()
-															.equals("android.widget.EditText")) {
-														EditText selectedExtra = (EditText) buttonLineChild;
-														if (selectedExtra.getText()
-																.toString()
-																.length() > 0)
-															isExtraValueTyped = true;
-													}
+										String field_skip = "";
+										if (selectedButton != null
+												&& selectedButton
+														.getTag(R.id.field_skip) != null)
+											field_skip = selectedButton.getTag(
+													R.id.field_skip).toString();
+										if (extra_value_required) {
+											LinearLayout selectedButtonLine = (LinearLayout) selectedButton
+													.getParent();
+											for (int k = 0; k < selectedButtonLine
+													.getChildCount(); k++) {
+												View buttonLineChild = selectedButtonLine
+														.getChildAt(k);
+												if (buttonLineChild
+														.getClass()
+														.getName()
+														.equals("android.widget.EditText")) {
+													EditText selectedExtra = (EditText) buttonLineChild;
+													if (selectedExtra.getText()
+															.toString()
+															.length() > 0)
+														isExtraValueTyped = true;
 												}
 											}
-											
-											//start stay still validation
-											if(isFieldRequired && !isSelectedAnyRadio){
-												//TODO Get error message from Question
-												errMessage = "Required Parent.";
-											}
+										}
 
-											if (isExtraValueTRUE
-													&& extra_value_required) {
-												if (!isExtraValueTyped) {
-													errMessage ="Required Child Extra";
-												}
+										// start stay still validation
+										if (isFieldRequired
+												&& !isSelectedAnyRadio) {
+											// TODO Get error message from
+											// Question
+											errMessage = "Required Parent.";
+										}
+
+										if (isExtraValueTRUE
+												&& extra_value_required) {
+											if (!isExtraValueTyped) {
+												errMessage = "Required Child Extra";
 											}
-											if (ApplicationValues.IS_RECORDING_NOW) {
-												 forceStopL_R = true;
-												/*navStayStill(
-														direction,
-														currentFieldID,*/
-													errMessage=	"Audio recording is needed to stop.";
-														/*lLManager, newPosition,
-														currentPosition,
-														forceStopL_R);*/
-											}
-											//end stay still validation
-											
-											if(errMessage.length()>0){	// block
-												navStayStill(
-														direction,
-														fieldID,
-														errMessage,
-														lLManager, newPosition,
-														currentPosition, forceStopL_R);
-											}
-										else {
+										}
+										if (ApplicationValues.IS_RECORDING_NOW) {
+											forceStopL_R = true;
+											/*
+											 * navStayStill( direction,
+											 * currentFieldID,
+											 */
+											errMessage = "Audio recording is needed to stop.";
+											/*
+											 * lLManager, newPosition,
+											 * currentPosition, forceStopL_R);
+											 */
+										}
+										// end stay still validation
+
+										if (errMessage.length() > 0) { // block
+											navStayStill(direction, fieldID,
+													errMessage, lLManager,
+													newPosition,
+													currentPosition,
+													forceStopL_R);
+										} else {
 											// pass
-											 if (field_skip.length() > 0) {
+											if (field_skip.length() > 0) {
 												if (field_skip.equals("submit")) {
 													// skip to submit
-													newPosition = layoutList.size() - 1;
+													newPosition = layoutList
+															.size() - 1;
 
 													int range = newPosition
 															- currentPosition;
@@ -656,54 +657,55 @@ public class OneQuestionOneView extends FragmentActivity {
 														hideKeyboard(nextLayout_);
 												} else {
 
-													// skip to other questions logic
+													// skip to other questions
+													// logic
 													skipID = Integer
 															.parseInt(field_skip);
 													newPosition = skipID - 1;
-													navLeftToRight(newPosition,currentFieldID);
+													navLeftToRight(newPosition,
+															currentFieldID);
 												}
-											 }
-											 else{
-													navLeftToRight(newPosition,currentFieldID);
-												}
-										}
-												// else{
-												// // block
-												// navigator.addLast(0);
-												// used_field_ids
-												// .addLast(currentFieldID);
-												// vPager.setCurrentItem(currentPosition);
-												// toast.xaveyToast(null, "");
-												// currentPosition = previousIndex;
-												// }
-
-											 /*else 
-											} 
 											} else {
+												navLeftToRight(newPosition,
+														currentFieldID);
+											}
+										}
+										// else{
+										// // block
+										// navigator.addLast(0);
+										// used_field_ids
+										// .addLast(currentFieldID);
+										// vPager.setCurrentItem(currentPosition);
+										// toast.xaveyToast(null, "");
+										// currentPosition = previousIndex;
+										// }
 
-												newPosition = getNextRoute(newPosition);
-												renderNextLayout(newPosition);
-												int range = newPosition
-														- currentPosition;
-												navigator.addLast(range);
-												used_field_ids
-														.addLast(currentFieldID);
-												vPager.setCurrentItem(newPosition);
-												currentPosition = newPosition;
-												previousIndex = currentPosition;
-												// hide keyboard
-												LinearLayout nextLayout_ = layoutList
-														.get(newPosition);
-												if (!isSubmitLayout(nextLayout_))
-													hideKeyboard(nextLayout_);
-											}*/
-
-										
 										/*
-										 * TODO : navStayStill if (errorMsg != null)
-										 * errorMsg.setLayoutParams(new
-										 * LayoutParams( LayoutParams.WRAP_CONTENT,
-										 * 0));
+										 * else } } else {
+										 * 
+										 * newPosition =
+										 * getNextRoute(newPosition);
+										 * renderNextLayout(newPosition); int
+										 * range = newPosition -
+										 * currentPosition;
+										 * navigator.addLast(range);
+										 * used_field_ids
+										 * .addLast(currentFieldID);
+										 * vPager.setCurrentItem(newPosition);
+										 * currentPosition = newPosition;
+										 * previousIndex = currentPosition; //
+										 * hide keyboard LinearLayout
+										 * nextLayout_ = layoutList
+										 * .get(newPosition); if
+										 * (!isSubmitLayout(nextLayout_))
+										 * hideKeyboard(nextLayout_); }
+										 */
+
+										/*
+										 * TODO : navStayStill if (errorMsg !=
+										 * null) errorMsg.setLayoutParams(new
+										 * LayoutParams(
+										 * LayoutParams.WRAP_CONTENT, 0));
 										 */
 									}
 								}
@@ -859,9 +861,9 @@ public class OneQuestionOneView extends FragmentActivity {
 											field_error_msg, lLManager,
 											newPosition, currentPosition, false);
 								} else {
-										// pass
+									// pass
 
-									navLeftToRight(newPosition,currentFieldID);
+									navLeftToRight(newPosition, currentFieldID);
 
 								}
 								// if (errorMsg != null)
@@ -875,29 +877,26 @@ public class OneQuestionOneView extends FragmentActivity {
 								// user typed and field_type is not number...
 								// so no need validation let them go
 
-								
-									// logic testing
-									// reverse
-									/*
-									 * LinearLayout nextLayout_ =
-									 * layoutList.get(newPosition); boolean
-									 * isInvolvedRef =
-									 * isFieldInvolvedReference(nextLayout_);
-									 * if(isInvolvedRef){ String next_ref =
-									 * getReferenceFromParrentLayout
-									 * (nextLayout_); LinearLayout ref_layout =
-									 * getRefLayout(next_ref, layoutList);
-									 * JSONArray next_cond =
-									 * getNextConditionFromParrentLayout
-									 * (nextLayout_); String
-									 * value_from_ref_layout =
-									 * jsonReader.readValueFromLayout
-									 * (ref_layout); boolean isNeedToSkip =
-									 * isNeedToSkip(next_cond,
-									 * value_from_ref_layout); newPosition++; }
-									 */
-									// ----------------------------------------------------------
-								navLeftToRight(newPosition,currentFieldID);
+								// logic testing
+								// reverse
+								/*
+								 * LinearLayout nextLayout_ =
+								 * layoutList.get(newPosition); boolean
+								 * isInvolvedRef =
+								 * isFieldInvolvedReference(nextLayout_);
+								 * if(isInvolvedRef){ String next_ref =
+								 * getReferenceFromParrentLayout (nextLayout_);
+								 * LinearLayout ref_layout =
+								 * getRefLayout(next_ref, layoutList); JSONArray
+								 * next_cond = getNextConditionFromParrentLayout
+								 * (nextLayout_); String value_from_ref_layout =
+								 * jsonReader.readValueFromLayout (ref_layout);
+								 * boolean isNeedToSkip =
+								 * isNeedToSkip(next_cond,
+								 * value_from_ref_layout); newPosition++; }
+								 */
+								// ----------------------------------------------------------
+								navLeftToRight(newPosition, currentFieldID);
 
 							}
 						} else {
@@ -968,89 +967,90 @@ public class OneQuestionOneView extends FragmentActivity {
 											R.id.field_id).toString();
 									Log.i("fieldID", fieldID);
 
-										String field_skip = selectedButton
-												.getTag(R.id.field_skip)
-												.toString();
+									String field_skip = selectedButton.getTag(
+											R.id.field_skip).toString();
 
-										if (extra_value_required) {
-											LinearLayout selectedButtonLine = (LinearLayout) selectedButton
-													.getParent();
-											for (int k = 0; k < selectedButtonLine
-													.getChildCount(); k++) {
-												View buttonLineChild = selectedButtonLine
-														.getChildAt(k);
-												if (buttonLineChild
-														.getClass()
-														.getName()
-														.equals("android.widget.EditText")) {
-													EditText selectedExtra = (EditText) buttonLineChild;
-													if (selectedExtra.getText()
-															.toString()
-															.length() > 0)
-														isExtraValueTyped = true;
-												}
+									if (extra_value_required) {
+										LinearLayout selectedButtonLine = (LinearLayout) selectedButton
+												.getParent();
+										for (int k = 0; k < selectedButtonLine
+												.getChildCount(); k++) {
+											View buttonLineChild = selectedButtonLine
+													.getChildAt(k);
+											if (buttonLineChild
+													.getClass()
+													.getName()
+													.equals("android.widget.EditText")) {
+												EditText selectedExtra = (EditText) buttonLineChild;
+												if (selectedExtra.getText()
+														.toString().length() > 0)
+													isExtraValueTyped = true;
 											}
 										}
+									}
 
-										if (isExtraValueTRUE
-												&& extra_value_required) {
-											if (!isExtraValueTyped) {
-												// block
-												navStayStill(
-														LEFT_TO_RIGHT,
-														fieldID,
-														"Extra value is needed for selected radio button",
-														lLManager, newPosition,
-														currentPosition, false);
-											} else {
-												// pass
-												navLeftToRight(newPosition,currentFieldID);
-
-											}
-											// else{
-											// // block
-											// navigator.addLast(0);
-											// used_field_ids
-											// .addLast(currentFieldID);
-											// vPager.setCurrentItem(currentPosition);
-											// toast.xaveyToast(null, "");
-											// currentPosition = previousIndex;
-											// }
-
-										} else if (ApplicationValues.IS_RECORDING_NOW) {
-											boolean forceStopL_R = true;
+									if (isExtraValueTRUE
+											&& extra_value_required) {
+										if (!isExtraValueTyped) {
+											// block
 											navStayStill(
-													direction,
-													currentFieldID,
-													"Audio recording is needed to stop.",
+													LEFT_TO_RIGHT,
+													fieldID,
+													"Extra value is needed for selected radio button",
 													lLManager, newPosition,
-													currentPosition,
-													forceStopL_R);
-										} else if (field_skip.length() > 0) {
-											if (field_skip.equals("submit")) {
-												// skip logic
-												// skip to submit
+													currentPosition, false);
+										} else {
+											// pass
+											navLeftToRight(newPosition,
+													currentFieldID);
 
-												newPosition = layoutList.size() - 1;
+										}
+										// else{
+										// // block
+										// navigator.addLast(0);
+										// used_field_ids
+										// .addLast(currentFieldID);
+										// vPager.setCurrentItem(currentPosition);
+										// toast.xaveyToast(null, "");
+										// currentPosition = previousIndex;
+										// }
 
-												navLeftToRight(newPosition,currentFieldID);
+									} else if (ApplicationValues.IS_RECORDING_NOW) {
+										boolean forceStopL_R = true;
+										navStayStill(
+												direction,
+												currentFieldID,
+												"Audio recording is needed to stop.",
+												lLManager, newPosition,
+												currentPosition, forceStopL_R);
+									} else if (field_skip.length() > 0) {
+										if (field_skip.equals("submit")) {
+											// skip logic
+											// skip to submit
 
-											} else {
+											newPosition = layoutList.size() - 1;
 
-												// skip logic
-												skipID = Integer
-														.parseInt(field_skip);
-												newPosition = skipID - 1;
-												navLeftToRight(newPosition,currentFieldID);
+											navLeftToRight(newPosition,
+													currentFieldID);
 
-											}
 										} else {
 
-											navLeftToRight(newPosition,currentFieldID);
+											// skip logic
+											skipID = Integer
+													.parseInt(field_skip);
+											newPosition = skipID - 1;
+											navLeftToRight(newPosition,
+													currentFieldID);
 
 										}
+									} else {
 
-																		/*
+										navLeftToRight(newPosition,
+												currentFieldID);
+
+									}
+
+									/*
 									 * TODO : navStayStill if (errorMsg != null)
 									 * errorMsg.setLayoutParams(new
 									 * LayoutParams( LayoutParams.WRAP_CONTENT,
@@ -1062,7 +1062,7 @@ public class OneQuestionOneView extends FragmentActivity {
 							// not radio
 							// no need validation
 
-							navLeftToRight(newPosition,currentFieldID);
+							navLeftToRight(newPosition, currentFieldID);
 							// TODO : navStayStill
 							// if (errorMsg != null)
 							// errorMsg.setText("");
@@ -1144,7 +1144,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			hashMap.put("field_name", field_name);
 			hashMap.put("media_path", imagePath);
 			hashMap.put("media_type", "image");
-			hashMap.put("media_id","");
+			hashMap.put("media_id", "");
 			mediaToSubmit.add(hashMap);
 
 			for (int i = 0; i < layoutList.size() - 1; i++) {
@@ -1296,6 +1296,8 @@ public class OneQuestionOneView extends FragmentActivity {
 	}
 
 	private LinearLayout produceSubmitLayout() {
+		// there is no inner layout in SubmitLayout
+		
 		LinearLayout lL = new LinearLayout(this);
 		lL.setOrientation(LinearLayout.VERTICAL);
 		lL.setTag(R.id.layout_id, "submitLayout");
@@ -1601,8 +1603,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 			parentLayout.getChildAt(1);
 
-			if (linearLayout.getTag(R.id.layout_id).toString()
-					.equals("textLayout")) {
+			if (linearLayout.getTag(R.id.layout_id).toString().equals("textLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String value = "";
 				EditText edt1 = null;
@@ -1857,99 +1858,197 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
+			} 
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("matrixTextLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String inputValues = "";
+				// ArrayList<MatrixCell> selectedCellList = new
+				// ArrayList<MatrixCell>();
+				key.toCharArray();
+				for (int x = 0; x < linearLayout.getChildCount(); x++) {
+					View view = linearLayout.getChildAt(x);
+					if (view.getClass().getName()
+							.equals("android.widget.LinearLayout")
+							&& view.getTag(R.id.layout_id).toString()
+									.equals("theMatrixLayout")) {
+						LinearLayout theMatrixLayout = (LinearLayout) view;
+						LinearLayout rowLabelColumn = null;
+						MYHorizontalScrollView horizontalScrollView = null;
+						for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
+							View v = theMatrixLayout.getChildAt(y);
+
+							if (v.getTag(R.id.layout_id).toString()
+									.equals("rowLabelColumn")) {
+								rowLabelColumn = (LinearLayout) v;
+							} else if (v.getTag(R.id.layout_id).toString()
+									.equals("horizontalScrollView")) {
+								horizontalScrollView = (MYHorizontalScrollView) v;
+							}
+						}
+						// both rowLabelColumn and horizontalScrollView must be
+						// already assigned in this line
+						if (((LinearLayout) horizontalScrollView.getChildAt(0))
+								.getTag(R.id.layout_id).toString()
+								.equals("AllColumns")) {
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView
+									.getChildAt(0);
+							for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
+										.getChildAt(ac);
+								String columnTitle = "";
+								for (int sc = 0; sc < singleColumnAt_ac
+										.getChildCount(); sc++) {
+									View singleNumberBoxLayout = singleColumnAt_ac
+											.getChildAt(sc);
+									String cellTag = singleNumberBoxLayout
+											.getTag(R.id.layout_id).toString();
+									if (cellTag.equals("columnTitle")) {
+										columnTitle = ((TextView) singleNumberBoxLayout)
+												.getText().toString();
+									} else if (cellTag.equals("cell")) {
+										LinearLayout cellLayout = (LinearLayout) singleNumberBoxLayout;
+										for (int c = 0; c < cellLayout
+												.getChildCount(); c++) {
+											if (cellLayout
+													.getChildAt(c)
+													.getClass()
+													.getName()
+													.toString()
+													.equals("android.widget.EditText")) {
+												EditText tb = (EditText) cellLayout
+														.getChildAt(c);
+												if (tb.getText().toString()
+														.length() > 0) {
+													MatrixCell cell = (MatrixCell) tb
+															.getTag(R.id.matrix_cell);
+													inputValues += "|"
+															+ "h"
+															+ cell.getH_index()
+															+ ""
+															+ "v"
+															+ cell.getV_index()
+															+ ":"
+															+ tb.getText()
+																	.toString(); // <-h0v0
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						// -------------
+						if (inputValues.length() > 0)
+							inputValues = inputValues.substring(1); // <- it
+																	// deletes
+																	// the
+																	// 1st
+																	// char
+																	// of
+																	// the
+																	// String
+						else
+							inputValues = "-";
+					}
+				}
+				map.put(key, inputValues);
 			}
 			else if (linearLayout.getTag(R.id.layout_id).toString()
-                    .equals("matrixNumberLayout")) {
-                String key = linearLayout.getTag(R.id.field_id).toString();
-                String inputValues = "";
-                // ArrayList<MatrixCell> selectedCellList = new
-                // ArrayList<MatrixCell>();
-                key.toCharArray();
-                for (int x = 0; x < linearLayout.getChildCount(); x++) {
-                    View view = linearLayout.getChildAt(x);
-                    if (view.getClass().getName()
-                            .equals("android.widget.LinearLayout")
-                            && view.getTag(R.id.layout_id).toString()
-                                    .equals("theMatrixLayout")) {
-                        LinearLayout theMatrixLayout = (LinearLayout) view;
-                        LinearLayout rowLabelColumn = null;
-                        MYHorizontalScrollView horizontalScrollView = null;
-                        for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
-                            View v = theMatrixLayout.getChildAt(y);
+					.equals("matrixNumberLayout")) {
+				String key = linearLayout.getTag(R.id.field_id).toString();
+				String inputValues = "";
+				// ArrayList<MatrixCell> selectedCellList = new
+				// ArrayList<MatrixCell>();
+				key.toCharArray();
+				for (int x = 0; x < linearLayout.getChildCount(); x++) {
+					View view = linearLayout.getChildAt(x);
+					if (view.getClass().getName()
+							.equals("android.widget.LinearLayout")
+							&& view.getTag(R.id.layout_id).toString()
+									.equals("theMatrixLayout")) {
+						LinearLayout theMatrixLayout = (LinearLayout) view;
+						LinearLayout rowLabelColumn = null;
+						MYHorizontalScrollView horizontalScrollView = null;
+						for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
+							View v = theMatrixLayout.getChildAt(y);
 
-                            if (v.getTag(R.id.layout_id).toString()
-                                    .equals("rowLabelColumn")) {
-                                rowLabelColumn = (LinearLayout) v;
-                            } else if (v.getTag(R.id.layout_id).toString()
-                                    .equals("horizontalScrollView")) {
-                                horizontalScrollView = (MYHorizontalScrollView) v;
-                            }
-                        }
-                        // both rowLabelColumn and horizontalScrollView must be
-                        // already assigned in this line
-                        if (((LinearLayout) horizontalScrollView.getChildAt(0))
-                                .getTag(R.id.layout_id).toString()
-                                .equals("AllColumns")) {
-                            LinearLayout AllColumns = (LinearLayout) horizontalScrollView
-                                    .getChildAt(0);
-                            for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
-                                LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
-                                        .getChildAt(ac);
-                                String columnTitle = "";
-                                for (int sc = 0; sc < singleColumnAt_ac
-                                        .getChildCount(); sc++) {
-                                    View singleNumberBoxLayout = singleColumnAt_ac
-                                            .getChildAt(sc);
-                                    String cellTag = singleNumberBoxLayout
-                                            .getTag(R.id.layout_id).toString();
-                                    if (cellTag.equals("columnTitle")) {
-                                        columnTitle = ((TextView) singleNumberBoxLayout)
-                                                .getText().toString();
-                                    } else if (cellTag.equals("cell")) {
-                                        LinearLayout cellLayout = (LinearLayout) singleNumberBoxLayout;
-                                        for (int c = 0; c < cellLayout
-                                                .getChildCount(); c++) {
-                                            if (cellLayout
-                                                    .getChildAt(c)
-                                                    .getClass()
-                                                    .getName()
-                                                    .toString()
-                                                    .equals("android.widget.EditText")) {
-                                                EditText tb = (EditText) cellLayout
-                                                        .getChildAt(c);
-                                                if (tb.getText().toString().length()>0) {
-                                                    MatrixCell cell = (MatrixCell) tb
-                                                            .getTag(R.id.matrix_cell);
-                                                    inputValues += "|" + "h"
-                                                            + cell.getH_index()
-                                                            + "" + "v"
-                                                            + cell.getV_index()
-                                                            + ":"
-                                                            + tb.getText().toString(); // <-h0v0
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        // -------------
-                        if (inputValues.length() > 0)
-                            inputValues = inputValues.substring(1); // <- it
-                                                                        // deletes
-                                                                        // the
-                                                                        // 1st
-                                                                        // char
-                                                                        // of
-                                                                        // the
-                                                                        // String
-                        else
-                            inputValues = "-";
-                    }
-                }
-                map.put(key, inputValues);
-            }
-			else if (linearLayout.getTag(R.id.layout_id).toString()
+							if (v.getTag(R.id.layout_id).toString()
+									.equals("rowLabelColumn")) {
+								rowLabelColumn = (LinearLayout) v;
+							} else if (v.getTag(R.id.layout_id).toString()
+									.equals("horizontalScrollView")) {
+								horizontalScrollView = (MYHorizontalScrollView) v;
+							}
+						}
+						// both rowLabelColumn and horizontalScrollView must be
+						// already assigned in this line
+						if (((LinearLayout) horizontalScrollView.getChildAt(0))
+								.getTag(R.id.layout_id).toString()
+								.equals("AllColumns")) {
+							LinearLayout AllColumns = (LinearLayout) horizontalScrollView
+									.getChildAt(0);
+							for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
+								LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
+										.getChildAt(ac);
+								String columnTitle = "";
+								for (int sc = 0; sc < singleColumnAt_ac
+										.getChildCount(); sc++) {
+									View singleNumberBoxLayout = singleColumnAt_ac
+											.getChildAt(sc);
+									String cellTag = singleNumberBoxLayout
+											.getTag(R.id.layout_id).toString();
+									if (cellTag.equals("columnTitle")) {
+										columnTitle = ((TextView) singleNumberBoxLayout)
+												.getText().toString();
+									} else if (cellTag.equals("cell")) {
+										LinearLayout cellLayout = (LinearLayout) singleNumberBoxLayout;
+										for (int c = 0; c < cellLayout
+												.getChildCount(); c++) {
+											if (cellLayout
+													.getChildAt(c)
+													.getClass()
+													.getName()
+													.toString()
+													.equals("android.widget.EditText")) {
+												EditText tb = (EditText) cellLayout
+														.getChildAt(c);
+												if (tb.getText().toString()
+														.length() > 0) {
+													MatrixCell cell = (MatrixCell) tb
+															.getTag(R.id.matrix_cell);
+													inputValues += "|"
+															+ "h"
+															+ cell.getH_index()
+															+ ""
+															+ "v"
+															+ cell.getV_index()
+															+ ":"
+															+ tb.getText()
+																	.toString(); // <-h0v0
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						// -------------
+						if (inputValues.length() > 0)
+							inputValues = inputValues.substring(1); // <- it
+																	// deletes
+																	// the
+																	// 1st
+																	// char
+																	// of
+																	// the
+																	// String
+						else
+							inputValues = "-";
+					}
+				}
+				map.put(key, inputValues);
+			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("matrixCheckListLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String checkedValues = "";
@@ -2297,6 +2396,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String values = "";
 				LinearLayoutManager linearLayoutManager = new LinearLayoutManager();
+				
 				try {
 					HashMap<String, Object> test_ = linearLayoutManager
 							.test(linearLayout);
@@ -2325,7 +2425,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return map;
 	}// </getValueFromEachLayout>
-	
+
 	private String getSelectedExtraValueBySelectedButton(
 			RadioButton selectedButton) {
 		String extraValue = "";
@@ -2333,28 +2433,25 @@ public class OneQuestionOneView extends FragmentActivity {
 				.getParent();
 		for (int i = 0; i < selectedLayoutLine.getChildCount(); i++) {
 			View v = selectedLayoutLine.getChildAt(i);
-			if (v.getClass().getName()
-					.equals("android.widget.EditText")) {
+			if (v.getClass().getName().equals("android.widget.EditText")) {
 				EditText selectedExtra = (EditText) v;
 				extraValue = selectedExtra.getText().toString();
 			}
 		}
 		return extraValue;
 	}
-	
+
 	private LinearLayout getInnerLayout(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;
 		LinearLayout innerLayout2 = null;
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
-			String className = parrentLayout.getChildAt(i)
-					.getClass().getName();
+			String className = parrentLayout.getChildAt(i).getClass().getName();
 			View v = parrentLayout.getChildAt(i);
 
 			if (className.equals("android.widget.ScrollView")) {
 				ScrollView scroll = (ScrollView) v;
 				innerLayout = (LinearLayout) scroll.getChildAt(0);
-				String layoutID = innerLayout
-						.getTag(R.id.layout_id).toString();
+				String layoutID = innerLayout.getTag(R.id.layout_id).toString();
 				if (innerLayout.getTag(R.id.layout_id) != null
 						&& !layoutID.equals("recordingLayout")) {
 					return innerLayout;
@@ -2364,15 +2461,11 @@ public class OneQuestionOneView extends FragmentActivity {
 				// }
 			}
 			// following else is for layouts without ScrollView
-			else if (className
-					.equals("android.widget.LinearLayout")) {
-				innerLayout2 = (LinearLayout) parrentLayout
-						.getChildAt(i);
+			else if (className.equals("android.widget.LinearLayout")) {
+				innerLayout2 = (LinearLayout) parrentLayout.getChildAt(i);
 				if (innerLayout2.getTag(R.id.layout_id) != null
-						&& innerLayout2.getTag(R.id.layout_id)
-								.toString() != "recordingLayout") {
-					Log.i("child count",
-							innerLayout2.getChildCount() + "");
+						&& innerLayout2.getTag(R.id.layout_id).toString() != "recordingLayout") {
+					Log.i("child count", innerLayout2.getChildCount() + "");
 					return innerLayout2;
 				}
 			}
@@ -2382,34 +2475,32 @@ public class OneQuestionOneView extends FragmentActivity {
 		else
 			return innerLayout2;
 	}
-	
+
 	public void renderNextLayout(int newPosition) {
 
 		if (newPosition != layoutList.size() - 1) {
 			ArrayList<LinearLayout> layoutList_ = layoutList;
 			LinearLayout nextLayout = layoutList.get(newPosition);
 			LinearLayout nextInnerLayout = getInnerLayout(nextLayout);
-			String nextLayoutID = nextInnerLayout.getTag(
-					R.id.layout_id).toString();
+			String nextLayoutID = nextInnerLayout.getTag(R.id.layout_id)
+					.toString();
 			String render_ref = "";
 			String render_ref_type = "";
 
 			if (nextInnerLayout.getTag(R.id.render_ref) != null) {
-				render_ref = nextInnerLayout
-						.getTag(R.id.render_ref).toString();
-				render_ref_type = nextInnerLayout.getTag(
-						R.id.render_ref_type).toString();
+				render_ref = nextInnerLayout.getTag(R.id.render_ref).toString();
+				render_ref_type = nextInnerLayout.getTag(R.id.render_ref_type)
+						.toString();
 
 				int renderRefID = Integer.parseInt(render_ref) - 1; // -1
 																	// to
 																	// get
 																	// real
 																	// id
-				LinearLayout renderRefLayout = layoutList
-						.get(renderRefID);
+				LinearLayout renderRefLayout = layoutList.get(renderRefID);
 				LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
-				String renderLayoutID = renderInnerLayout.getTag(
-						R.id.layout_id).toString();
+				String renderLayoutID = renderInnerLayout
+						.getTag(R.id.layout_id).toString();
 
 				if (render_ref_type.equals("extra_equal_no_item")) {
 					// following are all render Layout IDs...
@@ -2418,18 +2509,14 @@ public class OneQuestionOneView extends FragmentActivity {
 							.getTag(R.id.next_ref_cond);
 
 					if (renderLayoutID.equals("radioLayout")) {
-						for (int i = 0; i < renderInnerLayout
-								.getChildCount(); i++) {
-							View v = renderInnerLayout
-									.getChildAt(i);
-							if (v.getClass()
-									.getName()
+						for (int i = 0; i < renderInnerLayout.getChildCount(); i++) {
+							View v = renderInnerLayout.getChildAt(i);
+							if (v.getClass().getName()
 									.equals("android.widget.RadioGroup")) {
 								RadioGroup radioGroup = (RadioGroup) v;
 								RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 								String selectedButtonValue = selectedButton
-										.getTag(R.id.radio_value)
-										.toString();
+										.getTag(R.id.radio_value).toString();
 
 								// to check whether the layout
 								// should be skipped or not...
@@ -2438,12 +2525,10 @@ public class OneQuestionOneView extends FragmentActivity {
 								// calculate that user selected
 								// value is equal to one of
 								// next ref cond
-								for (int n = 0; n < nextRefcond
-										.length(); n++) {
+								for (int n = 0; n < nextRefcond.length(); n++) {
 									String condition = "";
 									try {
-										condition = nextRefcond
-												.getString(n);
+										condition = nextRefcond.getString(n);
 										if (selectedButtonValue
 												.equals(condition)) {
 											isRefCorrect &= false;
@@ -2457,8 +2542,7 @@ public class OneQuestionOneView extends FragmentActivity {
 									break;
 
 								boolean extraRequired = false;
-								if (selectedButton
-										.getTag(R.id.extra_required) != null) {
+								if (selectedButton.getTag(R.id.extra_required) != null) {
 									extraRequired = Boolean
 											.parseBoolean(selectedButton
 													.getTag(R.id.extra_required)
@@ -2476,14 +2560,11 @@ public class OneQuestionOneView extends FragmentActivity {
 
 								for (int a = 0; a < nextInnerLayout
 										.getChildCount(); a++) {
-									View view = nextInnerLayout
-											.getChildAt(a);
-									if (view.getClass()
-											.getName()
+									View view = nextInnerLayout.getChildAt(a);
+									if (view.getClass().getName()
 											.equals("android.widget.ListView")) {
 										ListView listView = (ListView) view;
-										Adapter adapter = listView
-												.getAdapter();
+										Adapter adapter = listView.getAdapter();
 										if (nextLayoutID
 												.equals("numberSetLayout")) {
 											NumberSetAdapter numberSetAdapter = (NumberSetAdapter) adapter;
@@ -2501,8 +2582,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												newData.add(map);
 											}
 											data = newData;
-											numberSetAdapter
-													.setData(newData);
+											numberSetAdapter.setData(newData);
 											numberSetAdapter
 													.notifyDataSetChanged();
 
@@ -2523,8 +2603,7 @@ public class OneQuestionOneView extends FragmentActivity {
 												newData.add(map);
 											}
 											data = newData;
-											textSetAdapter
-													.setData(newData);
+											textSetAdapter.setData(newData);
 											textSetAdapter
 													.notifyDataSetChanged();
 										}
@@ -2538,13 +2617,11 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				/*
 				 * //<numberSetLayout>
-				 * if(renderLayoutID.equals("numberSetLayout")){
-				 * for(int i=0; i<nextInnerLayout.getChildCount();
-				 * i++){ View child = nextInnerLayout.getChildAt(0);
-				 * if(child.getClass
-				 * ().getName().equals("android.widget.ListView")){
-				 * ListView listView = (ListView) child;
-				 * listView.getChildCount(); } } }
+				 * if(renderLayoutID.equals("numberSetLayout")){ for(int i=0;
+				 * i<nextInnerLayout.getChildCount(); i++){ View child =
+				 * nextInnerLayout.getChildAt(0); if(child.getClass
+				 * ().getName().equals("android.widget.ListView")){ ListView
+				 * listView = (ListView) child; listView.getChildCount(); } } }
 				 * //</numberSetLayout>
 				 */
 			} else {
@@ -2552,7 +2629,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 		}
 	}
-	
+
 	private LinearLayout getRefLayout(String ref_id,
 			ArrayList<LinearLayout> layoutList) {
 		LinearLayout refLayout = null;
@@ -2569,19 +2646,32 @@ public class OneQuestionOneView extends FragmentActivity {
 				if (parrentLayout.getTag(R.id.layout_id).toString()
 						.equals("submitLayout"))
 					return null;
-			} else if (parrentLayout.getChildAt(i).getClass()
-					.getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.LinearLayout")) {
 				LinearLayout linearLayout = (LinearLayout) parrentLayout
 						.getChildAt(i);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
-						&& !linearLayout.getTag(R.id.layout_id)
-								.toString()
+						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
-					nextConditionType = innerLayout.getTag(
-							R.id.next_ref_type).toString();
+					nextConditionType = innerLayout.getTag(R.id.next_ref_type)
+							.toString();
+				}
+			}
+			else if (parrentLayout.getChildAt(i).getClass().getName()
+					.equals("android.widget.ScrollView")) {
+				ScrollView scrollView = (ScrollView) parrentLayout
+						.getChildAt(i);
+				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0); 
+				LinearLayout innerLayout = null;
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& !linearLayout.getTag(R.id.layout_id).toString()
+								.equals("recordingLayout")) {
+					innerLayout = linearLayout;
+					nextConditionType = innerLayout.getTag(R.id.next_ref_type)
+							.toString();
+					nextConditionType.toString();
 				}
 			}
 		}
@@ -2596,15 +2686,30 @@ public class OneQuestionOneView extends FragmentActivity {
 				if (parrentLayout.getTag(R.id.layout_id).toString()
 						.equals("submitLayout"))
 					return null;
-			} else if (parrentLayout.getChildAt(i).getClass()
-					.getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.LinearLayout")) {
 				LinearLayout linearLayout = (LinearLayout) parrentLayout
 						.getChildAt(i);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
-						&& !linearLayout.getTag(R.id.layout_id)
-								.toString()
+						&& !linearLayout.getTag(R.id.layout_id).toString()
+								.equals("recordingLayout")) {
+					innerLayout = linearLayout;
+					if (innerLayout.getTag(R.id.next_ref_cond) != null) {
+						nextCondition = (JSONArray) innerLayout
+								.getTag(R.id.next_ref_cond);
+						return nextCondition;
+					}
+				}
+			}
+			else if (parrentLayout.getChildAt(i).getClass().getName()
+					.equals("android.widget.ScrollView")) {
+				ScrollView scrollView = (ScrollView) parrentLayout
+						.getChildAt(i);
+				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout innerLayout = null;
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
 					if (innerLayout.getTag(R.id.next_ref_cond) != null) {
@@ -2654,62 +2759,105 @@ public class OneQuestionOneView extends FragmentActivity {
 		return isNeedToSkip;
 	}
 
+	private boolean isNeedToSkipIfLessThan(JSONArray next_cond, int valueFromRefLayout) {
+		boolean isNeedToSkip = false;
+		try {
+			int next_condValue = Integer.parseInt(next_cond.getString(0));
+			if(valueFromRefLayout<=next_condValue){
+				isNeedToSkip = true;
+			}
+
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return isNeedToSkip;
+	}
+
 	private void previous(int newPosition) {
 		int last_range = navigator.getLast();
 		vPager.setCurrentItem(newPosition - last_range);
 		currentPosition = newPosition - last_range;
 	}
-	
-	private String getReferenceFromParrentLayout(
-			LinearLayout parrentLayout) {
+
+	private String getReferenceFromParrentLayout(LinearLayout parrentLayout) {
 		String reference = "";
 		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
 			if (parrentLayout.getTag(R.id.layout_id) != null) {
 				if (parrentLayout.getTag(R.id.layout_id).toString()
 						.equals("submitLayout"))
 					return "";
-			} else if (parrentLayout.getChildAt(i).getClass()
-					.getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.LinearLayout")) {
 				LinearLayout linearLayout = (LinearLayout) parrentLayout
 						.getChildAt(i);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
-						&& !linearLayout.getTag(R.id.layout_id)
-								.toString()
+						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
 					if (innerLayout.getTag(R.id.next_ref) != null)
-						reference = innerLayout.getTag(
-								R.id.next_ref).toString();
+						reference = innerLayout.getTag(R.id.next_ref)
+								.toString();
+				}
+			}
+			else if (parrentLayout.getChildAt(i).getClass().getName()
+					.equals("android.widget.ScrollView")) {
+				ScrollView scrollView = (ScrollView) parrentLayout
+						.getChildAt(i);
+				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout innerLayout = null;
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& !linearLayout.getTag(R.id.layout_id).toString()
+								.equals("recordingLayout")) {
+					innerLayout = linearLayout;
+					if (innerLayout.getTag(R.id.next_ref) != null)
+						reference = innerLayout.getTag(R.id.next_ref)
+								.toString();
 				}
 			}
 		}
 		return reference;
 	}
-	
-	private boolean isFieldInvolvedNextCondType(
-			LinearLayout parrentlayout) {
+
+	private boolean isFieldInvolvedNextCondType(LinearLayout parrentlayout) {
 		String next_cond_type = "";
 		for (int i = 0; i < parrentlayout.getChildCount(); i++) {
 			if (parrentlayout.getTag(R.id.layout_id) != null) {
 				if (parrentlayout.getTag(R.id.layout_id).toString()
 						.equals("submitLayout"))
 					return false;
-			} else if (parrentlayout.getChildAt(i).getClass()
-					.getName()
+			} else if (parrentlayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.LinearLayout")) {
 				LinearLayout linearLayout = (LinearLayout) parrentlayout
 						.getChildAt(i);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
-						&& !linearLayout.getTag(R.id.layout_id)
-								.toString()
+						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
 					if (innerLayout.getTag(R.id.next_ref_cond) != null)
-						next_cond_type = innerLayout.getTag(
-								R.id.next_ref_cond).toString();
+						next_cond_type = innerLayout.getTag(R.id.next_ref_cond)
+								.toString();
+				}
+			}
+			else if (parrentlayout.getChildAt(i).getClass().getName()
+					.equals("android.widget.ScrollView")) {
+				ScrollView scrollView = (ScrollView) parrentlayout
+						.getChildAt(i);
+				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout innerLayout = null;
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& !linearLayout.getTag(R.id.layout_id).toString()
+								.equals("recordingLayout")) {
+					innerLayout = linearLayout;
+					if (innerLayout.getTag(R.id.next_ref_cond) != null)
+						next_cond_type = innerLayout.getTag(R.id.next_ref_cond)
+								.toString();
 				}
 			}
 		}
@@ -2718,29 +2866,40 @@ public class OneQuestionOneView extends FragmentActivity {
 		else
 			return false;
 	}
-	
-	private boolean isFieldInvolvedReference(
-			LinearLayout parrentlayout) {
+
+	private boolean isFieldInvolvedReference(LinearLayout nextParrentLayout_) {
 		String next_ref = "";
-		for (int i = 0; i < parrentlayout.getChildCount(); i++) {
-			if (parrentlayout.getTag(R.id.layout_id) != null) {
-				if (parrentlayout.getTag(R.id.layout_id).toString()
+		for (int i = 0; i < nextParrentLayout_.getChildCount(); i++) {
+			if (nextParrentLayout_.getTag(R.id.layout_id) != null) {
+				if (nextParrentLayout_.getTag(R.id.layout_id).toString()
 						.equals("submitLayout"))
 					return false;
-			} else if (parrentlayout.getChildAt(i).getClass()
-					.getName()
+			} else if (nextParrentLayout_.getChildAt(i).getClass().getName()
 					.equals("android.widget.LinearLayout")) {
-				LinearLayout linearLayout = (LinearLayout) parrentlayout
+				LinearLayout linearLayout = (LinearLayout) nextParrentLayout_
 						.getChildAt(i);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
-						&& !linearLayout.getTag(R.id.layout_id)
-								.toString()
+						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
 					if (innerLayout.getTag(R.id.next_ref) != null)
-						next_ref = innerLayout
-								.getTag(R.id.next_ref).toString();
+						next_ref = innerLayout.getTag(R.id.next_ref).toString();
+				}
+			}else if (nextParrentLayout_.getChildAt(i).getClass().getName()
+					.equals("android.widget.ScrollView")) {
+				ScrollView scrollView = (ScrollView) nextParrentLayout_
+						.getChildAt(i);
+				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout innerLayout = null;
+				if (linearLayout.getTag(R.id.layout_id) != null
+						&& !linearLayout.getTag(R.id.layout_id).toString()
+								.equals("recordingLayout")) {
+					innerLayout = linearLayout;
+					if (innerLayout.getTag(R.id.next_ref) != null){
+						next_ref = innerLayout.getTag(R.id.next_ref).toString();
+						break;
+					}
 				}
 			}
 		}
@@ -2749,11 +2908,10 @@ public class OneQuestionOneView extends FragmentActivity {
 		else
 			return false;
 	}
-	
+
 	private int getNextRoute(int newPosition) {
 		boolean isNeedToSkip = true;
-		LinearLayout currentLayoutTest = layoutList
-				.get(currentPosition);
+		LinearLayout currentLayoutTest = layoutList.get(currentPosition);
 		while (isNeedToSkip) {
 			LinearLayout nextLayout_ = layoutList.get(newPosition);
 
@@ -2763,28 +2921,25 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			if (isInvolvedRef) {
 				String next_ref = getReferenceFromParrentLayout(nextLayout_);
-				LinearLayout ref_layout = getRefLayout(next_ref,
-						layoutList);
+				LinearLayout ref_layout = getRefLayout(next_ref, layoutList);
 				JSONArray next_cond = getNextConditionFromParrentLayout(nextLayout_);
 				boolean secondCondition = next_cond != null
 						&& next_cond.length() > 0;
 				if (isFieldInvolvedNextCondType) {
 					nextConditionType = getNextConditionTypeFromParrentLayout(nextLayout_);
+					LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
 					if (nextConditionType.equals("count")) {
 						// count is here
-						LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
+						
 						int count = 0;
-						if (ref_inner_layout.getTag(R.id.layout_id)
-								.toString()
+						if (ref_inner_layout.getTag(R.id.layout_id).toString()
 								.equals("checkBoxLayout")) {
 							for (int i = 0; i < ref_inner_layout
 									.getChildCount(); i++) {
-								View v = ref_inner_layout
-										.getChildAt(i);
-								String className = v.getClass()
-										.getName().toString();
-								if (className
-										.equals("android.widget.CheckBox")) {
+								View v = ref_inner_layout.getChildAt(i);
+								String className = v.getClass().getName()
+										.toString();
+								if (className.equals("android.widget.CheckBox")) {
 									CheckBox cb = (CheckBox) v;
 									if (cb.isChecked())
 										count++;
@@ -2792,19 +2947,44 @@ public class OneQuestionOneView extends FragmentActivity {
 							}
 						}
 						// now we got count here
-						isNeedToSkip = isNeedToSkip(next_cond,
-								count + "");
+						isNeedToSkip = isNeedToSkip(next_cond, count + "");
 						if (isNeedToSkip)
 							newPosition++;
+						isNeedToSkip = false; // to break from while loop
 					} // count end here
-					else {
-						isNeedToSkip = false;
-						String value_from_ref_layout = jsonReader
-								.readValueFromLayout(ref_layout);
-						isNeedToSkip = isNeedToSkip(next_cond,
-								value_from_ref_layout);
+					else if (nextConditionType.endsWith("less_or_equal")) {
+						String itemValue = nextConditionType.split(":")[0]; // "Used"
+						int valueFromRefLayout = 0;
+
+						LinearLayoutManager linearLayoutManager = new LinearLayoutManager();
+
+						try {
+							HashMap<String, Object> test_ = linearLayoutManager
+									.test(ref_inner_layout);
+							ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_.get("data");
+
+							for (HashMap<String, String> singleMap : data) {
+								Set<String> keys = singleMap.keySet();
+								String singleKey = keys.toArray()[0].toString();
+								if(singleKey.equals(itemValue)){
+									valueFromRefLayout = Integer.parseInt(singleMap.get(singleKey));
+								}
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+						isNeedToSkip = isNeedToSkipIfLessThan(next_cond, valueFromRefLayout);
 						if (isNeedToSkip)
 							newPosition++;
+						isNeedToSkip = false; // to break from while loop
+					} else {
+						isNeedToSkip = false;
+						String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
+						isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
+						if (isNeedToSkip)
+							newPosition++;
+						isNeedToSkip = false; // to break from while loop
 					}
 				}// nothing to do with it if it doesn't involve
 			} else {
@@ -2813,7 +2993,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return newPosition;
 	}
-	
+
 	// block navigation control
 	private void navStayStill(String direction, String currentFieldID,
 			String field_error_msg, LinearLayoutManager lLManager,
@@ -2854,12 +3034,11 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 		}
 	}
-	
-	private void navLeftToRight(int newPosition, String currentFieldID){
+
+	private void navLeftToRight(int newPosition, String currentFieldID) {
 		newPosition = getNextRoute(newPosition);
 		renderNextLayout(newPosition);
-		int range = newPosition
-				- currentPosition;
+		int range = newPosition - currentPosition;
 		if (range != 0)
 			navigator.addLast(range);
 		used_field_ids.addLast(currentFieldID);
@@ -2867,26 +3046,28 @@ public class OneQuestionOneView extends FragmentActivity {
 		currentPosition = newPosition;
 		previousIndex = currentPosition;
 		// hide keyboard
-		LinearLayout nextLayout_ = layoutList
-				.get(newPosition);
+		LinearLayout nextLayout_ = layoutList.get(newPosition);
 		if (!isSubmitLayout(nextLayout_))
 			hideKeyboard(nextLayout_);
-		isValidating=false;
+		isValidating = false;
 	}
 
-	private void navRightToLeft(int newPosition){
-		
-		if(ApplicationValues.IS_RECORDING_NOW){
+	private void navRightToLeft(int newPosition) {
+
+		if (ApplicationValues.IS_RECORDING_NOW) {
 			LinearLayout thisLayout = layoutList.get(currentPosition);
 			LinearLayout recordingLayout = null;
-			for(int i=0; i<thisLayout.getChildCount(); i++){
-				if(thisLayout.getChildAt(i).getTag(R.id.layout_id)!=null && thisLayout.getChildAt(i).getTag(R.id.layout_id).toString().equals("recordingLayout")){
+			for (int i = 0; i < thisLayout.getChildCount(); i++) {
+				if (thisLayout.getChildAt(i).getTag(R.id.layout_id) != null
+						&& thisLayout.getChildAt(i).getTag(R.id.layout_id)
+								.toString().equals("recordingLayout")) {
 					recordingLayout = (LinearLayout) thisLayout.getChildAt(i);
 					break;
 				}
 			}
-			if(recordingLayout!=null){
-				AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout.getTag(R.id.recording_manager);
+			if (recordingLayout != null) {
+				AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout
+						.getTag(R.id.recording_manager);
 				currentRecording.triggerStopClick();
 			}
 		}
@@ -2904,33 +3085,16 @@ public class OneQuestionOneView extends FragmentActivity {
 			hideKeyboard(nextLayout_);
 
 		/*
-		 if (ApplicationValues.) {
-		// still recording...
-		// block..
-		// there is no direction
-		// validation...
-		// bcuz it will block both direction
-		// if recording is not ending
-		/*
-		 * navigator.addLast(0);
-		 * used_field_ids
-		 * .addLast(currentFieldID);
-		 * vPager.setCurrentItem
-		 * (currentPosition);
-		 * toast.xaveyToast(null,
-		 * "Audio recording is needed to stop."
-		 * ); currentPosition =
-		 * previousIndex;
-		 
-		boolean forceStopL_R = true;
-		navStayStill(
-				direction,
-				currentFieldID,
-				"Audio recording is needed to stop.",
-				lLManager, newPosition,
-				currentPosition,
-				forceStopL_R);
-	}
+		 * if (ApplicationValues.) { // still recording... // block.. // there
+		 * is no direction // validation... // bcuz it will block both direction
+		 * // if recording is not ending /* navigator.addLast(0); used_field_ids
+		 * .addLast(currentFieldID); vPager.setCurrentItem (currentPosition);
+		 * toast.xaveyToast(null, "Audio recording is needed to stop." );
+		 * currentPosition = previousIndex;
+		 * 
+		 * boolean forceStopL_R = true; navStayStill( direction, currentFieldID,
+		 * "Audio recording is needed to stop.", lLManager, newPosition,
+		 * currentPosition, forceStopL_R); }
 		 */
 	}
 
@@ -3045,7 +3209,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private boolean isSubmitLayout(LinearLayout linearLayout) {
 		boolean isSubmitLayout = false;
 		if (linearLayout.getTag(R.id.layout_id) != null) {

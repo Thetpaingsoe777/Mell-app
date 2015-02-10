@@ -114,6 +114,10 @@ public class RatingSetAdapter extends BaseAdapter {
 			byte[] byteArray = syncImage.getImgByte();
 			Bitmap bitmapImage = xaveyUtils.convertByteArrayToBitmap(byteArray);
 			holder.image.setImageBitmap(bitmapImage);
+			
+			// following code is more beautiful , but setBackgroundDrawable method waas deprecated
+//			Drawable drawable = new BitmapDrawable(activity.getResources(), bitmapImage);
+//			holder.image.setBackgroundDrawable(drawable);
 		}
 		holder.ratingBarLayout.setTag(R.id.layout_id, "ratingBarLayout");
 		

@@ -36,9 +36,9 @@ public class FormAdapter extends BaseAdapter {
 		this.formList = formList;
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		availableFormIcon = activity.getResources().getDrawable(R.drawable.form_icon_1);
-		availableFormIcon.setBounds(0, 0, 80, 100);
+		availableFormIcon.setBounds(0, 0, 200, 290);
 		unavailableFormIcon = activity.getResources().getDrawable(R.drawable.form_icon_2);
-		unavailableFormIcon.setBounds(0, 0, 80, 100);
+		unavailableFormIcon.setBounds(0, 0, 200, 290);
 	}
 
 	@Override
