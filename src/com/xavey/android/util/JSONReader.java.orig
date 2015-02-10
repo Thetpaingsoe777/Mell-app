@@ -240,6 +240,15 @@ public class JSONReader {
 
 						ed1.setGravity(Gravity.LEFT);
 						ed1.setSingleLine(true);
+						boolean isMultiLine = false;
+						
+						if (fields.containsKey("field_multiline")){
+							isMultiLine = Boolean.parseBoolean(fields.get("field_multiline").toString());
+						}
+						if(isMultiLine){
+							ed1.setSingleLine(false);
+							ed1.setLines(30);
+						}
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
@@ -773,6 +782,7 @@ public class JSONReader {
 							// a condition should be checked here
 							// cuz not every question should be randomed
 
+							//TODO re-add the random
 							buttonLinesToBeRandomed.add(radioButtonLine); // <--
 																			// collect
 																			// the
@@ -806,7 +816,7 @@ public class JSONReader {
 						// example.. -> field_random : true
 
 						if (field_random) {
-							Collections.shuffle(buttonLinesToBeRandomed);
+							//Collections.shuffle(buttonLinesToBeRandomed);
 						}
 
 						for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
@@ -969,7 +979,7 @@ public class JSONReader {
 							cb.setTag(R.id.checkbox_value, tag);
 							cb.setTag(R.id.field_skip, skip);
 							cb.setTag(R.id.extra, extra);
-							cb.setTag(R.id.extra_required, extra_required);
+							cb.setTag(R.id.is_radiobutton_selected, false);
 							cb.setTypeface(typeface.getTypeFace());
 							LayoutParams cbParams = new LayoutParams(
 									LayoutParams.WRAP_CONTENT,
@@ -1694,7 +1704,7 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
-                        Collections.shuffle(columnSetCollection);
+                        //TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2066,8 +2076,12 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
+<<<<<<< HEAD
                         
                         Collections.shuffle(columnSetCollection);
+=======
+                        //TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
+>>>>>>> 2557fcab10940aa1118a2ee7c96022f940d5a863
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2442,7 +2456,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(
 								activity);
@@ -2822,7 +2836,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
 
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(
