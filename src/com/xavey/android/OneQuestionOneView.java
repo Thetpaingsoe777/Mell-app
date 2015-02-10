@@ -1857,7 +1857,99 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
-			} else if (linearLayout.getTag(R.id.layout_id).toString()
+			}
+			else if (linearLayout.getTag(R.id.layout_id).toString()
+                    .equals("matrixNumberLayout")) {
+                String key = linearLayout.getTag(R.id.field_id).toString();
+                String inputValues = "";
+                // ArrayList<MatrixCell> selectedCellList = new
+                // ArrayList<MatrixCell>();
+                key.toCharArray();
+                for (int x = 0; x < linearLayout.getChildCount(); x++) {
+                    View view = linearLayout.getChildAt(x);
+                    if (view.getClass().getName()
+                            .equals("android.widget.LinearLayout")
+                            && view.getTag(R.id.layout_id).toString()
+                                    .equals("theMatrixLayout")) {
+                        LinearLayout theMatrixLayout = (LinearLayout) view;
+                        LinearLayout rowLabelColumn = null;
+                        MYHorizontalScrollView horizontalScrollView = null;
+                        for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
+                            View v = theMatrixLayout.getChildAt(y);
+
+                            if (v.getTag(R.id.layout_id).toString()
+                                    .equals("rowLabelColumn")) {
+                                rowLabelColumn = (LinearLayout) v;
+                            } else if (v.getTag(R.id.layout_id).toString()
+                                    .equals("horizontalScrollView")) {
+                                horizontalScrollView = (MYHorizontalScrollView) v;
+                            }
+                        }
+                        // both rowLabelColumn and horizontalScrollView must be
+                        // already assigned in this line
+                        if (((LinearLayout) horizontalScrollView.getChildAt(0))
+                                .getTag(R.id.layout_id).toString()
+                                .equals("AllColumns")) {
+                            LinearLayout AllColumns = (LinearLayout) horizontalScrollView
+                                    .getChildAt(0);
+                            for (int ac = 0; ac < AllColumns.getChildCount(); ac++) {
+                                LinearLayout singleColumnAt_ac = (LinearLayout) AllColumns
+                                        .getChildAt(ac);
+                                String columnTitle = "";
+                                for (int sc = 0; sc < singleColumnAt_ac
+                                        .getChildCount(); sc++) {
+                                    View singleNumberBoxLayout = singleColumnAt_ac
+                                            .getChildAt(sc);
+                                    String cellTag = singleNumberBoxLayout
+                                            .getTag(R.id.layout_id).toString();
+                                    if (cellTag.equals("columnTitle")) {
+                                        columnTitle = ((TextView) singleNumberBoxLayout)
+                                                .getText().toString();
+                                    } else if (cellTag.equals("cell")) {
+                                        LinearLayout cellLayout = (LinearLayout) singleNumberBoxLayout;
+                                        for (int c = 0; c < cellLayout
+                                                .getChildCount(); c++) {
+                                            if (cellLayout
+                                                    .getChildAt(c)
+                                                    .getClass()
+                                                    .getName()
+                                                    .toString()
+                                                    .equals("android.widget.EditText")) {
+                                                EditText tb = (EditText) cellLayout
+                                                        .getChildAt(c);
+                                                if (tb.getText().toString().length()>0) {
+                                                    MatrixCell cell = (MatrixCell) tb
+                                                            .getTag(R.id.matrix_cell);
+                                                    inputValues += "|" + "h"
+                                                            + cell.getH_index()
+                                                            + "" + "v"
+                                                            + cell.getV_index()
+                                                            + ":"
+                                                            + tb.getText().toString(); // <-h0v0
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // -------------
+                        if (inputValues.length() > 0)
+                            inputValues = inputValues.substring(1); // <- it
+                                                                        // deletes
+                                                                        // the
+                                                                        // 1st
+                                                                        // char
+                                                                        // of
+                                                                        // the
+                                                                        // String
+                        else
+                            inputValues = "-";
+                    }
+                }
+                map.put(key, inputValues);
+            }
+			else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("matrixCheckListLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String checkedValues = "";

@@ -1466,6 +1466,381 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
+					// <matrix_number>
+                    else if (fields.get(key).equals("matrix_number")) {
+                        ScrollView scroll = new ScrollView(activity);
+                        scroll.setLayoutParams(new LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        LinearLayout parentLayout = new LinearLayout(activity);
+                        parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+                        LayoutParams parentLayoutParams = new LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT);
+                        parentLayout.setLayoutParams(parentLayoutParams);
+                        parentLayout.setOrientation(LinearLayout.VERTICAL);
+                        RelativeLayout upLayout = new RelativeLayout(activity);
+                        upLayout.setPadding(0, 10, 20, 0);
+                        int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
+                        int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
+                        RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(
+                                relative_MATCH_PARENT, relative_WRAP_CONTENT);
+                        upLayout.setLayoutParams(upLayoutParams);
+                        TextView index = new TextView(activity);
+                        RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
+                                relative_WRAP_CONTENT, relative_WRAP_CONTENT);
+                        tvLayoutParams
+                                .addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        index.setLayoutParams(tvLayoutParams);
+                        index.setText("index/index");
+                        index.setTag("index");
+                        upLayout.addView(index);
+                        // upLayout.addView(getLine(lineColor));
+                        parentLayout.addView(upLayout);
+
+                        LinearLayout matrixNumberLayout = new LinearLayout(
+                                activity);
+                        LayoutParams matrixSingleLayoutParams = new LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.WRAP_CONTENT);
+                        matrixSingleLayoutParams.setMargins(5, 20, 5, 0);
+                        matrixNumberLayout
+                                .setLayoutParams(matrixSingleLayoutParams);
+                        matrixNumberLayout
+                                .setGravity(Gravity.CENTER_HORIZONTAL);
+                        matrixNumberLayout
+                                .setOrientation(LinearLayout.VERTICAL);
+                        matrixNumberLayout.setPadding(0, 10, 0, 10);
+                        matrixNumberLayout.setTag(R.id.layout_id,
+                                "matrixNumberLayout");
+                        matrixNumberLayout.setTag(R.id.field_id,
+                                fields.get("field_id"));
+                        matrixNumberLayout.setTag(R.id.field_name_id,
+                                fields.get("field_name"));
+                        matrixNumberLayout.setTag(R.id.field_required_id,
+                                fields.get("field_required"));
+                        matrixNumberLayout.setTag(R.id.field_label_id,
+                                fields.get("field_label"));
+                        matrixNumberLayout.setTag(R.id.field_err_msg, "-");
+                        matrixNumberLayout.setTag(R.id.next_ref,
+                                fields.get("next_ref"));
+                        matrixNumberLayout.setTag(R.id.next_ref_cond,
+                                fields.get("next_ref_cond"));
+                        String field_label = fields.get("field_label")
+                                .toString();
+                        String field_name = fields.get("field_name").toString();
+                        String field_required = fields.get("field_required")
+                                .toString();
+                        TextView tvLabel = new TextView(activity);
+                        tvLabel.setText(field_label);
+                        tvLabel.setTextSize(labelTextSize);
+                        // tvLabel.setTag(fields.get("field_name"));
+                        tvLabel.setLayoutParams(labelLayoutParams);
+                        setTypeFace(tvLabel);
+                        matrixNumberLayout.addView(tvLabel);
+
+                        // adding description
+                        String description = fields.get("field_desc")
+                                .toString();
+                        TextView tvdescription = new TextView(activity);
+                        tvdescription.setText(description);
+                        tvdescription.setTextSize(descriptionTextSize);
+                        tvdescription.setLayoutParams(descriptionLayoutParams);
+                        tvdescription.setPadding(0, 5, 0, 5);
+                        setTypeFace(tvdescription);
+                        matrixNumberLayout.addView(tvdescription);
+
+                        LinearLayout theMatrixLayout = new LinearLayout(
+                                activity);
+                        theMatrixLayout.setLayoutParams(new LayoutParams(
+                                LayoutParams.WRAP_CONTENT,
+                                LayoutParams.WRAP_CONTENT));
+                        theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
+                        theMatrixLayout.setTag(R.id.layout_id,
+                                "theMatrixLayout");
+
+                        // <dataset_v stuffs>
+                        JSONObject field_dataset_v = (JSONObject) fields
+                                .get("field_dataset_v");
+                        JSONArray v_values = field_dataset_v
+                                .getJSONArray("dataset_values");
+                        String v_name = field_dataset_v
+                                .getString("dataset_name");
+
+                        ArrayList<HashMap<String, String>> v_values_list = new ArrayList<HashMap<String, String>>();
+                        for (int v = 0; v < v_values.length(); v++) {
+                            String value = v_values.getJSONObject(v).getString(
+                                    "value");
+                            String label = v_values.getJSONObject(v).getString(
+                                    "label");
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("value", value);
+                            map.put("label", label);
+                            v_values_list.add(map);
+                        }
+                        // </dataset_v stuffs>
+
+                        // <dataset_h stuffs>
+                        JSONObject field_dataset_h = (JSONObject) fields
+                                .get("field_dataset_h");
+                        JSONArray h_values = field_dataset_h
+                                .getJSONArray("dataset_values");
+                        String h_name = field_dataset_h
+                                .getString("dataset_name");
+
+                        ArrayList<HashMap<String, String>> h_values_list = new ArrayList<HashMap<String, String>>();
+                        for (int v = 0; v < h_values.length(); v++) {
+                            String max_range = "";
+                            if (h_values.getJSONObject(v).has("max_range"))
+                                max_range = h_values.getJSONObject(v)
+                                        .getString("max_range");
+                            String value = h_values.getJSONObject(v).getString(
+                                    "value");
+                            String label = h_values.getJSONObject(v).getString(
+                                    "label");
+                            String field_skip = h_values.getJSONObject(v)
+                                    .getString("field_skip");
+                            String extra = h_values.getJSONObject(v).getString(
+                                    "extra");
+                            String error_message = "";
+                            if (h_values.getJSONObject(v).has("error_message"))
+                                h_values.getJSONObject(v).getString(
+                                        "error_message");
+
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("max_range", max_range);
+                            map.put("value", value);
+                            map.put("label", label);
+                            map.put("field_skip", field_skip);
+                            map.put("extra", extra);
+                            map.put("error_message", error_message);
+                            h_values_list.add(map);
+                        }
+                        // </dataset_h stuffs>
+
+                        // < matrix stuffs >
+                        JSONArray matrix_values = (JSONArray) fields
+                                .get("matrix_values");
+
+                        int v_count = v_values_list.size();
+                        int h_count = h_values_list.size();
+
+                        // grouping all cells by each column
+                        LinkedList<ArrayList<MatrixCell>> columnSetCollection = new LinkedList<ArrayList<MatrixCell>>();
+
+                        for (int h = 0; h < h_count; h++) {
+                            ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
+
+                            for (int count = 0; count < matrix_values.length(); count++) {
+                                JSONObject cell_values = matrix_values
+                                        .getJSONObject(count);
+                                String fieldSkip = cell_values
+                                        .getString("field_skip");
+                                String value = cell_values.getString("value");
+                                String index_ = cell_values.getString("index");
+                                String[] parts = index_.split(",");
+                                int h_ = Integer.parseInt(parts[0]);
+                                int v_ = Integer.parseInt(parts[1]);
+
+                                if (h_ == h) {
+                                    MatrixCell cell = new MatrixCell();
+                                    cell.setFieldSkip(fieldSkip);
+                                    cell.setValue(value);
+                                    cell.setH_index(h_);
+                                    cell.setV_index(v_);
+                                    columnSet.add(cell);
+                                }
+                            }
+                            columnSetCollection.add(columnSet);
+                        }
+                        Collections.shuffle(columnSetCollection);
+                        // <producing row_label_set>
+                        LinearLayout row_label_column_set = new LinearLayout(
+                                activity);
+                        row_label_column_set.setTag(R.id.layout_id,
+                                "rowLabelColumn");
+                        int cell_row_width = 200;
+                        int cell_column_width = 150;
+                        int cell_column_height = 70;
+                        int cell_input_width = 100;
+
+                        LayoutParams rowLabelLayoutParams = new LayoutParams(
+                                cell_row_width, LayoutParams.WRAP_CONTENT);
+                        row_label_column_set
+                                .setLayoutParams(rowLabelLayoutParams);
+                        row_label_column_set
+                                .setOrientation(LinearLayout.VERTICAL);
+                        row_label_column_set.setGravity(Gravity.CENTER);
+
+                        LinearLayout blankLayout = new LinearLayout(activity);
+                        LayoutParams blankLayoutParams = new LayoutParams(
+                                cell_row_width, cell_column_height);
+                        blankLayout.setLayoutParams(blankLayoutParams);
+                        blankLayout.setGravity(Gravity.CENTER);
+                        TextView blankText = new TextView(activity);
+                        blankText.setLayoutParams(new LayoutParams(
+                                cell_row_width, cell_column_height));
+                        blankText.setText("     ");
+                        // row_label_column_set is the left vertical column
+                        blankLayout.addView(blankText);
+                        row_label_column_set.addView(blankLayout);
+                        theMatrixLayout.addView(row_label_column_set);
+
+                        for (int r = 0; r < v_values_list.size(); r++) {
+                            LinearLayout rowLabelCells = new LinearLayout(
+                                    activity);
+
+                            LayoutParams rowLabelCellsParams = new LayoutParams(
+                                    cell_row_width, cell_column_height);
+                            rowLabelCells.setLayoutParams(rowLabelCellsParams);
+
+                            TextView rowLabel = new TextView(activity);
+                            LayoutParams rowLabelParams = new LayoutParams(
+                                    cell_row_width, cell_column_height);
+                            rowLabel.setLayoutParams(rowLabelParams);
+                            rowLabel.setText(v_values_list.get(r).get("label")
+                                    .toString());
+                            rowLabel.setGravity(Gravity.START);
+                            // rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
+                            // value may be useless here
+                            row_label_column_set.addView(rowLabel);
+                        }
+                        // </producing row_label_set>
+
+                        int maxHeight = 0;
+
+                        // <prepare AllColumns
+                        LinearLayout AllColumns = new LinearLayout(activity);
+                        AllColumns.setLayoutParams(new LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        AllColumns.setOrientation(LinearLayout.HORIZONTAL);
+                        AllColumns.setTag(R.id.layout_id, "AllColumns");
+
+                        // <prepare columnSet>
+                        for (int column = 0; column < columnSetCollection
+                                .size(); column++) {
+                            ArrayList<MatrixCell> columnSet = columnSetCollection
+                                    .get(column);
+                            MatrixCell labelCell = columnSet.get(0);
+                            LinearLayout columnLayout = new LinearLayout(
+                                    activity);
+                            LayoutParams columnLayoutParams = new LayoutParams(
+                                    cell_column_width,
+                                    LayoutParams.WRAP_CONTENT);
+                            columnLayout.setLayoutParams(columnLayoutParams);
+                            columnLayout.setOrientation(LinearLayout.VERTICAL);
+                            columnLayout.setGravity(Gravity.CENTER);
+                            columnLayout.setTag(R.id.layout_id, "columnLayout");
+
+                            // getting h_values_ here...
+                            String max_range = "";
+                            if (h_values_list.get(labelCell.getH_index())
+                                    .get("max_range").length() > 0)
+                                max_range = h_values_list.get(
+                                        labelCell.getH_index())
+                                        .get("max_range");
+                            else
+                                max_range = "#no_value#";
+                            String field_skip = h_values_list.get(
+                                    labelCell.getH_index()).get("field_skip");
+                            String value = h_values_list.get(
+                                    labelCell.getH_index()).get("value");
+                            String label = h_values_list.get(
+                                    labelCell.getH_index()).get("label");
+                            String extra = h_values_list.get(
+                                    labelCell.getH_index()).get("extra");
+                            String error_message = "";
+                            if (h_values_list.get(labelCell.getH_index())
+                                    .get("error_message").length() > 0)
+                                h_values_list.get(labelCell.getH_index()).get(
+                                        "error_message");
+                            else
+                                error_message = "#no_value#";
+
+                            // max_range
+                            columnLayout.setTag(R.id.dataset_max_range,
+                                    max_range);
+                            // field_skip
+                            columnLayout.setTag(R.id.dataset_field_skip,
+                                    field_skip);
+                            // value
+                            columnLayout.setTag(R.id.dataset_value, value);
+                            // label
+                            columnLayout.setTag(R.id.dataset_label, label);
+                            // extra
+                            columnLayout.setTag(R.id.dataset_extra, extra);
+                            // error_message
+                            columnLayout.setTag(R.id.dataset_error_message,
+                                    error_message);
+
+                            TextView tvColumnTitle = new TextView(activity);
+                            tvColumnTitle.setLayoutParams(new LayoutParams(
+                                    cell_column_width, cell_column_height));
+                            tvColumnTitle.setText(label);
+                            // tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
+                            tvColumnTitle.setGravity(Gravity.CENTER);
+                            tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
+                            // following code dosen't work
+                            // if(tvColumnTitle.getLayoutParams().height>maxHeight){
+                            // maxHeight = tvColumnTitle.getHeight();
+                            // }
+
+                            columnLayout.addView(tvColumnTitle);
+
+                            for (int cs = 0; cs < columnSet.size(); cs++) {
+                                MatrixCell cell = columnSet.get(cs);
+                                LinearLayout singleNumberBoxLayout = new LinearLayout(
+                                        activity);
+                                singleNumberBoxLayout
+                                        .setLayoutParams(new LayoutParams(
+                                                cell_column_width,
+                                                cell_column_height));
+                                singleNumberBoxLayout.setGravity(Gravity.CENTER);
+                                singleNumberBoxLayout.setTag(R.id.layout_id,
+                                        "cell");
+                                EditText tb = new EditText(activity);
+                                tb.setInputType(InputType.TYPE_CLASS_NUMBER);
+        						tb.setKeyListener(DigitsKeyListener
+        								.getInstance("0123456789."));
+        						LayoutParams textBoxParams = new LayoutParams(
+        								cell_input_width,
+                                		cell_column_height);
+                                tb.setLayoutParams(textBoxParams);
+                                tb.setTag(R.id.matrix_cell, cell);
+                                // cb.setGravity(Gravity.CENTER); // <-- center
+                                // horizontal didn't work here
+                                singleNumberBoxLayout.addView(tb);
+                                // singleNumberBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
+                                columnLayout.addView(singleNumberBoxLayout);
+                            }
+                            // here
+                            AllColumns.addView(columnLayout);
+                            // theMatrixLayout.addView(columnLayout);
+                        }
+                        // </prepare columnSet>
+
+                        // </matrix stuffs>
+
+                        MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
+                                activity);
+                        horizontalScrollView.setLayoutParams(new LayoutParams(
+                                LayoutParams.MATCH_PARENT,
+                                LayoutParams.MATCH_PARENT));
+                        horizontalScrollView.addView(AllColumns);
+                        horizontalScrollView.setTag(R.id.layout_id,
+                                "horizontalScrollView");
+                        horizontalScrollView
+                                .requestDisallowInterceptTouchEvent(false);
+                        theMatrixLayout.addView(horizontalScrollView);
+                        matrixNumberLayout.addView(theMatrixLayout);
+
+                        scroll.addView(matrixNumberLayout);
+                        parentLayout.addView(scroll);
+                        addErrorMsg(parentLayout);
+                        layoutList.add(parentLayout);
+                    }
+                    // </matrix_numberlist>
 					// <matrix_checklist>
 					else if (fields.get(key).equals("matrix_checklist")) {
 						ScrollView scroll = new ScrollView(activity);
@@ -3606,7 +3981,27 @@ public class JSONReader {
 					if (jChild.has("next_ref_cond"))
 						fields.put("next_ref_cond",
 								jChild.getJSONArray("next_ref_cond"));
-				} else if (field_type.equals("matrix_option")) {
+				}else if (field_type.equals("matrix_number")) {
+                    fields.put("field_name", jChild.getString("field_name"));
+                    fields.put("field_desc", jChild.getString("field_desc"));
+                    fields.put("field_type", jChild.getString("field_type"));
+                    fields.put(
+                            "matrix_values",
+                            jChild.getJSONObject("field_matrix").getJSONArray(
+                                    "matrix_values"));
+                    fields.put("field_dataset_v",
+                            jChild.getJSONObject("field_dataset_v"));
+                    fields.put("field_required",
+                            jChild.getString("field_required"));
+                    fields.put("field_help", jChild.getString("field_help"));
+                    if (jChild.has("next_ref"))
+                        fields.put("next_ref", jChild.getString("next_ref"));
+                    fields.put("field_dataset_h",
+                            jChild.getJSONObject("field_dataset_h"));
+                    fields.put("field_label", jChild.getString("field_label"));
+                    fields.put("field_id", jChild.getString("field_id"));
+                } 
+				else if (field_type.equals("matrix_option")) {
 					fields.put("field_name", jChild.getString("field_name"));
 					fields.put("field_desc", jChild.getString("field_desc"));
 					fields.put("field_type", jChild.getString("field_type"));
