@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,12 +31,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -632,16 +633,15 @@ public class JSONReader {
 //							if (tag.equals(field_default_value)) {
 //								radioButton.setSelected(true);
 //								radioButton.setChecked(true);
-//								radioButton.setTag(
-//										R.id.is_radiobutton_selected, true);
+//								radioButton.setTag(R.id.is_radiobutton_selected, true);
 //							}
+							
 							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
 									RadioGroup.LayoutParams.MATCH_PARENT,
 									RadioGroup.LayoutParams.WRAP_CONTENT);
 
 							EditText extraValue = new EditText(activity);
-							extraValue
-									.setLayoutParams(extraValueLayoutParamsDisappear);
+							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
 							extraValue.setTag(R.id.extra_status, "off");
 
 							layoutParams.setMargins(0, 10, 0, 10);
@@ -761,7 +761,7 @@ public class JSONReader {
 							 * EditText(activity); extraValue.setLayoutParams(
 							 * extraValueLayoutParamsAppear);
 							 * extraValue.setTag(R.id.extra_status, "on");
-							 * radioButtonLine.addView(extraValue); }
+							 * radioButtonLine.addView(); }
 							 */
 							if (radioButton.isChecked()) {
 								radioButton.performClick();
@@ -947,6 +947,9 @@ public class JSONReader {
 						int default_value = 1;
 						int length = dataset.length();
 
+						LayoutParams checkBoxLineLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
 						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 
 						int checkboxCount = 0;
@@ -955,11 +958,18 @@ public class JSONReader {
 							obj = dataset.getJSONObject(j);
 							String text = obj.getString("label");
 							String tag = obj.getString("value");
+							String skip = obj.getString("field_skip");
+							boolean extra = obj.getBoolean("extra"); 
+							boolean extra_required=false;
+							if(obj.has("extra_required"))
+								extra_required = obj.getBoolean("extra_required");
 							CheckBox cb = new CheckBox(activity);
 							cb.setText(text);
-							cb.setTextSize(radioButtonTextSize); // same as
-																	// radio
-							cb.setTag(tag);
+							cb.setTextSize(radioButtonTextSize); // same as radio 
+							cb.setTag(R.id.checkbox_value, tag);
+							cb.setTag(R.id.field_skip, skip);
+							cb.setTag(R.id.extra, extra);
+							cb.setTag(R.id.is_radiobutton_selected, false);
 							cb.setTypeface(typeface.getTypeFace());
 							LayoutParams cbParams = new LayoutParams(
 									LayoutParams.WRAP_CONTENT,
@@ -967,22 +977,49 @@ public class JSONReader {
 							cbParams.setMargins(15, 5, 15, 5);
 							cb.setLayoutParams(cbParams);
 							setTypeFace(cb);
-							if (default_value == (j + 1)) {
-								cb.setChecked(true);
-							}
+//							if (default_value == (j + 1)) {
+//								cb.setChecked(true);
+//							}
 							checkBoxList.add(cb);
 							// checkBoxLayout.addView(cb);
 							checkboxCount++;
 						}
 
 						if (field_random) {
-							Collections.shuffle(checkBoxList);
+							//Collections.shuffle(checkBoxList);
 						}
 
-						for (CheckBox cb : checkBoxList) {
-							checkBoxLayout.addView(cb);
-						}
+						
+						
+						for (final CheckBox cb : checkBoxList) {
+							LinearLayout checkBoxLine = new LinearLayout(activity);
+							checkBoxLine.setTag(R.id.layout_id, "checkBoxLine");
+							checkBoxLine.setLayoutParams(checkBoxLineLayoutParams);
+							checkBoxLine.setOrientation(LinearLayout.VERTICAL);
+							
+							Boolean extraRequired = Boolean.parseBoolean(cb.getTag(R.id.extra).toString());
+							
+							EditText extraValue = new EditText(activity);
+							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
+							cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+								@Override
+								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+									LinearLayout checkBoxLine = (LinearLayout) cb.getParent();
+									EditText selectedExtra = (EditText) checkBoxLine.getChildAt(1); // <- making static so far..
+									if(selectedExtra!=null)
+									if(!isChecked){
+										selectedExtra.setLayoutParams(extraValueLayoutParamsDisappear);
+									}else{
+										selectedExtra.setLayoutParams(extraValueLayoutParamsAppear);
+									}
+								}
+							});
+							checkBoxLine.addView(cb);
+							if(extraRequired)
+								checkBoxLine.addView(extraValue);
+							checkBoxLayout.addView(checkBoxLine);
+						}
 						scroll.addView(checkBoxLayout);
 						parentLayout.addView(scroll);
 						addErrorMsg(parentLayout);
@@ -2029,6 +2066,7 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
+                        
                         Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
