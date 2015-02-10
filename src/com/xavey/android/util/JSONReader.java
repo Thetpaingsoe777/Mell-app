@@ -239,6 +239,15 @@ public class JSONReader {
 
 						ed1.setGravity(Gravity.LEFT);
 						ed1.setSingleLine(true);
+						boolean isMultiLine = false;
+						
+						if (fields.containsKey("field_multiline")){
+							isMultiLine = Boolean.parseBoolean(fields.get("field_multiline").toString());
+						}
+						if(isMultiLine){
+							ed1.setSingleLine(false);
+							ed1.setLines(30);
+						}
 						ed1.setHint(fieldHelp);
 						ed1.setBackgroundResource(R.drawable.edittext_style);
 						ed1.setLayoutParams(editTextLayoutParams);
@@ -773,6 +782,7 @@ public class JSONReader {
 							// a condition should be checked here
 							// cuz not every question should be randomed
 
+							//TODO re-add the random
 							buttonLinesToBeRandomed.add(radioButtonLine); // <--
 																			// collect
 																			// the
@@ -806,7 +816,7 @@ public class JSONReader {
 						// example.. -> field_random : true
 
 						if (field_random) {
-							Collections.shuffle(buttonLinesToBeRandomed);
+							//Collections.shuffle(buttonLinesToBeRandomed);
 						}
 
 						for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
@@ -976,7 +986,7 @@ public class JSONReader {
 						}
 
 						if (field_random) {
-							Collections.shuffle(checkBoxList);
+							//Collections.shuffle(checkBoxList);
 						}
 
 						for (CheckBox cb : checkBoxList) {
@@ -1657,7 +1667,7 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
-                        Collections.shuffle(columnSetCollection);
+                        //TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2029,7 +2039,7 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
-                        Collections.shuffle(columnSetCollection);
+                        //TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2404,7 +2414,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(
 								activity);
@@ -2784,7 +2794,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//TODO: add json attribute for RANDOM Collections.shuffle(columnSetCollection);
 
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(

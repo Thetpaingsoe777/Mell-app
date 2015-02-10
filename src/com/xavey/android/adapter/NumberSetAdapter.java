@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class NumberSetAdapter extends BaseAdapter {
 
@@ -80,6 +81,8 @@ public class NumberSetAdapter extends BaseAdapter {
 			rootView = inflater.inflate(R.layout.number_set_item, null);
 			holder = new ViewHolder();
 			holder.tvLabel = (TextView) rootView.findViewById(R.id.label_number_set);
+			holder.tvLabel.setLayoutParams(new LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			holder.inputNumber = (EditText) rootView.findViewById(R.id.input_number_set);
 			rootView.setTag(holder);
 		}

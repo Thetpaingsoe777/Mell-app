@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class TextSetAdapter extends BaseAdapter {
 
@@ -68,6 +69,8 @@ public class TextSetAdapter extends BaseAdapter {
 			rootView = inflater.inflate(R.layout.text_set_item, null);
 			holder = new ViewHolder();
 			holder.tvLabel = (TextView) rootView.findViewById(R.id.label_text_set);
+			holder.tvLabel.setLayoutParams(new LayoutParams(
+					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			holder.inputText = (EditText) rootView.findViewById(R.id.input_text_set);
 			rootView.setTag(holder);
 		}

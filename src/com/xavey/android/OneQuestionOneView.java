@@ -655,6 +655,7 @@ public class OneQuestionOneView extends FragmentActivity {
 															.get(newPosition);
 													if (!isSubmitLayout(nextLayout_))
 														hideKeyboard(nextLayout_);
+													navLeftToRight(newPosition,currentFieldID);
 												} else {
 
 													// skip to other questions
