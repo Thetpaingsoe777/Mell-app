@@ -1835,7 +1835,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (cb.isChecked()) {
 							String value = cb.getTag(R.id.checkbox_value).toString();
 							// checkedValues.put(value);
-							if(extra.getText().toString().length()>0){
+							if(extra!=null && extra.getText().toString().length()>0){
 								value += ":"+extra.getText().toString();
 							}
 							checkedValues += "|" + value;

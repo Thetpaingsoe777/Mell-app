@@ -243,10 +243,6 @@ public class MainActivity extends Activity {
 			current_position = 0;
 			break;
 		case 1:
-//			fragment = new CSVExportFragment();
-//			args.putString("CSV Export", itemList.get(position).getItemName());
-//			setTitle("CSV Export");
-//			current_position = 1;
 			fragment = new HistoryFragment();
 			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position)
 					.getItemName());
@@ -254,26 +250,19 @@ public class MainActivity extends Activity {
 			current_position = 2;
 			break;
 		case 2:
-			fragment = new HistoryFragment();
-			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position)
-					.getItemName());
-			setTitle(itemList.get(position).getItemName());
-			current_position = 2;
-			break;
-		case 3:
 			fragment = new SettingFragment();
 			args.putString("Setting", itemList.get(position).getItemName());
 			setTitle(itemList.get(position).getItemName());
 			current_position = 3;
 			break;
-		case 4:
+		case 3:
 			fragment = new AboutFragment();
 			args.putString("About", itemList.get(position).getItemName());
 			String itemName = itemList.get(position).getItemName();
 			setTitle(itemName);
 			current_position = 4;
 			break;
-		case 5:
+		case 4:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
 			alertDialogBuilder.setTitle("Confirm");
