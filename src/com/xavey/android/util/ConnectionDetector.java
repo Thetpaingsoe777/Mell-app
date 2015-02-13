@@ -49,7 +49,7 @@ public class ConnectionDetector {
 //					}
 
 			String xaveyURL = xaveyProperties.getCurrentlyPointingURL();
-			int timeout = 3000;
+			int timeout = 7000;
 
 			if(isMyURLReachable(xaveyURL, timeout)){
 				return true;

@@ -14,8 +14,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -3362,5 +3364,37 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 		}
 		return isSubmitLayout;
+	}
+	
+	@Override
+	public void onBackPressed() {
+		
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		alertDialogBuilder.setTitle("Confirm");
+		alertDialogBuilder.setMessage("Are you sure you want to home screen? It will lose collected data.");
+		alertDialogBuilder.setCancelable(false);
+		
+		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+//				Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+//				homeIntent.addCategory(Intent.CATEGORY_HOME);
+//				homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//				startActivity(homeIntent);
+				finish();
+			}
+		});
+		alertDialogBuilder.setNegativeButton("No",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						// if this button is clicked, just close
+						// the dialog box and do nothing
+						dialog.cancel();
+					}
+				});
+		alertDialogBuilder.create().show();
+		
+		
 	}
 }
