@@ -17,14 +17,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.xavey.android.ApplicationValues;
-import com.xavey.android.LoginActivity;
+import com.xavey.android.MainActivity;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.XMedia;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
 import com.xavey.android.model.User;
+import com.xavey.android.model.XMedia;
 
 public class SyncManager {
 
@@ -149,15 +149,15 @@ public class SyncManager {
 
 		@Override
 		protected RestClient doInBackground(JSONArray... params) {
-			
+
 			// ---------- updating token.. --------------------------------
 			String userName = ApplicationValues.loginUser.getUser_name();
 			String password = ApplicationValues.loginUser.getPwd();
 			String deviceID = getDeviceUniqueID(activity_);
 			//updateToken(userName,password);
-			
+
 			String authenticateURL = xavey_properties.getAuthenticateURL();
-			
+
 			RestClient c_ = new RestClient(authenticateURL);
 			c_.AddParam("username", userName);
 			c_.AddParam("password", password);
@@ -202,6 +202,8 @@ public class SyncManager {
 			            if(_id.length()>0){
 			            	dbHelper.updateDocument(document);
 							dbHelper.updateDocumentSubmittedByJSON(document, "1");
+							// :TODO 
+							//MainActivity.selectItem(MainActivity.current_position);
 			            }
 			        } catch (JSONException e) {
 			            e.printStackTrace();
@@ -515,7 +517,7 @@ public class SyncManager {
 //			Dialog.show();
 			String user_id = result.get("user_id");
 			String responseCode_ = result.get("response_code");
-			
+
 			if(isNumeric(responseCode_)){
 				int responseCode = Integer.parseInt(result.get("response_code"));
 				String token = result.get("token");
@@ -523,7 +525,7 @@ public class SyncManager {
 //					Dialog.setMessage("Token is now updated..");
 //					Dialog.show();
 					//Toast.makeText(activity_, "token is now updated", 1000).show();
-					
+
 					dbHelper.updateTokenByUserID(user_id, token);
 				}else{
 					toast.xaveyToast(null, "Authentication failed..!" + "\nResponse Code : "+responseCode);

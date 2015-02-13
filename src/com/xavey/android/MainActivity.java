@@ -55,13 +55,13 @@ import com.xavey.android.util.XaveyUtils;
 
 public class MainActivity extends Activity {
 
-	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
+	private static DrawerLayout mDrawerLayout;
+	private static ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	// private CharSequence mDrawerTitle;
 	CustomDrawerAdapter adapter_;
-	List<DrawerItem> itemList;
-	SessionManager session;
+	static List<DrawerItem> itemList;
+	static SessionManager session;
 	public static Menu optionMenu;
 	XaveyDBHelper dbHelper;
 	XaveyUtils xaveyUtils;
@@ -90,19 +90,24 @@ public class MainActivity extends Activity {
 		ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
 				.getDeviceUniqueID(this);
 		initializeUI();
-		session.checkLogin();
-		dbHelper = new XaveyDBHelper(this);
-		if (savedInstanceState == null) {
-			selectItem(0);
+		if(session.isLoggedIn()){
+			dbHelper = new XaveyDBHelper(this);
+			if (savedInstanceState == null) {
+				selectItem(0, MainActivity.this);
+			}
+			String current_token = "";
+			String userID = session.getUserDetails().get(SessionManager.USER_ID);
+			if (userID != null) {
+				ApplicationValues.loginUser = dbHelper.getUserByUserID(userID);
+				current_token = ApplicationValues.loginUser.getToken();
+			}
+			downloadForms();
+			customHandler.postDelayed(updateTimerThread, 1000 * 30);
 		}
-		String current_token = "";
-		String userID = session.getUserDetails().get(SessionManager.USER_ID);
-		if (userID != null) {
-			ApplicationValues.loginUser = dbHelper.getUserByUserID(userID);
-			current_token = ApplicationValues.loginUser.getToken();
+		else{
+			session.initLogin();
 		}
-		downloadForms();
-		customHandler.postDelayed(updateTimerThread, 1000 * 30);
+		
 	}
 
 	private void downloadForms() {
@@ -199,7 +204,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long arg3) {
-				selectItem(position);
+				selectItem(position, MainActivity.this);
 			}
 		});
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -230,8 +235,12 @@ public class MainActivity extends Activity {
 		itemList.add(new DrawerItem(getString(R.string.str_logout),
 				R.drawable.orkut));
 	}
+	
+//	public static void selectItemGlobal(int position){
+//		
+//	}
 
-	public void selectItem(int position) {
+	public static void selectItem(int position, final Activity mainAct) {
 		Fragment fragment = null;
 		Bundle args = new Bundle();
 		switch (position) {
@@ -239,32 +248,32 @@ public class MainActivity extends Activity {
 			fragment = new HomeFragment();
 			args.putString(HomeFragment.ITEM_NAME, itemList.get(position)
 					.getItemName());
-			setTitle("Xavey Pte Ltd");
+			mainAct.setTitle("Xavey Pte Ltd");
 			current_position = 0;
 			break;
 		case 1:
 			fragment = new HistoryFragment();
 			args.putString(HistoryFragment.ITEM_NAME, itemList.get(position)
 					.getItemName());
-			setTitle(itemList.get(position).getItemName());
+			mainAct.setTitle(itemList.get(position).getItemName());
 			current_position = 2;
 			break;
 		case 2:
 			fragment = new SettingFragment();
 			args.putString("Setting", itemList.get(position).getItemName());
-			setTitle(itemList.get(position).getItemName());
+			mainAct.setTitle(itemList.get(position).getItemName());
 			current_position = 3;
 			break;
 		case 3:
 			fragment = new AboutFragment();
 			args.putString("About", itemList.get(position).getItemName());
 			String itemName = itemList.get(position).getItemName();
-			setTitle(itemName);
+			mainAct.setTitle(itemName);
 			current_position = 4;
 			break;
 		case 4:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-					this);
+					mainAct);
 			alertDialogBuilder.setTitle("Confirm");
 			alertDialogBuilder.setMessage("Are you sure to sign out?");
 			alertDialogBuilder.setCancelable(false);
@@ -273,7 +282,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					session.logoutUser();
-					startActivity(new Intent(getApplicationContext(),
+					mainAct.startActivity(new Intent(mainAct.getApplicationContext(),
 							LoginActivity.class));
 				}
 			});
@@ -294,11 +303,11 @@ public class MainActivity extends Activity {
 		if (args != null) {
 			fragment.setArguments(args);
 			try {
-				FragmentManager frgManager = getFragmentManager();
+				FragmentManager frgManager = mainAct.getFragmentManager();
 				frgManager.beginTransaction()
 						.replace(R.id.content_frame, fragment).commit();
 				mDrawerList.setItemChecked(position, true);
-				setTitle(itemList.get(position).getItemName());
+				mainAct.setTitle(itemList.get(position).getItemName());
 				mDrawerLayout.closeDrawer(mDrawerList);
 			} catch (IllegalStateException e) {
 
@@ -650,7 +659,7 @@ public class MainActivity extends Activity {
 				}
 			}
 
-			selectItem(0); // this is like refreshing ;)
+			selectItem(0, MainActivity.this); // this is like refreshing ;)
 			setRefreshActionButtonState(false);
 		}
 	}
@@ -815,7 +824,7 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(HashMap<String, Object> syncedForms) {
 			Dialog.dismiss();
 			if(current_position==0){
-				selectItem(0);
+				selectItem(0, MainActivity.this);
 			}
 		}
 	}

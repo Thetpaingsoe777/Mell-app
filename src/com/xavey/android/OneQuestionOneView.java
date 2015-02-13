@@ -151,11 +151,9 @@ public class OneQuestionOneView extends FragmentActivity {
 			vPager.setAdapter(qAdapter);
 
 			vPager.setOnPageChangeListener(new OnPageChangeListener() {
-
 				String fieldRequired;
 				String layoutID;
 				int index = 0;
-
 				LinearLayout nextLayout = null;
 				RelativeLayout currentUpperLayout = null;
 
@@ -942,7 +940,7 @@ public class OneQuestionOneView extends FragmentActivity {
 																			Toast.makeText(
 																					getApplicationContext(),
 																					"error : ",
-																					2000);
+																					5000);
 																		} else
 																			maxRange = Integer
 																					.parseInt(maxRangeString); // <--

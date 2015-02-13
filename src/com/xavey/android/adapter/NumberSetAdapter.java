@@ -32,8 +32,7 @@ public class NumberSetAdapter extends BaseAdapter {
 		dbHelper = new XaveyDBHelper(this.activity);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
-	
-	
+
 	public ArrayList<HashMap<String, String>> getData() {
 		return data;
 	}

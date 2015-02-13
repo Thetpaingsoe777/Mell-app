@@ -63,6 +63,7 @@ public class HistoryFragment extends Fragment {
 		db = new XaveyDBHelper(getActivity());
 		historyListView = (ListView) v.findViewById(R.id.history_form_listview);
 		historyListView.setItemsCanFocus(false);
+		
 	}
 
 	public class DocumentPagerAdapter extends ArrayAdapter<Document>{

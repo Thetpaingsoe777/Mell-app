@@ -9,12 +9,15 @@ import java.util.HashMap;
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONObject;
 
+import android.R.color;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,11 +27,9 @@ import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.RequestMethod;
@@ -40,6 +41,7 @@ import com.xavey.android.util.StringEncrytDecryManager;
 import com.xavey.android.util.SyncManager;
 import com.xavey.android.util.ToastManager;
 import com.xavey.android.util.XaveyProperties;
+import com.xavey.android.util.XaveyUtils;
 
 public class LoginActivity extends Activity {
 
@@ -53,6 +55,9 @@ public class LoginActivity extends Activity {
 	SessionManager session;
 	Intent itt;
 	XaveyDBHelper dbHelper;
+	XaveyUtils xUtils;
+	XaveyProperties xaveyProperties;
+	ToastManager xaveyToast;
 	
 	//ImageView xaveyLogo;
 
@@ -83,11 +88,17 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		
+		// http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+		
 		setContentView(R.layout.login_screen);
 		loadUI();
 
 		dbHelper = new XaveyDBHelper(this);
-
+		
 		btnLogin.setOnClickListener(new OnClickListener() {
 
 			private void hideLoginKeyboard() {
@@ -104,13 +115,22 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				hideLoginKeyboard();
-				txtMsg.setText("");
-
+				//TODO Show loading message
+				ProgressDialog Dialog = new ProgressDialog(LoginActivity.this);
+				Dialog.setMessage("Loggin in...");
+				Dialog.show();
+				txtMsg.setText("Loggin in..");
+				txtMsg.setTextColor(Color.BLACK);
+				xaveyToast.xaveyToast(txtMsg, "Loggin in...");
+				
 				ConnectionDetector detector = new ConnectionDetector(
 						getApplicationContext());
+				Dialog.dismiss();
+				txtMsg.setTextColor(Color.RED);
 				boolean isConnecting = detector.isConnectingToInternet();
-				boolean b = isConnecting;
-				if (detector.isConnectingToInternet()) {
+				//show dialog
+				if (isConnecting) {
+					
 					User u = new User();
 					String username, password;
 					username = edtUserName.getText().toString();
@@ -119,8 +139,10 @@ public class LoginActivity extends Activity {
 							&& password.trim().length() > 0) {
 						u.setUser_name(username);
 						u.setPwd(password);
-						new AuthenticateTask().execute(u);
+						new LoginAsynTask().execute(u);
 					}
+					// --------- following is new code
+
 				} else {
 					// offline mode
 					String userID = dbHelper.getUserIDByUserName(edtUserName
@@ -140,10 +162,10 @@ public class LoginActivity extends Activity {
 							startActivity(itt);
 							finish();
 						} else {
-							txtMsg.setText("Invalid login !, try again.");
+							txtMsg.setText("Invalid user name or password!");
 						}
 					} else {
-						txtMsg.setText("User name does not exist");
+						txtMsg.setText("This user hasn't logged in before for offline access.");
 					}
 				}
 			}
@@ -187,9 +209,12 @@ public class LoginActivity extends Activity {
 		edtUserName.setBackgroundResource(R.drawable.rounded_edittext);
 		edtPassword = (EditText) findViewById(R.id.edtPwd);
 		edtPassword.setBackgroundResource(R.drawable.rounded_edittext);
+		xUtils = new XaveyUtils(this);
+		xaveyProperties = new XaveyProperties();
 		//xaveyLogo = (ImageView) findViewById(R.id.xaveyLogo);
 		RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(width-20, height/3);
 		//xaveyLogo.setLayoutParams(logoParams);
+		xaveyToast = new ToastManager(this);
 	}
 
 	// test mode only
@@ -228,8 +253,8 @@ public class LoginActivity extends Activity {
 		// String serverFormURL = "serverFormURL";
 
 		protected void onPreExecute() {
-			Dialog.setMessage("Please wait..");
-			//Dialog.show();
+			Dialog.setMessage("Logging in...");
+			Dialog.show();
 			xavey_properties = new XaveyProperties();
 			authenticateURL = xavey_properties.getAuthenticateURL();
 			localAuthenticate = xavey_properties.getLocalAuthenticateURL();
@@ -318,7 +343,7 @@ public class LoginActivity extends Activity {
 				}
 				ApplicationValues.loginUser = loggedInUser; // if logo involved or not whatever, loggedInUser must be assigned
 			} else if (responseCode == 403) {
-				txtMsg.setText("Token expired....!");
+				txtMsg.setText("Token expired!");
 			} else if (responseCode == 401) {
 				txtMsg.setText("Login failed, Try again.");
 			}
@@ -338,8 +363,8 @@ public class LoginActivity extends Activity {
 				 */
 				dbHelper.addNewUser(result);
 			} else {
-				Toast.makeText(getApplicationContext(), "AlreadyExist", 500)
-						.show();
+//				Toast.makeText(getApplicationContext(), "AlreadyExist", 500)
+//						.show();
 				dbHelper.updateUser(result);
 			}
 		}
@@ -392,7 +417,7 @@ public class LoginActivity extends Activity {
 		// String serverFormURL = "serverFormURL";
 
 		protected void onPreExecute() {
-			Dialog.setMessage("Downloading Company Logo..");
+			Dialog.setMessage("Downloading Company Logo...");
 			Dialog.show();
 			xavey_properties = new XaveyProperties();
 			logoDownloadURL = xavey_properties.getSyncImageDownloadURL();
@@ -448,10 +473,10 @@ public class LoginActivity extends Activity {
 				}
 			}
 			else if(userResponseCode_==401){
-				toastManager.xaveyToast(null, "Authenticating failed when downloading form..");
+				toastManager.xaveyToast(null, "Authenticating failed when downloading form!");
 			}
 			else if(userResponseCode_==403){
-				toastManager.xaveyToast(null, "server error when downloading form.. at Main Activity");
+				toastManager.xaveyToast(null, "Server error when downloading form! (MainActivity)");
 			}
 			return result;
 		}
@@ -513,4 +538,100 @@ public class LoginActivity extends Activity {
         }
 
    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private class LoginAsynTask extends AsyncTask<User, Void, HashMap<String, String>> {
+		// (1) do in background parameter
+		// (2) progress
+		// (3) post execute parameter
+
+		User user = new User();
+
+		// properties
+		XaveyProperties xavey_properties;
+		String authenticateURL = "";
+		String authenUserName = "";
+		String authenPassword = "";
+		String deviceID= "";
+
+		protected void onPreExecute() {
+			authenticateURL = xaveyProperties.getAuthenticateURL();
+			authenUserName = xaveyProperties.getAuthenUserName();
+			authenPassword = xaveyProperties.getAuthenPassword();
+			deviceID = xUtils.getDeviceUniqueID();
+		}
+
+		protected HashMap<String, String> doInBackground(User... params) {
+
+			// here is current works
+			HashMap<String, String> result = new HashMap<String, String>();
+			try {
+				RestClient c = new RestClient(authenticateURL);
+				c.AddParam("username", params[0].getUser_name());
+				c.AddParam("password", params[0].getPwd());
+				c.AddParam("device", deviceID);
+				c.Execute(RequestMethod.POST);
+				int userResponseCode = c.getResponseCode();
+				String s = c.getResponse();
+				result.put("response_code", userResponseCode+"");
+			}
+			catch(Exception e){
+				Log.e("login server error :", e.getMessage());
+			}
+			return result;
+		}
+
+		@Override
+		protected void onPostExecute(HashMap<String, String> result) {
+
+			int responseCode = Integer.parseInt(result.get("response_code").toString());
+
+			if(responseCode==200){
+				// internet available 
+				// do login stuffs
+
+					User u = new User();
+					String username, password;
+					username = edtUserName.getText().toString();
+					password = edtPassword.getText().toString();
+					if (username.trim().length() > 0
+							&& password.trim().length() > 0) {
+						u.setUser_name(username);
+						u.setPwd(password);
+						new AuthenticateTask().execute(u);
+					}
+			}
+			else if (responseCode==401){
+				Toast.makeText(LoginActivity.this, "Invalid user name or password!", 1000).show();
+			}
+			else if (responseCode==403){
+				Toast.makeText(LoginActivity.this, "Token expired!", 1000).show();
+			}
+			else{
+				Toast.makeText(LoginActivity.this, "Network Error!", 1000).show();
+			}
+
+		}
+
+
+		
+		}
+	
+	
+	
+	
+
+	
 }

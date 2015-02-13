@@ -17,6 +17,10 @@ public class XaveyProperties {
 	final String LOCAL_FORM_DOWNLOAD = "localFormDownload";
 	final String LOCAL_AUTHENTICATE = "localAuthenticate";
 	final String IMAGE_DOWNLOAD = "logoDownloadURL";
+	final String CURRENTLY_POINTING_URL = "currentlyPointingURL";
+	
+	final String AUTHEN_USER_NAME = "authen_user";
+	final String AUTHEN_PASSWORD = "authen_pw";
 	
 	private String authenticateURL;
 	private String serverFormDownloadURL;
@@ -26,6 +30,9 @@ public class XaveyProperties {
 	private String localFormDownload;
 	private String localAuthenticate;
 	private String syncImageDownloadURL;
+	private String authenUserName;
+	private String authenPassword;
+	private String currentlyPointingURL;
 	
 	public XaveyProperties() {
 		Properties xaveyProperties = new Properties();
@@ -39,6 +46,9 @@ public class XaveyProperties {
 			zawgyi_font = xaveyProperties.getProperty(ZAWGYI_FONT);
 			localFormDownload = xaveyProperties.getProperty(LOCAL_FORM_DOWNLOAD);
 			localAuthenticate = xaveyProperties.getProperty(LOCAL_AUTHENTICATE);
+			authenUserName = xaveyProperties.getProperty(AUTHEN_USER_NAME);
+			authenPassword = xaveyProperties.getProperty(AUTHEN_PASSWORD);
+			setCurrentlyPointingURL(xaveyProperties.getProperty(CURRENTLY_POINTING_URL));
 			setSyncImageDownloadURL(xaveyProperties.getProperty(IMAGE_DOWNLOAD));
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
@@ -83,6 +93,30 @@ public class XaveyProperties {
 
 	public void setSyncImageDownloadURL(String syncImageDownloadURL) {
 		this.syncImageDownloadURL = syncImageDownloadURL;
+	}
+
+	public String getAuthenUserName() {
+		return authenUserName;
+	}
+
+	public void setAuthenUserName(String authenUserName) {
+		this.authenUserName = authenUserName;
+	}
+
+	public String getAuthenPassword() {
+		return authenPassword;
+	}
+
+	public void setAuthenPassword(String authenPassword) {
+		this.authenPassword = authenPassword;
+	}
+
+	public String getCurrentlyPointingURL() {
+		return currentlyPointingURL;
+	}
+
+	public void setCurrentlyPointingURL(String currentlyPointingURL) {
+		this.currentlyPointingURL = currentlyPointingURL;
 	}
 
 

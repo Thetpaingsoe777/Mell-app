@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
 
+import com.xavey.android.LoginActivity;
 import com.xavey.android.ShowDocumentDetailActivity;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
@@ -25,24 +26,38 @@ import android.widget.Toast;
 public class ConnectionDetector {
 
 	private Context _context;
-
+	XaveyProperties xaveyProperties;
+	XaveyUtils xUtils;
+	
+	
 	public ConnectionDetector(Context context) {
 		this._context = context;
+		xaveyProperties = new XaveyProperties();
+		xUtils = new XaveyUtils(context);
 	}
 
 	public boolean isConnectingToInternet() {
+
 		ConnectivityManager connectivity = (ConnectivityManager) _context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (connectivity != null) {
-			NetworkInfo[] info = connectivity.getAllNetworkInfo();
-			if (info != null)
-				for (int i = 0; i < info.length; i++)
-					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-						return true;
-					}
+//			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+//			if (info != null)
+//				for (int i = 0; i < info.length; i++)
+//					if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+//						return true;
+//					}
 
+			String xaveyURL = xaveyProperties.getCurrentlyPointingURL();
+			int timeout = 3000;
+
+			if(isMyURLReachable(xaveyURL, timeout)){
+				return true;
+			}
 		}
 		return false;
+
+		
 	}
 
 	public boolean isURLReachable(String url_) {
@@ -115,15 +130,13 @@ public class ConnectionDetector {
 	}
 
 	// 9.7.2014
-	public boolean isMyURLReachable(String url){
+	public boolean isMyURLReachable(String url, int timeOut){
 		boolean reachable = false;
         try {
-            reachable = InetAddress.getByName(url).isReachable(2000);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
+            reachable = InetAddress.getByName(url).isReachable(timeOut);
+        } catch (Exception e) {
+            // wifi ava but not data connection ... known exception is UnknownHostException // 
+        	e.printStackTrace();
             return false;
         }
 		return reachable;
