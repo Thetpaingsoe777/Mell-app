@@ -3313,7 +3313,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		case android.R.id.home:
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setTitle("Confirm");
-			alertDialogBuilder.setMessage("Are you sure you want to home screen? It will lose collected data.");
+			alertDialogBuilder.setMessage("Are you sure you to end the interview?");
 			alertDialogBuilder.setCancelable(false);
 
 			alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -3395,7 +3395,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Confirm");
-		alertDialogBuilder.setMessage("Are you sure you want to home screen? It will lose collected data.");
+		alertDialogBuilder.setMessage("Are you sure you to end the interview?");
 		alertDialogBuilder.setCancelable(false);
 
 		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
