@@ -3311,7 +3311,31 @@ public class OneQuestionOneView extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			alertDialogBuilder.setTitle("Confirm");
+			alertDialogBuilder.setMessage("Are you sure you want to home screen? It will lose collected data.");
+			alertDialogBuilder.setCancelable(false);
+
+			alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+//					Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+//					homeIntent.addCategory(Intent.CATEGORY_HOME);
+//					homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//					startActivity(homeIntent);
+					finish();
+				}
+			});
+			alertDialogBuilder.setNegativeButton("No",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							// if this button is clicked, just close
+							// the dialog box and do nothing
+							dialog.cancel();
+						}
+					});
+			alertDialogBuilder.create().show();
 			break;
 
 		default:
@@ -3373,9 +3397,9 @@ public class OneQuestionOneView extends FragmentActivity {
 		alertDialogBuilder.setTitle("Confirm");
 		alertDialogBuilder.setMessage("Are you sure you want to home screen? It will lose collected data.");
 		alertDialogBuilder.setCancelable(false);
-		
+
 		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 //				Intent homeIntent = new Intent(Intent.ACTION_MAIN);
