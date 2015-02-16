@@ -6,9 +6,12 @@ import java.util.HashMap;
 import com.xavey.android.R;
 import com.xavey.android.adapter.TextSetAdapter.ViewHolder;
 import com.xavey.android.db.XaveyDBHelper;
+import com.xavey.android.util.ToastManager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +25,7 @@ public class NumberSetAdapter extends BaseAdapter {
 	private Activity activity;
 	private static LayoutInflater inflater = null;
 	XaveyDBHelper dbHelper;
+	public String[] CurrentItems;
 	private ArrayList<HashMap<String, String>> data;
 	private ArrayList<HashMap<String, String>> refData;
 	
@@ -29,8 +33,13 @@ public class NumberSetAdapter extends BaseAdapter {
 		this.activity = activity;
 		this.data = data;
 		this.refData = data;
+		CurrentItems = new String[data.size()];
 		dbHelper = new XaveyDBHelper(this.activity);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		for(int i=0;i<data.size();i++)
+//	    {
+//	       //myList.put(i,"");
+//	    }
 	}
 
 	public ArrayList<HashMap<String, String>> getData() {
@@ -45,7 +54,6 @@ public class NumberSetAdapter extends BaseAdapter {
 		return refData;	
 	}
 	
-
 	@Override
 	public int getCount() {
 		return data.size();
@@ -65,6 +73,7 @@ public class NumberSetAdapter extends BaseAdapter {
 	public static class ViewHolder {
 		public TextView tvLabel;
 		public EditText inputNumber;
+		public int ref;
 	}
 
 	public void setView(int startPosition, int endPosition){
@@ -75,7 +84,8 @@ public class NumberSetAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rootView = convertView;
-		ViewHolder holder;
+		final ViewHolder holder;
+	    final int pos=position;
 		if(convertView==null){
 			rootView = inflater.inflate(R.layout.number_set_item, null);
 			holder = new ViewHolder();
@@ -88,11 +98,32 @@ public class NumberSetAdapter extends BaseAdapter {
 		else{
 			holder = (ViewHolder) rootView.getTag();
 		}
+
+		holder.inputNumber.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start,
+                    int before, int count) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                    int count, int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            public void afterTextChanged(Editable s) {
+            	CurrentItems[holder.ref] = s.toString();
+               // myList.put(pos,s.toString().trim());
+            }
+        });
+		
 		HashMap<String, String> map = data.get(position);
 		String label=map.get("label");
-		
+		holder.ref=position;
 		holder.tvLabel.setText(label);
+		holder.inputNumber.setText(CurrentItems[position]);
+		
 		return rootView;
 	}
-
 }
