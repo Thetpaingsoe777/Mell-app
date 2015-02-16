@@ -3,6 +3,7 @@ package com.xavey.android.db;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import android.content.ContentValues;
@@ -57,7 +58,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private static final String ROLE = "role";
 	private static final String ORGANIZATION = "organization";
 	private static final String LOGO_NAME = "logo_name";
-	private static final String LOGO_IMAGE = "log_image";
+	private static final String LOGO_IMAGE = "logo_image";
 	private static final String TOKEN = "token";
 
 	private static final String WORKER_FORM_TABLE = "worker_form";
@@ -165,28 +166,19 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_MEDIA_TABLE);
 		//db.execSQL(CREATE_AUDIO_TABLE);
 		db.execSQL(CREATE_SYNCED_IMAGE_TABLE);
-		
-		/*ArrayList<Form> existingFormList = getAllForms();
-		ArrayList<User> existingUserList = getAllUsers();
-		ArrayList<Document> existingDocument = getAllDocuments();*/
-		
-		
-		// getAllWorkerForms();
-		
-		//ArrayList<XMedia> existingMedia = getAllMedia();
-		// getAllSyncImage
-		
-		
-		
-		
-		
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		
 		// store data here
-		
+
+		ArrayList<Form> existingFormList = getAllForms();
+		ArrayList<User> existingUserList = getAllUsers();
+		ArrayList<Document> existingDocumentList = getAllDocuments();
+		ArrayList<HashMap<String, String>> existingWorkerFormList = getAllWorkerForm();
+		ArrayList<XMedia> existingMediaList = getAllMedia();
+		ArrayList<SyncImage> existingSyncedImageList = getAllSyncedImage();
+
 		db.execSQL("DROP TABLE IF EXISTS " + FORM_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + DOCUMENT_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + WORKER_FORM_TABLE);
@@ -194,6 +186,54 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + MEDIA_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + SYNCED_IMAGE_TABLE);
 		onCreate(db);
+		
+		// add old forms
+		if(existingFormList!=null && existingFormList.size()>0){
+			for(int i=0; i<existingFormList.size(); i++){
+				Form form = existingFormList.get(i);
+				addNewForm(form);
+			}
+		}
+		
+		// add old users
+		if(existingUserList!=null && existingUserList.size()>0){
+			for(int i=0; i<existingFormList.size(); i++){
+				User user = existingUserList.get(i);
+				addNewUser(user);
+			}
+		}
+		
+		// add old documents 
+		if(existingDocumentList!=null && existingDocumentList.size()>0){
+			for(int i=0; i<existingFormList.size(); i++){
+				Document document = existingDocumentList.get(i);
+				addNewDocument(document);
+			}
+		}
+		
+		// add old worker forms
+		if(existingWorkerFormList!=null && existingWorkerFormList.size()>0){
+			for(int i=0; i<existingWorkerFormList.size(); i++){
+				HashMap<String, String> map = existingWorkerFormList.get(i);
+				addNewWorkerForm(map.get(USER_ID), map.get(FORM_ID), map.get(ASSIGN));
+			}
+		}
+
+		// add old media 
+		if(existingMediaList!=null && existingMediaList.size()>0){
+			for(int i=0; i<existingMediaList.size(); i++){
+				XMedia xmedia = existingMediaList.get(i);
+				addNewMedia(xmedia);
+			}
+		}
+
+		// add old synced_images
+		if(existingSyncedImageList!=null && existingSyncedImageList.size()>0){
+			for(int i=0; i<existingSyncedImageList.size(); i++){
+				SyncImage syncImage = existingSyncedImageList.get(i);
+				addNewSyncImage(syncImage);
+			}
+		}
 	}
 
 	// FORMS
@@ -255,7 +295,6 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			else{
 				form.setImageSynced(false);
 			}
-			
 			cursor.close();
 			db.close();
 			return form;
@@ -276,8 +315,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				form.setForm_title(cursor.getString(2));
 				form.setForm_subtitle(cursor.getString(3));
 				form.setForm_desc(cursor.getString(4));
-				form.setForm_location_required(Boolean.parseBoolean(cursor
-						.getString(5)));
+				form.setForm_location_required(Boolean.parseBoolean(cursor.getString(5)));
 				form.setForm_version(cursor.getString(6));
 				String form_json = cursor.getString(7);
 				form_json = JSONReader.convertStandardJSONString(form_json);
@@ -507,6 +545,26 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	}
 
 	// WORKER_FORM
+	
+	public ArrayList<HashMap<String,String>> getAllWorkerForm(){
+		ArrayList<HashMap<String, String>> workerFormList = new ArrayList<HashMap<String,String>>();
+		String selectQuery = "SELECT * FROM " + WORKER_FORM_TABLE;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] {});
+		if (cursor.moveToFirst()) {
+			do {
+				HashMap<String, String> map = new HashMap<String, String>();
+				map.put(USER_ID, cursor.getString(0));
+				map.put(FORM_ID, cursor.getString(1));
+				map.put(ASSIGN, cursor.getString(2));
+				workerFormList.add(map);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return workerFormList;
+	}
+	
 	public void addNewWorkerForm(String user_id, String form_id, String assign) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -988,6 +1046,27 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	}
 	
 	//synced image table
+	// get all syncd image
+	public ArrayList<SyncImage> getAllSyncedImage(){
+		ArrayList<SyncImage> syncedImageList = new ArrayList<SyncImage>();
+		String selectQuery = "SELECT * FROM " + SYNCED_IMAGE_TABLE;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(selectQuery, new String[] {});
+		if (cursor.moveToFirst()) {
+			do {
+				SyncImage synceImage = new SyncImage();
+				synceImage.setId(cursor.getString(0));
+				synceImage.setImageID(cursor.getString(1));
+				synceImage.setSynceID(cursor.getString(2));
+				synceImage.setImgByte(cursor.getBlob(3));
+				syncedImageList.add(synceImage);
+			} while (cursor.moveToNext());
+		}
+		cursor.close();
+		db.close();
+		return syncedImageList;
+	}
+	
 	// add new synced image
 	public void addNewSyncImage(SyncImage syncImage) {
 		SQLiteDatabase db = this.getWritableDatabase();

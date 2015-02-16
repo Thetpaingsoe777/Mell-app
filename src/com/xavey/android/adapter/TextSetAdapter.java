@@ -9,6 +9,8 @@ import com.xavey.android.db.XaveyDBHelper;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ public class TextSetAdapter extends BaseAdapter {
 	private Activity activity;
 	private static LayoutInflater inflater = null;
 	XaveyDBHelper dbHelper;
+	public String[] CurrentItems;
 	private ArrayList<HashMap<String, String>> data;
 	private ArrayList<HashMap<String, String>> refData;
 
@@ -30,6 +33,7 @@ public class TextSetAdapter extends BaseAdapter {
 		this.activity = activity;
 		this.data = data;
 		this.refData = data;
+		CurrentItems = new String[data.size()];
 		dbHelper = new XaveyDBHelper(this.activity);
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
@@ -59,12 +63,13 @@ public class TextSetAdapter extends BaseAdapter {
 	public static class ViewHolder {
 		public TextView tvLabel;
 		public EditText inputText;
+		public int ref;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View rootView = convertView;
-		ViewHolder holder;
+		final ViewHolder holder;
 		if(convertView==null){
 			rootView = inflater.inflate(R.layout.text_set_item, null);
 			holder = new ViewHolder();
@@ -77,10 +82,31 @@ public class TextSetAdapter extends BaseAdapter {
 		else{
 			holder = (ViewHolder) rootView.getTag();
 		}
+		
+		holder.inputText.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start,
+                    int before, int count) {
+
+            }
+
+            public void beforeTextChanged(CharSequence s, int start,
+                    int count, int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            public void afterTextChanged(Editable s) {
+            	CurrentItems[holder.ref] = s.toString();
+               // myList.put(pos,s.toString().trim());
+            }
+        });
+		
 		HashMap<String, String> map = data.get(position);
 		String label=map.get("label");
-
+		holder.ref=position;
 		holder.tvLabel.setText(label);
+		holder.inputText.setText(CurrentItems[position]);
 		return rootView;
 	}
 

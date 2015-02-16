@@ -24,6 +24,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -78,6 +79,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+
+		// http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
 		sharedPreferences = getSharedPreferences("XaveyFONTPref",
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
@@ -90,24 +97,24 @@ public class MainActivity extends Activity {
 		ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
 				.getDeviceUniqueID(this);
 		initializeUI();
-		if(session.isLoggedIn()){
+		if (session.isLoggedIn()) {
 			dbHelper = new XaveyDBHelper(this);
 			if (savedInstanceState == null) {
 				selectItem(0, MainActivity.this);
 			}
 			String current_token = "";
-			String userID = session.getUserDetails().get(SessionManager.USER_ID);
+			String userID = session.getUserDetails()
+					.get(SessionManager.USER_ID);
 			if (userID != null) {
 				ApplicationValues.loginUser = dbHelper.getUserByUserID(userID);
 				current_token = ApplicationValues.loginUser.getToken();
 			}
 			downloadForms();
 			customHandler.postDelayed(updateTimerThread, 1000 * 30);
-		}
-		else{
+		} else {
 			session.initLogin();
 		}
-		
+
 	}
 
 	private void downloadForms() {
@@ -116,12 +123,12 @@ public class MainActivity extends Activity {
 		if (userName != null) {
 			LOGIN_USER_ID = dbHelper.getUserIDByUserName(userName);
 			String password = nameAndPassword.get(SessionManager.PASSWORD);
-			//String userID = dbHelper.getUserIDByUserName(userName);
-//			User u = new User();
-//			u.setUser_id(userID);
-//			u.setUser_name(userName);
-//			u.setPwd(password);
-//			u.setToken(ApplicationValues.loginUser.getToken());
+			// String userID = dbHelper.getUserIDByUserName(userName);
+			// User u = new User();
+			// u.setUser_id(userID);
+			// u.setUser_name(userName);
+			// u.setPwd(password);
+			// u.setToken(ApplicationValues.loginUser.getToken());
 			// online mode
 			if (connectionDetector.isConnectingToInternet()) {
 				new FormDownloadTask().execute(ApplicationValues.loginUser);
@@ -198,7 +205,8 @@ public class MainActivity extends Activity {
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		addDrawerItem();
 		itemList.remove(1);
-		adapter_ = new CustomDrawerAdapter(this, R.layout.custom_drawer_item, itemList);
+		adapter_ = new CustomDrawerAdapter(this, R.layout.custom_drawer_item,
+				itemList);
 		mDrawerList.setAdapter(adapter_);
 		mDrawerList.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -235,10 +243,10 @@ public class MainActivity extends Activity {
 		itemList.add(new DrawerItem(getString(R.string.str_logout),
 				R.drawable.orkut));
 	}
-	
-//	public static void selectItemGlobal(int position){
-//		
-//	}
+
+	// public static void selectItemGlobal(int position){
+	//
+	// }
 
 	public static void selectItem(int position, final Activity mainAct) {
 		Fragment fragment = null;
@@ -282,8 +290,8 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					session.logoutUser();
-					mainAct.startActivity(new Intent(mainAct.getApplicationContext(),
-							LoginActivity.class));
+					mainAct.startActivity(new Intent(mainAct
+							.getApplicationContext(), LoginActivity.class));
 				}
 			});
 			alertDialogBuilder.setNegativeButton("No",
@@ -367,8 +375,7 @@ public class MainActivity extends Activity {
 					// here is form download
 					// MainActivity.this.onResume();
 					downloadForms();
-					
-					
+
 				} else {
 					toastManager.xaveyToast(null,
 							"Not connecting with server...");
@@ -435,13 +442,13 @@ public class MainActivity extends Activity {
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
-				//toastManager.xaveyToast(null, e2.getMessage());
+				// toastManager.xaveyToast(null, e2.getMessage());
 			}
 			int userResponseCode = c_.getResponseCode();
 			String authenResponse = c_.getResponse();
 			String newToken = "";
 			try {
-				if(userResponseCode==200){
+				if (userResponseCode == 200) {
 					JSONObject authenResponse_ = new JSONObject(authenResponse);
 					newToken = authenResponse_.getString("token");
 					user.setToken(newToken);
@@ -533,8 +540,10 @@ public class MainActivity extends Activity {
 																			// needed
 																			// in
 																			// future
-								boolean test = form_meta.getBoolean("form_location_required");
-								form.setForm_location_required(form_meta.getBoolean("form_location_required"));
+								boolean test = form_meta
+										.getBoolean("form_location_required");
+								form.setForm_location_required(form_meta
+										.getBoolean("form_location_required"));
 
 							}
 							// org
@@ -591,14 +600,14 @@ public class MainActivity extends Activity {
 						}
 					}
 
-//					// assign all forms' imageSynced to false
-//					for (Form form : result) {
-//						form.setImageSynced(false);
-//					}
+					// // assign all forms' imageSynced to false
+					// for (Form form : result) {
+					// form.setImageSynced(false);
+					// }
 
 					// get the forms that involved images
-					ArrayList<HashMap<String,String>> imageIDandFormIDList = new ArrayList<HashMap<String,String>>();
-					//boolean isFormNeedToSyncImage = false;
+					ArrayList<HashMap<String, String>> imageIDandFormIDList = new ArrayList<HashMap<String, String>>();
+					// boolean isFormNeedToSyncImage = false;
 					ArrayList<String> imageIncludedFormIDList = new ArrayList<String>();
 					for (Form form : result) {
 						String form_fields_string = form.getForm_fields();
@@ -609,43 +618,48 @@ public class MainActivity extends Activity {
 							String fieldType = field.getString("field_type");
 
 							if (fieldType.equals("image_checklist")
-									|| fieldType.equals("image_option") || fieldType.equals("rating_set_image")) {
+									|| fieldType.equals("image_option")
+									|| fieldType.equals("rating_set_image")) {
 								// getting ImageID here
-								JSONObject fieldDataset = field.getJSONObject("field_dataset");
-								JSONArray dataSetValues = fieldDataset.getJSONArray("dataset_values");
+								JSONObject fieldDataset = field
+										.getJSONObject("field_dataset");
+								JSONArray dataSetValues = fieldDataset
+										.getJSONArray("dataset_values");
 								imageIncludedFormIDList.add(form.getForm_id());
 								form.setImageSynced(false);
-								
+
 								for (int j = 0; j < dataSetValues.length(); j++) {
-									String imageID = dataSetValues.getJSONObject(j).getString("image");
+									String imageID = dataSetValues
+											.getJSONObject(j)
+											.getString("image");
 									HashMap<String, String> map = new HashMap<String, String>();
 									map.put("form_id", form.getForm_id());
 									map.put("image_id", imageID);
 									imageIDandFormIDList.add(map);
 								}
 							}
-//							else if(fieldType.equals("rating_image_set")){
-//								
-//							}
+							// else if(fieldType.equals("rating_image_set")){
+							//
+							// }
 						}
 					}
 
-					imageIncludedFormIDList = xaveyUtils.removeDuplicateString(imageIncludedFormIDList);
-					
-					for(Form form: result){
+					imageIncludedFormIDList = xaveyUtils
+							.removeDuplicateString(imageIncludedFormIDList);
+
+					for (Form form : result) {
 						String formID = form.getForm_id();
-						if(imageIncludedFormIDList.contains(formID)){
+						if (imageIncludedFormIDList.contains(formID)) {
 							form.setImageSynced(false);
 							dbHelper.updateForm(form);
 							SyncImagesDownloadTask syncImageTask = new SyncImagesDownloadTask();
 							syncImageTask.execute(imageIDandFormIDList);
-						}
-						else{
+						} else {
 							form.setImageSynced(true);
 							dbHelper.updateForm(form);
 						}
 					}
-					
+
 				}
 
 				if (Dialog != null) {
@@ -672,8 +686,9 @@ public class MainActivity extends Activity {
 		startActivity(homeIntent);
 	}
 
-	private class SyncImagesDownloadTask extends
-			AsyncTask<ArrayList<HashMap<String,String>>, Void, HashMap<String, Object>> {
+	private class SyncImagesDownloadTask
+			extends
+			AsyncTask<ArrayList<HashMap<String, String>>, Void, HashMap<String, Object>> {
 
 		private ProgressDialog Dialog = new ProgressDialog(MainActivity.this);
 		// properties
@@ -693,7 +708,7 @@ public class MainActivity extends Activity {
 		}
 
 		protected HashMap<String, Object> doInBackground(
-				ArrayList<HashMap<String,String>>... imageIDLists) {
+				ArrayList<HashMap<String, String>>... imageIDLists) {
 
 			// ---------- updating token.. --------------------------------
 			String userName = ApplicationValues.loginUser.getUser_name();
@@ -707,7 +722,7 @@ public class MainActivity extends Activity {
 			c_.AddParam("username", userName);
 			c_.AddParam("password", password);
 			c_.AddParam("device", deviceID);
-			
+
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
@@ -722,37 +737,44 @@ public class MainActivity extends Activity {
 						.getString("token");
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
-				toastManager.xaveyToast(null, "JSON Exception at MainActivity... response code");
+				toastManager.xaveyToast(null,
+						"JSON Exception at MainActivity... response code");
 			}
-			
+
 			HashMap<String, Object> syncedForms = new HashMap<String, Object>();
 
 			if (userResponseCode_ == 200) {
-				ArrayList<HashMap<String,String>> imageIDList = imageIDLists[0];
+				ArrayList<HashMap<String, String>> imageIDList = imageIDLists[0];
 				String syncID = UUIDGenerator.getUUIDForSyncedID();
 				for (HashMap<String, String> hashMap : imageIDList) {
 					String imageName = hashMap.get("image_id").toString();
 					String formID = hashMap.get("form_id").toString();
 					try {
-						boolean isImageIDAlreadyExistInSyncImageTable = dbHelper.isImageIDAlreadyExistInSyncImageTable(imageName);
-						if(isImageIDAlreadyExistInSyncImageTable){
-							boolean  isSyncIDAlreadyExistInSyncImageTable = dbHelper.isSyncIDAlreadyExistInSyncImageTable(imageName, syncID);
-							if(isSyncIDAlreadyExistInSyncImageTable){
-								// True True Situation... (already synced situation)
+						boolean isImageIDAlreadyExistInSyncImageTable = dbHelper
+								.isImageIDAlreadyExistInSyncImageTable(imageName);
+						if (isImageIDAlreadyExistInSyncImageTable) {
+							boolean isSyncIDAlreadyExistInSyncImageTable = dbHelper
+									.isSyncIDAlreadyExistInSyncImageTable(
+											imageName, syncID);
+							if (isSyncIDAlreadyExistInSyncImageTable) {
+								// True True Situation... (already synced
+								// situation)
 								// Do nothing
 								// set the form available
 								Form form = dbHelper.getFormByFormID(formID);
 								form.setImageSynced(true);
 								dbHelper.updateForm(form);
-								//toastManager.xaveyToast(null, form.getForm_title() + " is now available.");
-							}else{
-								//True False Situation
-								//update sync image
-								RestClient c = new RestClient(imageDownloadURL + imageName);
+								// toastManager.xaveyToast(null,
+								// form.getForm_title() + " is now available.");
+							} else {
+								// True False Situation
+								// update sync image
+								RestClient c = new RestClient(imageDownloadURL
+										+ imageName);
 								c.AddHeader("x-access-token", token);
 								c.Execute(RequestMethod.GET);
 								int imageResponseCode = c.getResponseCode();
-								if(imageResponseCode==200){
+								if (imageResponseCode == 200) {
 									byte[] imageByte = c.getResponseImage();
 									SyncImage syncImageToUpdate = new SyncImage();
 									syncImageToUpdate.setImageID(imageName);
@@ -761,27 +783,32 @@ public class MainActivity extends Activity {
 									dbHelper.updateSyncImage(syncImageToUpdate);
 
 									// set the form available
-									Form form = dbHelper.getFormByFormID(formID);
+									Form form = dbHelper
+											.getFormByFormID(formID);
 									form.setImageSynced(true);
 									dbHelper.updateForm(form);
-									
-									//toastManager.xaveyToast(null, form.getForm_title() + " is now available.");
-								}
-								else if (imageResponseCode==401){
-									toastManager.xaveyToast(null, "401: token expired when downloading image");
-								}
-								else if (imageResponseCode==403){
-									toastManager.xaveyToast(null, "403: server error.");
+
+									// toastManager.xaveyToast(null,
+									// form.getForm_title() +
+									// " is now available.");
+								} else if (imageResponseCode == 401) {
+									toastManager
+											.xaveyToast(null,
+													"401: token expired when downloading image");
+								} else if (imageResponseCode == 403) {
+									toastManager.xaveyToast(null,
+											"403: server error.");
 								}
 							}
-						}else{
+						} else {
 							// false false situation
 							// add new sync image here
-							RestClient c = new RestClient(imageDownloadURL + imageName);
+							RestClient c = new RestClient(imageDownloadURL
+									+ imageName);
 							c.AddHeader("x-access-token", token);
 							c.Execute(RequestMethod.GET);
 							int imageResponseCode = c.getResponseCode();
-							if(imageResponseCode==200){
+							if (imageResponseCode == 200) {
 								byte[] imageByte = c.getResponseImage();
 								SyncImage syncImageToAdd = new SyncImage();
 								syncImageToAdd.setImageID(imageName);
@@ -792,22 +819,24 @@ public class MainActivity extends Activity {
 								Form form = dbHelper.getFormByFormID(formID);
 								form.setImageSynced(true);
 								dbHelper.updateForm(form);
-							}
-							else if (imageResponseCode==401){
-								toastManager.xaveyToast(null, "401: token expired when downloading image");
-							}
-							else if (imageResponseCode==403){
-								toastManager.xaveyToast(null, "403: server error.");
+							} else if (imageResponseCode == 401) {
+								toastManager
+										.xaveyToast(null,
+												"401: token expired when downloading image");
+							} else if (imageResponseCode == 403) {
+								toastManager.xaveyToast(null,
+										"403: server error.");
 							}
 						}
-	
+
 					} catch (Exception e) {
-						toastManager.xaveyToast(null, "Error Dowonloading image : "+imageName+"\n"+e.getMessage());
+						toastManager.xaveyToast(null,
+								"Error Dowonloading image : " + imageName
+										+ "\n" + e.getMessage());
 						onResume();
 					}
 					syncedForms.put("formID", formID);
 				}
-				
 
 			} else if (userResponseCode_ == 401) {
 				toastManager.xaveyToast(null,
@@ -823,7 +852,7 @@ public class MainActivity extends Activity {
 		@Override
 		protected void onPostExecute(HashMap<String, Object> syncedForms) {
 			Dialog.dismiss();
-			if(current_position==0){
+			if (current_position == 0) {
 				selectItem(0, MainActivity.this);
 			}
 		}

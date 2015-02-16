@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,7 +38,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -805,9 +804,9 @@ public class JSONReader {
 						// random.... valid by some json in future
 						// example.. -> field_random : true
 
-						if (field_random) {
-							Collections.shuffle(buttonLinesToBeRandomed);
-						}
+//						if (field_random) {
+//							Collections.shuffle(buttonLinesToBeRandomed);
+//						}
 
 						for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
 							rg.addView(eachButtonLine);
@@ -876,8 +875,7 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -931,8 +929,7 @@ public class JSONReader {
 						checkBoxLayout.addView(tvLabel);
 
 						// adding description
-						String description = fields.get("field_desc")
-								.toString();
+						String description = fields.get("field_desc").toString();
 						TextView tvdescription = new TextView(activity);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
@@ -1694,7 +1691,7 @@ public class JSONReader {
                             }
                             columnSetCollection.add(columnSet);
                         }
-                        Collections.shuffle(columnSetCollection);
+                        //Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2067,7 +2064,7 @@ public class JSONReader {
                             columnSetCollection.add(columnSet);
                         }
                         
-                        Collections.shuffle(columnSetCollection);
+                        //Collections.shuffle(columnSetCollection);
                         // <producing row_label_set>
                         LinearLayout row_label_column_set = new LinearLayout(
                                 activity);
@@ -2442,7 +2439,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//Collections.shuffle(columnSetCollection);
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(
 								activity);
@@ -2822,7 +2819,7 @@ public class JSONReader {
 							}
 							columnSetCollection.add(columnSet);
 						}
-						Collections.shuffle(columnSetCollection);
+						//Collections.shuffle(columnSetCollection);
 
 						// <producing row_label_set>
 						LinearLayout row_label_column_set = new LinearLayout(
@@ -3479,21 +3476,20 @@ public class JSONReader {
 						RatingBar ratingBar = new RatingBar(activity);
 						RelativeLayout.LayoutParams ratingBarLayoutParams = new RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						ratingBarLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+						ratingBarLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 						ratingBar.setLayoutParams(ratingBarLayoutParams);
-						ratingBar.setRating(1);
-						ratingBar.setNumStars(Integer.parseInt(maxValue));
+						//ratingBar.setRating(1);
+						int maxValue_ = Integer.parseInt(maxValue);
+						if(maxValue_>10)
+							maxValue_=10;
+						ratingBar.setNumStars(maxValue_);
 						ratingBar.setStepSize(1);
 						// etc....
 						// ratingLayout.addView(ratingBar);
-						ratingBar.setBackgroundColor(Color
-								.parseColor("#ffffff"));
+						ratingBar.setBackgroundColor(Color.parseColor("#ffffff"));
 
-						RelativeLayout minMaxLabelLayout = new RelativeLayout(
-								activity);
-						minMaxLabelLayout.setBackgroundColor(Color
-								.parseColor("#ffffff"));
+						RelativeLayout minMaxLabelLayout = new RelativeLayout(activity);
+						minMaxLabelLayout.setBackgroundColor(Color.parseColor("#ffffff"));
 						minMaxLabelLayout.setTag(R.id.layout_id,
 								"ratingAndMinMaxLabelLayout");
 						minMaxLabelLayout.setPadding(5, 8, 5, 10);

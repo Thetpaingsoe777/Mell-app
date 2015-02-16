@@ -330,6 +330,22 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
+					else if(fields.get(key).equals("text_set")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("number_set")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("image_checklist")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
+					else if(fields.get(key).equals("image_option")){
+						horizontalLayout = writeHorizontalView(fields, docFields);
+						lL.addView(horizontalLayout);
+					}
 				}
 			}
 		}

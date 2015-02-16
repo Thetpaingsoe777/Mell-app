@@ -3,11 +3,6 @@ package com.xavey.android.adapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.xavey.android.R;
-import com.xavey.android.adapter.TextSetAdapter.ViewHolder;
-import com.xavey.android.db.XaveyDBHelper;
-import com.xavey.android.util.ToastManager;
-
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
@@ -17,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
+
+import com.xavey.android.R;
+import com.xavey.android.db.XaveyDBHelper;
 
 public class NumberSetAdapter extends BaseAdapter {
 
