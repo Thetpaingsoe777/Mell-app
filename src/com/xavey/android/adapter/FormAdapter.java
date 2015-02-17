@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xavey.android.R;
 import com.xavey.android.model.Form;
+import com.xavey.android.util.DisplayManager;
 import com.xavey.android.util.TypeFaceManager;
 import com.xavey.android.util.XaveyProperties;
 
@@ -23,22 +24,28 @@ public class FormAdapter extends BaseAdapter {
 	Context activity;
 	LayoutInflater inflater;
 	Intent i ;
-	DisplayMetrics metrics;
-	int deviceWidth;
-	int deviceHeight;
+	DisplayManager displayManager;
+	int width;
+	int height;
 	int formImage = R.drawable.form_icon_1;
 	Drawable availableFormIcon;
 	Drawable unavailableFormIcon;
 	ArrayList<Form> formList;
+	
 
 	public FormAdapter(Context a, ArrayList<Form> formList){
 		activity = a;
 		this.formList = formList;
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		displayManager = new DisplayManager((Activity) activity);
+		width = displayManager.getWidth(20);
+		height = displayManager.getHeigth(17);
 		availableFormIcon = activity.getResources().getDrawable(R.drawable.form_icon_1);
-		availableFormIcon.setBounds(0, 0, 100, 140);
+		availableFormIcon.setBounds(0, 0, width, height);
+		//availableFormIcon.setBounds(0, 0, 100, 140);
 		unavailableFormIcon = activity.getResources().getDrawable(R.drawable.form_icon_2);
-		unavailableFormIcon.setBounds(0, 0, 100, 140);
+		availableFormIcon.setBounds(0, 0, width, height);
+		//unavailableFormIcon.setBounds(0, 0, 100, 140);
 	}
 
 	@Override

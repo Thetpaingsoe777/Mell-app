@@ -312,6 +312,7 @@ public class SyncManager {
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
+							toast.xaveyToast(null, "can't reach to server");
 						}
 						String response = c.getResponse();
 						String image_id = "";

@@ -3,6 +3,7 @@ package com.xavey.android.adapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.xavey.android.R;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.SyncImage;
+import com.xavey.android.util.DisplayManager;
 import com.xavey.android.util.XaveyUtils;
 
 public class ImageAdapter extends BaseAdapter {
@@ -26,6 +28,9 @@ public class ImageAdapter extends BaseAdapter {
 	ArrayList<HashMap<String, String>> data_set_values;
 	XaveyDBHelper dbHelper;
 	XaveyUtils xaveyUtils;
+	DisplayManager displayManager;
+	int width;
+	int height;
 
 	public ImageAdapter(Context a,
 			ArrayList<HashMap<String, String>> data_set_values) {
@@ -35,6 +40,7 @@ public class ImageAdapter extends BaseAdapter {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		dbHelper = new XaveyDBHelper(activity);
 		xaveyUtils = new XaveyUtils(a);
+		displayManager = new DisplayManager((Activity) activity);
 	}
 
 	@Override
@@ -83,7 +89,9 @@ public class ImageAdapter extends BaseAdapter {
 		byte[] byteArray = syncImage.getImgByte();
 		BitmapDrawable bd = xaveyUtils
 				.convertByteArrayToBitmapDrawable(byteArray);
-		bd.setBounds(0, 0, 250, 250);
+		width = displayManager.getWidth(30);
+		height = displayManager.getHeigth(25);
+		bd.setBounds(0, 0, width, height);
 		holder.imageTitle.setCompoundDrawables(null, bd, null, null);
 		holder.imageTitle.setText(label);
 		// holder.imageTitle.setTag(R.id.grid_item_value, value);
