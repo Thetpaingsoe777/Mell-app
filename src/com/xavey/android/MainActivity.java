@@ -37,6 +37,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.CustomDrawerAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
@@ -47,6 +48,8 @@ import com.xavey.android.model.RestClient;
 import com.xavey.android.model.SyncImage;
 import com.xavey.android.model.User;
 import com.xavey.android.util.ConnectionDetector;
+import com.xavey.android.util.DemoAccountManager;
+import com.xavey.android.util.JSONReader;
 import com.xavey.android.util.SessionManager;
 import com.xavey.android.util.SyncManager;
 import com.xavey.android.util.ToastManager;
@@ -72,6 +75,8 @@ public class MainActivity extends Activity {
 
 	private Handler customHandler = new Handler();;
 	ToastManager toastManager;
+	
+	DemoAccountManager demoAccManager;
 
 	public static int current_position = 0;
 
@@ -97,6 +102,7 @@ public class MainActivity extends Activity {
 		ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
 				.getDeviceUniqueID(this);
 		initializeUI();
+		
 		if (session.isLoggedIn()) {
 			dbHelper = new XaveyDBHelper(this);
 			if (savedInstanceState == null) {
@@ -109,12 +115,37 @@ public class MainActivity extends Activity {
 				ApplicationValues.loginUser = dbHelper.getUserByUserID(userID);
 				current_token = ApplicationValues.loginUser.getToken();
 			}
-			downloadForms();
-			customHandler.postDelayed(updateTimerThread, 1000 * 30);
+			if(ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.DEMO_LOGIN)){
+				String demoForm = demoAccManager.getDataFromAssets("demo_form.json");
+				String standardJSONString = JSONReader.convertStandardJSONString(demoForm);
+				ArrayList<Form> demoFormList = parseJSONForm(standardJSONString);
+				ApplicationValues.userFormList = demoFormList;
+				ApplicationValues.numberOfForm = demoFormList.size();
+				for (Form form : demoFormList) {
+					String form_id = form.getForm_id();
+					if (!dbHelper.isFormAlreadyExistInDB(form_id)) {
+						// add if new form
+						dbHelper.addNewForm(form);
+					} else {
+						// update form
+						dbHelper.updateForm(form);
+					}
+					if (!dbHelper.isUserIDAndFormIDPaired(userID, form_id)) {
+						dbHelper.addNewWorkerForm(userID, form_id, "1");
+					} else {
+						dbHelper.setAssignByUserIDAndFormID(userID,
+								form_id, "1");
+					}
+				}
+			}
+			else{
+				// downloading forms and background thread only works in normal login mode
+				downloadForms();
+				customHandler.postDelayed(updateTimerThread, 1000 * 30);
+			}
 		} else {
 			session.initLogin();
 		}
-
 	}
 
 	private void downloadForms() {
@@ -135,6 +166,8 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+	
+	
 
 	private Runnable updateTimerThread = new Runnable() {
 		@Override
@@ -215,6 +248,7 @@ public class MainActivity extends Activity {
 				selectItem(position, MainActivity.this);
 			}
 		});
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
@@ -227,6 +261,7 @@ public class MainActivity extends Activity {
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		toastManager = new ToastManager(this);
 		xaveyUtils = new XaveyUtils(this);
+		demoAccManager = new DemoAccountManager(this);
 	}
 
 	private void addDrawerItem() {
@@ -374,7 +409,12 @@ public class MainActivity extends Activity {
 
 					// here is form download
 					// MainActivity.this.onResume();
-					downloadForms();
+					if(ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.DEMO_LOGIN)){
+						
+					}
+					else{
+						downloadForms();						
+					}
 
 				} else {
 					toastManager.xaveyToast(null,
@@ -502,79 +542,7 @@ public class MainActivity extends Activity {
 			return userFormsList;
 		}
 
-		private ArrayList<Form> parseJSONForm(String response) {
-			ArrayList<Form> form_list = new ArrayList<Form>();
-			response = response.replace("\n", "");
-			if (!response.equals("null")) {
-				response = "{" + "\"forms\"" + ":" + response + "}";
-				// Log.i("JSON", response.toString());
-				JSONObject jsResponse;
-				try {
-					// 1st level
-					jsResponse = new JSONObject(response);
-					JSONArray jsMainNode = jsResponse.optJSONArray("forms");
-					for (int i = 0; i < jsMainNode.length(); i++) {
-						JSONObject jsChildNode1 = jsMainNode.getJSONObject(i);
-						Form form = new Form();
-						// form.setForm_id(jsChildNode1.getString("form_id"));
-						String form_json = jsChildNode1.getString("form_json");
-						if (!form_json.equals("null")) {
-							// 2nd level
-							JSONObject form_content = new JSONObject(form_json);
-							form.setForm_id(form_content.getString("_id"));
-							// form_meta
-							JSONObject form_meta = form_content
-									.getJSONObject("form_meta");
-							form.setForm_title(form_meta
-									.getString("form_title"));
-							form.setForm_subtitle(form_meta
-									.getString("form_subtitle"));
-							form.setForm_desc(form_meta.getString("form_desc"));
-							form.setForm_version(form_meta
-									.getString("form_version"));
-							if (form_meta.has("form_location_required")) {// <--
-																			// this
-																			// condition
-																			// won't
-																			// be
-																			// needed
-																			// in
-																			// future
-								boolean test = form_meta
-										.getBoolean("form_location_required");
-								form.setForm_location_required(form_meta
-										.getBoolean("form_location_required"));
 
-							}
-							// org
-							JSONObject org = form_content.getJSONObject("org");
-							form.setOrg_auto_id(org.getString("auto_id"));
-							form.setOrg_given_id(org.getString("given_id"));
-							form.setOrg_name(org.getString("name"));
-							// worker
-							JSONObject creator = form_content
-									.getJSONObject("creator");
-							form.setCreator_id(creator.getString("id"));
-							form.setCreator_email(creator.getString("email"));
-							form.setCreator_name(creator.getString("name"));
-
-							// form_fields
-							JSONArray form_fields = form_content
-									.getJSONArray("form_fields");
-							form.setForm_fields(form_fields.toString());
-
-							form.setForm_json(form_content.toString());
-							form_list.add(form);
-						}
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			} else {
-				Toast.makeText(getApplicationContext(), "401", 500).show();
-			}
-			return form_list;
-		}
 
 		@Override
 		protected void onPostExecute(ArrayList<Form> result) {
@@ -676,6 +644,80 @@ public class MainActivity extends Activity {
 			selectItem(0, MainActivity.this); // this is like refreshing ;)
 			setRefreshActionButtonState(false);
 		}
+	}
+	
+	private ArrayList<Form> parseJSONForm(String response) {
+		ArrayList<Form> form_list = new ArrayList<Form>();
+		response = response.replace("\n", "");
+		if (!response.equals("null")) {
+			response = "{" + "\"forms\"" + ":" + response + "}";
+			// Log.i("JSON", response.toString());
+			JSONObject jsResponse;
+			try {
+				// 1st level
+				jsResponse = new JSONObject(response);
+				JSONArray jsMainNode = jsResponse.optJSONArray("forms");
+				for (int i = 0; i < jsMainNode.length(); i++) {
+					JSONObject jsChildNode1 = jsMainNode.getJSONObject(i);
+					Form form = new Form();
+					// form.setForm_id(jsChildNode1.getString("form_id"));
+					String form_json = jsChildNode1.getString("form_json");
+					if (!form_json.equals("null")) {
+						// 2nd level
+						JSONObject form_content = new JSONObject(form_json);
+						form.setForm_id(form_content.getString("_id"));
+						// form_meta
+						JSONObject form_meta = form_content
+								.getJSONObject("form_meta");
+						form.setForm_title(form_meta
+								.getString("form_title"));
+						form.setForm_subtitle(form_meta
+								.getString("form_subtitle"));
+						form.setForm_desc(form_meta.getString("form_desc"));
+						form.setForm_version(form_meta
+								.getString("form_version"));
+						if (form_meta.has("form_location_required")) {// <--
+																		// this
+																		// condition
+																		// won't
+																		// be
+																		// needed
+																		// in
+																		// future
+							boolean test = form_meta
+									.getBoolean("form_location_required");
+							form.setForm_location_required(form_meta
+									.getBoolean("form_location_required"));
+
+						}
+						// org
+						JSONObject org = form_content.getJSONObject("org");
+						form.setOrg_auto_id(org.getString("auto_id"));
+						form.setOrg_given_id(org.getString("given_id"));
+						form.setOrg_name(org.getString("name"));
+						// worker
+						JSONObject creator = form_content
+								.getJSONObject("creator");
+						form.setCreator_id(creator.getString("id"));
+						form.setCreator_email(creator.getString("email"));
+						form.setCreator_name(creator.getString("name"));
+
+						// form_fields
+						JSONArray form_fields = form_content
+								.getJSONArray("form_fields");
+						form.setForm_fields(form_fields.toString());
+
+						form.setForm_json(form_content.toString());
+						form_list.add(form);
+					}
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else {
+			Toast.makeText(getApplicationContext(), "401", 500).show();
+		}
+		return form_list;
 	}
 
 	@Override

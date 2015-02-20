@@ -1,0 +1,46 @@
+{
+	"form_name" 	: "Ideas",
+	"form_title"	: "My Ideas",
+	"form_fields" : [
+		{
+			"field_name" : "idea_name",
+			"field_type" : "text",
+			"field_hint" : "Enter idea name",
+			"form_list_title" : true,
+			"form_list_subtitle" : false,
+			"field_required" : true
+		}, 
+		{
+			"field_name" : "idea_desc",
+			"field_type" : "multiline-text",
+			"field_hint" : "Enter your idea",
+			"form_list_title" : false,
+			"form_list_subtitle" : true,
+			"field_required" : false
+		},
+		{
+			"field_name" : "idea_cost",
+			"field_type" : "text",
+			"field_hint" : "How much will it cost?",
+			"form_list_title" : false,
+			"form_list_subtitle" : true,
+			"field_required" : false
+		},
+		{
+			"field_name" : "idea_potential",
+			"field_type" : "multiline-text",
+			"field_hint" : "What's unique about your idea",
+			"form_list_title" : false,
+			"form_list_subtitle" : true,
+			"field_required" : false
+		},
+		{
+			"field_name" : "new_field",
+			"field_type" : "multiline-text",
+			"field_hint" : "New field",
+			"form_list_title" : false,
+			"form_list_subtitle" : true,
+			"field_required" : false
+		}
+	]
+}

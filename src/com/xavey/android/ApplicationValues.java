@@ -12,6 +12,7 @@ import com.xavey.android.model.Form;
 import com.xavey.android.model.User;
 
 public class ApplicationValues {
+
 	public static int numberOfForm = 0;
 	public static ArrayList<Form> userFormList = new ArrayList<Form>();
 	public static User loginUser = new User();
@@ -30,17 +31,17 @@ public class ApplicationValues {
 	public static Activity mainActivity = null;
 
 	public static File XAVEY_DIRECTORY = null; 
-	
+
 	public static FONT CURRENT_FONT = FONT.DEFAULT_;
 	
 	public static boolean IS_RECORDING_NOW = false;
 	
 	public static String UNIQUE_DEVICE_ID = "";
 	
+	public static LOGIN_TYPE CURRENT_TYPE = LOGIN_TYPE.REGULAR_LOGIN;
 	
-//	public static String getDeviceID(Activity activity) {
-//		TelephonyManager telephonyManager = (TelephonyManager) activity
-//				.getSystemService(Context.TELEPHONY_SERVICE);
-//		return telephonyManager.getDeviceId();
-//	}
+	public static enum LOGIN_TYPE{
+		DEMO_LOGIN, REGULAR_LOGIN
+	}
+
 }

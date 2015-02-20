@@ -12,6 +12,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.xavey.android.ApplicationValues;
 import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
@@ -77,6 +78,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	private static final String CREATED_AT = "created_date";
 	private static final String CREATED_WORKER = "created_worker";
 	private static final String SUBMITTED = "submitted";
+	
 	// FORM_ID
 	private final ArrayList<Document> documentList = new ArrayList<Document>();
 

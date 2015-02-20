@@ -7,6 +7,7 @@ import java.net.URLConnection;
 import java.util.HashMap;
 
 import org.apache.http.util.ByteArrayBuffer;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.R.color;
@@ -31,11 +32,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
 import com.xavey.android.model.User;
 import com.xavey.android.util.ConnectionDetector;
+import com.xavey.android.util.DemoAccountManager;
+import com.xavey.android.util.JSONReader;
 import com.xavey.android.util.SessionManager;
 import com.xavey.android.util.StringEncrytDecryManager;
 import com.xavey.android.util.SyncManager;
@@ -48,7 +52,7 @@ public class LoginActivity extends Activity {
 	DisplayMetrics dm;
 	int width;
 	int height;
-	//ImageView xaveyLogo;
+	// ImageView xaveyLogo;
 	Button btnLogin;
 	EditText edtUserName, edtPassword;
 	TextView txtMsg;
@@ -58,10 +62,9 @@ public class LoginActivity extends Activity {
 	XaveyUtils xUtils;
 	XaveyProperties xaveyProperties;
 	ToastManager xaveyToast;
-	
-	//ImageView xaveyLogo;
 
-
+	// ImageView xaveyLogo;
+	DemoAccountManager demoAccManager;
 
 	// private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
 	// @Override
@@ -88,17 +91,17 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
 		// http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-		
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
 		setContentView(R.layout.login_screen);
 		loadUI();
 
 		dbHelper = new XaveyDBHelper(this);
-		
+
 		btnLogin.setOnClickListener(new OnClickListener() {
 
 			private void hideLoginKeyboard() {
@@ -115,57 +118,108 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				hideLoginKeyboard();
-				//TODO Show loading message
-				ProgressDialog Dialog = new ProgressDialog(LoginActivity.this);
-				Dialog.setMessage("Loggin in...");
-				Dialog.show();
-				txtMsg.setText("Loggin in..");
-				txtMsg.setTextColor(Color.BLACK);
-				xaveyToast.xaveyToast(txtMsg, "Loggin in...");
-				
-				ConnectionDetector detector = new ConnectionDetector(
-						getApplicationContext());
-				Dialog.dismiss();
-				txtMsg.setTextColor(Color.RED);
-				boolean isConnecting = detector.isConnectingToInternet();
-				//show dialog
-				if (isConnecting) {
-					
-					User u = new User();
-					String username, password;
-					username = edtUserName.getText().toString();
-					password = edtPassword.getText().toString();
-					if (username.trim().length() > 0
-							&& password.trim().length() > 0) {
-						u.setUser_name(username);
-						u.setPwd(password);
-						new LoginAsynTask().execute(u);
-					}
-					// --------- following is new code
 
+				String username, password;
+				username = edtUserName.getText().toString();
+				password = edtPassword.getText().toString();
+
+				if (username.equals("demo") && password.equals("demo")) {
+					ApplicationValues.CURRENT_TYPE = LOGIN_TYPE.DEMO_LOGIN;
+					// read file
+					String authenticateJSONString = demoAccManager
+							.getDataFromAssets("authenticate.json");
+					String standardAuthenJSON = JSONReader
+							.convertStandardJSONString(authenticateJSONString);
+					HashMap<String, String> demoResult = parseJSON(standardAuthenJSON);
+
+					String userID = demoResult.get("user_id");
+					// String username = demoResult.get("username").toString();
+					// String password = demoResult.get("password").toString();
+					String hashPassword = demoResult.get("hashPassword")
+							.toString();
+					String email = demoResult.get("email").toString();
+					String role = demoResult.get("role").toString();
+					String organization = demoResult.get("organization")
+							.toString();
+					String logo = demoResult.get("logo").toString();
+					String token = demoResult.get("token").toString();
+					session = new SessionManager(getApplicationContext());
+					session.createLoginSession(userID, username, hashPassword);
+					User loggedInUser = new User();
+					loggedInUser.setUser_id(userID);
+					loggedInUser.setUser_name(username);
+					loggedInUser.setPwd(password);
+					loggedInUser.setHashPwd(hashPassword);
+					loggedInUser.setEmail(email);
+					loggedInUser.setRole(role);
+					loggedInUser.setOrganization(organization);
+					loggedInUser.setLogoName(logo);
+					loggedInUser.setToken(token);
+
+					checkUserAndStore(loggedInUser, null); // <- null cuz no
+															// need dialog
+					ApplicationValues.loginUser = loggedInUser;
+
+					try {
+						JSONObject authenticateJSON = new JSONObject(
+								standardAuthenJSON);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						xaveyToast
+								.xaveyToast(null,
+										"JSONException occurs when reading authenticate.json");
+					}
+					startActivity(itt);
+					finish();
 				} else {
-					// offline mode
-					String userID = dbHelper.getUserIDByUserName(edtUserName
-							.getText().toString());
-					if (userID.length() != 0) {
-						User user = dbHelper.getUserByUserID(userID);
-						String userTypedPassword = StringEncrytDecryManager
-								.getMD5(edtPassword.getText().toString());
-						String realPassword = user.getHashPwd();
-						if (realPassword.equals(userTypedPassword)) {
-							session = new SessionManager(
-									getApplicationContext());
-							session.createLoginSession(userID,
-									user.getUser_name(), user.getPwd());
-							itt = new Intent(getApplicationContext(),
-									MainActivity.class);
-							startActivity(itt);
-							finish();
-						} else {
-							txtMsg.setText("Invalid user name or password!");
+					// TODO Show loading message
+					ProgressDialog Dialog = new ProgressDialog(
+							LoginActivity.this);
+					Dialog.setMessage("Loggin in...");
+					Dialog.show();
+					txtMsg.setText("Loggin in..");
+					txtMsg.setTextColor(Color.BLACK);
+					xaveyToast.xaveyToast(txtMsg, "Loggin in...");
+
+					ConnectionDetector detector = new ConnectionDetector(
+							getApplicationContext());
+					Dialog.dismiss();
+					txtMsg.setTextColor(Color.RED);
+					boolean isConnecting = detector.isConnectingToInternet();
+					// show dialog
+					if (isConnecting) {
+						User u = new User();
+						if (username.trim().length() > 0
+								&& password.trim().length() > 0) {
+							u.setUser_name(username);
+							u.setPwd(password);
+							new LoginAsynTask().execute(u);
 						}
+						// --------- following is new code
 					} else {
-						txtMsg.setText("This user hasn't logged in before for offline access.");
+						// offline mode
+						String userID = dbHelper
+								.getUserIDByUserName(edtUserName.getText()
+										.toString());
+						if (userID.length() != 0) {
+							User user = dbHelper.getUserByUserID(userID);
+							String userTypedPassword = StringEncrytDecryManager
+									.getMD5(edtPassword.getText().toString());
+							String realPassword = user.getHashPwd();
+							if (realPassword.equals(userTypedPassword)) {
+								session = new SessionManager(
+										getApplicationContext());
+								session.createLoginSession(userID,
+										user.getUser_name(), user.getPwd());
+								startActivity(itt);
+								finish();
+							} else {
+								txtMsg.setText("Invalid user name or password!");
+							}
+						} else {
+							txtMsg.setText("This user hasn't logged in before for offline access.");
+						}
 					}
 				}
 			}
@@ -211,10 +265,14 @@ public class LoginActivity extends Activity {
 		edtPassword.setBackgroundResource(R.drawable.rounded_edittext);
 		xUtils = new XaveyUtils(this);
 		xaveyProperties = new XaveyProperties();
-		//xaveyLogo = (ImageView) findViewById(R.id.xaveyLogo);
-		RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(width-20, height/3);
-		//xaveyLogo.setLayoutParams(logoParams);
+		// xaveyLogo = (ImageView) findViewById(R.id.xaveyLogo);
+		RelativeLayout.LayoutParams logoParams = new RelativeLayout.LayoutParams(
+				width - 20, height / 3);
+		// xaveyLogo.setLayoutParams(logoParams);
 		xaveyToast = new ToastManager(this);
+		demoAccManager = new DemoAccountManager(this);
+		itt = new Intent(getApplicationContext(),
+				MainActivity.class);
 	}
 
 	// test mode only
@@ -322,10 +380,11 @@ public class LoginActivity extends Activity {
 				loggedInUser.setLogoName(logo);
 				loggedInUser.setToken(token);
 
-				checkUserAndStore(loggedInUser);
-				ApplicationValues.loginUser= loggedInUser;
+				checkUserAndStore(loggedInUser, Dialog);
+				ApplicationValues.loginUser = loggedInUser;
 
-				if (!logo.equals("null") && logo.length() > 0) { // <- logo involves
+				if (!logo.equals("null") && logo.length() > 0) { // <- logo
+																	// involves
 					// download logo here and start activity only if the
 					// downloadTask() complete
 					HashMap<String, String> tokenAndLogo = new HashMap<String, String>();
@@ -333,15 +392,17 @@ public class LoginActivity extends Activity {
 					tokenAndLogo.put("logo", logo);
 					tokenAndLogo.put("user_id", userID);
 					new LogoDownloadAndTask().execute(tokenAndLogo);
-					
+
 				} else { // <- logo doesn't involve
 							// do as usual
-					
-					itt = new Intent(getApplicationContext(), MainActivity.class);
+
 					startActivity(itt);
 					finish();
 				}
-				ApplicationValues.loginUser = loggedInUser; // if logo involved or not whatever, loggedInUser must be assigned
+				ApplicationValues.loginUser = loggedInUser; // if logo involved
+															// or not whatever,
+															// loggedInUser must
+															// be assigned
 			} else if (responseCode == 403) {
 				txtMsg.setText("Token expired!");
 			} else if (responseCode == 401) {
@@ -349,60 +410,52 @@ public class LoginActivity extends Activity {
 			}
 		}
 
-		private void checkUserAndStore(User result) {
-			// check user
-			if (!dbHelper.isUserAlreadyExistInDB(result.getUser_id())) {
-				Dialog.setMessage("Saving User");
-				/*
-				 * User user = new User(); user.setUser_id(result.getUser_id());
-				 * user.setUser_name(result.getUser_name());
-				 * user.setHashPwd(result.getHashPwd());
-				 * user.setEmail(result.getEmail());
-				 * user.setRole(result.getRole());
-				 * user.setOrganization(result.getOrganization());
-				 */
-				dbHelper.addNewUser(result);
-			} else {
-//				Toast.makeText(getApplicationContext(), "AlreadyExist", 500)
-//						.show();
-				dbHelper.updateUser(result);
-			}
-		}
+	}
 
-		
-		private HashMap<String, String> parseJSON(String response) {
-			HashMap<String, String> responseMap = new HashMap<String, String>();
-			if (response != null) {
-				Log.i("JSON", response.toString());
-				JSONObject jsResponse;
-				try {
-					jsResponse = new JSONObject(response);
-					responseMap.put("user_id", jsResponse.getString("user_id"));
-					responseMap.put("username",
-							jsResponse.getString("username"));
-					responseMap.put("hashPassword",
-							jsResponse.getString("password"));
-					responseMap.put("email", jsResponse.getString("email"));
-					responseMap.put("role", jsResponse.getString("role"));
-					// responseMap.put("organization",
-					// jsResponse.getString("organization"));
-					responseMap.put("organization",
-							jsResponse.getInt("organization") + "");
-					responseMap.put("logo", jsResponse.getString("logo"));
-					responseMap.put("response_code", "200");
-					// responseMap.put("organization",
-					// jsResponse.getString("organization"));
-					responseMap.put("message", "Authorize");
-					responseMap.put("token", jsResponse.getString("token"));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				responseMap.put("response_code", "401");
-				responseMap.put("message", "Unauthorize");
-			}
-			return responseMap;
+	private void checkUserAndStore(User result, ProgressDialog Dialog) {
+		// check user
+		if (!dbHelper.isUserAlreadyExistInDB(result.getUser_id())) {
+			if (Dialog != null)
+				Dialog.setMessage("Saving User");
+			dbHelper.addNewUser(result);
+		} else {
+			// Toast.makeText(getApplicationContext(), "AlreadyExist", 500)
+			// .show();
+			dbHelper.updateUser(result);
 		}
+	}
+
+	private HashMap<String, String> parseJSON(String response) {
+		HashMap<String, String> responseMap = new HashMap<String, String>();
+		if (response != null) {
+			Log.i("JSON", response.toString());
+			JSONObject jsResponse;
+			try {
+				jsResponse = new JSONObject(response);
+				responseMap.put("user_id", jsResponse.getString("user_id"));
+				responseMap.put("username", jsResponse.getString("username"));
+				responseMap.put("hashPassword",
+						jsResponse.getString("password"));
+				responseMap.put("email", jsResponse.getString("email"));
+				responseMap.put("role", jsResponse.getString("role"));
+				// responseMap.put("organization",
+				// jsResponse.getString("organization"));
+				responseMap.put("organization",
+						jsResponse.getInt("organization") + "");
+				responseMap.put("logo", jsResponse.getString("logo"));
+				responseMap.put("response_code", "200");
+				// responseMap.put("organization",
+				// jsResponse.getString("organization"));
+				responseMap.put("message", "Authorize");
+				responseMap.put("token", jsResponse.getString("token"));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			responseMap.put("response_code", "401");
+			responseMap.put("message", "Unauthorize");
+		}
+		return responseMap;
 	}
 
 	private class LogoDownloadAndTask extends
@@ -413,6 +466,7 @@ public class LoginActivity extends Activity {
 		XaveyProperties xavey_properties;
 		String logoDownloadURL = "";
 		ToastManager toastManager;
+
 		// String serverLoginURL = "serverLoginURL";
 		// String serverFormURL = "serverFormURL";
 
@@ -424,12 +478,11 @@ public class LoginActivity extends Activity {
 			toastManager = new ToastManager(LoginActivity.this);
 		}
 
-		protected HashMap<String, Object> doInBackground(HashMap<String, String>... params) {
+		protected HashMap<String, Object> doInBackground(
+				HashMap<String, String>... params) {
 
-			
-			
 			// ---------- updating token.. --------------------------------
-			String userName =ApplicationValues.loginUser.getUser_name();
+			String userName = ApplicationValues.loginUser.getUser_name();
 			String password = ApplicationValues.loginUser.getPwd();
 			String deviceID = ApplicationValues.UNIQUE_DEVICE_ID;
 			// updateToken(userName,password);
@@ -443,14 +496,14 @@ public class LoginActivity extends Activity {
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
-				
+
 			}
 			int userResponseCode_ = c_.getResponseCode();
 			// -----------------------------------------------------------------
 
 			HashMap<String, Object> result = new HashMap<String, Object>();
-			
-			if(userResponseCode_==200){
+
+			if (userResponseCode_ == 200) {
 
 				HashMap<String, String> logoAndToken = params[0];
 				String logo = logoAndToken.get("logo");
@@ -458,7 +511,10 @@ public class LoginActivity extends Activity {
 				String userID = logoAndToken.get("user_id");
 
 				try {
-					RestClient c = new RestClient(logoDownloadURL+logo); // <-- concat logo here
+					RestClient c = new RestClient(logoDownloadURL + logo); // <--
+																			// concat
+																			// logo
+																			// here
 					// RestClient c = new RestClient(localAuthenticate);
 					c.AddHeader("x-access-token", token); // <-- add token here
 					c.Execute(RequestMethod.GET);
@@ -471,12 +527,12 @@ public class LoginActivity extends Activity {
 				} catch (Exception e) {
 					Log.e("logo server error :", e.getMessage());
 				}
-			}
-			else if(userResponseCode_==401){
-				toastManager.xaveyToast(null, "Authenticating failed when downloading form!");
-			}
-			else if(userResponseCode_==403){
-				toastManager.xaveyToast(null, "Server error when downloading form! (MainActivity)");
+			} else if (userResponseCode_ == 401) {
+				toastManager.xaveyToast(null,
+						"Authenticating failed when downloading form!");
+			} else if (userResponseCode_ == 403) {
+				toastManager.xaveyToast(null,
+						"Server error when downloading form! (MainActivity)");
 			}
 			return result;
 		}
@@ -485,7 +541,7 @@ public class LoginActivity extends Activity {
 		protected void onPostExecute(HashMap<String, Object> result) {
 			Dialog.dismiss();
 
-			if(result.containsKey("response_code")){
+			if (result.containsKey("response_code")) {
 				int responseCode = Integer.parseInt(result.get("response_code")
 						.toString());
 				if (responseCode == 200) {
@@ -493,7 +549,8 @@ public class LoginActivity extends Activity {
 					String userID = result.get("user_id").toString();
 					ApplicationValues.loginUser.setLogoImage(logoImage);
 					dbHelper.updateUser(ApplicationValues.loginUser);
-					itt = new Intent(getApplicationContext(), MainActivity.class);
+					itt = new Intent(getApplicationContext(),
+							MainActivity.class);
 					startActivity(itt);
 					finish();
 				} else if (responseCode == 403) {
@@ -501,9 +558,10 @@ public class LoginActivity extends Activity {
 				} else if (responseCode == 401) {
 					txtMsg.setText("CODE 401, Login failed when downloading company logo , Try again.");
 				}
-			}
-			else{
-				toastManager.xaveyToast(null, "Couldn't get any response from server. (LoginActivity)"); 
+			} else {
+				toastManager
+						.xaveyToast(null,
+								"Couldn't get any response from server. (LoginActivity)");
 			}
 		}
 	}
@@ -515,44 +573,32 @@ public class LoginActivity extends Activity {
 		homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(homeIntent);
 	}
-	
-	private byte[] getLogoImage(String url){
-        try {
-                URL imageUrl = new URL(url);
-                URLConnection ucon = imageUrl.openConnection();
 
-                InputStream is = ucon.getInputStream();
-                BufferedInputStream bis = new BufferedInputStream(is);
+	private byte[] getLogoImage(String url) {
+		try {
+			URL imageUrl = new URL(url);
+			URLConnection ucon = imageUrl.openConnection();
 
-                ByteArrayBuffer baf = new ByteArrayBuffer(500);
-                int current = 0;
-                while ((current = bis.read()) != -1) {
-                        baf.append((byte) current);
-                }
+			InputStream is = ucon.getInputStream();
+			BufferedInputStream bis = new BufferedInputStream(is);
 
-                return baf.toByteArray();
-        } catch (Exception e) {
-                Log.d("ImageManager", "Error: " + e.toString());
-                Toast.makeText(getApplicationContext(), e.getMessage(), 3000);
-                return null;
-        }
+			ByteArrayBuffer baf = new ByteArrayBuffer(500);
+			int current = 0;
+			while ((current = bis.read()) != -1) {
+				baf.append((byte) current);
+			}
 
-   }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private class LoginAsynTask extends AsyncTask<User, Void, HashMap<String, String>> {
+			return baf.toByteArray();
+		} catch (Exception e) {
+			Log.d("ImageManager", "Error: " + e.toString());
+			Toast.makeText(getApplicationContext(), e.getMessage(), 3000);
+			return null;
+		}
+
+	}
+
+	private class LoginAsynTask extends
+			AsyncTask<User, Void, HashMap<String, String>> {
 		// (1) do in background parameter
 		// (2) progress
 		// (3) post execute parameter
@@ -564,7 +610,7 @@ public class LoginActivity extends Activity {
 		String authenticateURL = "";
 		String authenUserName = "";
 		String authenPassword = "";
-		String deviceID= "";
+		String deviceID = "";
 
 		protected void onPreExecute() {
 			authenticateURL = xaveyProperties.getAuthenticateURL();
@@ -585,9 +631,8 @@ public class LoginActivity extends Activity {
 				c.Execute(RequestMethod.POST);
 				int userResponseCode = c.getResponseCode();
 				String s = c.getResponse();
-				result.put("response_code", userResponseCode+"");
-			}
-			catch(Exception e){
+				result.put("response_code", userResponseCode + "");
+			} catch (Exception e) {
 				Log.e("login server error :", e.getMessage());
 			}
 			return result;
@@ -596,42 +641,36 @@ public class LoginActivity extends Activity {
 		@Override
 		protected void onPostExecute(HashMap<String, String> result) {
 
-			int responseCode = Integer.parseInt(result.get("response_code").toString());
+			int responseCode = Integer.parseInt(result.get("response_code")
+					.toString());
 
-			if(responseCode==200){
-				// internet available 
+			if (responseCode == 200) {
+				// internet available
 				// do login stuffs
 
-					User u = new User();
-					String username, password;
-					username = edtUserName.getText().toString();
-					password = edtPassword.getText().toString();
-					if (username.trim().length() > 0
-							&& password.trim().length() > 0) {
-						u.setUser_name(username);
-						u.setPwd(password);
-						new AuthenticateTask().execute(u);
-					}
-			}
-			else if (responseCode==401){
-				Toast.makeText(LoginActivity.this, "Invalid user name or password!", 1000).show();
-			}
-			else if (responseCode==403){
-				Toast.makeText(LoginActivity.this, "Token expired!", 1000).show();
-			}
-			else{
-				Toast.makeText(LoginActivity.this, "Network Error!", 1000).show();
+				User u = new User();
+				String username, password;
+				username = edtUserName.getText().toString();
+				password = edtPassword.getText().toString();
+				if (username.trim().length() > 0
+						&& password.trim().length() > 0) {
+					u.setUser_name(username);
+					u.setPwd(password);
+					new AuthenticateTask().execute(u);
+				}
+			} else if (responseCode == 401) {
+				Toast.makeText(LoginActivity.this,
+						"Invalid user name or password!", 1000).show();
+			} else if (responseCode == 403) {
+				Toast.makeText(LoginActivity.this, "Token expired!", 1000)
+						.show();
+			} else {
+				Toast.makeText(LoginActivity.this, "Network Error!", 1000)
+						.show();
 			}
 
 		}
 
+	}
 
-		
-		}
-	
-	
-	
-	
-
-	
 }

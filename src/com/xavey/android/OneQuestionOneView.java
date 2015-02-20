@@ -56,6 +56,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.NumberSetAdapter;
 import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
@@ -1517,6 +1518,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					document.setForm_id(currentForm.getForm_id());
 					document.setCreated_worker(ApplicationValues.loginUser
 							.getUser_id());
+					
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -1597,7 +1599,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				// -----
 				isInternetAvailable = connectionDetector
 						.isConnectingToInternet();
-				if (isInternetAvailable) {
+				if (isInternetAvailable && ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
 						if (mediaToSubmit.size() > 0) {
