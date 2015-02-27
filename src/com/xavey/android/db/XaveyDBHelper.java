@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.xavey.android.ApplicationValues;
 import com.xavey.android.model.Audio;
@@ -173,7 +174,11 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// store data here
-
+		onUpgradeMaintainResources();
+		
+	}
+	
+	public void onUpgradeMaintainResources(){
 		ArrayList<Form> existingFormList = getAllForms();
 		ArrayList<User> existingUserList = getAllUsers();
 		ArrayList<Document> existingDocumentList = getAllDocuments();
@@ -181,6 +186,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		ArrayList<XMedia> existingMediaList = getAllMedia();
 		ArrayList<SyncImage> existingSyncedImageList = getAllSyncedImage();
 
+		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + FORM_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + DOCUMENT_TABLE);
 		db.execSQL("DROP TABLE IF EXISTS " + WORKER_FORM_TABLE);
@@ -212,6 +218,7 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 				addNewDocument(document);
 			}
 		}
+		
 		
 		// add old worker forms
 		if(existingWorkerFormList!=null && existingWorkerFormList.size()>0){
@@ -498,6 +505,33 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		db.close();
 		return userList;
 	}
+	//log and logo image error
+	public ArrayList<User> getOldAllUsers() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		ArrayList<User> userList = new ArrayList<User>();
+		String values = USER_ID + "," + USER_NAME + ", " + PASSWORD + ", "
+				+ HASH_PWD + ", " + EMAIL + ", " + ROLE + ", " + ORGANIZATION
+				+ ", " + LOGO_NAME + ", " + "log_image";
+		Cursor cursor = db.rawQuery("select " + values + " from " + USER_TABLE,
+				null);
+		User user = new User();
+		if (cursor != null && cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			user.setUser_id(cursor.getString(0));
+			user.setUser_name(cursor.getString(1));
+			user.setPwd(cursor.getString(2));
+			user.setHashPwd(cursor.getString(3));
+			user.setEmail(cursor.getString(4));
+			user.setRole(cursor.getString(5));
+			user.setOrganization(cursor.getString(6));
+			user.setLogoName(cursor.getString(7));
+			user.setLogoImage(cursor.getBlob(8));
+			userList.add(user);
+		}
+		cursor.close();
+		db.close();
+		return userList;
+	}
 
 	public boolean isUserAlreadyExistInDB(String user_id) {
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -608,6 +642,8 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 			} while (cursor.moveToNext());
 		}
 		cursor.close();
+		
+		
 		db.close();
 		return formIDs;
 	}
@@ -655,6 +691,15 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 		values.put(CREATED_WORKER, document.getCreated_worker());
 		values.put(SUBMITTED, document.getSubmitted());
 		db.insert(DOCUMENT_TABLE, null, values);
+		db.close();
+	}
+	
+	public void deleteAllDocumentsByCurrentLoggedInUser(){
+		SQLiteDatabase db = this.getWritableDatabase();
+		String deleteQuery = "delete from "+ DOCUMENT_TABLE +" where "+FORM_ID+" in (select "+FORM_ID+" from "+ WORKER_FORM_TABLE +" where "+USER_ID+"="+ApplicationValues.loginUser.getUser_id()+") ";
+		Log.i("deleteQuery", deleteQuery);
+		db.execSQL(deleteQuery);
+		//db.rawQuery(deleteQuery, null);
 		db.close();
 	}
 
@@ -982,12 +1027,12 @@ public class XaveyDBHelper extends SQLiteOpenHelper {
 
 	// following method is useful cuz we assumed that the image_name
 	// (field_name) is currently unique
-	public XMedia getImagePathByImageName(String image_name) {
+	public XMedia getImagePathByImageName(String image_name, String documentID) {
 		XMedia media = new XMedia();
 		SQLiteDatabase db = this.getReadableDatabase();
 		String rawQuery = "SELECT * FROM " + MEDIA_TABLE + " WHERE "
-				+ MEDIA_NAME + "=?";
-		String[] parameters = new String[] { image_name };
+				+ MEDIA_NAME + "=?" + " AND " + DOC_ID + "=?";
+		String[] parameters = new String[] { image_name, documentID };
 		Cursor cursor = db.rawQuery(rawQuery, parameters);
 		if (cursor != null && cursor.getCount() > 0) {
 			cursor.moveToFirst();

@@ -21,22 +21,16 @@ public class DemoAccountManager {
 		InputStream json;
 		try {
 			json = activity.getAssets().open(assetPath);
-
 			BufferedReader in = new BufferedReader(new InputStreamReader(json,
 					"UTF-8"));
-
 			while ((str = in.readLine()) != null) {
 				buf.append(str);
 			}
 			in.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		str = buf.toString();
 		return str;
 	}
-	
-	
-	
 }

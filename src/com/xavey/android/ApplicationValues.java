@@ -33,12 +33,12 @@ public class ApplicationValues {
 	public static File XAVEY_DIRECTORY = null; 
 
 	public static FONT CURRENT_FONT = FONT.DEFAULT_;
-	
+
 	public static boolean IS_RECORDING_NOW = false;
 	
 	public static String UNIQUE_DEVICE_ID = "";
 	
-	public static LOGIN_TYPE CURRENT_TYPE = LOGIN_TYPE.REGULAR_LOGIN;
+	public static LOGIN_TYPE CURRENT_LOGIN_MODE = LOGIN_TYPE.REGULAR_LOGIN;
 	
 	public static enum LOGIN_TYPE{
 		DEMO_LOGIN, REGULAR_LOGIN

@@ -1599,7 +1599,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				// -----
 				isInternetAvailable = connectionDetector
 						.isConnectingToInternet();
-				if (isInternetAvailable && ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
+				if (isInternetAvailable && ApplicationValues.CURRENT_LOGIN_MODE.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
 						if (mediaToSubmit.size() > 0) {
@@ -1768,8 +1768,10 @@ public class OneQuestionOneView extends FragmentActivity {
 						RadioGroup radioGroup = (RadioGroup) linearLayout
 								.getChildAt(y);
 						RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-						String value = selectedButton.getTag(R.id.radio_value)
-								.toString();
+						String value = "";
+						if(selectedButton!=null){
+						 value = selectedButton.getTag(R.id.radio_value)
+								.toString();}
 
 						for (int u = 0; u < radioGroup.getChildCount(); u++) {
 							LinearLayout layoutLine = (LinearLayout) radioGroup
@@ -2035,11 +2037,12 @@ public class OneQuestionOneView extends FragmentActivity {
 													MatrixCell cell = (MatrixCell) tb
 															.getTag(R.id.matrix_cell);
 													inputValues += "|"
-															+ "h"
+															/*+ "h"
 															+ cell.getH_index()
 															+ ""
 															+ "v"
-															+ cell.getV_index()
+															+ cell.getV_index()*/
+															+ cell.getValue()
 															+ ":"
 															+ tb.getText()
 																	.toString(); // <-h0v0
@@ -2130,14 +2133,15 @@ public class OneQuestionOneView extends FragmentActivity {
 													MatrixCell cell = (MatrixCell) tb
 															.getTag(R.id.matrix_cell);
 													inputValues += "|"
-															+ "h"
+															/*+ "h"
 															+ cell.getH_index()
 															+ ""
 															+ "v"
-															+ cell.getV_index()
+															+ cell.getV_index()*/
+															+ cell.getValue()
 															+ ":"
 															+ tb.getText()
-																	.toString(); // <-h0v0
+																	.toString();
 												}
 											}
 										}
@@ -2222,10 +2226,12 @@ public class OneQuestionOneView extends FragmentActivity {
 												if (cb.isChecked()) {
 													MatrixCell cell = (MatrixCell) cb
 															.getTag(R.id.matrix_cell);
-													checkedValues += "|" + "h"
+													checkedValues += "|" 
+															/*+ "h"
 															+ cell.getH_index()
 															+ "" + "v"
-															+ cell.getV_index()
+															+ cell.getV_index()*/
+															+ cell.getValue()
 															+ ":"
 															+ cell.getValue(); // <-h0v0
 												}
@@ -2314,10 +2320,12 @@ public class OneQuestionOneView extends FragmentActivity {
 												if (rb.isChecked()) {
 													MatrixCell cell = (MatrixCell) rb
 															.getTag(R.id.matrix_cell);
-													checkedValues += "|" + "h"
+													checkedValues += "|" 
+															/*+ "h"
 															+ cell.getH_index()
 															+ "" + "v"
-															+ cell.getV_index()
+															+ cell.getV_index()*/
+															+ cell.getValue()
 															+ ":"
 															+ cell.getValue(); // <-h0v0
 												}

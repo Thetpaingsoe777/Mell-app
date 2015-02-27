@@ -5,6 +5,8 @@ import java.io.ByteArrayOutputStream;
 import android.app.Activity;
 import android.gesture.GestureOverlayView;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,10 +30,18 @@ public class SignatureActivity extends Activity {
 			public void onClick(View v) {
 				Bitmap bmp = Bitmap.createBitmap(govSignature
 						.getDrawingCache());
+				
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bmp.compress(Bitmap.CompressFormat.JPEG, 100,
 						stream);
 				byte[] byteArrayImage = stream.toByteArray();
+				
+				/*Bitmap newBitmap = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), bmp.getConfig());
+
+				Canvas canvas = new Canvas(newBitmap);
+				canvas.drawColor(Color.WHITE);
+				canvas.drawBitmap(bmp, 0, 0, null);*/
+				
 				/*boolean isGestureVisible = govSignature.isPressed();
 				Toast.makeText(getApplicationContext(), "isPreesed :"+isGestureVisible, 1000).show();*/
 				/*Intent toDocumentInput = new Intent(SignatureActivity.this, DocumentInputActivity.class);

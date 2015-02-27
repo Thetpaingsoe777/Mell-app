@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import com.xavey.android.db.XaveyDBHelper;
+
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

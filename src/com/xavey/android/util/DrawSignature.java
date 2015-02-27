@@ -192,7 +192,14 @@ public class DrawSignature extends Activity {
 			break;
 		case R.id.save:
 			Bitmap bm = (Bitmap) dv.getBitmap();
-			String imagePath = saveImageToLocalStore(bm);
+			
+			Bitmap newBitmap = Bitmap.createBitmap(bm.getWidth(), bm.getHeight(), bm.getConfig());
+
+			Canvas canvas = new Canvas(newBitmap);
+			canvas.drawColor(Color.WHITE);
+			canvas.drawBitmap(bm, 0, 0, null);
+			
+			String imagePath = saveImageToLocalStore(newBitmap);
 
 			Intent i = getIntent();
 			String field_name = i.getStringExtra("field_name");

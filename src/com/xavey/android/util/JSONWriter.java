@@ -311,11 +311,11 @@ public class JSONWriter {
 					}
 					else if(fields.get(key).equals("drawing")){
 						// debug docFields , make sure involved path rather than unavailabe
-						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+						horizontalLayout = writeHorizontalViewForImage(fields, docFields, document.getDocument_id());
 						lL.addView(horizontalLayout);
 					}
 					else if(fields.get(key).equals("photo")){
-						horizontalLayout = writeHorizontalViewForImage(fields, docFields);
+						horizontalLayout = writeHorizontalViewForImage(fields, docFields, document.getDocument_id());
 						lL.addView(horizontalLayout);
 					}
 					else if(fields.get(key).equals("rating")){
@@ -485,7 +485,7 @@ public class JSONWriter {
 		return horizontalLayout;
 	}
 
-	private LinearLayout writeHorizontalViewForImage(HashMap<String, Object> fields, HashMap<String, String> docFields ){
+	private LinearLayout writeHorizontalViewForImage(HashMap<String, Object> fields, HashMap<String, String> docFields , String documentID){
 		// following link may be needed at future
 		// http://stackoverflow.com/questions/11111129/android-textview-individual-line-spacing-for-each-line
 		
@@ -498,7 +498,7 @@ public class JSONWriter {
 		String imageID = docFields.get("field_value");
 		XMedia image = new XMedia();
 		if(imageID.equals("unavailable")||imageID.endsWith(".jpeg")||imageID.endsWith(".jpg")){
-			image = dbHelper.getImagePathByImageName(fieldName);
+			image = dbHelper.getImagePathByImageName(fieldName, documentID);
 		}
 		else{
 			image = dbHelper.getImageByImageID(imageID);

@@ -986,8 +986,6 @@ public class JSONReader {
 							//Collections.shuffle(checkBoxList);
 						}
 
-						
-						
 						for (final CheckBox cb : checkBoxList) {
 							LinearLayout checkBoxLine = new LinearLayout(activity);
 							checkBoxLine.setTag(R.id.layout_id, "checkBoxLine");
@@ -1504,7 +1502,7 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 						layoutList.add(parentLayout);
 					}
-					// <matrix_number>
+					// <matrix_text>
                     else if (fields.get(key).equals("matrix_text")) {
                         ScrollView scroll = new ScrollView(activity);
                         scroll.setLayoutParams(new LayoutParams(
@@ -1733,6 +1731,7 @@ public class JSONReader {
                             rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
                             TextView rowLabel = new TextView(activity);
+                            setTypeFace(rowLabel);
                             LayoutParams rowLabelParams = new LayoutParams(
                                     cell_row_width, cell_column_height);
                             rowLabel.setLayoutParams(rowLabelParams);
@@ -2186,6 +2185,7 @@ public class JSONReader {
                                     error_message);
 
                             TextView tvColumnTitle = new TextView(activity);
+                            setTypeFace(tvColumnTitle);
                             tvColumnTitle.setLayoutParams(new LayoutParams(
                                     cell_column_width, cell_column_height));
                             tvColumnTitle.setText(label);
@@ -2480,6 +2480,7 @@ public class JSONReader {
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
+							setTypeFace(rowLabel);
 							LayoutParams rowLabelParams = new LayoutParams(
 									cell_row_width, cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
@@ -2560,6 +2561,7 @@ public class JSONReader {
 									error_message);
 
 							TextView tvColumnTitle = new TextView(activity);
+							setTypeFace(tvColumnTitle);
 							tvColumnTitle.setLayoutParams(new LayoutParams(
 									cell_column_width, cell_column_height));
 							tvColumnTitle.setText(label);
@@ -2860,6 +2862,7 @@ public class JSONReader {
 							rowLabelCells.setLayoutParams(rowLabelCellsParams);
 
 							TextView rowLabel = new TextView(activity);
+							setTypeFace(rowLabel);
 							LayoutParams rowLabelParams = new LayoutParams(
 									cell_row_width, cell_column_height);
 							rowLabel.setLayoutParams(rowLabelParams);
@@ -2949,6 +2952,7 @@ public class JSONReader {
 									error_message);
 
 							TextView tvColumnTitle = new TextView(activity);
+							setTypeFace(tvColumnTitle);
 							tvColumnTitle.setLayoutParams(new LayoutParams(
 									cell_column_width, cell_column_height));
 							tvColumnTitle.setText(label);
@@ -3499,6 +3503,7 @@ public class JSONReader {
 								.setLayoutParams(ratingAndMinMaxLabelLayoutParams);
 
 						TextView tvMinLabel = new TextView(activity);
+						setTypeFace(tvMinLabel);
 						RelativeLayout.LayoutParams tvMinLabelParams = new RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
 						tvMinLabelParams
@@ -3509,6 +3514,7 @@ public class JSONReader {
 						minMaxLabelLayout.addView(tvMinLabel);
 
 						TextView tvMaxLabel = new TextView(activity);
+						setTypeFace(tvMaxLabel);
 						RelativeLayout.LayoutParams tvMaxLabelParams = new RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
 						tvMaxLabelParams
@@ -4674,12 +4680,14 @@ public class JSONReader {
 	}
 
 	public static String convertStandardJSONString(String data_json) {
-		data_json = data_json.replace("\\", "");
-		data_json = data_json.replace("\"{", "{");
-		data_json = data_json.replace("}\",", "},");
-		data_json = data_json.replace("}\"", "}");
-		data_json = data_json.replace("\"[", "[");
-		data_json = data_json.replace("]\"", "]");
+		if(data_json!=null){
+			data_json = data_json.replace("\\", "");
+			data_json = data_json.replace("\"{", "{");
+			data_json = data_json.replace("}\",", "},");
+			data_json = data_json.replace("}\"", "}");
+			data_json = data_json.replace("\"[", "[");
+			data_json = data_json.replace("]\"", "]");
+		}
 		return data_json;
 	}
 

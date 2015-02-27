@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
@@ -36,7 +34,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.CustomDrawerAdapter;
 import com.xavey.android.db.XaveyDBHelper;
@@ -73,16 +70,15 @@ public class MainActivity extends Activity {
 
 	public static String LOGIN_USER_ID = "";
 
-	private Handler customHandler = new Handler();;
+	private Handler customHandler = new Handler();
 	ToastManager toastManager;
-	
+
 	DemoAccountManager demoAccManager;
 
 	public static int current_position = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
 		// http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
@@ -102,7 +98,7 @@ public class MainActivity extends Activity {
 		ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
 				.getDeviceUniqueID(this);
 		initializeUI();
-		
+
 		if (session.isLoggedIn()) {
 			dbHelper = new XaveyDBHelper(this);
 			if (savedInstanceState == null) {
@@ -113,30 +109,35 @@ public class MainActivity extends Activity {
 					.get(SessionManager.USER_ID);
 			if (userID != null) {
 				ApplicationValues.loginUser = dbHelper.getUserByUserID(userID);
+				if(ApplicationValues.loginUser.getUser_name().equals("demo") &&
+						ApplicationValues.loginUser.getPwd().equals("demo")){
+					ApplicationValues.CURRENT_LOGIN_MODE = LOGIN_TYPE.DEMO_LOGIN;
+				}
 				current_token = ApplicationValues.loginUser.getToken();
 			}
-			if(ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.DEMO_LOGIN)){
+			if(ApplicationValues.CURRENT_LOGIN_MODE.equals(LOGIN_TYPE.DEMO_LOGIN)){
 				String demoForm = demoAccManager.getDataFromAssets("demo_form.json");
 				String standardJSONString = JSONReader.convertStandardJSONString(demoForm);
 				ArrayList<Form> demoFormList = parseJSONForm(standardJSONString);
+				syncWithDatabase(demoFormList, userID);
 				ApplicationValues.userFormList = demoFormList;
 				ApplicationValues.numberOfForm = demoFormList.size();
-				for (Form form : demoFormList) {
-					String form_id = form.getForm_id();
-					if (!dbHelper.isFormAlreadyExistInDB(form_id)) {
-						// add if new form
-						dbHelper.addNewForm(form);
-					} else {
-						// update form
-						dbHelper.updateForm(form);
-					}
-					if (!dbHelper.isUserIDAndFormIDPaired(userID, form_id)) {
-						dbHelper.addNewWorkerForm(userID, form_id, "1");
-					} else {
-						dbHelper.setAssignByUserIDAndFormID(userID,
-								form_id, "1");
-					}
-				}
+//				for (Form form : demoFormList) {
+//					String form_id = form.getForm_id();
+//					if (!dbHelper.isFormAlreadyExistInDB(form_id)) {
+//						// add if new form
+//						dbHelper.addNewForm(form);
+//					} else {
+//						// update form
+//						dbHelper.updateForm(form);
+//					}
+//					if (!dbHelper.isUserIDAndFormIDPaired(userID, form_id)) {
+//						dbHelper.addNewWorkerForm(userID, form_id, "1");
+//					} else {
+//						dbHelper.setAssignByUserIDAndFormID(userID,
+//								form_id, "1");
+//					}
+//				}
 			}
 			else{
 				// downloading forms and background thread only works in normal login mode
@@ -154,20 +155,12 @@ public class MainActivity extends Activity {
 		if (userName != null) {
 			LOGIN_USER_ID = dbHelper.getUserIDByUserName(userName);
 			String password = nameAndPassword.get(SessionManager.PASSWORD);
-			// String userID = dbHelper.getUserIDByUserName(userName);
-			// User u = new User();
-			// u.setUser_id(userID);
-			// u.setUser_name(userName);
-			// u.setPwd(password);
-			// u.setToken(ApplicationValues.loginUser.getToken());
-			// online mode
+
 			if (connectionDetector.isConnectingToInternet()) {
 				new FormDownloadTask().execute(ApplicationValues.loginUser);
 			}
 		}
 	}
-	
-	
 
 	private Runnable updateTimerThread = new Runnable() {
 		@Override
@@ -325,6 +318,10 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					session.logoutUser();
+					if(ApplicationValues.CURRENT_LOGIN_MODE==LOGIN_TYPE.DEMO_LOGIN){
+						XaveyDBHelper xDBHelper = new XaveyDBHelper(mainAct);
+						xDBHelper.deleteAllDocumentsByCurrentLoggedInUser();
+					}
 					mainAct.startActivity(new Intent(mainAct
 							.getApplicationContext(), LoginActivity.class));
 				}
@@ -353,7 +350,7 @@ public class MainActivity extends Activity {
 				mainAct.setTitle(itemList.get(position).getItemName());
 				mDrawerLayout.closeDrawer(mDrawerList);
 			} catch (IllegalStateException e) {
-
+				
 			}
 		}
 		mDrawerLayout.closeDrawer(mDrawerList);
@@ -361,7 +358,6 @@ public class MainActivity extends Activity {
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
 	}
@@ -401,7 +397,6 @@ public class MainActivity extends Activity {
 							try {
 								syncManager.submitDocument(doc, form);
 							} catch (JSONException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
@@ -409,7 +404,7 @@ public class MainActivity extends Activity {
 
 					// here is form download
 					// MainActivity.this.onResume();
-					if(ApplicationValues.CURRENT_TYPE.equals(LOGIN_TYPE.DEMO_LOGIN)){
+					if(ApplicationValues.CURRENT_LOGIN_MODE.equals(LOGIN_TYPE.DEMO_LOGIN)){
 						
 					}
 					else{
@@ -495,12 +490,12 @@ public class MainActivity extends Activity {
 					dbHelper.updateUser(user);
 				}
 			} catch (JSONException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			// -----------------------------------------------------------------
 
 			if (userResponseCode == 200) {
+				
 				try {
 					// RestClient f = new RestClient(localFromDownloadURL);
 					RestClient f = new RestClient(serverFormDownloadURL);
@@ -517,7 +512,7 @@ public class MainActivity extends Activity {
 					if (responseCode == 200) {
 						response = f.getResponse();
 						Log.i("response :", f.getResponse());
-						userFormsList = parseJSONForm(response);
+						userFormsList = parseJSONForm(response); // :TODO : response must be JSON Array
 						ApplicationValues.userFormList = userFormsList;
 						ApplicationValues.numberOfForm = userFormsList.size();
 					} else if (responseCode == 403) {
@@ -551,7 +546,9 @@ public class MainActivity extends Activity {
 			try {
 				if (result.size() > 0) {
 					dbHelper.setAllAssignZeroByUserID(userID);
-					for (Form form : result) {
+					// syncWithDB()
+					syncWithDatabase(result, userID);
+					/*for (Form form : result) {
 						String form_id = form.getForm_id();
 						if (!dbHelper.isFormAlreadyExistInDB(form_id)) {
 							// add if new form
@@ -566,12 +563,7 @@ public class MainActivity extends Activity {
 							dbHelper.setAssignByUserIDAndFormID(userID,
 									form_id, "1");
 						}
-					}
-
-					// // assign all forms' imageSynced to false
-					// for (Form form : result) {
-					// form.setImageSynced(false);
-					// }
+					}*/
 
 					// get the forms that involved images
 					ArrayList<HashMap<String, String>> imageIDandFormIDList = new ArrayList<HashMap<String, String>>();
@@ -645,7 +637,9 @@ public class MainActivity extends Activity {
 			setRefreshActionButtonState(false);
 		}
 	}
+
 	
+
 	private ArrayList<Form> parseJSONForm(String response) {
 		ArrayList<Form> form_list = new ArrayList<Form>();
 		response = response.replace("\n", "");
@@ -657,6 +651,7 @@ public class MainActivity extends Activity {
 				// 1st level
 				jsResponse = new JSONObject(response);
 				JSONArray jsMainNode = jsResponse.optJSONArray("forms");
+				
 				for (int i = 0; i < jsMainNode.length(); i++) {
 					JSONObject jsChildNode1 = jsMainNode.getJSONObject(i);
 					Form form = new Form();
@@ -667,15 +662,11 @@ public class MainActivity extends Activity {
 						JSONObject form_content = new JSONObject(form_json);
 						form.setForm_id(form_content.getString("_id"));
 						// form_meta
-						JSONObject form_meta = form_content
-								.getJSONObject("form_meta");
-						form.setForm_title(form_meta
-								.getString("form_title"));
-						form.setForm_subtitle(form_meta
-								.getString("form_subtitle"));
+						JSONObject form_meta = form_content.getJSONObject("form_meta");
+						form.setForm_title(form_meta.getString("form_title"));
+						form.setForm_subtitle(form_meta.getString("form_subtitle"));
 						form.setForm_desc(form_meta.getString("form_desc"));
-						form.setForm_version(form_meta
-								.getString("form_version"));
+						form.setForm_version(form_meta.getString("form_version"));
 						if (form_meta.has("form_location_required")) {// <--
 																		// this
 																		// condition
@@ -684,11 +675,8 @@ public class MainActivity extends Activity {
 																		// needed
 																		// in
 																		// future
-							boolean test = form_meta
-									.getBoolean("form_location_required");
-							form.setForm_location_required(form_meta
-									.getBoolean("form_location_required"));
-
+							boolean test = form_meta.getBoolean("form_location_required");
+							form.setForm_location_required(form_meta.getBoolean("form_location_required"));
 						}
 						// org
 						JSONObject org = form_content.getJSONObject("org");
@@ -703,8 +691,7 @@ public class MainActivity extends Activity {
 						form.setCreator_name(creator.getString("name"));
 
 						// form_fields
-						JSONArray form_fields = form_content
-								.getJSONArray("form_fields");
+						JSONArray form_fields = form_content.getJSONArray("form_fields");
 						form.setForm_fields(form_fields.toString());
 
 						form.setForm_json(form_content.toString());
@@ -713,6 +700,7 @@ public class MainActivity extends Activity {
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
+				toastManager.xaveyToast(null, "JSONException while reading demo from from assets.");
 			}
 		} else {
 			Toast.makeText(getApplicationContext(), "401", 500).show();
@@ -778,7 +766,6 @@ public class MainActivity extends Activity {
 				token = new JSONObject(c_.getResponse().toString())
 						.getString("token");
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				toastManager.xaveyToast(null,
 						"JSON Exception at MainActivity... response code");
 			}
@@ -896,6 +883,25 @@ public class MainActivity extends Activity {
 			Dialog.dismiss();
 			if (current_position == 0) {
 				selectItem(0, MainActivity.this);
+			}
+		}
+	}
+
+	public void syncWithDatabase(ArrayList<Form> result, String userID){
+		for (Form form : result) {
+			String form_id = form.getForm_id();
+			if (!dbHelper.isFormAlreadyExistInDB(form_id)) {
+				// add if new form
+				dbHelper.addNewForm(form);
+			} else {
+				// update form
+				dbHelper.updateForm(form);
+			}
+			if (!dbHelper.isUserIDAndFormIDPaired(userID, form_id)) {
+				dbHelper.addNewWorkerForm(userID, form_id, "1");
+			} else {
+				dbHelper.setAssignByUserIDAndFormID(userID,
+						form_id, "1");
 			}
 		}
 	}

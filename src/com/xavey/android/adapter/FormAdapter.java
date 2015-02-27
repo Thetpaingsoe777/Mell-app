@@ -13,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.xavey.android.ApplicationValues;
 import com.xavey.android.R;
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.model.Form;
 import com.xavey.android.util.DisplayManager;
 import com.xavey.android.util.TypeFaceManager;
@@ -88,12 +90,16 @@ public class FormAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		Form form = formList.get(position);
+		if(ApplicationValues.CURRENT_LOGIN_MODE==LOGIN_TYPE.DEMO_LOGIN){
+			form.setImageSynced(true);
+		}
 		holder.formTitle.setText(form.getForm_title()); // subtitle = name , need to change it after confirmed
 		if(form.isImageSynced()){
 			holder.formTitle.setCompoundDrawables(null, availableFormIcon, null, null);
 		}else{
 			holder.formTitle.setCompoundDrawables(null, unavailableFormIcon, null, null);
 		}
+		
 		XaveyProperties xaveyProperties = new XaveyProperties();
 		String zawGyiFontStatus = xaveyProperties.getZawgyiFontStatus();
 		TypeFaceManager tfManager=new TypeFaceManager((Activity) activity);

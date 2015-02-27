@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.FormAdapter;
 import com.xavey.android.adapter.FormAdapter.ViewHolder;
 import com.xavey.android.db.XaveyDBHelper;
@@ -75,7 +76,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 
 	private void refresh(){
 		//formList = dbHelper.getAllForms(); // dbHelper.getUserRelatedForm
-		formList = dbHelper.getAssignedFormsByUserID(MainActivity.LOGIN_USER_ID);
+		formList = dbHelper.getAssignedFormsByUserID(ApplicationValues.loginUser.getUser_id());
 		formAdapter = new FormAdapter(getActivity(), formList);
 		formGridView.setAdapter(formAdapter);
 		formGridView.setOnItemClickListener(this);
@@ -91,7 +92,6 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 		else
 			formGridView.setNumColumns(2);
 		setWelcomeText();
-		
 	}
 
 	public static boolean isTablet(Context context) {
@@ -114,6 +114,10 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 		String id_from_holder = holder.getFormID();
 		Form clickedForm = dbHelper.getFormByFormID(id_from_holder);
 
+		if(ApplicationValues.CURRENT_LOGIN_MODE==LOGIN_TYPE.DEMO_LOGIN){
+			clickedForm.setImageSynced(true);
+		}
+		
 		if(clickedForm.isImageSynced()){
 			// image is synced here
 			if(clickedForm.isForm_location_required())

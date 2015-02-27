@@ -118,13 +118,12 @@ public class LoginActivity extends Activity {
 			public void onClick(View v) {
 
 				hideLoginKeyboard();
-
 				String username, password;
 				username = edtUserName.getText().toString();
 				password = edtPassword.getText().toString();
 
 				if (username.equals("demo") && password.equals("demo")) {
-					ApplicationValues.CURRENT_TYPE = LOGIN_TYPE.DEMO_LOGIN;
+					ApplicationValues.CURRENT_LOGIN_MODE = LOGIN_TYPE.DEMO_LOGIN;
 					// read file
 					String authenticateJSONString = demoAccManager
 							.getDataFromAssets("authenticate.json");
@@ -135,12 +134,10 @@ public class LoginActivity extends Activity {
 					String userID = demoResult.get("user_id");
 					// String username = demoResult.get("username").toString();
 					// String password = demoResult.get("password").toString();
-					String hashPassword = demoResult.get("hashPassword")
-							.toString();
+					String hashPassword = demoResult.get("hashPassword").toString();
 					String email = demoResult.get("email").toString();
 					String role = demoResult.get("role").toString();
-					String organization = demoResult.get("organization")
-							.toString();
+					String organization = demoResult.get("organization").toString();
 					String logo = demoResult.get("logo").toString();
 					String token = demoResult.get("token").toString();
 					session = new SessionManager(getApplicationContext());
@@ -166,9 +163,7 @@ public class LoginActivity extends Activity {
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						xaveyToast
-								.xaveyToast(null,
-										"JSONException occurs when reading authenticate.json");
+						xaveyToast.xaveyToast(null, "JSONException occurs when reading authenticate.json");
 					}
 					startActivity(itt);
 					finish();
@@ -199,9 +194,7 @@ public class LoginActivity extends Activity {
 						// --------- following is new code
 					} else {
 						// offline mode
-						String userID = dbHelper
-								.getUserIDByUserName(edtUserName.getText()
-										.toString());
+						String userID = dbHelper.getUserIDByUserName(edtUserName.getText().toString());
 						if (userID.length() != 0) {
 							User user = dbHelper.getUserByUserID(userID);
 							String userTypedPassword = StringEncrytDecryManager

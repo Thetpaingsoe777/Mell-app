@@ -2,26 +2,21 @@ package com.xavey.android.util;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.SocketException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
-import org.json.JSONArray;
-
-import com.xavey.android.LoginActivity;
-import com.xavey.android.ShowDocumentDetailActivity;
-import com.xavey.android.model.RequestMethod;
-import com.xavey.android.model.RestClient;
-
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.xavey.android.ApplicationValues;
+import com.xavey.android.ApplicationValues.LOGIN_TYPE;
+import com.xavey.android.model.RequestMethod;
+import com.xavey.android.model.RestClient;
 
 public class ConnectionDetector {
 
@@ -40,7 +35,7 @@ public class ConnectionDetector {
 
 		ConnectivityManager connectivity = (ConnectivityManager) _context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectivity != null) {
+		if (connectivity != null && ApplicationValues.CURRENT_LOGIN_MODE!=LOGIN_TYPE.DEMO_LOGIN) {
 //			NetworkInfo[] info = connectivity.getAllNetworkInfo();
 //			if (info != null)
 //				for (int i = 0; i < info.length; i++)
@@ -56,8 +51,6 @@ public class ConnectionDetector {
 			}
 		}
 		return false;
-
-		
 	}
 
 	public boolean isURLReachable(String url_) {
@@ -132,13 +125,18 @@ public class ConnectionDetector {
 	// 9.7.2014
 	public boolean isMyURLReachable(String url, int timeOut){
 		boolean reachable = false;
-        try {
-            reachable = InetAddress.getByName(url).isReachable(timeOut);
-        } catch (Exception e) {
-            // wifi ava but not data connection ... known exception is UnknownHostException // 
-        	e.printStackTrace();
-            return false;
-        }
+		try {
+		    URL url_ = new URL("http://"+url);
+		    HttpURLConnection urlc = (HttpURLConnection) url_.openConnection();
+		    urlc.setConnectTimeout(timeOut); // mTimeout is in seconds
+		    urlc.connect();
+		    if (urlc.getResponseCode() == 200) {
+		        reachable = true;
+		    }
+		} catch (Exception e1) {
+		    e1.printStackTrace();
+		    return false;
+		}
 		return reachable;
 	}
 
@@ -175,8 +173,6 @@ public class ConnectionDetector {
 			RestClient c = new RestClient(url);
 			try {
 				c.Execute(RequestMethod.GET);
-				
-				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
