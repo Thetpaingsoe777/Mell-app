@@ -2344,6 +2344,10 @@ public class JSONReader {
 						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
 						theMatrixLayout.setTag(R.id.layout_id,
 								"theMatrixLayout");
+						
+						//String type = fields.get("column_normal"); // <-- to add
+						String type= "column_normal";
+						
 
 						// <dataset_v stuffs>
 						JSONObject field_dataset_v = (JSONObject) fields
@@ -2630,8 +2634,7 @@ public class JSONReader {
 					else if (fields.get(key).equals("matrix_option")) {
 						ScrollView scroll = new ScrollView(activity);
 						scroll.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.WRAP_CONTENT));
+								LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 						LinearLayout parentLayout = new LinearLayout(activity);
 						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 						LayoutParams parentLayoutParams = new LayoutParams(
@@ -2848,7 +2851,7 @@ public class JSONReader {
 						TextView blankText = new TextView(activity);
 						blankText.setLayoutParams(new LayoutParams(
 								cell_row_width, cell_column_height));
-						blankText.setText("     ");
+						blankText.setText("   -   ");
 						// row_label_column_set is the left vertical column
 						blankLayout.addView(blankText);
 						row_label_column_set.addView(blankLayout);
@@ -2971,13 +2974,11 @@ public class JSONReader {
 
 								LinearLayout singleRadioLayout = new LinearLayout(
 										activity);
-								singleRadioLayout
-										.setLayoutParams(new LayoutParams(
+								singleRadioLayout.setLayoutParams(new LayoutParams(
 												cell_column_width,
 												cell_column_height));
 								singleRadioLayout.setGravity(Gravity.CENTER);
-								singleRadioLayout
-										.setTag(R.id.layout_id, "cell");
+								singleRadioLayout.setTag(R.id.layout_id, "cell");
 								RadioButton rb = new RadioButton(activity);
 								LayoutParams RadioParams = new LayoutParams(
 										LayoutParams.WRAP_CONTENT,
@@ -4965,10 +4966,8 @@ public class JSONReader {
 		} else if (linearLayout.getTag(R.id.layout_id).toString()
 				.equals("radioLayout")) {
 			for (int y = 0; y < linearLayout.getChildCount(); y++) {
-
 				Class<?> subClass = (Class<?>) linearLayout.getChildAt(y)
 						.getClass();
-
 				if (subClass.getName().equals("android.widget.RadioGroup")) {
 					// radio
 					RadioGroup radioGroup = (RadioGroup) linearLayout
@@ -4993,10 +4992,8 @@ public class JSONReader {
 						.getClass();
 				if (subClass.getName().equals("android.widget.TextView")) {
 					TextView textView = (TextView) linearLayout.getChildAt(z);
-
 					// following if else is just to categorize the
 					// textView
-
 				} else if (subClass.getName().equals("android.widget.CheckBox")) {
 					CheckBox checkBox = (CheckBox) linearLayout.getChildAt(z);
 					if (checkBox.isChecked()) {

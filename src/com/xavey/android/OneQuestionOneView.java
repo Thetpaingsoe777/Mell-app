@@ -392,23 +392,7 @@ public class OneQuestionOneView extends FragmentActivity {
 									// pass
 									// logic testing
 									// reverse
-									/*
-									 * LinearLayout nextLayout_ =
-									 * layoutList.get(newPosition); boolean
-									 * isInvolvedRef = isFieldInvolvedReference
-									 * (nextLayout_); if(isInvolvedRef){ String
-									 * next_ref = getReferenceFromParrentLayout
-									 * (nextLayout_); LinearLayout ref_layout =
-									 * getRefLayout(next_ref, layoutList);
-									 * JSONArray next_cond =
-									 * getNextConditionFromParrentLayout
-									 * (nextLayout_); String
-									 * value_from_ref_layout =
-									 * jsonReader.readValueFromLayout
-									 * (ref_layout); boolean isNeedToSkip =
-									 * isNeedToSkip(next_cond,
-									 * value_from_ref_layout); newPosition++; }
-									 */
+
 									// ------------------------------------------------------
 									navLeftToRight(newPosition, currentFieldID);
 
@@ -416,11 +400,11 @@ public class OneQuestionOneView extends FragmentActivity {
 									// errorMsg.setText("");
 								}
 							}
-							//----
+							// ----
 							else if (tagID.equals("checkBoxLayout")) {
 								navLeftToRight(newPosition, currentFieldID);
 							}
-							//----
+							// ----
 							else if (tagID.equals("numberSetLayout")
 									|| tagID.equals("textSetLayout")) {
 
@@ -665,7 +649,8 @@ public class OneQuestionOneView extends FragmentActivity {
 															.get(newPosition);
 													if (!isSubmitLayout(nextLayout_))
 														hideKeyboard(nextLayout_);
-													navLeftToRight(newPosition,currentFieldID);
+													navLeftToRight(newPosition,
+															currentFieldID);
 												} else {
 
 													// skip to other questions
@@ -681,203 +666,158 @@ public class OneQuestionOneView extends FragmentActivity {
 														currentFieldID);
 											}
 										}
-										
+
 									}
 								}
 							}
 							// radio ends
 							// checkboxes start
-							/*else if (tagID.equals("checkBoxLayout")) {
-								for (int i = 0; i < currentLayout
-										.getChildCount(); i++) {
-									String className = currentLayout
-											.getChildAt(i).getClass().getName()
-											.toString();
-									
-									if(className.equals("android.widget.ScrollView")){
-										ScrollView scrollView = (ScrollView) currentLayout
-												.getChildAt(i);
-										LinearLayout checkBoxLayout = (LinearLayout) scrollView.getChildAt(0);
-										
-										boolean isSelectedAnyCheckBox = isSelectedAnyCheckBox(checkBoxLayout);
-										boolean isFieldRequired = Boolean
-												.parseBoolean(currentLayout.getTag(
-														R.id.field_required_id)
-														.toString());
-										
-										if(isSelectedAnyCheckBox){
-											// checked something
-											for(int cbCount=0; cbCount<checkBoxLayout.getChildCount(); cbCount++){
-												LinearLayout checkBoxLine = (LinearLayout) checkBoxLayout.getChildAt(cbCount);
-												CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
-												EditText extra = getExtraFromCheckBoxLine(checkBoxLine);
-												
-												boolean isChecked = cb.isChecked();
-												boolean extra_value_required = Boolean.parseBoolean(cb.getTag(R.id.extra_required).toString());
-												boolean isExtraValueTRUE = false; // <-- what's that? no idea..
-												boolean isExtraValueTyped = false;
-												if(extra.getText().toString().length()>0){
-													isExtraValueTyped |= true;
-												}
-												
-												// gotta decide here what to do
-												if(isChecked){
-													
-												}
-												
-											}	
-										}else{
-											// checked nothing
-											if(isFieldRequired){
-												// error , block
-												navStayStill(tagID, className, field_error_msg, lLManager, newPosition, newPosition, force_stop_r_l)
-											}else{
-												//
-												navLeftToRight(newPosition, className);
-											}
-											
-										}
-										
-									}
-
-									
-									
-									String errMessage = "";
-
-										
-
-										RadioGroup radioGroup = (RadioGroup) currentLayout
-												.getChildAt(i);
-
-										RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-
-										isSelectedAnyRadio = selectedButton != null ? true
-												: false;
-
-										if (isSelectedAnyRadio
-												&& selectedButton
-														.getTag(R.id.extra) != null) {
-											// Extra Value
-											isExtraValueTRUE = Boolean
-													.parseBoolean(selectedButton
-															.getTag(R.id.extra)
-															.toString());
-											if (selectedButton
-													.getTag(R.id.extra_required) != null) {
-												extra_value_required = Boolean
-														.parseBoolean(selectedButton
-																.getTag(R.id.extra_required)
-																.toString());
-											}
-										}
-
-										String fieldID = currentLayout.getTag(
-												R.id.field_id).toString();
-										Log.i("fieldID", fieldID);
-
-										boolean forceStopL_R = false;
-
-										String field_skip = "";
-										if (selectedButton != null
-												&& selectedButton
-														.getTag(R.id.field_skip) != null)
-											field_skip = selectedButton.getTag(
-													R.id.field_skip).toString();
-										if (extra_value_required) {
-											LinearLayout selectedButtonLine = (LinearLayout) selectedButton
-													.getParent();
-											for (int k = 0; k < selectedButtonLine
-													.getChildCount(); k++) {
-												View buttonLineChild = selectedButtonLine
-														.getChildAt(k);
-												if (buttonLineChild
-														.getClass()
-														.getName()
-														.equals("android.widget.EditText")) {
-													EditText selectedExtra = (EditText) buttonLineChild;
-													if (selectedExtra.getText()
-															.toString()
-															.length() > 0)
-														isExtraValueTyped = true;
-												}
-											}
-										}
-
-										// start stay still validation
-										if (isFieldRequired
-												&& !isSelectedAnyRadio) {
-											// TODO Get error message from
-											// Question
-											errMessage = "Required Parent.";
-										}
-
-										if (isExtraValueTRUE
-												&& extra_value_required) {
-											if (!isExtraValueTyped) {
-												errMessage = "Required Child Extra";
-											}
-										}
-										if (ApplicationValues.IS_RECORDING_NOW) {
-											forceStopL_R = true;
-											
-											 * navStayStill( direction,
-											 * currentFieldID,
-											 
-											errMessage = "Audio recording is needed to stop.";
-											
-											 * lLManager, newPosition,
-											 * currentPosition, forceStopL_R);
-											 
-										}
-										// end stay still validation
-
-										if (errMessage.length() > 0) { // block
-											navStayStill(direction, fieldID,
-													errMessage, lLManager,
-													newPosition,
-													currentPosition,
-													forceStopL_R);
-										} else {
-											// pass
-											if (field_skip.length() > 0) {
-												if (field_skip.equals("submit")) {
-													// skip to submit
-													newPosition = layoutList
-															.size() - 1;
-
-													int range = newPosition
-															- currentPosition;
-													navigator.addLast(range);
-													used_field_ids
-															.addLast(currentFieldID);
-													vPager.setCurrentItem(newPosition);
-													currentPosition = newPosition;
-													previousIndex = currentPosition;
-													// hide keyboard
-													LinearLayout nextLayout_ = layoutList
-															.get(newPosition);
-													if (!isSubmitLayout(nextLayout_))
-														hideKeyboard(nextLayout_);
-													navLeftToRight(newPosition,currentFieldID);
-												} else {
-
-													// skip to other questions
-													// logic
-													skipID = Integer
-															.parseInt(field_skip);
-													newPosition = skipID - 1;
-													navLeftToRight(newPosition,
-															currentFieldID);
-												}
-											} else {
-												navLeftToRight(newPosition,
-														currentFieldID);
-											}
-										}
-										
-									
-								}
-							}*/
+							/*
+							 * else if (tagID.equals("checkBoxLayout")) { for
+							 * (int i = 0; i < currentLayout .getChildCount();
+							 * i++) { String className = currentLayout
+							 * .getChildAt(i).getClass().getName() .toString();
+							 * 
+							 * if(className.equals("android.widget.ScrollView")){
+							 * ScrollView scrollView = (ScrollView)
+							 * currentLayout .getChildAt(i); LinearLayout
+							 * checkBoxLayout = (LinearLayout)
+							 * scrollView.getChildAt(0);
+							 * 
+							 * boolean isSelectedAnyCheckBox =
+							 * isSelectedAnyCheckBox(checkBoxLayout); boolean
+							 * isFieldRequired = Boolean
+							 * .parseBoolean(currentLayout.getTag(
+							 * R.id.field_required_id) .toString());
+							 * 
+							 * if(isSelectedAnyCheckBox){ // checked something
+							 * for(int cbCount=0;
+							 * cbCount<checkBoxLayout.getChildCount();
+							 * cbCount++){ LinearLayout checkBoxLine =
+							 * (LinearLayout)
+							 * checkBoxLayout.getChildAt(cbCount); CheckBox cb =
+							 * getCheckBoxFromCheckBoxLine(checkBoxLine);
+							 * EditText extra =
+							 * getExtraFromCheckBoxLine(checkBoxLine);
+							 * 
+							 * boolean isChecked = cb.isChecked(); boolean
+							 * extra_value_required =
+							 * Boolean.parseBoolean(cb.getTag
+							 * (R.id.extra_required).toString()); boolean
+							 * isExtraValueTRUE = false; // <-- what's that? no
+							 * idea.. boolean isExtraValueTyped = false;
+							 * if(extra.getText().toString().length()>0){
+							 * isExtraValueTyped |= true; }
+							 * 
+							 * // gotta decide here what to do if(isChecked){
+							 * 
+							 * }
+							 * 
+							 * } }else{ // checked nothing if(isFieldRequired){
+							 * // error , block navStayStill(tagID, className,
+							 * field_error_msg, lLManager, newPosition,
+							 * newPosition, force_stop_r_l) }else{ //
+							 * navLeftToRight(newPosition, className); }
+							 * 
+							 * }
+							 * 
+							 * }
+							 * 
+							 * 
+							 * 
+							 * String errMessage = "";
+							 * 
+							 * 
+							 * 
+							 * RadioGroup radioGroup = (RadioGroup)
+							 * currentLayout .getChildAt(i);
+							 * 
+							 * RadioButton selectedButton =
+							 * getSelectedRadioButtonMyRadioGroup(radioGroup);
+							 * 
+							 * isSelectedAnyRadio = selectedButton != null ?
+							 * true : false;
+							 * 
+							 * if (isSelectedAnyRadio && selectedButton
+							 * .getTag(R.id.extra) != null) { // Extra Value
+							 * isExtraValueTRUE = Boolean
+							 * .parseBoolean(selectedButton .getTag(R.id.extra)
+							 * .toString()); if (selectedButton
+							 * .getTag(R.id.extra_required) != null) {
+							 * extra_value_required = Boolean
+							 * .parseBoolean(selectedButton
+							 * .getTag(R.id.extra_required) .toString()); } }
+							 * 
+							 * String fieldID = currentLayout.getTag(
+							 * R.id.field_id).toString(); Log.i("fieldID",
+							 * fieldID);
+							 * 
+							 * boolean forceStopL_R = false;
+							 * 
+							 * String field_skip = ""; if (selectedButton !=
+							 * null && selectedButton .getTag(R.id.field_skip)
+							 * != null) field_skip = selectedButton.getTag(
+							 * R.id.field_skip).toString(); if
+							 * (extra_value_required) { LinearLayout
+							 * selectedButtonLine = (LinearLayout)
+							 * selectedButton .getParent(); for (int k = 0; k <
+							 * selectedButtonLine .getChildCount(); k++) { View
+							 * buttonLineChild = selectedButtonLine
+							 * .getChildAt(k); if (buttonLineChild .getClass()
+							 * .getName() .equals("android.widget.EditText")) {
+							 * EditText selectedExtra = (EditText)
+							 * buttonLineChild; if (selectedExtra.getText()
+							 * .toString() .length() > 0) isExtraValueTyped =
+							 * true; } } }
+							 * 
+							 * // start stay still validation if
+							 * (isFieldRequired && !isSelectedAnyRadio) { //
+							 * TODO Get error message from // Question
+							 * errMessage = "Required Parent."; }
+							 * 
+							 * if (isExtraValueTRUE && extra_value_required) {
+							 * if (!isExtraValueTyped) { errMessage =
+							 * "Required Child Extra"; } } if
+							 * (ApplicationValues.IS_RECORDING_NOW) {
+							 * forceStopL_R = true;
+							 * 
+							 * navStayStill( direction, currentFieldID,
+							 * 
+							 * errMessage =
+							 * "Audio recording is needed to stop.";
+							 * 
+							 * lLManager, newPosition, currentPosition,
+							 * forceStopL_R);
+							 * 
+							 * } // end stay still validation
+							 * 
+							 * if (errMessage.length() > 0) { // block
+							 * navStayStill(direction, fieldID, errMessage,
+							 * lLManager, newPosition, currentPosition,
+							 * forceStopL_R); } else { // pass if
+							 * (field_skip.length() > 0) { if
+							 * (field_skip.equals("submit")) { // skip to submit
+							 * newPosition = layoutList .size() - 1;
+							 * 
+							 * int range = newPosition - currentPosition;
+							 * navigator.addLast(range); used_field_ids
+							 * .addLast(currentFieldID);
+							 * vPager.setCurrentItem(newPosition);
+							 * currentPosition = newPosition; previousIndex =
+							 * currentPosition; // hide keyboard LinearLayout
+							 * nextLayout_ = layoutList .get(newPosition); if
+							 * (!isSubmitLayout(nextLayout_))
+							 * hideKeyboard(nextLayout_);
+							 * navLeftToRight(newPosition,currentFieldID); }
+							 * else {
+							 * 
+							 * // skip to other questions // logic skipID =
+							 * Integer .parseInt(field_skip); newPosition =
+							 * skipID - 1; navLeftToRight(newPosition,
+							 * currentFieldID); } } else {
+							 * navLeftToRight(newPosition, currentFieldID); } }
+							 * } }
+							 */
 							// checkboxes ends
 							else if (tagID.equals("matrixCheckListLayout")
 									|| tagID.equals("matrixOptionLayout")) {
@@ -891,6 +831,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 								boolean isSelectedCountValid = true;
 								boolean whileController = true;
+
+								ArrayList<String> selectedValueList = new ArrayList<String>();
 
 								if (isFieldRequired) {
 									for (int i = 0; i < currentLayout
@@ -937,7 +879,7 @@ public class OneQuestionOneView extends FragmentActivity {
 																		String maxRangeString = columnLayout
 																				.getTag(R.id.dataset_max_range)
 																				.toString();
-																		int maxRange = 6;
+																		int maxRange = 100; //:TODO to get value from JSON
 																		if (maxRangeString
 																				.equals("#no_value#")) {
 																			Toast.makeText(
@@ -959,6 +901,8 @@ public class OneQuestionOneView extends FragmentActivity {
 																								// from
 																								// tag
 
+																		selectedValueList
+																				.size();
 																		for (int m = 0; m < columnLayout
 																				.getChildCount(); m++) {
 																			View eachColumnChild = columnLayout
@@ -980,6 +924,11 @@ public class OneQuestionOneView extends FragmentActivity {
 																						if (radioBtn
 																								.isChecked()) {
 																							selectedCount++;
+																							MatrixCell selectedCell = (MatrixCell) radioBtn
+																									.getTag(R.id.matrix_cell);
+																							selectedValueList
+																									.add(selectedCell
+																											.getFieldSkip());
 																						}
 																					}
 																				}
@@ -991,7 +940,6 @@ public class OneQuestionOneView extends FragmentActivity {
 																			dataset_error_msg = columnErorMsg;
 																			break;
 																		}
-
 																	}
 																}
 																whileController = false;
@@ -1004,180 +952,63 @@ public class OneQuestionOneView extends FragmentActivity {
 									}
 								}
 
+								boolean shouldSkip = true;
+								for (String selectedSingleValue : selectedValueList) {
+									if (selectedSingleValue.equals("")) { // <-
+																			// blank
+																			// string
+																			// means
+																			// no
+																			// skip
+										shouldSkip &= false;
+									}
+								}
+
 								if (!isValid || !isSelectedCountValid) {
 									// block
-									
+
 									navStayStill(direction, currentFieldID,
 											field_error_msg, lLManager,
 											newPosition, currentPosition, false);
 								} else {
 									// pass
 
-									navLeftToRight(newPosition, currentFieldID);
+									if (shouldSkip) {
+										// skip to submit
+										newPosition = layoutList.size() - 1;
 
+										int range = newPosition
+												- currentPosition;
+										navigator.addLast(range);
+										used_field_ids.addLast(currentFieldID);
+										vPager.setCurrentItem(newPosition);
+										currentPosition = newPosition;
+										previousIndex = currentPosition;
+										// hide keyboard
+										LinearLayout nextLayout_ = layoutList
+												.get(newPosition);
+										if (!isSubmitLayout(nextLayout_))
+											hideKeyboard(nextLayout_);
+									}
+									navLeftToRight(newPosition,
+											currentFieldID);
 								}
 							}
 
 							else {
-								
 								navLeftToRight(newPosition, currentFieldID);
-
 							}
 						} else {
-							
+
 							navStayStill(direction, currentFieldID,
 									field_error_msg, lLManager, newPosition,
 									currentPosition, false);
 						}
-					}
-					else{
+					} else {
 						// pass all
 						navLeftToRight(newPosition, currentFieldID);
 					}
-					/*else {
-						// here will be fragments that doesn't need validation
-						// pass
-						// another question is where to go if radio layout
-						// (skip logic)
 
-						if (currentLayout.getTag(R.id.layout_id).toString()
-								.equals("radioLayout")) { // TODO: radio
-															// checking if else
-							for (int i = 0; i < currentLayout.getChildCount(); i++) {
-								String className = currentLayout.getChildAt(i)
-										.getClass().getName().toString();
-								if (className
-										.equals("android.widget.RadioGroup")) {
-									// radio
-
-									boolean extra_value_required = false;
-									boolean isExtraValueTRUE = false;
-									boolean isExtraValueTyped = false;
-
-									RadioGroup radioGroup = (RadioGroup) currentLayout
-											.getChildAt(i);
-
-									RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
-									if (selectedButton.getTag(R.id.extra) != null) {
-										// Extra Value
-										isExtraValueTRUE = Boolean
-												.parseBoolean(selectedButton
-														.getTag(R.id.extra)
-														.toString());
-										if (selectedButton
-												.getTag(R.id.extra_required) != null) {
-											extra_value_required = Boolean
-													.parseBoolean(selectedButton
-															.getTag(R.id.extra_required)
-															.toString());
-										}
-									}
-
-									String fieldID = currentLayout.getTag(
-											R.id.field_id).toString();
-									Log.i("fieldID", fieldID);
-
-									String field_skip = selectedButton.getTag(
-											R.id.field_skip).toString();
-
-									if (extra_value_required) {
-										LinearLayout selectedButtonLine = (LinearLayout) selectedButton
-												.getParent();
-										for (int k = 0; k < selectedButtonLine
-												.getChildCount(); k++) {
-											View buttonLineChild = selectedButtonLine
-													.getChildAt(k);
-											if (buttonLineChild
-													.getClass()
-													.getName()
-													.equals("android.widget.EditText")) {
-												EditText selectedExtra = (EditText) buttonLineChild;
-												if (selectedExtra.getText()
-														.toString().length() > 0)
-													isExtraValueTyped = true;
-											}
-										}
-									}
-
-									if (isExtraValueTRUE
-											&& extra_value_required) {
-										if (!isExtraValueTyped) {
-											// block
-											navStayStill(
-													LEFT_TO_RIGHT,
-													fieldID,
-													"Extra value is needed for selected radio button",
-													lLManager, newPosition,
-													currentPosition, false);
-										} else {
-											// pass
-											navLeftToRight(newPosition,
-													currentFieldID);
-
-										}
-										// else{
-										// // block
-										// navigator.addLast(0);
-										// used_field_ids
-										// .addLast(currentFieldID);
-										// vPager.setCurrentItem(currentPosition);
-										// toast.xaveyToast(null, "");
-										// currentPosition = previousIndex;
-										// }
-
-									} else if (ApplicationValues.IS_RECORDING_NOW) {
-										boolean forceStopL_R = true;
-										navStayStill(
-												direction,
-												currentFieldID,
-												"Audio recording is needed to stop.",
-												lLManager, newPosition,
-												currentPosition, forceStopL_R);
-									} else if (field_skip.length() > 0) {
-										if (field_skip.equals("submit")) {
-											// skip logic
-											// skip to submit
-
-											newPosition = layoutList.size() - 1;
-
-											navLeftToRight(newPosition,
-													currentFieldID);
-
-										} else {
-
-											// skip logic
-											skipID = Integer
-													.parseInt(field_skip);
-											newPosition = skipID - 1;
-											navLeftToRight(newPosition,
-													currentFieldID);
-
-										}
-									} else {
-
-										navLeftToRight(newPosition,
-												currentFieldID);
-
-									}
-
-									
-									 * TODO : navStayStill if (errorMsg != null)
-									 * errorMsg.setLayoutParams(new
-									 * LayoutParams( LayoutParams.WRAP_CONTENT,
-									 * 0));
-									 
-								}
-							}
-						} else {
-							// not radio
-							// no need validation
-
-							navLeftToRight(newPosition, currentFieldID);
-							// TODO : navStayStill
-							// if (errorMsg != null)
-							// errorMsg.setText("");
-						}
-					}*/
 				}
 
 				@Override
@@ -1407,7 +1238,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 	private LinearLayout produceSubmitLayout() {
 		// there is no inner layout in SubmitLayout
-		
+
 		LinearLayout lL = new LinearLayout(this);
 		lL.setOrientation(LinearLayout.VERTICAL);
 		lL.setTag(R.id.layout_id, "submitLayout");
@@ -1518,7 +1349,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					document.setForm_id(currentForm.getForm_id());
 					document.setCreated_worker(ApplicationValues.loginUser
 							.getUser_id());
-					
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -1599,7 +1430,9 @@ public class OneQuestionOneView extends FragmentActivity {
 				// -----
 				isInternetAvailable = connectionDetector
 						.isConnectingToInternet();
-				if (isInternetAvailable && ApplicationValues.CURRENT_LOGIN_MODE.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
+				if (isInternetAvailable
+						&& ApplicationValues.CURRENT_LOGIN_MODE
+								.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
 					try {
 						syncManager = new SyncManager(OneQuestionOneView.this);
 						if (mediaToSubmit.size() > 0) {
@@ -1714,7 +1547,8 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 			parentLayout.getChildAt(1);
 
-			if (linearLayout.getTag(R.id.layout_id).toString().equals("textLayout")) {
+			if (linearLayout.getTag(R.id.layout_id).toString()
+					.equals("textLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String value = "";
 				EditText edt1 = null;
@@ -1769,9 +1603,10 @@ public class OneQuestionOneView extends FragmentActivity {
 								.getChildAt(y);
 						RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 						String value = "";
-						if(selectedButton!=null){
-						 value = selectedButton.getTag(R.id.radio_value)
-								.toString();}
+						if (selectedButton != null) {
+							value = selectedButton.getTag(R.id.radio_value)
+									.toString();
+						}
 
 						for (int u = 0; u < radioGroup.getChildCount(); u++) {
 							LinearLayout layoutLine = (LinearLayout) radioGroup
@@ -1827,32 +1662,36 @@ public class OneQuestionOneView extends FragmentActivity {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String field_label = linearLayout.getTag(R.id.field_label_id)
 						.toString();
-				
+
 				LinearLayout checkBoxLayout = linearLayout;
-				for(int c = 0; c<checkBoxLayout.getChildCount(); c++){
+				for (int c = 0; c < checkBoxLayout.getChildCount(); c++) {
 					LinearLayout checkBoxLine = null;
 					View cbLayoutChild = checkBoxLayout.getChildAt(c);
-					if(cbLayoutChild.getClass().getName().equals("android.widget.LinearLayout")){
-						checkBoxLine = (LinearLayout) checkBoxLayout.getChildAt(c);
+					if (cbLayoutChild.getClass().getName()
+							.equals("android.widget.LinearLayout")) {
+						checkBoxLine = (LinearLayout) checkBoxLayout
+								.getChildAt(c);
 						CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
 						EditText extra = getExtraFromCheckBoxLine(checkBoxLine);
 						if (cb.isChecked()) {
-							String value = cb.getTag(R.id.checkbox_value).toString();
+							String value = cb.getTag(R.id.checkbox_value)
+									.toString();
 							// checkedValues.put(value);
-							if(extra!=null && extra.getText().toString().length()>0){
-								value += ":"+extra.getText().toString();
+							if (extra != null
+									&& extra.getText().toString().length() > 0) {
+								value += ":" + extra.getText().toString();
 							}
 							checkedValues += "|" + value;
-						}	
+						}
 					}
-					
+
 				}
-				
-				
+
 				if (checkedValues.length() > 0)
 					checkedValues = checkedValues.substring(1); // <- it deletes
 																// the 1st char
-																// of the String ( | )
+																// of the String
+																// ( | )
 				else
 					checkedValues = "-";
 				map.put(key, checkedValues);
@@ -1972,8 +1811,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					map.put(key, photoPreview.getTag().toString());
 				else
 					map.put(key, "-");
-			} 
-			else if (linearLayout.getTag(R.id.layout_id).toString()
+			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("matrixTextLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String inputValues = "";
@@ -2037,11 +1875,12 @@ public class OneQuestionOneView extends FragmentActivity {
 													MatrixCell cell = (MatrixCell) tb
 															.getTag(R.id.matrix_cell);
 													inputValues += "|"
-															/*+ "h"
-															+ cell.getH_index()
-															+ ""
-															+ "v"
-															+ cell.getV_index()*/
+															/*
+															 * + "h" +
+															 * cell.getH_index()
+															 * + "" + "v" +
+															 * cell.getV_index()
+															 */
 															+ cell.getValue()
 															+ ":"
 															+ tb.getText()
@@ -2068,8 +1907,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				map.put(key, inputValues);
-			}
-			else if (linearLayout.getTag(R.id.layout_id).toString()
+			} else if (linearLayout.getTag(R.id.layout_id).toString()
 					.equals("matrixNumberLayout")) {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String inputValues = "";
@@ -2133,11 +1971,12 @@ public class OneQuestionOneView extends FragmentActivity {
 													MatrixCell cell = (MatrixCell) tb
 															.getTag(R.id.matrix_cell);
 													inputValues += "|"
-															/*+ "h"
-															+ cell.getH_index()
-															+ ""
-															+ "v"
-															+ cell.getV_index()*/
+															/*
+															 * + "h" +
+															 * cell.getH_index()
+															 * + "" + "v" +
+															 * cell.getV_index()
+															 */
 															+ cell.getValue()
 															+ ":"
 															+ tb.getText()
@@ -2226,13 +2065,13 @@ public class OneQuestionOneView extends FragmentActivity {
 												if (cb.isChecked()) {
 													MatrixCell cell = (MatrixCell) cb
 															.getTag(R.id.matrix_cell);
-													checkedValues += "|" 
-															/*+ "h"
-															+ cell.getH_index()
-															+ "" + "v"
-															+ cell.getV_index()*/
-															+ cell.getValue()
-															+ ":"
+													checkedValues += "|"
+													/*
+													 * + "h" + cell.getH_index()
+													 * + "" + "v" +
+													 * cell.getV_index()
+													 */
+													+ cell.getValue() + ":"
 															+ cell.getValue(); // <-h0v0
 												}
 											}
@@ -2320,13 +2159,13 @@ public class OneQuestionOneView extends FragmentActivity {
 												if (rb.isChecked()) {
 													MatrixCell cell = (MatrixCell) rb
 															.getTag(R.id.matrix_cell);
-													checkedValues += "|" 
-															/*+ "h"
-															+ cell.getH_index()
-															+ "" + "v"
-															+ cell.getV_index()*/
-															+ cell.getValue()
-															+ ":"
+													checkedValues += "|"
+													/*
+													 * + "h" + cell.getH_index()
+													 * + "" + "v" +
+													 * cell.getV_index()
+													 */
+													+ cell.getValue() + ":"
 															+ cell.getValue(); // <-h0v0
 												}
 											}
@@ -2516,7 +2355,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				String key = linearLayout.getTag(R.id.field_id).toString();
 				String values = "";
 				LinearLayoutManager linearLayoutManager = new LinearLayoutManager();
-				
+
 				try {
 					HashMap<String, Object> test_ = linearLayoutManager
 							.test(linearLayout);
@@ -2778,12 +2617,12 @@ public class OneQuestionOneView extends FragmentActivity {
 					nextConditionType = innerLayout.getTag(R.id.next_ref_type)
 							.toString();
 				}
-			}
-			else if (parrentLayout.getChildAt(i).getClass().getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
 				ScrollView scrollView = (ScrollView) parrentLayout
 						.getChildAt(i);
-				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0); 
+				LinearLayout linearLayout = (LinearLayout) scrollView
+						.getChildAt(0);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
 						&& !linearLayout.getTag(R.id.layout_id).toString()
@@ -2821,12 +2660,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						return nextCondition;
 					}
 				}
-			}
-			else if (parrentLayout.getChildAt(i).getClass().getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
 				ScrollView scrollView = (ScrollView) parrentLayout
 						.getChildAt(i);
-				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout linearLayout = (LinearLayout) scrollView
+						.getChildAt(0);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
 						&& !linearLayout.getTag(R.id.layout_id).toString()
@@ -2879,11 +2718,12 @@ public class OneQuestionOneView extends FragmentActivity {
 		return isNeedToSkip;
 	}
 
-	private boolean isNeedToSkipIfLessThan(JSONArray next_cond, int valueFromRefLayout) {
+	private boolean isNeedToSkipIfLessThan(JSONArray next_cond,
+			int valueFromRefLayout) {
 		boolean isNeedToSkip = false;
 		try {
 			int next_condValue = Integer.parseInt(next_cond.getString(0));
-			if(valueFromRefLayout<=next_condValue){
+			if (valueFromRefLayout <= next_condValue) {
 				isNeedToSkip = true;
 			}
 
@@ -2924,12 +2764,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						reference = innerLayout.getTag(R.id.next_ref)
 								.toString();
 				}
-			}
-			else if (parrentLayout.getChildAt(i).getClass().getName()
+			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
 				ScrollView scrollView = (ScrollView) parrentLayout
 						.getChildAt(i);
-				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout linearLayout = (LinearLayout) scrollView
+						.getChildAt(0);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
 						&& !linearLayout.getTag(R.id.layout_id).toString()
@@ -2964,12 +2804,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						next_cond_type = innerLayout.getTag(R.id.next_ref_cond)
 								.toString();
 				}
-			}
-			else if (parrentlayout.getChildAt(i).getClass().getName()
+			} else if (parrentlayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
 				ScrollView scrollView = (ScrollView) parrentlayout
 						.getChildAt(i);
-				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout linearLayout = (LinearLayout) scrollView
+						.getChildAt(0);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
 						&& !linearLayout.getTag(R.id.layout_id).toString()
@@ -3006,17 +2846,18 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (innerLayout.getTag(R.id.next_ref) != null)
 						next_ref = innerLayout.getTag(R.id.next_ref).toString();
 				}
-			}else if (nextParrentLayout_.getChildAt(i).getClass().getName()
+			} else if (nextParrentLayout_.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
 				ScrollView scrollView = (ScrollView) nextParrentLayout_
 						.getChildAt(i);
-				LinearLayout linearLayout = (LinearLayout) scrollView.getChildAt(0);
+				LinearLayout linearLayout = (LinearLayout) scrollView
+						.getChildAt(0);
 				LinearLayout innerLayout = null;
 				if (linearLayout.getTag(R.id.layout_id) != null
 						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
-					if (innerLayout.getTag(R.id.next_ref) != null){
+					if (innerLayout.getTag(R.id.next_ref) != null) {
 						next_ref = innerLayout.getTag(R.id.next_ref).toString();
 						break;
 					}
@@ -3050,7 +2891,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					LinearLayout ref_inner_layout = getInnerLayout(ref_layout);
 					if (nextConditionType.equals("count")) {
 						// count is here
-						
+
 						int count = 0;
 						if (ref_inner_layout.getTag(R.id.layout_id).toString()
 								.equals("checkBoxLayout")) {
@@ -3081,30 +2922,35 @@ public class OneQuestionOneView extends FragmentActivity {
 						try {
 							HashMap<String, Object> test_ = linearLayoutManager
 									.test(ref_inner_layout);
-							ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_.get("data");
+							ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test_
+									.get("data");
 
 							for (HashMap<String, String> singleMap : data) {
 								Set<String> keys = singleMap.keySet();
 								String singleKey = keys.toArray()[0].toString();
-								if(singleKey.equals(itemValue)){
-									valueFromRefLayout = Integer.parseInt(singleMap.get(singleKey));
+								if (singleKey.equals(itemValue)) {
+									valueFromRefLayout = Integer
+											.parseInt(singleMap.get(singleKey));
 								}
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
 
-						isNeedToSkip = isNeedToSkipIfLessThan(next_cond, valueFromRefLayout);
+						isNeedToSkip = isNeedToSkipIfLessThan(next_cond,
+								valueFromRefLayout);
 						if (isNeedToSkip)
 							newPosition++;
-//						isNeedToSkip = false; // to break from while loop
+						// isNeedToSkip = false; // to break from while loop
 					} else {
-//						isNeedToSkip = false;
-						String value_from_ref_layout = jsonReader.readValueFromLayout(ref_layout);
-						isNeedToSkip = isNeedToSkip(next_cond, value_from_ref_layout);
+						// isNeedToSkip = false;
+						String value_from_ref_layout = jsonReader
+								.readValueFromLayout(ref_layout);
+						isNeedToSkip = isNeedToSkip(next_cond,
+								value_from_ref_layout);
 						if (isNeedToSkip)
 							newPosition++;
-//						isNeedToSkip = false; // to break from while loop
+						// isNeedToSkip = false; // to break from while loop
 					}
 				}// nothing to do with it if it doesn't involve
 			} else {
@@ -3321,22 +3167,25 @@ public class OneQuestionOneView extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
 			alertDialogBuilder.setTitle("Confirm");
 			alertDialogBuilder.setMessage("Are you sure to end the interview?");
 			alertDialogBuilder.setCancelable(false);
 
-			alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			alertDialogBuilder.setPositiveButton("Yes",
+					new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-//					Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-//					homeIntent.addCategory(Intent.CATEGORY_HOME);
-//					homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//					startActivity(homeIntent);
-					finish();
-				}
-			});
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Intent homeIntent = new
+							// Intent(Intent.ACTION_MAIN);
+							// homeIntent.addCategory(Intent.CATEGORY_HOME);
+							// homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							// startActivity(homeIntent);
+							finish();
+						}
+					});
 			alertDialogBuilder.setNegativeButton("No",
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
@@ -3353,42 +3202,45 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	private boolean isSelectedAnyCheckBox(LinearLayout checkBoxLayout){
-		
+
+	private boolean isSelectedAnyCheckBox(LinearLayout checkBoxLayout) {
+
 		boolean isSelectedAnyCheckBox = false;
-		for(int i=0; i<checkBoxLayout.getChildCount(); i++){
-			LinearLayout checkBoxLine = (LinearLayout) checkBoxLayout.getChildAt(i);
+		for (int i = 0; i < checkBoxLayout.getChildCount(); i++) {
+			LinearLayout checkBoxLine = (LinearLayout) checkBoxLayout
+					.getChildAt(i);
 			CheckBox cb = (CheckBox) checkBoxLine.getChildAt(0);
-			if(cb.isChecked()){
+			if (cb.isChecked()) {
 				isSelectedAnyCheckBox |= true;
 			}
 		}
 		return isSelectedAnyCheckBox;
 	}
 
-	private CheckBox getCheckBoxFromCheckBoxLine(LinearLayout checkBoxLine){
+	private CheckBox getCheckBoxFromCheckBoxLine(LinearLayout checkBoxLine) {
 		View view = null;
-		for(int i=0; i<checkBoxLine.getChildCount(); i++){
-			if(checkBoxLine.getChildAt(i).getClass().getName().toString().equals("android.widget.CheckBox")){
+		for (int i = 0; i < checkBoxLine.getChildCount(); i++) {
+			if (checkBoxLine.getChildAt(i).getClass().getName().toString()
+					.equals("android.widget.CheckBox")) {
 				view = checkBoxLine.getChildAt(i);
 				break;
 			}
 		}
-		return (CheckBox)view;
+		return (CheckBox) view;
 	}
-	
-	private EditText getExtraFromCheckBoxLine(LinearLayout checkBoxLine){
+
+	private EditText getExtraFromCheckBoxLine(LinearLayout checkBoxLine) {
 		View view = null;
-		for(int i=0; i<checkBoxLine.getChildCount(); i++){
-			if(checkBoxLine.getChildAt(i).getClass().getName().toString().equals("android.widget.EditText")){
+		for (int i = 0; i < checkBoxLine.getChildCount(); i++) {
+			if (checkBoxLine.getChildAt(i).getClass().getName().toString()
+					.equals("android.widget.EditText")) {
 				view = checkBoxLine.getChildAt(i);
 				break;
 			}
 		}
-		return (EditText)view;
+		return (EditText) view;
 	}
-	
+
 	private boolean isSubmitLayout(LinearLayout linearLayout) {
 		boolean isSubmitLayout = false;
 		if (linearLayout.getTag(R.id.layout_id) != null) {
@@ -3399,26 +3251,27 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 		return isSubmitLayout;
 	}
-	
+
 	@Override
 	public void onBackPressed() {
-		
+
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 		alertDialogBuilder.setTitle("Confirm");
 		alertDialogBuilder.setMessage("Are you sure to end the interview?");
 		alertDialogBuilder.setCancelable(false);
 
-		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		alertDialogBuilder.setPositiveButton("Yes",
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-//				Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-//				homeIntent.addCategory(Intent.CATEGORY_HOME);
-//				homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//				startActivity(homeIntent);
-				finish();
-			}
-		});
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+						// homeIntent.addCategory(Intent.CATEGORY_HOME);
+						// homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						// startActivity(homeIntent);
+						finish();
+					}
+				});
 		alertDialogBuilder.setNegativeButton("No",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
@@ -3428,7 +3281,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				});
 		alertDialogBuilder.create().show();
-		
-		
+
 	}
 }
