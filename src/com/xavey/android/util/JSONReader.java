@@ -972,6 +972,7 @@ public class JSONReader {
 							cb.setTag(R.id.field_skip, skip);
 							cb.setTag(R.id.extra, extra);
 							cb.setTag(R.id.extra_required, extra_required);
+							cb.setTag(R.id.ignore_other, ignore_other);
 							cb.setTypeface(typeface.getTypeFace());
 
 							LayoutParams cbParams = new LayoutParams(
@@ -999,12 +1000,19 @@ public class JSONReader {
 							EditText extraValue = new EditText(activity);
 							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
 							cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
 								@Override
 								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+									
+								}
+							});
+							
+							cb.setOnClickListener(new OnClickListener() {
+								
+								@Override
+								public void onClick(View view___) {
+									boolean isChecked = cb.isChecked();
 									LinearLayout checkBoxLine = (LinearLayout) cb.getParent();
 									CheckBox selectedCB = (CheckBox) checkBoxLine.getChildAt(0); // <- making static so far
-									
 									EditText selectedExtra = (EditText) checkBoxLine.getChildAt(1); // <- making static so far..
 									if(selectedExtra!=null)
 									if(!isChecked){
@@ -1012,28 +1020,58 @@ public class JSONReader {
 									}else{
 										selectedExtra.setLayoutParams(extraValueLayoutParamsAppear);
 									}
-									
-									// ignore stuffs
+									// ignore stuffs\
+									LinearLayout checkBoxLayout = (LinearLayout) checkBoxLine.getParent();
 									if(selectedCB.getTag(R.id.ignore_other)!=null){
 										boolean ignore_other = Boolean.parseBoolean(selectedCB.getTag(R.id.ignore_other).toString());
 										if(ignore_other){
-											LinearLayout checkBoxLayout = (LinearLayout) checkBoxLine.getParent();
+											
 											for(int c=0; c<checkBoxLayout.getChildCount(); c++){
 												View v = checkBoxLayout.getChildAt(c);
-												if(v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
+												if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
 													LinearLayout singleCheckBoxLine = (LinearLayout) v;
 													CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
+
+													String a = singleCheckBox.toString(); //<-- debug it
+													String b = selectedCB.toString(); // debug it if they are the same or not
+													a.length();
+													b.length();
 													if(singleCheckBox!=selectedCB){
 														singleCheckBox.setChecked(false);
-														//singleCheckBox.setSelected(false);
+													}
+												}
+											}
+											
+										} else{ // those checkboxes which involved ignore_other but false
+											for(int c=0; c<checkBoxLayout.getChildCount(); c++){
+												View v = checkBoxLayout.getChildAt(c);
+												if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
+													LinearLayout singleCheckBoxLine = (LinearLayout) v;
+													CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
+													boolean single_ignore_other = Boolean.parseBoolean(singleCheckBox.getTag(R.id.ignore_other).toString());
+													if(single_ignore_other){ // juz find the ignore_other checkbox and discheck it
+														singleCheckBox.setChecked(false);
 													}
 												}
 											}
 										}
 									}
-									
+									else{ // those checkboxes which doesn't even involved ignore_other 
+										for(int c=0; c<checkBoxLayout.getChildCount(); c++){
+											View v = checkBoxLayout.getChildAt(c);
+											if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
+												LinearLayout singleCheckBoxLine = (LinearLayout) v;
+												CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
+												boolean single_ignore_other = Boolean.parseBoolean(singleCheckBox.getTag(R.id.ignore_other).toString());
+												if(single_ignore_other){ // juz find the ignore_other checkbox and discheck it
+													singleCheckBox.setChecked(false);
+												}
+											}
+										}
+									}
 								}
 							});
+							
 							checkBoxLine.addView(cb);
 							if(extraRequired)
 								checkBoxLine.addView(extraValue);
