@@ -58,4 +58,13 @@
     <!-- recording purpose only -->
     <item type="id" name="recording_manager" />
     
+    <!-- description -->
+    <item type="id" name="field_desc" />
+    
+    <!-- to control referenced created views -->
+    <item type="id" name="isViewAlreadyExisted" />
+    
+    <!-- checklist stuff -->
+    <item type="id" name="ignore_other" />
+    
 </resources>

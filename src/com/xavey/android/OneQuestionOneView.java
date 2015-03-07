@@ -1,6 +1,7 @@
 package com.xavey.android;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -225,7 +226,6 @@ public class OneQuestionOneView extends FragmentActivity {
 											.toString()
 											.equals("recordingLayout"))
 								currentLayout = linearLayout;
-
 						}
 						if (view.getClass().getName()
 								.equals("android.widget.RelativeLayout")) {
@@ -879,7 +879,12 @@ public class OneQuestionOneView extends FragmentActivity {
 																		String maxRangeString = columnLayout
 																				.getTag(R.id.dataset_max_range)
 																				.toString();
-																		int maxRange = 100; //:TODO to get value from JSON
+																		int maxRange = 100; // :TODO
+																							// to
+																							// get
+																							// value
+																							// from
+																							// JSON
 																		if (maxRangeString
 																				.equals("#no_value#")) {
 																			Toast.makeText(
@@ -990,8 +995,7 @@ public class OneQuestionOneView extends FragmentActivity {
 										if (!isSubmitLayout(nextLayout_))
 											hideKeyboard(nextLayout_);
 									}
-									navLeftToRight(newPosition,
-											currentFieldID);
+									navLeftToRight(newPosition, currentFieldID);
 								}
 							}
 
@@ -2334,7 +2338,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								}
 							}
 						}
-
 					}
 				}
 				if (checkedValues.length() > 0)
@@ -2448,9 +2451,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			if (nextInnerLayout.getTag(R.id.render_ref) != null) {
 				render_ref = nextInnerLayout.getTag(R.id.render_ref).toString();
-				render_ref_type = nextInnerLayout.getTag(R.id.render_ref_type)
-						.toString();
-
+				render_ref_type = nextInnerLayout.getTag(R.id.render_ref_type).toString();
 				int renderRefID = Integer.parseInt(render_ref) - 1; // -1
 																	// to
 																	// get
@@ -2572,6 +2573,59 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 					// </radioLayout>
+				}
+				else if(render_ref_type.equals("display_append_value_set")){
+					
+					// dismiss newly created labels
+					boolean isViewAlreadyExisted = Boolean.parseBoolean(nextInnerLayout.getTag(R.id.isViewAlreadyExisted).toString());
+//					for(int i=0; i<nextInnerLayout.getChildCount(); i++){
+//						View viewToRemove = nextInnerLayout.getChildAt(i);
+//						if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
+//							isViewAlreadyExisted = Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
+//							if(isViewAlreadyExisted){
+//								viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
+//							}
+//						}
+//					}
+//					nextInnerLayout.refreshDrawableState();
+
+					render_ref.toCharArray();
+					render_ref.toString();
+					renderRefLayout.getChildCount();
+					String[] selectedValues = null;
+					for(int i=0;i<renderRefLayout.getChildCount();i++){
+						View v = renderRefLayout.getChildAt(i);
+						if(v.getClass().getName().equals("android.widget.LinearLayout")){
+							String layoutTagKey = v.getTag(R.id.layout_id).toString();
+							if(layoutTagKey.equals("textSetLayout")){
+								LinearLayout textSetLayout = (LinearLayout) v;
+								for(int j=0; j<textSetLayout.getChildCount(); j++){
+									if(textSetLayout.getChildAt(j).getClass().getName().equals("android.widget.ListView")){
+										ListView textSetListView = (ListView) textSetLayout.getChildAt(j);
+										TextSetAdapter adapter = (TextSetAdapter) textSetListView.getAdapter();
+										selectedValues = adapter.CurrentItems;
+									}
+								}
+							}
+						}
+					}
+					// append selected values here..
+					if(!isViewAlreadyExisted){
+						float textSize = 18;
+						LayoutParams labelLayoutParams = new LayoutParams(
+								LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+						labelLayoutParams.setMargins(20, 10, 10, 0);
+						for(int i=0; i<selectedValues.length; i++){
+							String value = selectedValues[i];
+							TextView referencedLabel = new TextView(this);
+							referencedLabel.setLayoutParams(labelLayoutParams);
+							referencedLabel.setText("-"+value);
+							referencedLabel.setTextSize(textSize);
+							referencedLabel.setTag(R.id.isViewAlreadyExisted, true);
+							nextInnerLayout.addView(referencedLabel);
+						}
+						nextInnerLayout.setTag(R.id.isViewAlreadyExisted, true);
+					}
 				}
 
 				/*
@@ -3049,19 +3103,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout nextLayout_ = layoutList.get(newPosition);
 		if (!isSubmitLayout(nextLayout_))
 			hideKeyboard(nextLayout_);
-
-		/*
-		 * if (ApplicationValues.) { // still recording... // block.. // there
-		 * is no direction // validation... // bcuz it will block both direction
-		 * // if recording is not ending /* navigator.addLast(0); used_field_ids
-		 * .addLast(currentFieldID); vPager.setCurrentItem (currentPosition);
-		 * toast.xaveyToast(null, "Audio recording is needed to stop." );
-		 * currentPosition = previousIndex;
-		 * 
-		 * boolean forceStopL_R = true; navStayStill( direction, currentFieldID,
-		 * "Audio recording is needed to stop.", lLManager, newPosition,
-		 * currentPosition, forceStopL_R); }
-		 */
 	}
 
 	private RadioButton getSelectedRadioButtonMyRadioGroup(RadioGroup radioGroup) {
@@ -3079,17 +3120,6 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 			}
-			/*
-			 * Object test =
-			 * radioButtonLine.getTag(R.id.is_radiobutton_selected); boolean
-			 * isSelected = Boolean.parseBoolean(radioButtonLine.getTag(R.id.
-			 * is_radiobutton_selected).toString()); if(isSelected){ for(int
-			 * j=0; j<radioButtonLine.getChildCount(); j++){
-			 * if(radioButtonLine.getChildAt
-			 * (j).getClass().getName().equals("android.widget.RadioButton")){
-			 * selectedButton = (RadioButton) radioButtonLine.getChildAt(j); } }
-			 * }
-			 */
 		}
 		return selectedButton;
 	}

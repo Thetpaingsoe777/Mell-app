@@ -174,8 +174,7 @@ public class JSONReader {
 						TextView index = new TextView(activity);
 						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
 								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+						tvLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 						index.setLayoutParams(tvLayoutParams);
 						index.setText("index/index");
 						index.setTag("index");
@@ -949,12 +948,18 @@ public class JSONReader {
 
 						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 
+						
+						
 						int checkboxCount = 0;
 						for (int j = 0; j < length; j++) {
 							JSONObject obj = new JSONObject();
 							obj = dataset.getJSONObject(j);
 							String text = obj.getString("label");
 							String tag = obj.getString("value");
+							boolean ignore_other = false;
+							if(obj.has("ignore_other")){
+								ignore_other = obj.getBoolean("ignore_other");
+							}
 							String skip = obj.getString("field_skip");
 							boolean extra = obj.getBoolean("extra"); 
 							boolean extra_required=false;
@@ -968,22 +973,19 @@ public class JSONReader {
 							cb.setTag(R.id.extra, extra);
 							cb.setTag(R.id.extra_required, extra_required);
 							cb.setTypeface(typeface.getTypeFace());
+
 							LayoutParams cbParams = new LayoutParams(
 									LayoutParams.WRAP_CONTENT,
 									LayoutParams.WRAP_CONTENT);
 							cbParams.setMargins(15, 5, 15, 5);
 							cb.setLayoutParams(cbParams);
 							setTypeFace(cb);
-//							if (default_value == (j + 1)) {
-//								cb.setChecked(true);
-//							}
 							checkBoxList.add(cb);
-							// checkBoxLayout.addView(cb);
 							checkboxCount++;
 						}
 
 						if (field_random) {
-							//Collections.shuffle(checkBoxList);
+
 						}
 
 						for (final CheckBox cb : checkBoxList) {
@@ -991,9 +993,9 @@ public class JSONReader {
 							checkBoxLine.setTag(R.id.layout_id, "checkBoxLine");
 							checkBoxLine.setLayoutParams(checkBoxLineLayoutParams);
 							checkBoxLine.setOrientation(LinearLayout.VERTICAL);
-							
+
 							Boolean extraRequired = Boolean.parseBoolean(cb.getTag(R.id.extra).toString());
-							
+
 							EditText extraValue = new EditText(activity);
 							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
 							cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -1001,6 +1003,8 @@ public class JSONReader {
 								@Override
 								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 									LinearLayout checkBoxLine = (LinearLayout) cb.getParent();
+									CheckBox selectedCB = (CheckBox) checkBoxLine.getChildAt(0); // <- making static so far
+									
 									EditText selectedExtra = (EditText) checkBoxLine.getChildAt(1); // <- making static so far..
 									if(selectedExtra!=null)
 									if(!isChecked){
@@ -1008,6 +1012,26 @@ public class JSONReader {
 									}else{
 										selectedExtra.setLayoutParams(extraValueLayoutParamsAppear);
 									}
+									
+									// ignore stuffs
+									if(selectedCB.getTag(R.id.ignore_other)!=null){
+										boolean ignore_other = Boolean.parseBoolean(selectedCB.getTag(R.id.ignore_other).toString());
+										if(ignore_other){
+											LinearLayout checkBoxLayout = (LinearLayout) checkBoxLine.getParent();
+											for(int c=0; c<checkBoxLayout.getChildCount(); c++){
+												View v = checkBoxLayout.getChildAt(c);
+												if(v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
+													LinearLayout singleCheckBoxLine = (LinearLayout) v;
+													CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
+													if(singleCheckBox!=selectedCB){
+														singleCheckBox.setChecked(false);
+														//singleCheckBox.setSelected(false);
+													}
+												}
+											}
+										}
+									}
+									
 								}
 							});
 							checkBoxLine.addView(cb);
@@ -1466,18 +1490,19 @@ public class JSONReader {
 						// .setBackgroundResource(R.drawable.linear_layout_ui);
 						noteLayout.setOrientation(LinearLayout.VERTICAL);
 						noteLayout.setTag(R.id.layout_id, "noteLayout");
-						noteLayout
-								.setTag(R.id.field_id, fields.get("field_id"));
-						noteLayout.setTag(R.id.field_name_id,
-								fields.get("field_name"));
+						noteLayout.setTag(R.id.field_id, fields.get("field_id"));
+						noteLayout.setTag(R.id.field_name_id, fields.get("field_name"));
 						noteLayout.setTag(R.id.field_label_id,
 								fields.get("field_label"));
 						noteLayout.setTag(R.id.field_default_value,
 								fields.get("field_default_value"));
-						noteLayout
-								.setTag(R.id.next_ref, fields.get("next_ref"));
+						noteLayout.setTag(R.id.next_ref, fields.get("next_ref"));
 						noteLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
+						noteLayout.setTag(R.id.render_ref, fields.get("render_ref"));
+						noteLayout.setTag(R.id.render_ref_type, fields.get("render_ref_type"));
+						noteLayout.setTag(R.id.isViewAlreadyExisted, false);
+						
 						String textLabel = fields.get("field_label").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(textLabel);
@@ -1490,6 +1515,7 @@ public class JSONReader {
 						String description = fields.get("field_desc")
 								.toString();
 						TextView tvdescription = new TextView(activity);
+						tvdescription.setTag(R.id.field_desc, description);
 						tvdescription.setText(description);
 						tvdescription.setTextSize(descriptionTextSize);
 						tvdescription.setLayoutParams(descriptionLayoutParams);
@@ -2810,8 +2836,8 @@ public class JSONReader {
 								String value = cell_values.getString("value");
 								String index_ = cell_values.getString("index");
 								String[] parts = index_.split(",");
-								int h_ = Integer.parseInt(parts[0]);
-								int v_ = Integer.parseInt(parts[1]);
+								int h_ = Integer.parseInt(parts[0].trim());
+								int v_ = Integer.parseInt(parts[1].trim());
 
 								if (h_ == h) {
 									MatrixCell cell = new MatrixCell();
@@ -4239,6 +4265,8 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_help", jChild.getString("field_help"));
+					/*if(jChild.has("ignore_other"))
+						fields.put("ignore_other", jChild.getBoolean("ignore_other"));*/
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
 					if (jChild.has("next_ref_cond"))
@@ -4249,18 +4277,14 @@ public class JSONReader {
 						fields.put("field_desc", field_desc);
 					else
 						fields.put("field_desc", "-");
-					fields.put("field_required",
-							jChild.getBoolean("field_required"));
+					fields.put("field_required", jChild.getBoolean("field_required"));
 					// fields.put("field_default_value",
 					// jChild.getInt("field_default_value"));
 					fields.put("field_default_value", 1);
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
-					JSONObject field_dataset = jChild
-							.getJSONObject("field_dataset");
-					JSONArray dataset_values = field_dataset
-							.getJSONArray("dataset_values");
-					String dataset_name = field_dataset
-							.getString("dataset_name");
+					JSONObject field_dataset = jChild.getJSONObject("field_dataset");
+					JSONArray dataset_values = field_dataset.getJSONArray("dataset_values");
+					String dataset_name = field_dataset.getString("dataset_name");
 					fields.put("dataset_values", dataset_values);
 					fields.put("dataset_name", dataset_name);
 				} else if (field_type.equals("datetime")) {
@@ -4401,14 +4425,16 @@ public class JSONReader {
 					fields.put("field_help", jChild.getString("field_help"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
-					
+					if (jChild.has("render_ref"))
+						fields.put("render_ref", jChild.getString("render_ref"));
+					if (jChild.has("render_ref_type"))
+						fields.put("render_ref_type", jChild.getString("render_ref_type"));
 					if(jChild.has("field_default_value"))
 					fields.put("field_default_value",
 							jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref_cond"))
-						fields.put("next_ref_cond",
-								jChild.getJSONArray("next_ref_cond"));
+						fields.put("next_ref_cond", jChild.getJSONArray("next_ref_cond"));
 				}else if (field_type.equals("matrix_number")) {
                     fields.put("field_name", jChild.getString("field_name"));
                     fields.put("field_desc", jChild.getString("field_desc"));

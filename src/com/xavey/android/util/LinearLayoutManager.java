@@ -37,6 +37,17 @@ public class LinearLayoutManager {
 		return errMsg;
 	}
 	
+	public static CheckBox getCheckBoxFromCheckBoxLine(LinearLayout checkBoxLine){
+		CheckBox cb = null;
+		for(int i=0; i<checkBoxLine.getChildCount(); i++){
+			if(checkBoxLine.getChildAt(i).getClass().getName().equals("android.widget.CheckBox")){
+				cb = (CheckBox) checkBoxLine.getChildAt(i);
+				break;
+			}
+		}
+		return cb;
+	}
+	
 	public String getFieldIDFromLayout(LinearLayout linearLayout){
 		LinearLayout targetLayout = null;
 		for(int i=0; i<linearLayout.getChildCount();i++){
