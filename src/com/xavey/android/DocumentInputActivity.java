@@ -69,6 +69,7 @@ public class DocumentInputActivity extends Activity {
 	ConnectionDetector connectionDetector;
 	Form currentForm;
 	ArrayList<HashMap<String, Object>> formFieldsList;
+	ArrayList<HashMap<String, Object>> formRefList;
 
 	boolean isAllRequiredFieldFilled = true;
 
@@ -747,6 +748,7 @@ public class DocumentInputActivity extends Activity {
 		errorMsg = (TextView) findViewById(R.id.tvErrorMsgDocumentInput);
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
+		formRefList = jsonReader.getFormRefs(currentForm.getForm_json());
 		jsonWriter = new JSONWriter(this);
 		typeface = new TypeFaceManager(this);
 	}

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -617,6 +618,41 @@ public class LinearLayoutManager {
 			}
 		}
 		return selectedButton;
+	}
+	
+	public LinearLayout getInnerLayout(LinearLayout parrentLayout) {
+		LinearLayout innerLayout = null;
+		LinearLayout innerLayout2 = null;
+		for (int i = 0; i < parrentLayout.getChildCount(); i++) {
+			String className = parrentLayout.getChildAt(i).getClass().getName();
+			View v = parrentLayout.getChildAt(i);
+
+			if (className.equals("android.widget.ScrollView")) {
+				ScrollView scroll = (ScrollView) v;
+				innerLayout = (LinearLayout) scroll.getChildAt(0);
+				String layoutID = innerLayout.getTag(R.id.layout_id).toString();
+				if (innerLayout.getTag(R.id.layout_id) != null
+						&& !layoutID.equals("recordingLayout")) {
+					return innerLayout;
+				}
+				// else{
+				// return null;
+				// }
+			}
+			// following else is for layouts without ScrollView
+			else if (className.equals("android.widget.LinearLayout")) {
+				innerLayout2 = (LinearLayout) parrentLayout.getChildAt(i);
+				if (innerLayout2.getTag(R.id.layout_id) != null
+						&& innerLayout2.getTag(R.id.layout_id).toString() != "recordingLayout") {
+					Log.i("child count", innerLayout2.getChildCount() + "");
+					return innerLayout2;
+				}
+			}
+		}
+		if (innerLayout != null)
+			return innerLayout;
+		else
+			return innerLayout2;
 	}
 
 }

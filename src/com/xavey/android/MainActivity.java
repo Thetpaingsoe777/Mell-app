@@ -694,6 +694,15 @@ public class MainActivity extends Activity {
 						JSONArray form_fields = form_content.getJSONArray("form_fields");
 						form.setForm_fields(form_fields.toString());
 
+						//keep below attribute in try catch to maintain old forms 
+						//form_refs
+						try { 
+							JSONArray form_refs = form_content.getJSONArray("form_refs");
+							form.setForm_refs(form_refs.toString());
+						} 
+						catch (JSONException ignored) {}
+						
+						
 						form.setForm_json(form_content.toString());
 						form_list.add(form);
 					}

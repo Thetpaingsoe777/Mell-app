@@ -19,6 +19,7 @@ public class Form {
 	private String creator_name;
 	
 	private String form_fields;
+	private String form_refs;
 	private boolean form_location_required;
 	private boolean isImageSynced;
 	
@@ -89,6 +90,14 @@ public class Form {
 	public void setForm_fields(String form_fields) {
 		this.form_fields = form_fields;
 	}
+	
+	public String getForm_refs() {
+		return form_refs;
+	}
+	public void setForm_refs(String form_refs) {
+		this.form_refs = form_refs;
+	}
+	
 	public String getCreator_id() {
 		return creator_id;
 	}

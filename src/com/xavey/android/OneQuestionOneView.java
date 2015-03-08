@@ -63,6 +63,7 @@ import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
 import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
+import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
 import com.xavey.android.model.XMedia;
@@ -71,6 +72,7 @@ import com.xavey.android.util.AudioRecordingManager;
 import com.xavey.android.util.ConnectionDetector;
 import com.xavey.android.util.GPSTracker;
 import com.xavey.android.util.ImageSavingManager;
+import com.xavey.android.util.JSONHelper;
 import com.xavey.android.util.JSONReader;
 import com.xavey.android.util.JSONWriter;
 import com.xavey.android.util.LinearLayoutManager;
@@ -99,6 +101,8 @@ public class OneQuestionOneView extends FragmentActivity {
 	ConnectionDetector connectionDetector;
 	Form currentForm;
 	ArrayList<HashMap<String, Object>> formFieldsList;
+	ArrayList<HashMap<String, Object>> formRefList;
+	HashMap<String, String> Refs;
 	ArrayList<LinearLayout> layoutList;
 
 	TypeFaceManager typeface;
@@ -139,7 +143,8 @@ public class OneQuestionOneView extends FragmentActivity {
 		try {
 			layoutList = jsonReader.readForm2(currentForm);
 			layoutList.add(produceSubmitLayout());
-		} catch (JSONException e) {
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -193,11 +198,17 @@ public class OneQuestionOneView extends FragmentActivity {
 						// break from this method
 					} else if (direction == LEFT_TO_RIGHT) {
 						isValidating = true;
-						validateOnPageSelected(newPosition);
+						try {
+							validateOnPageSelected(newPosition);
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 
-				private void validateOnPageSelected(int newPosition) {
+				private void validateOnPageSelected(int newPosition)
+						throws Exception {
 					int lastJump = -1;
 					if (navigator.size() != 0) {
 						lastJump = navigator.getLast();
@@ -1270,7 +1281,8 @@ public class OneQuestionOneView extends FragmentActivity {
 				Document document = new Document();
 				ArrayList<LinearLayout> completeList = getCompleteList(
 						layoutList, used_field_ids);
-				HashMap<String, Object> incompleteMap = getValuesFromEachLayout(completeList);
+				HashMap<String, Object> incompleteMap = getValuesFromEachLayout(
+						completeList, 0, completeList.size(), false);
 
 				JSONObject document_json = new JSONObject();
 				JSONArray jsonArray = new JSONArray();
@@ -1516,9 +1528,10 @@ public class OneQuestionOneView extends FragmentActivity {
 	}
 
 	private HashMap<String, Object> getValuesFromEachLayout(
-			ArrayList<LinearLayout> layoutList) {
+			ArrayList<LinearLayout> layoutList, int startPoint, int endPoint,
+			boolean needRawValue) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		for (int i = 0; i < layoutList.size(); i++) {
+		for (int i = startPoint; i < endPoint; i++) {
 			// -1 don't care the last room cuz the last room is submitLayout
 
 			LinearLayout parentLayout = (LinearLayout) layoutList.get(i);
@@ -2369,7 +2382,11 @@ public class OneQuestionOneView extends FragmentActivity {
 						Set<String> keys = singleMap.keySet();
 						String singleKey = keys.toArray()[0].toString();
 						String singleValue = singleMap.get(singleKey);
-						values += "|" + singleKey + ":" + singleValue;
+						if (needRawValue) {
+							values += "|" + singleValue;
+						} else {
+							values += "|" + singleKey + ":" + singleValue;
+						}
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -2438,7 +2455,7 @@ public class OneQuestionOneView extends FragmentActivity {
 			return innerLayout2;
 	}
 
-	public void renderNextLayout(int newPosition) {
+	public void renderNextLayout(int newPosition) throws Exception {
 
 		if (newPosition != layoutList.size() - 1) {
 			ArrayList<LinearLayout> layoutList_ = layoutList;
@@ -2451,18 +2468,20 @@ public class OneQuestionOneView extends FragmentActivity {
 
 			if (nextInnerLayout.getTag(R.id.render_ref) != null) {
 				render_ref = nextInnerLayout.getTag(R.id.render_ref).toString();
-				render_ref_type = nextInnerLayout.getTag(R.id.render_ref_type).toString();
+				render_ref_type = nextInnerLayout.getTag(R.id.render_ref_type)
+						.toString();
+
 				int renderRefID = Integer.parseInt(render_ref) - 1; // -1
 																	// to
 																	// get
 																	// real
 																	// id
-				LinearLayout renderRefLayout = layoutList.get(renderRefID);
-				LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
-				String renderLayoutID = renderInnerLayout
-						.getTag(R.id.layout_id).toString();
 
 				if (render_ref_type.equals("extra_equal_no_item")) {
+					LinearLayout renderRefLayout = layoutList.get(renderRefID);
+					LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
+					String renderLayoutID = renderInnerLayout.getTag(
+							R.id.layout_id).toString();
 					// following are all render Layout IDs...
 					// <radioLayout>
 					JSONArray nextRefcond = (JSONArray) nextInnerLayout
@@ -2575,7 +2594,10 @@ public class OneQuestionOneView extends FragmentActivity {
 					// </radioLayout>
 				}
 				else if(render_ref_type.equals("display_append_value_set")){
-					
+					LinearLayout renderRefLayout = layoutList.get(renderRefID);
+					LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
+					String renderLayoutID = renderInnerLayout.getTag(
+							R.id.layout_id).toString();
 					// dismiss newly created labels
 					boolean isViewAlreadyExisted = Boolean.parseBoolean(nextInnerLayout.getTag(R.id.isViewAlreadyExisted).toString());
 //					for(int i=0; i<nextInnerLayout.getChildCount(); i++){
@@ -2627,7 +2649,35 @@ public class OneQuestionOneView extends FragmentActivity {
 						nextInnerLayout.setTag(R.id.isViewAlreadyExisted, true);
 					}
 				}
+				else if (render_ref_type
+						.equals("display_dataset_append_set_ref")) {
+					// if end with ref
+					// read from ref values
+					// prepare dataset
+					// get target linear layout, remove and add new one
+					String refValue = Refs.get(render_ref);
+					if (refValue != null && refValue.length() > 0) {
 
+						if (nextLayoutID.equals("radioLayout")) {
+							for (int a = 0; a < nextInnerLayout.getChildCount(); a++) {
+								View view = nextInnerLayout.getChildAt(a);
+								if (view.getClass()
+										.getName()
+										.equals("com.xavey.android.layout.RadioGroupLayout")) {
+									JSONHelper jh = new JSONHelper();
+									RadioGroupLayout radioGroup = (RadioGroupLayout) view;
+									final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
+									radioGroup.initLayout(dsArray);
+								}
+							}
+
+						} else if (nextLayoutID.equals("checklistLayout")) {
+
+						} else if (nextLayoutID.equals("matrixLayout")) {
+
+						}
+					}
+				}
 				/*
 				 * //<numberSetLayout>
 				 * if(renderLayoutID.equals("numberSetLayout")){ for(int i=0;
@@ -3055,7 +3105,69 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 	}
 
-	private void navLeftToRight(int newPosition, String currentFieldID) {
+	private void prepRefValues() {
+		String setterPointer = "";
+		LinearLayout currentParentLayout = layoutList.get(currentPosition);
+		LinearLayoutManager llManager = new LinearLayoutManager();
+		LinearLayout thisLayout = llManager.getInnerLayout(currentParentLayout);
+		if (thisLayout.getTag(R.id.ref_setter) != null) {
+			setterPointer = thisLayout.getTag(R.id.ref_setter).toString();
+		}
+		if (setterPointer != null && setterPointer.length() > 0) {
+			// tma: question comes with ref_setter ID.. now check
+			// the ref object and set the value
+			for (int i = 0; i < formRefList.size(); i++) {
+				if (formRefList.get(i).size() > 0) {
+					HashMap<String, Object> map = formRefList.get(i);
+					String refID = map.get("ref_id").toString();
+					String refType = map.get("ref_type").toString();
+					JSONArray refSetter = (JSONArray) map.get("ref_setter");
+					if (refID == setterPointer) { // work only for
+													// one
+													// ref:ref_setter
+						String refValues = "";
+						for (int n = 0; n < refSetter.length(); n++) {
+							String setterIDRaw = "";
+							int setterID = -1;
+							int layoutIndex = -1;
+							try {
+								setterIDRaw = refSetter.getString(n);
+								setterID = Integer.valueOf(setterIDRaw);
+								layoutIndex = setterID - 1;
+								if (layoutIndex <= currentPosition
+										|| layoutIndex <= 0) {
+									// valid setter ID ready to read
+									// the value from layout
+									HashMap<String, Object> valueFromLayout = getValuesFromEachLayout(
+											layoutList, layoutIndex,
+											layoutIndex + 1, true);
+									if (valueFromLayout != null) {
+										HashMap.Entry<String, Object> entry = valueFromLayout
+												.entrySet().iterator().next();
+										String key = entry.getKey();
+										String value = entry.getValue()
+												.toString();
+										refValues += value + "|";
+
+									}
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+						// after looping ref:ref_setter values
+						Refs.put(refID,
+								refValues.substring(0, refValues.length() - 1));
+						Log.i("test", Refs.get(refID));
+					}
+				}
+			}
+		}
+	}
+
+	private void navLeftToRight(int newPosition, String currentFieldID)
+			throws Exception {
+		prepRefValues();
 		newPosition = getNextRoute(newPosition);
 		renderNextLayout(newPosition);
 		int range = newPosition - currentPosition;
@@ -3146,6 +3258,24 @@ public class OneQuestionOneView extends FragmentActivity {
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
 		recordingManager = new AudioRecordingManager(this);
+
+		formRefList = jsonReader.getFormRefs(currentForm.getForm_json());
+		prepareDataSets();
+	}
+
+	private void prepareDataSets() {
+		Refs = new HashMap<String, String>();
+		for (int i = 0; i < formRefList.size(); i++) {
+			HashMap<String, Object> map = formRefList.get(i);
+			String refID = map.get("ref_id").toString();
+			String refType = map.get("ref_type").toString();
+			// if(refType=="dataset"){
+			Refs.put(refID, null);
+			// }
+			// else{
+			// Refs.put(refID,"");
+			// }
+		}
 	}
 
 	private void getScreenInfo() {

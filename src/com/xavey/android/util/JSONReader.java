@@ -54,6 +54,11 @@ import com.xavey.android.adapter.NumberSetAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
 import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
+import com.xavey.android.layout.CheckboxLayout;
+import com.xavey.android.layout.MatrixCheckListLayout;
+import com.xavey.android.layout.MatrixNumberLayout;
+import com.xavey.android.layout.MatrixOptionLayout;
+import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
@@ -95,7 +100,7 @@ public class JSONReader {
 
 	LayoutParams errorMsgLayoutParams = null;
 
-	public ArrayList<LinearLayout> readForm2(Form form) throws JSONException {
+	public ArrayList<LinearLayout> readForm2(Form form) throws Exception {
 
 		ArrayList<LinearLayout> layoutList = new ArrayList<LinearLayout>();
 		ArrayList<HashMap<String, Object>> formFields = getFormFields(form
@@ -200,8 +205,24 @@ public class JSONReader {
 								.setTag(R.id.next_ref, fields.get("next_ref"));
 						textLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
-						if(fields.containsKey("next_ref_type"))
-							textLayout.setTag(R.id.next_ref_type, fields.get("next_ref_type"));
+						if (fields.containsKey("next_ref_type"))
+							textLayout.setTag(R.id.next_ref_type,
+									fields.get("next_ref_type"));
+						
+						
+						if (fields.containsKey("render_ref"))
+							textLayout.setTag(R.id.render_ref,
+									fields.get("render_ref"));
+						if (fields.containsKey("render_ref_type"))
+							textLayout.setTag(R.id.render_ref_type,
+									fields.get("render_ref_type"));
+
+						// tma: tagging ref_setter value
+						if (fields.containsKey("ref_setter")) {
+							textLayout.setTag(R.id.ref_setter,
+									fields.get("ref_setter").toString());
+						}
+						
 						String textLabel = fields.get("field_label").toString();
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setTag("label");
@@ -548,16 +569,22 @@ public class JSONReader {
 							radioLayout.setTag(R.id.next_ref_type,
 									fields.get("next_ref_type"));
 						}
-//						String field_default_value = fields.get(
-//								"field_default_value").toString();
-//						radioLayout.setTag(R.id.field_default_value,
-//								field_default_value);
+						// String field_default_value = fields.get(
+						// "field_default_value").toString();
+						// radioLayout.setTag(R.id.field_default_value,
+						// field_default_value);
 						if (fields.containsKey("render_ref"))
 							radioLayout.setTag(R.id.render_ref,
 									fields.get("render_ref"));
 						if (fields.containsKey("render_ref_type"))
 							radioLayout.setTag(R.id.render_ref_type,
 									fields.get("render_ref_type"));
+
+						// tma: tagging ref_setter value
+						if (fields.containsKey("ref_setter")) {
+							radioLayout.setTag(R.id.ref_setter,
+									fields.get("ref_setter").toString());
+						}
 
 						String radioLabel = fields.get("field_label")
 								.toString();
@@ -585,245 +612,23 @@ public class JSONReader {
 						setTypeFace(tvdescription);
 						radioLayout.addView(tvdescription);
 
-						final RadioGroup rg = new RadioGroup(activity);
-						LayoutParams radioGroupParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.WRAP_CONTENT);
-						radioGroupParams.setMargins(15, 5, 15, 5);
-						rg.setLayoutParams(radioGroupParams);
-
 						JSONArray dataset = (JSONArray) fields
 								.get("dataset_values");
-						// int default_value = Integer.parseInt(fields.get(
-						// "field_default_value").toString());
-						int default_value = 1;
-						int length = dataset.length();
-						for (int j = 0; j < length; j++) {
-							JSONObject obj = new JSONObject();
-							obj = dataset.getJSONObject(j);
-							String text = obj.getString("label");
-							String tag = obj.getString("value");
-							String skip = obj.getString("field_skip");
-							boolean extra = obj.getBoolean("extra"); 
-							boolean extra_required=false;
-							if(obj.has("extra_required"))
-								extra_required = obj.getBoolean("extra_required");
-
-							RadioButton radioButton = new RadioButton(activity);
-							radioButton.setId(Utils.generateViewId()); // View.generateViewId();
-																		// <=
-																		// only
-																		// support
-																		// for
-																		// lvl17
-																		// n
-																		// above
-							radioButton.setText(text);
-							radioButton.setTextSize(radioButtonTextSize);
-							radioButton.setTag(R.id.radio_value, tag);
-							radioButton.setTag(R.id.field_skip, skip);
-							radioButton.setTag(R.id.extra, extra);
-							radioButton.setTag(R.id.is_radiobutton_selected, false);
-							if(extra_required)
-								radioButton.setTag(R.id.extra_required, extra_required);
-							radioButton.setSelected(false);
-
-//							if (tag.equals(field_default_value)) {
-//								radioButton.setSelected(true);
-//								radioButton.setChecked(true);
-//								radioButton.setTag(R.id.is_radiobutton_selected, true);
-//							}
-							
-							LinearLayout.LayoutParams layoutParams = new RadioGroup.LayoutParams(
-									RadioGroup.LayoutParams.MATCH_PARENT,
-									RadioGroup.LayoutParams.WRAP_CONTENT);
-
-							EditText extraValue = new EditText(activity);
-							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
-							extraValue.setTag(R.id.extra_status, "off");
-
-							layoutParams.setMargins(0, 10, 0, 10);
-							// if (default_value == (j + 1)) {
-							// radioButton.setChecked(true);
-							// radioButton.setTag(R.id.is_radiobutton_selected,
-							// true);
-							// }
-							setTypeFace(radioButton);
-
-							// rg.addView(radioButton, j, layoutParams);\
-							LinearLayout radioButtonLine = new LinearLayout(
-									activity);
-							radioButtonLine.setTag(R.id.layout_id,
-									"radioButtonLine");
-							radioButtonLine.setLayoutParams(radioButtonLineLayoutParams);
-							radioButtonLine.setOrientation(LinearLayout.VERTICAL);
-							radioButton.setOnClickListener(new OnClickListener() {
-										@Override
-										public void onClick(View v) {
-											RadioButton clicked_button = (RadioButton) v;
-											clicked_button.setTag(R.id.is_radiobutton_selected,true);
-
-											// disable all other
-											Random r = new Random();
-											int randomValue = r.nextInt(1000);
-											clicked_button.setTag(
-													R.id.radio_random_value,
-													randomValue);
-
-											for (int i = 0; i < rg
-													.getChildCount(); i++) {
-												LinearLayout radioButtonLine_ = (LinearLayout) rg
-														.getChildAt(i);
-												// for loop child count of radio
-												// Button line
-												// if child == radiobutton ,
-												// then assigned to button
-												// if child == edit text , than
-												// assigned to edittext
-												// end loop
-
-												RadioButton singleButtonFromAll = null;
-												EditText singleEditTextFromAll = null;
-												for (int j = 0; j < radioButtonLine_
-														.getChildCount(); j++) {
-													View child = radioButtonLine_
-															.getChildAt(j);
-													String child_class_name = child
-															.getClass()
-															.getName()
-															.toString();
-													if (child_class_name
-															.equals("android.widget.RadioButton")) {
-														singleButtonFromAll = (RadioButton) child;
-													} else if (child_class_name
-															.equals("android.widget.EditText")) {
-														singleEditTextFromAll = (EditText) child;
-													} else {
-														// for other views for
-														// future
-														// just in case
-													}
-												}
-
-												// now we got editext and radio
-												// button
-												boolean extra = Boolean
-														.parseBoolean(singleButtonFromAll
-																.getTag(R.id.extra)
-																.toString());
-
-												int randomed_ = 0;
-												if (singleButtonFromAll
-														.getTag(R.id.radio_random_value) != null) {
-													randomed_ = Integer
-															.parseInt(singleButtonFromAll
-																	.getTag(R.id.radio_random_value)
-																	.toString());
-												}
-
-												boolean isOtherButton = randomValue == randomed_;
-
-												// radioButtonLine_.setBackgroundColor(Color.BLUE);
-
-												if (!isOtherButton) {
-													singleButtonFromAll
-															.setChecked(false);
-													singleButtonFromAll
-															.setTag(R.id.is_radiobutton_selected,
-																	false);
-													radioButtonLine_
-															.setTag(R.id.is_radiobutton_selected,
-																	false);
-													singleEditTextFromAll
-															.setLayoutParams(extraValueLayoutParamsDisappear);
-												} else {
-													singleButtonFromAll.setChecked(true);
-													singleButtonFromAll.setTag(R.id.is_radiobutton_selected,
-																	true);
-													radioButtonLine_.setTag(R.id.is_radiobutton_selected, true);
-													singleEditTextFromAll.requestFocus();
-													if (extra) { // if extra
-																	// value
-																	// true;
-														singleEditTextFromAll.setLayoutParams(extraValueLayoutParamsAppear);
-													}
-												}
-											}
-										}
-									});
-
-							// extra par yin..
-							/*
-							 * if(radioButton.getTag(R.id.extra).toString().equals
-							 * ("true")){ final EditText extraValue = new
-							 * EditText(activity); extraValue.setLayoutParams(
-							 * extraValueLayoutParamsAppear);
-							 * extraValue.setTag(R.id.extra_status, "on");
-							 * radioButtonLine.addView(); }
-							 */
-							if (radioButton.isChecked()) {
-								radioButton.performClick();
-							}
-							radioButtonLine.addView(radioButton);
-							radioButtonLine.addView(extraValue);
-
-							// random here everything...
-							// a condition should be checked here
-							// cuz not every question should be randomed
-
-							buttonLinesToBeRandomed.add(radioButtonLine); // <--
-																			// collect
-																			// the
-																			// lines
-																			// first
-
-							// rg.addView(radioButtonLine);
-						}
-						// for loop ends here
-
-						// RelativeLayout radiobuttonLayout = new
-						// RelativeLayout(activity);
-						// int relative_MATCH_PARENT_ =
-						// RelativeLayout.LayoutParams.MATCH_PARENT;
-						// int relative_WRAP_CONTENT_ =
-						// RelativeLayout.LayoutParams.WRAP_CONTENT;
-						// RelativeLayout.LayoutParams radiobuttonLayoutParams =
-						// new RelativeLayout.LayoutParams(
-						// relative_MATCH_PARENT_, relative_WRAP_CONTENT_);
-						// radiobuttonLayout.setLayoutParams(radiobuttonLayoutParams);
-						// RadioButton radioButton = new RadioButton(activity);
-						// radioButton.setId(View.generateViewId());
-						// radioButton.setTextSize(13);
-						// radiobuttonLayout.addView(radioButton);
-						// EditText testText = new EditText(activity);
-						// testText.setLayoutParams(labelLayoutParams);
-						// radiobuttonLayout.addView(testText);
-						// radioLayout.addView(radiobuttonLayout);
-
-						// random.... valid by some json in future
-						// example.. -> field_random : true
-
-//						if (field_random) {
-//							Collections.shuffle(buttonLinesToBeRandomed);
-//						}
-
-						for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
-							rg.addView(eachButtonLine);
-						}
-
-						// the clients don't want a default selected value
-						// so nothing will be selected here
-//						if (getSelectedRadioButtonMyRadioGroup(rg) == null) {
-//							RadioButton firstButton = getRadioButtonByIndexMyRadioGroup(
-//									rg, 0);
-//							firstButton.setChecked(true);
-//						}
-
-						radioLayout.addView(rg);
+						
+						RadioGroupLayout radioGroupLayout = new RadioGroupLayout(activity,dataset);
+						radioGroupLayout.setRadioButtonTextSize(radioButtonTextSize);
+						radioGroupLayout.setRadioButtonLineLayoutParams(radioButtonLineLayoutParams);
+						radioGroupLayout.setExtraValueLayoutParamsAppear(extraValueLayoutParamsAppear);
+						radioGroupLayout.setExtraValueLayoutParamsDisappear(extraValueLayoutParamsDisappear);
+						radioGroupLayout.initLayout(dataset); 
+						dataset = null;
+						
+						radioLayout.addView(radioGroupLayout);
 						radioLayout.setGravity(Gravity.CENTER);
 
 						scroll.addView(radioLayout);
 						parentLayout.addView(scroll);
+						dataset=null;
 
 						// audio stuff
 						// String audiorequired =
@@ -940,143 +745,17 @@ public class JSONReader {
 								.get("dataset_values");
 						// int default_value = Integer.parseInt(fields.get(
 						// "field_default_value").toString());
-						int default_value = 1;
-						int length = dataset.length();
+						
 
 						LayoutParams checkBoxLineLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-						ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.WRAP_CONTENT);
 
 						
+						CheckboxLayout theCheckBoxLayout = new CheckboxLayout(activity);
+						theCheckBoxLayout.initLayout(dataset, checkBoxLineLayoutParams, extraValueLayoutParamsDisappear, extraValueLayoutParamsAppear);
 						
-						int checkboxCount = 0;
-						for (int j = 0; j < length; j++) {
-							JSONObject obj = new JSONObject();
-							obj = dataset.getJSONObject(j);
-							String text = obj.getString("label");
-							String tag = obj.getString("value");
-							boolean ignore_other = false;
-							if(obj.has("ignore_other")){
-								ignore_other = obj.getBoolean("ignore_other");
-							}
-							String skip = obj.getString("field_skip");
-							boolean extra = obj.getBoolean("extra"); 
-							boolean extra_required=false;
-							if(obj.has("extra_required"))
-								extra_required = obj.getBoolean("extra_required");
-							CheckBox cb = new CheckBox(activity);
-							cb.setText(text);
-							cb.setTextSize(radioButtonTextSize); // same as radio 
-							cb.setTag(R.id.checkbox_value, tag);
-							cb.setTag(R.id.field_skip, skip);
-							cb.setTag(R.id.extra, extra);
-							cb.setTag(R.id.extra_required, extra_required);
-							cb.setTag(R.id.ignore_other, ignore_other);
-							cb.setTypeface(typeface.getTypeFace());
-
-							LayoutParams cbParams = new LayoutParams(
-									LayoutParams.WRAP_CONTENT,
-									LayoutParams.WRAP_CONTENT);
-							cbParams.setMargins(15, 5, 15, 5);
-							cb.setLayoutParams(cbParams);
-							setTypeFace(cb);
-							checkBoxList.add(cb);
-							checkboxCount++;
-						}
-
-						if (field_random) {
-
-						}
-
-						for (final CheckBox cb : checkBoxList) {
-							LinearLayout checkBoxLine = new LinearLayout(activity);
-							checkBoxLine.setTag(R.id.layout_id, "checkBoxLine");
-							checkBoxLine.setLayoutParams(checkBoxLineLayoutParams);
-							checkBoxLine.setOrientation(LinearLayout.VERTICAL);
-
-							Boolean extraRequired = Boolean.parseBoolean(cb.getTag(R.id.extra).toString());
-
-							EditText extraValue = new EditText(activity);
-							extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
-							cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-								@Override
-								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-									
-								}
-							});
-							
-							cb.setOnClickListener(new OnClickListener() {
-								
-								@Override
-								public void onClick(View view___) {
-									boolean isChecked = cb.isChecked();
-									LinearLayout checkBoxLine = (LinearLayout) cb.getParent();
-									CheckBox selectedCB = (CheckBox) checkBoxLine.getChildAt(0); // <- making static so far
-									EditText selectedExtra = (EditText) checkBoxLine.getChildAt(1); // <- making static so far..
-									if(selectedExtra!=null)
-									if(!isChecked){
-										selectedExtra.setLayoutParams(extraValueLayoutParamsDisappear);
-									}else{
-										selectedExtra.setLayoutParams(extraValueLayoutParamsAppear);
-									}
-									// ignore stuffs\
-									LinearLayout checkBoxLayout = (LinearLayout) checkBoxLine.getParent();
-									if(selectedCB.getTag(R.id.ignore_other)!=null){
-										boolean ignore_other = Boolean.parseBoolean(selectedCB.getTag(R.id.ignore_other).toString());
-										if(ignore_other){
-											
-											for(int c=0; c<checkBoxLayout.getChildCount(); c++){
-												View v = checkBoxLayout.getChildAt(c);
-												if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
-													LinearLayout singleCheckBoxLine = (LinearLayout) v;
-													CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
-
-													String a = singleCheckBox.toString(); //<-- debug it
-													String b = selectedCB.toString(); // debug it if they are the same or not
-													a.length();
-													b.length();
-													if(singleCheckBox!=selectedCB){
-														singleCheckBox.setChecked(false);
-													}
-												}
-											}
-											
-										} else{ // those checkboxes which involved ignore_other but false
-											for(int c=0; c<checkBoxLayout.getChildCount(); c++){
-												View v = checkBoxLayout.getChildAt(c);
-												if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
-													LinearLayout singleCheckBoxLine = (LinearLayout) v;
-													CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
-													boolean single_ignore_other = Boolean.parseBoolean(singleCheckBox.getTag(R.id.ignore_other).toString());
-													if(single_ignore_other){ // juz find the ignore_other checkbox and discheck it
-														singleCheckBox.setChecked(false);
-													}
-												}
-											}
-										}
-									}
-									else{ // those checkboxes which doesn't even involved ignore_other 
-										for(int c=0; c<checkBoxLayout.getChildCount(); c++){
-											View v = checkBoxLayout.getChildAt(c);
-											if(v.getTag(R.id.layout_id)!=null && v.getTag(R.id.layout_id).toString().equals("checkBoxLine")){
-												LinearLayout singleCheckBoxLine = (LinearLayout) v;
-												CheckBox singleCheckBox = LinearLayoutManager.getCheckBoxFromCheckBoxLine(singleCheckBoxLine);
-												boolean single_ignore_other = Boolean.parseBoolean(singleCheckBox.getTag(R.id.ignore_other).toString());
-												if(single_ignore_other){ // juz find the ignore_other checkbox and discheck it
-													singleCheckBox.setChecked(false);
-												}
-											}
-										}
-									}
-								}
-							});
-							
-							checkBoxLine.addView(cb);
-							if(extraRequired)
-								checkBoxLine.addView(extraValue);
-							checkBoxLayout.addView(checkBoxLine);
-						}
+						checkBoxLayout.addView(theCheckBoxLayout);
 						scroll.addView(checkBoxLayout);
 						parentLayout.addView(scroll);
 						addErrorMsg(parentLayout);
@@ -1650,15 +1329,6 @@ public class JSONReader {
                         setTypeFace(tvdescription);
                         matrixNumberLayout.addView(tvdescription);
 
-                        LinearLayout theMatrixLayout = new LinearLayout(
-                                activity);
-                        theMatrixLayout.setLayoutParams(new LayoutParams(
-                                LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT));
-                        theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-                        theMatrixLayout.setTag(R.id.layout_id,
-                                "theMatrixLayout");
-
                         // <dataset_v stuffs>
                         JSONObject field_dataset_v = (JSONObject) fields
                                 .get("field_dataset_v");
@@ -1722,217 +1392,12 @@ public class JSONReader {
                         JSONArray matrix_values = (JSONArray) fields
                                 .get("matrix_values");
 
-                        int v_count = v_values_list.size();
-                        int h_count = h_values_list.size();
+						MatrixNumberLayout theMatrixLayout = new MatrixNumberLayout(
+								activity);
+						theMatrixLayout.initLayout(h_values_list,
+								v_values_list, matrix_values);
 
-                        // grouping all cells by each column
-                        LinkedList<ArrayList<MatrixCell>> columnSetCollection = new LinkedList<ArrayList<MatrixCell>>();
-
-                        for (int h = 0; h < h_count; h++) {
-                            ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
-
-                            for (int count = 0; count < matrix_values.length(); count++) {
-                                JSONObject cell_values = matrix_values
-                                        .getJSONObject(count);
-                                String fieldSkip = cell_values
-                                        .getString("field_skip");
-                                String value = cell_values.getString("value");
-                                String index_ = cell_values.getString("index");
-                                String[] parts = index_.split(",");
-                                int h_ = Integer.parseInt(parts[0]);
-                                int v_ = Integer.parseInt(parts[1]);
-
-                                if (h_ == h) {
-                                    MatrixCell cell = new MatrixCell();
-                                    cell.setFieldSkip(fieldSkip);
-                                    cell.setValue(value);
-                                    cell.setH_index(h_);
-                                    cell.setV_index(v_);
-                                    columnSet.add(cell);
-                                }
-                            }
-                            columnSetCollection.add(columnSet);
-                        }
-                        //Collections.shuffle(columnSetCollection);
-                        // <producing row_label_set>
-                        LinearLayout row_label_column_set = new LinearLayout(
-                                activity);
-                        row_label_column_set.setTag(R.id.layout_id,
-                                "rowLabelColumn");
-                        int cell_row_width = 200;
-                        int cell_column_width = 150;
-                        int cell_column_height = 70;
-                        int cell_input_width = 100;
-
-                        LayoutParams rowLabelLayoutParams = new LayoutParams(
-                                cell_row_width, LayoutParams.WRAP_CONTENT);
-                        row_label_column_set
-                                .setLayoutParams(rowLabelLayoutParams);
-                        row_label_column_set
-                                .setOrientation(LinearLayout.VERTICAL);
-                        row_label_column_set.setGravity(Gravity.CENTER);
-
-                        LinearLayout blankLayout = new LinearLayout(activity);
-                        LayoutParams blankLayoutParams = new LayoutParams(
-                                cell_row_width, cell_column_height);
-                        blankLayout.setLayoutParams(blankLayoutParams);
-                        blankLayout.setGravity(Gravity.CENTER);
-                        TextView blankText = new TextView(activity);
-                        blankText.setLayoutParams(new LayoutParams(
-                                cell_row_width, cell_column_height));
-                        blankText.setText("     ");
-                        // row_label_column_set is the left vertical column
-                        blankLayout.addView(blankText);
-                        row_label_column_set.addView(blankLayout);
-                        theMatrixLayout.addView(row_label_column_set);
-
-                        for (int r = 0; r < v_values_list.size(); r++) {
-                            LinearLayout rowLabelCells = new LinearLayout(
-                                    activity);
-
-                            LayoutParams rowLabelCellsParams = new LayoutParams(
-                                    cell_row_width, cell_column_height);
-                            rowLabelCells.setLayoutParams(rowLabelCellsParams);
-
-                            TextView rowLabel = new TextView(activity);
-                            setTypeFace(rowLabel);
-                            LayoutParams rowLabelParams = new LayoutParams(
-                                    cell_row_width, cell_column_height);
-                            rowLabel.setLayoutParams(rowLabelParams);
-                            rowLabel.setText(v_values_list.get(r).get("label")
-                                    .toString());
-                            rowLabel.setGravity(Gravity.START);
-                            // rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
-                            // value may be useless here
-                            row_label_column_set.addView(rowLabel);
-                        }
-                        // </producing row_label_set>
-
-                        int maxHeight = 0;
-
-                        // <prepare AllColumns
-                        LinearLayout AllColumns = new LinearLayout(activity);
-                        AllColumns.setLayoutParams(new LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT));
-                        AllColumns.setOrientation(LinearLayout.HORIZONTAL);
-                        AllColumns.setTag(R.id.layout_id, "AllColumns");
-
-                        // <prepare columnSet>
-                        for (int column = 0; column < columnSetCollection
-                                .size(); column++) {
-                            ArrayList<MatrixCell> columnSet = columnSetCollection
-                                    .get(column);
-                            MatrixCell labelCell = columnSet.get(0);
-                            LinearLayout columnLayout = new LinearLayout(
-                                    activity);
-                            LayoutParams columnLayoutParams = new LayoutParams(
-                                    cell_column_width,
-                                    LayoutParams.WRAP_CONTENT);
-                            columnLayout.setLayoutParams(columnLayoutParams);
-                            columnLayout.setOrientation(LinearLayout.VERTICAL);
-                            columnLayout.setGravity(Gravity.CENTER);
-                            columnLayout.setTag(R.id.layout_id, "columnLayout");
-
-                            // getting h_values_ here...
-                            String max_range = "";
-                            if (h_values_list.get(labelCell.getH_index())
-                                    .get("max_range").length() > 0)
-                                max_range = h_values_list.get(
-                                        labelCell.getH_index())
-                                        .get("max_range");
-                            else
-                                max_range = "#no_value#";
-                            String field_skip = h_values_list.get(
-                                    labelCell.getH_index()).get("field_skip");
-                            String value = h_values_list.get(
-                                    labelCell.getH_index()).get("value");
-                            String label = h_values_list.get(
-                                    labelCell.getH_index()).get("label");
-                            String extra = h_values_list.get(
-                                    labelCell.getH_index()).get("extra");
-                            String error_message = "";
-                            if (h_values_list.get(labelCell.getH_index())
-                                    .get("error_message").length() > 0)
-                                h_values_list.get(labelCell.getH_index()).get(
-                                        "error_message");
-                            else
-                                error_message = "#no_value#";
-
-                            // max_range
-                            columnLayout.setTag(R.id.dataset_max_range,
-                                    max_range);
-                            // field_skip
-                            columnLayout.setTag(R.id.dataset_field_skip,
-                                    field_skip);
-                            // value
-                            columnLayout.setTag(R.id.dataset_value, value);
-                            // label
-                            columnLayout.setTag(R.id.dataset_label, label);
-                            // extra
-                            columnLayout.setTag(R.id.dataset_extra, extra);
-                            // error_message
-                            columnLayout.setTag(R.id.dataset_error_message,
-                                    error_message);
-
-                            TextView tvColumnTitle = new TextView(activity);
-                            tvColumnTitle.setLayoutParams(new LayoutParams(
-                                    cell_column_width, cell_column_height));
-                            tvColumnTitle.setText(label);
-                            // tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
-                            tvColumnTitle.setGravity(Gravity.CENTER);
-                            tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
-                            // following code dosen't work
-                            // if(tvColumnTitle.getLayoutParams().height>maxHeight){
-                            // maxHeight = tvColumnTitle.getHeight();
-                            // }
-
-                            columnLayout.addView(tvColumnTitle);
-
-                            for (int cs = 0; cs < columnSet.size(); cs++) {
-                                MatrixCell cell = columnSet.get(cs);
-                                LinearLayout singleNumberBoxLayout = new LinearLayout(
-                                        activity);
-                                singleNumberBoxLayout
-                                        .setLayoutParams(new LayoutParams(
-                                                cell_column_width,
-                                                cell_column_height));
-                                singleNumberBoxLayout.setGravity(Gravity.CENTER);
-                                singleNumberBoxLayout.setTag(R.id.layout_id,
-                                        "cell");
-                                EditText tb = new EditText(activity);
-                                
-        						LayoutParams textBoxParams = new LayoutParams(
-        								cell_input_width,
-                                		cell_column_height);
-                                tb.setLayoutParams(textBoxParams);
-                                tb.setTag(R.id.matrix_cell, cell);
-                                // cb.setGravity(Gravity.CENTER); // <-- center
-                                // horizontal didn't work here
-                                singleNumberBoxLayout.addView(tb);
-                                // singleNumberBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
-                                columnLayout.addView(singleNumberBoxLayout);
-                            }
-                            // here
-                            AllColumns.addView(columnLayout);
-                            // theMatrixLayout.addView(columnLayout);
-                        }
-                        // </prepare columnSet>
-
-                        // </matrix stuffs>
-
-                        MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
-                                activity);
-                        horizontalScrollView.setLayoutParams(new LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT));
-                        horizontalScrollView.addView(AllColumns);
-                        horizontalScrollView.setTag(R.id.layout_id,
-                                "horizontalScrollView");
-                        horizontalScrollView
-                                .requestDisallowInterceptTouchEvent(false);
-                        theMatrixLayout.addView(horizontalScrollView);
-                        matrixNumberLayout.addView(theMatrixLayout);
+						matrixNumberLayout.addView(theMatrixLayout);
 
                         scroll.addView(matrixNumberLayout);
                         parentLayout.addView(scroll);
@@ -2023,22 +1488,13 @@ public class JSONReader {
                         setTypeFace(tvdescription);
                         matrixNumberLayout.addView(tvdescription);
 
-                        LinearLayout theMatrixLayout = new LinearLayout(
-                                activity);
-                        theMatrixLayout.setLayoutParams(new LayoutParams(
-                                LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT));
-                        theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-                        theMatrixLayout.setTag(R.id.layout_id,
-                                "theMatrixLayout");
-
-                        // <dataset_v stuffs>
-                        JSONObject field_dataset_v = (JSONObject) fields
-                                .get("field_dataset_v");
-                        JSONArray v_values = field_dataset_v
-                                .getJSONArray("dataset_values");
-                        String v_name = field_dataset_v
-                                .getString("dataset_name");
+						// <dataset_v stuffs>
+						JSONObject field_dataset_v = (JSONObject) fields
+								.get("field_dataset_v");
+						JSONArray v_values = field_dataset_v
+								.getJSONArray("dataset_values");
+						String v_name = field_dataset_v
+								.getString("dataset_name");
 
                         ArrayList<HashMap<String, String>> v_values_list = new ArrayList<HashMap<String, String>>();
                         for (int v = 0; v < v_values.length(); v++) {
@@ -2095,220 +1551,12 @@ public class JSONReader {
                         JSONArray matrix_values = (JSONArray) fields
                                 .get("matrix_values");
 
-                        int v_count = v_values_list.size();
-                        int h_count = h_values_list.size();
+						MatrixNumberLayout theMatrixLayout = new MatrixNumberLayout(
+								activity);
+						theMatrixLayout.initLayout(h_values_list,
+								v_values_list, matrix_values);
 
-                        // grouping all cells by each column
-                        LinkedList<ArrayList<MatrixCell>> columnSetCollection = new LinkedList<ArrayList<MatrixCell>>();
-
-                        for (int h = 0; h < h_count; h++) {
-                            ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
-
-                            for (int count = 0; count < matrix_values.length(); count++) {
-                                JSONObject cell_values = matrix_values
-                                        .getJSONObject(count);
-                                String fieldSkip = cell_values
-                                        .getString("field_skip");
-                                String value = cell_values.getString("value");
-                                String index_ = cell_values.getString("index");
-                                String[] parts = index_.split(",");
-                                int h_ = Integer.parseInt(parts[0]);
-                                int v_ = Integer.parseInt(parts[1]);
-
-                                if (h_ == h) {
-                                    MatrixCell cell = new MatrixCell();
-                                    cell.setFieldSkip(fieldSkip);
-                                    cell.setValue(value);
-                                    cell.setH_index(h_);
-                                    cell.setV_index(v_);
-                                    columnSet.add(cell);
-                                }
-                            }
-                            columnSetCollection.add(columnSet);
-                        }
-                        
-                        //Collections.shuffle(columnSetCollection);
-                        // <producing row_label_set>
-                        LinearLayout row_label_column_set = new LinearLayout(
-                                activity);
-                        row_label_column_set.setTag(R.id.layout_id,
-                                "rowLabelColumn");
-                        int cell_row_width = 200;
-                        int cell_column_width = 150;
-                        int cell_column_height = 70;
-                        int cell_input_width = 100;
-
-                        LayoutParams rowLabelLayoutParams = new LayoutParams(
-                                cell_row_width, LayoutParams.WRAP_CONTENT);
-                        row_label_column_set
-                                .setLayoutParams(rowLabelLayoutParams);
-                        row_label_column_set
-                                .setOrientation(LinearLayout.VERTICAL);
-                        row_label_column_set.setGravity(Gravity.CENTER);
-
-                        LinearLayout blankLayout = new LinearLayout(activity);
-                        LayoutParams blankLayoutParams = new LayoutParams(
-                                cell_row_width, cell_column_height);
-                        blankLayout.setLayoutParams(blankLayoutParams);
-                        blankLayout.setGravity(Gravity.CENTER);
-                        TextView blankText = new TextView(activity);
-                        blankText.setLayoutParams(new LayoutParams(
-                                cell_row_width, cell_column_height));
-                        blankText.setText("     ");
-                        // row_label_column_set is the left vertical column
-                        blankLayout.addView(blankText);
-                        row_label_column_set.addView(blankLayout);
-                        theMatrixLayout.addView(row_label_column_set);
-
-                        for (int r = 0; r < v_values_list.size(); r++) {
-                            LinearLayout rowLabelCells = new LinearLayout(
-                                    activity);
-
-                            LayoutParams rowLabelCellsParams = new LayoutParams(
-                                    cell_row_width, cell_column_height);
-                            rowLabelCells.setLayoutParams(rowLabelCellsParams);
-
-                            TextView rowLabel = new TextView(activity);
-                            LayoutParams rowLabelParams = new LayoutParams(
-                                    cell_row_width, cell_column_height);
-                            rowLabel.setLayoutParams(rowLabelParams);
-                            rowLabel.setText(v_values_list.get(r).get("label")
-                                    .toString());
-                            rowLabel.setGravity(Gravity.START);
-                            // rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
-                            // value may be useless here
-                            row_label_column_set.addView(rowLabel);
-                        }
-                        // </producing row_label_set>
-
-                        int maxHeight = 0;
-
-                        // <prepare AllColumns
-                        LinearLayout AllColumns = new LinearLayout(activity);
-                        AllColumns.setLayoutParams(new LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT));
-                        AllColumns.setOrientation(LinearLayout.HORIZONTAL);
-                        AllColumns.setTag(R.id.layout_id, "AllColumns");
-
-                        // <prepare columnSet>
-                        for (int column = 0; column < columnSetCollection
-                                .size(); column++) {
-                            ArrayList<MatrixCell> columnSet = columnSetCollection
-                                    .get(column);
-                            MatrixCell labelCell = columnSet.get(0);
-                            LinearLayout columnLayout = new LinearLayout(
-                                    activity);
-                            LayoutParams columnLayoutParams = new LayoutParams(
-                                    cell_column_width,
-                                    LayoutParams.WRAP_CONTENT);
-                            columnLayout.setLayoutParams(columnLayoutParams);
-                            columnLayout.setOrientation(LinearLayout.VERTICAL);
-                            columnLayout.setGravity(Gravity.CENTER);
-                            columnLayout.setTag(R.id.layout_id, "columnLayout");
-
-                            // getting h_values_ here...
-                            String max_range = "";
-                            if (h_values_list.get(labelCell.getH_index())
-                                    .get("max_range").length() > 0)
-                                max_range = h_values_list.get(
-                                        labelCell.getH_index())
-                                        .get("max_range");
-                            else
-                                max_range = "#no_value#";
-                            String field_skip = h_values_list.get(
-                                    labelCell.getH_index()).get("field_skip");
-                            String value = h_values_list.get(
-                                    labelCell.getH_index()).get("value");
-                            String label = h_values_list.get(
-                                    labelCell.getH_index()).get("label");
-                            String extra = h_values_list.get(
-                                    labelCell.getH_index()).get("extra");
-                            String error_message = "";
-                            if (h_values_list.get(labelCell.getH_index())
-                                    .get("error_message").length() > 0)
-                                h_values_list.get(labelCell.getH_index()).get(
-                                        "error_message");
-                            else
-                                error_message = "#no_value#";
-
-                            // max_range
-                            columnLayout.setTag(R.id.dataset_max_range,
-                                    max_range);
-                            // field_skip
-                            columnLayout.setTag(R.id.dataset_field_skip,
-                                    field_skip);
-                            // value
-                            columnLayout.setTag(R.id.dataset_value, value);
-                            // label
-                            columnLayout.setTag(R.id.dataset_label, label);
-                            // extra
-                            columnLayout.setTag(R.id.dataset_extra, extra);
-                            // error_message
-                            columnLayout.setTag(R.id.dataset_error_message,
-                                    error_message);
-
-                            TextView tvColumnTitle = new TextView(activity);
-                            setTypeFace(tvColumnTitle);
-                            tvColumnTitle.setLayoutParams(new LayoutParams(
-                                    cell_column_width, cell_column_height));
-                            tvColumnTitle.setText(label);
-                            // tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
-                            tvColumnTitle.setGravity(Gravity.CENTER);
-                            tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
-                            // following code dosen't work
-                            // if(tvColumnTitle.getLayoutParams().height>maxHeight){
-                            // maxHeight = tvColumnTitle.getHeight();
-                            // }
-
-                            columnLayout.addView(tvColumnTitle);
-
-                            for (int cs = 0; cs < columnSet.size(); cs++) {
-                                MatrixCell cell = columnSet.get(cs);
-                                LinearLayout singleNumberBoxLayout = new LinearLayout(
-                                        activity);
-                                singleNumberBoxLayout
-                                        .setLayoutParams(new LayoutParams(
-                                                cell_column_width,
-                                                cell_column_height));
-                                singleNumberBoxLayout.setGravity(Gravity.CENTER);
-                                singleNumberBoxLayout.setTag(R.id.layout_id,
-                                        "cell");
-                                EditText tb = new EditText(activity);
-                                tb.setInputType(InputType.TYPE_CLASS_NUMBER);
-        						tb.setKeyListener(DigitsKeyListener
-        								.getInstance("0123456789."));
-        						LayoutParams textBoxParams = new LayoutParams(
-        								cell_input_width,
-                                		cell_column_height);
-                                tb.setLayoutParams(textBoxParams);
-                                tb.setTag(R.id.matrix_cell, cell);
-                                // cb.setGravity(Gravity.CENTER); // <-- center
-                                // horizontal didn't work here
-                                singleNumberBoxLayout.addView(tb);
-                                // singleNumberBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
-                                columnLayout.addView(singleNumberBoxLayout);
-                            }
-                            // here
-                            AllColumns.addView(columnLayout);
-                            // theMatrixLayout.addView(columnLayout);
-                        }
-                        // </prepare columnSet>
-
-                        // </matrix stuffs>
-
-                        MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
-                                activity);
-                        horizontalScrollView.setLayoutParams(new LayoutParams(
-                                LayoutParams.MATCH_PARENT,
-                                LayoutParams.MATCH_PARENT));
-                        horizontalScrollView.addView(AllColumns);
-                        horizontalScrollView.setTag(R.id.layout_id,
-                                "horizontalScrollView");
-                        horizontalScrollView
-                                .requestDisallowInterceptTouchEvent(false);
-                        theMatrixLayout.addView(horizontalScrollView);
-                        matrixNumberLayout.addView(theMatrixLayout);
+						matrixNumberLayout.addView(theMatrixLayout);
 
                         scroll.addView(matrixNumberLayout);
                         parentLayout.addView(scroll);
@@ -2400,19 +1648,6 @@ public class JSONReader {
 						setTypeFace(tvdescription);
 						matrixChecklistLayout.addView(tvdescription);
 
-						LinearLayout theMatrixLayout = new LinearLayout(
-								activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT));
-						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-						theMatrixLayout.setTag(R.id.layout_id,
-								"theMatrixLayout");
-						
-						//String type = fields.get("column_normal"); // <-- to add
-						String type= "column_normal";
-						
-
 						// <dataset_v stuffs>
 						JSONObject field_dataset_v = (JSONObject) fields
 								.get("field_dataset_v");
@@ -2476,215 +1711,11 @@ public class JSONReader {
 						JSONArray matrix_values = (JSONArray) fields
 								.get("matrix_values");
 
-						int v_count = v_values_list.size();
-						int h_count = h_values_list.size();
-
-						// grouping all cells by each column
-						LinkedList<ArrayList<MatrixCell>> columnSetCollection = new LinkedList<ArrayList<MatrixCell>>();
-
-						for (int h = 0; h < h_count; h++) {
-							ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
-
-							for (int count = 0; count < matrix_values.length(); count++) {
-								JSONObject cell_values = matrix_values
-										.getJSONObject(count);
-								String fieldSkip = cell_values
-										.getString("field_skip");
-								String value = cell_values.getString("value");
-								String index_ = cell_values.getString("index");
-								String[] parts = index_.split(",");
-								int h_ = Integer.parseInt(parts[0]);
-								int v_ = Integer.parseInt(parts[1]);
-
-								if (h_ == h) {
-									MatrixCell cell = new MatrixCell();
-									cell.setFieldSkip(fieldSkip);
-									cell.setValue(value);
-									cell.setH_index(h_);
-									cell.setV_index(v_);
-									columnSet.add(cell);
-								}
-							}
-							columnSetCollection.add(columnSet);
-						}
-						//Collections.shuffle(columnSetCollection);
-						// <producing row_label_set>
-						LinearLayout row_label_column_set = new LinearLayout(
+						MatrixCheckListLayout theMatrixLayout = new MatrixCheckListLayout(
 								activity);
-						row_label_column_set.setTag(R.id.layout_id,
-								"rowLabelColumn");
-						int cell_row_width = 200;
-						int cell_column_width = 150;
-						int cell_column_height = 70;
+						theMatrixLayout.initLayout(h_values_list,
+								v_values_list, matrix_values);
 
-						LayoutParams rowLabelLayoutParams = new LayoutParams(
-								cell_row_width, LayoutParams.WRAP_CONTENT);
-						row_label_column_set
-								.setLayoutParams(rowLabelLayoutParams);
-						row_label_column_set
-								.setOrientation(LinearLayout.VERTICAL);
-						row_label_column_set.setGravity(Gravity.CENTER);
-
-						LinearLayout blankLayout = new LinearLayout(activity);
-						LayoutParams blankLayoutParams = new LayoutParams(
-								cell_row_width, cell_column_height);
-						blankLayout.setLayoutParams(blankLayoutParams);
-						blankLayout.setGravity(Gravity.CENTER);
-						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(
-								cell_row_width, cell_column_height));
-						blankText.setText("     ");
-						// row_label_column_set is the left vertical column
-						blankLayout.addView(blankText);
-						row_label_column_set.addView(blankLayout);
-						theMatrixLayout.addView(row_label_column_set);
-
-						for (int r = 0; r < v_values_list.size(); r++) {
-							LinearLayout rowLabelCells = new LinearLayout(
-									activity);
-
-							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_row_width, cell_column_height);
-							rowLabelCells.setLayoutParams(rowLabelCellsParams);
-
-							TextView rowLabel = new TextView(activity);
-							setTypeFace(rowLabel);
-							LayoutParams rowLabelParams = new LayoutParams(
-									cell_row_width, cell_column_height);
-							rowLabel.setLayoutParams(rowLabelParams);
-							rowLabel.setText(v_values_list.get(r).get("label")
-									.toString());
-							rowLabel.setGravity(Gravity.START);
-							// rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
-							// value may be useless here
-							row_label_column_set.addView(rowLabel);
-						}
-						// </producing row_label_set>
-
-						int maxHeight = 0;
-
-						// <prepare AllColumns
-						LinearLayout AllColumns = new LinearLayout(activity);
-						AllColumns.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
-						AllColumns.setOrientation(LinearLayout.HORIZONTAL);
-						AllColumns.setTag(R.id.layout_id, "AllColumns");
-
-						// <prepare columnSet>
-						for (int column = 0; column < columnSetCollection
-								.size(); column++) {
-							ArrayList<MatrixCell> columnSet = columnSetCollection
-									.get(column);
-							MatrixCell labelCell = columnSet.get(0);
-							LinearLayout columnLayout = new LinearLayout(
-									activity);
-							LayoutParams columnLayoutParams = new LayoutParams(
-									cell_column_width,
-									LayoutParams.WRAP_CONTENT);
-							columnLayout.setLayoutParams(columnLayoutParams);
-							columnLayout.setOrientation(LinearLayout.VERTICAL);
-							columnLayout.setGravity(Gravity.CENTER);
-							columnLayout.setTag(R.id.layout_id, "columnLayout");
-
-							// getting h_values_ here...
-							String max_range = "";
-							if (h_values_list.get(labelCell.getH_index())
-									.get("max_range").length() > 0)
-								max_range = h_values_list.get(
-										labelCell.getH_index())
-										.get("max_range");
-							else
-								max_range = "#no_value#";
-							String field_skip = h_values_list.get(
-									labelCell.getH_index()).get("field_skip");
-							String value = h_values_list.get(
-									labelCell.getH_index()).get("value");
-							String label = h_values_list.get(
-									labelCell.getH_index()).get("label");
-							String extra = h_values_list.get(
-									labelCell.getH_index()).get("extra");
-							String error_message = "";
-							if (h_values_list.get(labelCell.getH_index())
-									.get("error_message").length() > 0)
-								h_values_list.get(labelCell.getH_index()).get(
-										"error_message");
-							else
-								error_message = "#no_value#";
-
-							// max_range
-							columnLayout.setTag(R.id.dataset_max_range,
-									max_range);
-							// field_skip
-							columnLayout.setTag(R.id.dataset_field_skip,
-									field_skip);
-							// value
-							columnLayout.setTag(R.id.dataset_value, value);
-							// label
-							columnLayout.setTag(R.id.dataset_label, label);
-							// extra
-							columnLayout.setTag(R.id.dataset_extra, extra);
-							// error_message
-							columnLayout.setTag(R.id.dataset_error_message,
-									error_message);
-
-							TextView tvColumnTitle = new TextView(activity);
-							setTypeFace(tvColumnTitle);
-							tvColumnTitle.setLayoutParams(new LayoutParams(
-									cell_column_width, cell_column_height));
-							tvColumnTitle.setText(label);
-							// tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
-							tvColumnTitle.setGravity(Gravity.CENTER);
-							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
-							// following code dosen't work
-							// if(tvColumnTitle.getLayoutParams().height>maxHeight){
-							// maxHeight = tvColumnTitle.getHeight();
-							// }
-
-							columnLayout.addView(tvColumnTitle);
-
-							for (int cs = 0; cs < columnSet.size(); cs++) {
-								MatrixCell cell = columnSet.get(cs);
-								LinearLayout singleCheckBoxLayout = new LinearLayout(
-										activity);
-								singleCheckBoxLayout
-										.setLayoutParams(new LayoutParams(
-												cell_column_width,
-												cell_column_height));
-								singleCheckBoxLayout.setGravity(Gravity.CENTER);
-								singleCheckBoxLayout.setTag(R.id.layout_id,
-										"cell");
-								CheckBox cb = new CheckBox(activity);
-								LayoutParams checkBoxParams = new LayoutParams(
-										LayoutParams.WRAP_CONTENT,
-										LayoutParams.WRAP_CONTENT);
-								cb.setLayoutParams(checkBoxParams);
-								cb.setTag(R.id.matrix_cell, cell);
-								// cb.setGravity(Gravity.CENTER); // <-- center
-								// horizontal didn't work here
-								singleCheckBoxLayout.addView(cb);
-								// singleCheckBoxLayout.setBackgroundColor(Color.parseColor("#5abde4"));
-								columnLayout.addView(singleCheckBoxLayout);
-							}
-							// here
-							AllColumns.addView(columnLayout);
-							// theMatrixLayout.addView(columnLayout);
-						}
-						// </prepare columnSet>
-
-						// </matrix stuffs>
-
-						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
-								activity);
-						horizontalScrollView.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
-						horizontalScrollView.addView(AllColumns);
-						horizontalScrollView.setTag(R.id.layout_id,
-								"horizontalScrollView");
-						horizontalScrollView
-								.requestDisallowInterceptTouchEvent(false);
-						theMatrixLayout.addView(horizontalScrollView);
 						matrixChecklistLayout.addView(theMatrixLayout);
 
 						scroll.addView(matrixChecklistLayout);
@@ -2780,15 +1811,6 @@ public class JSONReader {
 						setTypeFace(tvdescription);
 						matrixOptionLayout.addView(tvdescription);
 
-						LinearLayout theMatrixLayout = new LinearLayout(
-								activity);
-						theMatrixLayout.setLayoutParams(new LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT));
-						theMatrixLayout.setOrientation(LinearLayout.HORIZONTAL);
-						theMatrixLayout.setTag(R.id.layout_id,
-								"theMatrixLayout");
-
 						// <dataset_v stuffs>
 						JSONObject field_dataset_v = (JSONObject) fields
 								.get("field_dataset_v");
@@ -2856,276 +1878,11 @@ public class JSONReader {
 						// < matrix stuffs >
 						JSONArray matrix_values = (JSONArray) fields
 								.get("matrix_values");
+						
+						MatrixOptionLayout theMatrixLayout = new MatrixOptionLayout(activity);
+						theMatrixLayout.initLayout(h_values_list, v_values_list, matrix_values);
 
-						int v_count = v_values_list.size();
-						int h_count = h_values_list.size();
-
-						// grouping all cells by each column
-						LinkedList<ArrayList<MatrixCell>> columnSetCollection = new LinkedList<ArrayList<MatrixCell>>();
-
-						for (int h = 0; h < h_count; h++) {
-							ArrayList<MatrixCell> columnSet = new ArrayList<MatrixCell>();
-
-							for (int count = 0; count < matrix_values.length(); count++) {
-								JSONObject cell_values = matrix_values
-										.getJSONObject(count);
-								String fieldSkip = cell_values
-										.getString("field_skip");
-								String value = cell_values.getString("value");
-								String index_ = cell_values.getString("index");
-								String[] parts = index_.split(",");
-								int h_ = Integer.parseInt(parts[0].trim());
-								int v_ = Integer.parseInt(parts[1].trim());
-
-								if (h_ == h) {
-									MatrixCell cell = new MatrixCell();
-									cell.setFieldSkip(fieldSkip);
-									cell.setValue(value);
-									cell.setH_index(h_);
-									cell.setV_index(v_);
-									columnSet.add(cell);
-								}
-							}
-							columnSetCollection.add(columnSet);
-						}
-						//Collections.shuffle(columnSetCollection);
-
-						// <producing row_label_set>
-						LinearLayout row_label_column_set = new LinearLayout(
-								activity);
-						row_label_column_set.setTag(R.id.layout_id,
-								"rowLabelColumn");
-						int cell_row_width = 200;
-						int cell_column_width = 150;
-						int cell_column_height = 70;
-
-						LayoutParams rowLabelLayoutParams = new LayoutParams(
-								cell_row_width, LayoutParams.WRAP_CONTENT);
-						row_label_column_set
-								.setLayoutParams(rowLabelLayoutParams);
-						row_label_column_set
-								.setOrientation(LinearLayout.VERTICAL);
-						row_label_column_set.setGravity(Gravity.CENTER);
-
-						LinearLayout blankLayout = new LinearLayout(activity);
-						LayoutParams blankLayoutParams = new LayoutParams(
-								cell_row_width, cell_column_height);
-						blankLayout.setLayoutParams(blankLayoutParams);
-						blankLayout.setGravity(Gravity.CENTER);
-						TextView blankText = new TextView(activity);
-						blankText.setLayoutParams(new LayoutParams(
-								cell_row_width, cell_column_height));
-						blankText.setText("   -   ");
-						// row_label_column_set is the left vertical column
-						blankLayout.addView(blankText);
-						row_label_column_set.addView(blankLayout);
-
-						for (int r = 0; r < v_values_list.size(); r++) {
-							LinearLayout rowLabelCells = new LinearLayout(
-									activity);
-
-							LayoutParams rowLabelCellsParams = new LayoutParams(
-									cell_row_width, cell_column_height);
-							rowLabelCells.setLayoutParams(rowLabelCellsParams);
-
-							TextView rowLabel = new TextView(activity);
-							setTypeFace(rowLabel);
-							LayoutParams rowLabelParams = new LayoutParams(
-									cell_row_width, cell_column_height);
-							rowLabel.setLayoutParams(rowLabelParams);
-							rowLabel.setText(v_values_list.get(r).get("label")
-									.toString());
-							rowLabel.setGravity(Gravity.START
-									| Gravity.CENTER_VERTICAL);
-							// rowLabel.setBackgroundColor(Color.parseColor("#49F2D6"));
-							// value may be useless here
-
-							row_label_column_set.addView(rowLabel);
-
-						}
-
-						theMatrixLayout.addView(row_label_column_set);
-						theMatrixLayout.setPadding(10, 0, 0, 0);
-						// </producing row_label_set>
-
-						int maxHeight = 0;
-
-						// <prepare AllColumns
-						LinearLayout AllColumns = new LinearLayout(activity);
-						AllColumns.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
-						AllColumns.setOrientation(LinearLayout.HORIZONTAL);
-						AllColumns.setTag(R.id.layout_id, "AllColumns");
-
-						// <prepare columnSet>
-						for (int column = 0; column < columnSetCollection
-								.size(); column++) {
-							ArrayList<MatrixCell> columnSet = columnSetCollection
-									.get(column);
-							MatrixCell labelCell = columnSet.get(0);
-
-							LinearLayout columnLayout = new LinearLayout(
-									activity);
-							LayoutParams columnLayoutParams = new LayoutParams(
-									cell_column_width,
-									LayoutParams.MATCH_PARENT);
-							columnLayout.setLayoutParams(columnLayoutParams);
-							columnLayout.setOrientation(LinearLayout.VERTICAL);
-							columnLayout.setGravity(Gravity.CENTER);
-							columnLayout.setTag(R.id.layout_id, "columnLayout");
-
-							columnLayout.setTag("");
-							// getting h_values_ here...
-							String max_range = "";
-							if (h_values_list.get(labelCell.getH_index()).get(
-									"max_range") != null)
-								max_range = h_values_list.get(
-										labelCell.getH_index())
-										.get("max_range");
-							else
-								max_range = "#no_value#";
-							String field_skip = h_values_list.get(
-									labelCell.getH_index()).get("field_skip");
-							String value = h_values_list.get(
-									labelCell.getH_index()).get("value");
-							String label = h_values_list.get(
-									labelCell.getH_index()).get("label");
-							String extra = h_values_list.get(
-									labelCell.getH_index()).get("extra");
-							String error_message = "";
-							if (h_values_list.get(labelCell.getH_index()).get(
-									"error_message") != null)
-								error_message = h_values_list.get(
-										labelCell.getH_index()).get(
-										"error_message");
-							else
-								error_message = "#no_value#";
-							// set them..
-							// max_range
-							columnLayout.setTag(R.id.dataset_max_range,
-									max_range);
-							// field_skip
-							columnLayout.setTag(R.id.dataset_field_skip,
-									field_skip);
-							// value
-							columnLayout.setTag(R.id.dataset_value, value);
-							// label
-							columnLayout.setTag(R.id.dataset_label, label);
-							// extra
-							columnLayout.setTag(R.id.dataset_extra, extra);
-							// error_message
-							columnLayout.setTag(R.id.dataset_error_message,
-									error_message);
-
-							TextView tvColumnTitle = new TextView(activity);
-							setTypeFace(tvColumnTitle);
-							tvColumnTitle.setLayoutParams(new LayoutParams(
-									cell_column_width, cell_column_height));
-							tvColumnTitle.setText(label);
-							// tvColumnTitle.setBackgroundColor(Color.parseColor("#aabbcc"));
-							tvColumnTitle.setGravity(Gravity.CENTER);
-							tvColumnTitle.setTag(R.id.layout_id, "columnTitle");
-							// following code dosen't work
-							// if(tvColumnTitle.getLayoutParams().height>maxHeight){
-							// maxHeight = tvColumnTitle.getHeight();
-							// }
-
-							columnLayout.addView(tvColumnTitle);
-
-							for (int cs = 0; cs < columnSet.size(); cs++) {
-								MatrixCell cell = columnSet.get(cs);
-
-								LinearLayout singleRadioLayout = new LinearLayout(
-										activity);
-								singleRadioLayout.setLayoutParams(new LayoutParams(
-												cell_column_width,
-												cell_column_height));
-								singleRadioLayout.setGravity(Gravity.CENTER);
-								singleRadioLayout.setTag(R.id.layout_id, "cell");
-								RadioButton rb = new RadioButton(activity);
-								LayoutParams RadioParams = new LayoutParams(
-										LayoutParams.WRAP_CONTENT,
-										LayoutParams.WRAP_CONTENT);
-								rb.setLayoutParams(RadioParams);
-								rb.setTag(R.id.matrix_cell, cell);
-								rb.setTag(R.id.is_radiobutton_selected, false);
-								// rb.setGravity(Gravity.CENTER); // <-- center
-								// horizontal didn't work here
-								singleRadioLayout.addView(rb);
-								radioButtonList.add(rb);
-								// singleRadioLayout.setBackgroundColor(Color.parseColor("#5abde4"));
-								columnLayout.addView(singleRadioLayout);
-							}
-							// here
-							AllColumns.addView(columnLayout);
-							// theMatrixLayout.addView(columnLayout);
-						}
-						// </prepare columnSet>
-
-						// </matrix stuffs>
-
-						MYHorizontalScrollView horizontalScrollView = new MYHorizontalScrollView(
-								activity);
-						horizontalScrollView.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.WRAP_CONTENT));
-						horizontalScrollView.addView(AllColumns);
-						horizontalScrollView.setTag(R.id.layout_id,
-								"horizontalScrollView");
-						horizontalScrollView
-								.requestDisallowInterceptTouchEvent(false);
-						theMatrixLayout.addView(horizontalScrollView);
 						matrixOptionLayout.addView(theMatrixLayout);
-
-						// <setting onClickListener to individual RadioButton>
-						for (int v = 0; v < v_values_list.size(); v++) { // 4
-							final ArrayList<RadioButton> singleRowAtC = new ArrayList<RadioButton>();
-							// <collecting cell by v index>
-							for (RadioButton rb : radioButtonList) {
-								MatrixCell cell = (MatrixCell) rb
-										.getTag(R.id.matrix_cell);
-								if (cell.getV_index() == v) {
-									singleRowAtC.add(rb);
-								}
-							}
-							// </collecting cell by v index>
-
-							// <setting Listener>
-							for (int s = 0; s < singleRowAtC.size(); s++) { // 4
-								final RadioButton rb = singleRowAtC.get(s);
-								rb.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										rb.setTag(R.id.is_radiobutton_selected,
-												true);
-										MatrixCell cell = (MatrixCell) rb
-												.getTag(R.id.matrix_cell);
-										String uniqueValue = cell.getValue();
-										for (int ss = 0; ss < singleRowAtC
-												.size(); ss++) {
-											RadioButton loopButton = singleRowAtC
-													.get(ss);
-											MatrixCell loopCell = (MatrixCell) loopButton
-													.getTag(R.id.matrix_cell);
-											if (!uniqueValue.equals(loopCell
-													.getValue())) {
-												RadioButton otherButton = singleRowAtC
-														.get(ss);
-												otherButton.setChecked(false);
-												otherButton
-														.setTag(R.id.is_radiobutton_selected,
-																false);
-											}
-										}
-									}
-								});
-							}
-							// </setting Listener>
-						}
-
-						// </setting onClickListener to individual RadioButton>
 
 						scroll.addView(matrixOptionLayout);
 						parentLayout.addView(scroll);
@@ -4463,13 +3220,10 @@ public class JSONReader {
 					fields.put("field_help", jChild.getString("field_help"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
-					if (jChild.has("render_ref"))
-						fields.put("render_ref", jChild.getString("render_ref"));
-					if (jChild.has("render_ref_type"))
-						fields.put("render_ref_type", jChild.getString("render_ref_type"));
-					if(jChild.has("field_default_value"))
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+
+					if (jChild.has("field_default_value"))
+						fields.put("field_default_value",
+								jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref_cond"))
 						fields.put("next_ref_cond", jChild.getJSONArray("next_ref_cond"));
@@ -4679,11 +3433,7 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getBoolean("field_required"));
-					if (jChild.has("render_ref"))
-						fields.put("render_ref", jChild.getString("render_ref"));
-					if (jChild.has("render_ref_type"))
-						fields.put("render_ref_type",
-								jChild.getString("render_ref_type"));
+					
 
 					// fields.put("field_default_value",
 					// jChild.getInt("field_default_value"));
@@ -4698,6 +3448,16 @@ public class JSONReader {
 					fields.put("dataset_values", dataset_values);
 					fields.put("dataset_name", dataset_name);
 				}
+
+				// tma: general fields go here
+				if (jChild.has("ref_setter"))
+					fields.put("ref_setter", jChild.getString("ref_setter"));
+				if (jChild.has("render_ref"))
+					fields.put("render_ref", jChild.getString("render_ref"));
+				if (jChild.has("render_ref_type"))
+					fields.put("render_ref_type",
+							jChild.getString("render_ref_type"));
+
 				if (!fields.isEmpty())
 					fieldList.add(fields);
 			}
@@ -4707,6 +3467,31 @@ public class JSONReader {
 			xaveyToast.xaveyToast(null, e.getMessage());
 		}
 		return fieldList;
+	}
+
+	public ArrayList<HashMap<String, Object>> getFormRefs(String form_json) {
+		ArrayList<HashMap<String, Object>> refList = new ArrayList<HashMap<String, Object>>();
+		try {
+			JSONObject json = new JSONObject(
+					convertStandardJSONString(form_json));
+			JSONArray form_refs = json.getJSONArray("form_refs");
+			for (int i = 0; i < form_refs.length(); i++) {
+				JSONObject jChild = form_refs.getJSONObject(i);
+				HashMap<String, Object> fields = new HashMap<String, Object>();
+				fields.put("ref_id", jChild.getString("ref_id"));
+				fields.put("ref_name", jChild.getString("ref_name"));
+				fields.put("ref_type", jChild.getString("ref_type"));
+				fields.put("ref_setter", jChild.getJSONArray("ref_setter"));
+				if (!fields.isEmpty()) {
+					refList.add(fields);
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			ToastManager xaveyToast = new ToastManager(activity);
+			xaveyToast.xaveyToast(null, e.getMessage());
+		}
+		return refList;
 	}
 
 	public ArrayList<HashMap<String, String>> getDocumentFields(
