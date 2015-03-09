@@ -2673,7 +2673,32 @@ public class OneQuestionOneView extends FragmentActivity {
 
 						} else if (nextLayoutID.equals("checklistLayout")) {
 
-						} else if (nextLayoutID.equals("matrixLayout")) {
+						} else if (nextLayoutID.equals("matrixOptionLayout")) {
+							
+						}
+					}
+				}
+				else if (render_ref_type
+						.equals("display_dataset_h_set_ref")) {
+					// if end with ref
+					// read from ref values
+					// prepare dataset
+					// get target linear layout, remove and add new one
+					String refValue = Refs.get(render_ref);
+					if (refValue != null && refValue.length() > 0) {
+
+						if (nextLayoutID.equals("matrixOptionLayout")) {
+							for (int a = 0; a < nextInnerLayout.getChildCount(); a++) {
+								View view = nextInnerLayout.getChildAt(a);
+								if (view.getClass()
+										.getName()
+										.equals("com.xavey.android.layout.MatrixOptionLayout")) {
+									JSONHelper jh = new JSONHelper();
+									RadioGroupLayout radioGroup = (RadioGroupLayout) view;
+									final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
+									radioGroup.initLayout(dsArray);
+								}
+							}
 
 						}
 					}

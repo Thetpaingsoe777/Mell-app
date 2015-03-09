@@ -164,7 +164,7 @@ public class LinearLayoutManager {
 			for (int i = 0; i < linearLayout.getChildCount(); i++) {
 				String className = linearLayout.getChildAt(i).getClass()
 						.getName();
-				if (className.equals("android.widget.RadioGroup")) {
+				if (className.equals("com.xavey.android.layout.RadioGroupLayout")) {
 					RadioGroup rg = (RadioGroup) linearLayout.getChildAt(i);
 					RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(rg);
 					if (selectedButton != null)
