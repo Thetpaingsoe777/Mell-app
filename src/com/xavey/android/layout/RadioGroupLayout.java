@@ -1,30 +1,20 @@
 package com.xavey.android.layout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Random;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.xavey.android.R;
-import com.xavey.android.model.MatrixCell;
-import com.xavey.android.util.MYHorizontalScrollView;
-import com.xavey.android.util.Utils;
-
 import android.content.Context;
-import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
+
+import com.xavey.android.R;
+import com.xavey.android.util.Utils;
 
 public class RadioGroupLayout extends RadioGroup {
 
@@ -68,7 +58,7 @@ public class RadioGroupLayout extends RadioGroup {
 	public void initLayout(JSONArray valueList) throws Exception{
 		this.removeAllViews();
 		final RadioGroup that = this;
-		
+
 		LayoutParams radioGroupParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT);

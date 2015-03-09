@@ -1,6 +1,8 @@
 package com.xavey.android.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,13 +19,28 @@ public class JSONHelper {
 		jsonO.put("field_skip", "");
 		return jsonO;
 	}
-	
-	public JSONArray StringToDataSet(String[] StringData) throws JSONException {
+
+	public JSONArray StringToJSONDataSet(String[] StringData) throws Exception {
 		JSONArray thisArray = new JSONArray();
 		for (int i = 0; i < StringData.length; i++) {
 			thisArray.put(StringToDataSet(StringData[i]));
 		}
 		return thisArray;
+	}
+
+	public ArrayList<HashMap<String, String>> StringToMapDataSet(String[] StringData) throws Exception {
+		ArrayList<HashMap<String, String>> values_list = new ArrayList<HashMap<String, String>>();
+		for (int i = 0; i < StringData.length; i++) {
+			HashMap<String,String> thisArray = new HashMap<String,String>();
+			thisArray.put("max_range", "");
+			thisArray.put("field_skip", "");
+			thisArray.put("value", StringData[i]);
+			thisArray.put("label", StringData[i]);
+			thisArray.put("extra", "");
+			thisArray.put("error_message", "");
+			values_list.add(thisArray);
+		}
+		return values_list;
 	}
 
 	public JSONArray AppendStringToDataSet(JSONArray ParentArray,
@@ -36,7 +53,7 @@ public class JSONHelper {
 			tempCompare[x]=jsonO.getString("label").toLowerCase();
 			returnArray.put(jsonO);
 		}
-		
+
 		for (int j = 0; j < StringData.length; j++) {
 			String newLabel = StringData[j];
 			if(newLabel!=null&&newLabel.length()>0){
@@ -47,5 +64,35 @@ public class JSONHelper {
 			}
 		}
 		return returnArray;
+	}
+	
+	public JSONArray generateMatrixValues(ArrayList<HashMap<String, String>> hValueList, ArrayList<HashMap<String, String>> vValueList) throws JSONException{
+
+		hValueList.size();
+		vValueList.size();
+		
+		JSONArray matrix_values = new JSONArray();
+		
+		for(int h=0; h<hValueList.size(); h++){ // outter h loop
+			HashMap<String, String> current_h = hValueList.get(h);
+			String current_h_value = current_h.get("value");
+			//String current_h_label = current_h.get("label");
+			
+			for(int v=0; v<vValueList.size(); v++){ // inner v loop
+				
+				HashMap<String, String> current_v = vValueList.get(v);
+				String current_v_value = current_v.get("value");
+				//String current_v_label = current_v.get("label");
+				
+				JSONObject obj = new JSONObject();
+				obj.put("index", h+","+v);
+				obj.put("value", current_h_value+"_"+current_v_value);
+				obj.put("field_skip", "");
+				obj.put("extra", false);
+				matrix_values.put(obj);
+			}
+		}
+		
+		return matrix_values;
 	}
 }

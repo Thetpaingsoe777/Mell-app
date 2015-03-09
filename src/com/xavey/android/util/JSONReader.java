@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -30,8 +29,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -62,7 +59,6 @@ import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
-import com.xavey.android.model.MatrixCell;
 import com.xavey.android.model.User;
 
 // (1) getFile()
@@ -1786,6 +1782,10 @@ public class JSONReader {
 								fields.get("next_ref"));
 						matrixOptionLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
+						if(fields.containsKey("render_ref"))
+							matrixOptionLayout.setTag(R.id.render_ref, fields.get("render_ref"));
+						if(fields.containsKey("render_ref_type"))
+							matrixOptionLayout.setTag(R.id.render_ref_type, fields.get("render_ref_type"));
 						String field_label = fields.get("field_label")
 								.toString();
 
@@ -1878,10 +1878,15 @@ public class JSONReader {
 						// < matrix stuffs >
 						JSONArray matrix_values = (JSONArray) fields
 								.get("matrix_values");
-						
-						MatrixOptionLayout theMatrixLayout = new MatrixOptionLayout(activity);
-						theMatrixLayout.initLayout(h_values_list, v_values_list, matrix_values);
 
+						MatrixOptionLayout theMatrixLayout = new MatrixOptionLayout(activity);
+
+						theMatrixLayout.setHValueList(h_values_list);
+						theMatrixLayout.setVValueList(v_values_list);
+						theMatrixLayout.setCellValueList(matrix_values);
+						theMatrixLayout.initLayout(); // above three params are needed to init this 
+						
+						
 						matrixOptionLayout.addView(theMatrixLayout);
 
 						scroll.addView(matrixOptionLayout);
@@ -3043,8 +3048,8 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getBoolean("field_required"));
-					fields.put("field_default_value",
-							jChild.get("field_default_value"));
+					if(jChild.has("field_default_value"))
+						fields.put("field_default_value", jChild.get("field_default_value"));
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
 					JSONObject field_dataset = jChild
 							.getJSONObject("field_dataset");
@@ -3284,6 +3289,11 @@ public class JSONReader {
 						fields.put("next_ref", jChild.getString("next_ref"));
 					fields.put("field_dataset_h",
 							jChild.getJSONObject("field_dataset_h"));
+					if (jChild.has("render_ref"))
+						fields.put("render_ref", jChild.getString("render_ref"));
+					if (jChild.has("render_ref_type"))
+						fields.put("render_ref_type",
+								jChild.getString("render_ref_type"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_id", jChild.getString("field_id"));
 				} else if (field_type.equals("matrix_checklist")) {

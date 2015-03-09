@@ -63,6 +63,7 @@ import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
 import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
+import com.xavey.android.layout.MatrixOptionLayout;
 import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
@@ -541,7 +542,7 @@ public class OneQuestionOneView extends FragmentActivity {
 									boolean isSelectedAnyRadio = false;
 									String errMessage = "";
 									if (className
-											.equals("android.widget.RadioGroup")) {
+											.equals("com.xavey.android.layout.RadioGroupLayout")) {
 										// radio
 
 										boolean extra_value_required = false;
@@ -1614,7 +1615,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(y)
 							.getClass();
 
-					if (subClass.getName().equals("android.widget.RadioGroup")) {
+					if (subClass.getName().equals("com.xavey.android.layout.RadioGroupLayout")) {
 						// radio
 						RadioGroup radioGroup = (RadioGroup) linearLayout
 								.getChildAt(y);
@@ -2679,7 +2680,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 				}
 				else if (render_ref_type
-						.equals("display_dataset_h_set_ref")) {
+						.equals("display_dataset_v_set_ref")) {
 					// if end with ref
 					// read from ref values
 					// prepare dataset
@@ -2694,12 +2695,19 @@ public class OneQuestionOneView extends FragmentActivity {
 										.getName()
 										.equals("com.xavey.android.layout.MatrixOptionLayout")) {
 									JSONHelper jh = new JSONHelper();
-									RadioGroupLayout radioGroup = (RadioGroupLayout) view;
-									final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
-									radioGroup.initLayout(dsArray);
+									MatrixOptionLayout matOpt = (MatrixOptionLayout) view;
+									//final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
+//									radioGroup.initLayout(dsArray);
+									//hValueList , vValueList, cellValueList
+									ArrayList<HashMap<String, String>> hValueList = matOpt.getHValueList();
+									ArrayList<HashMap<String, String>> vValueList = jh.StringToMapDataSet(refValue.split("\\|"));
+									JSONArray cellValueList = jh.generateMatrixValues(hValueList, vValueList);
+									matOpt.setHValueList(hValueList);
+									matOpt.setVValueList(vValueList);
+									matOpt.setCellValueList(cellValueList);
+									matOpt.initLayout();
 								}
 							}
-
 						}
 					}
 				}

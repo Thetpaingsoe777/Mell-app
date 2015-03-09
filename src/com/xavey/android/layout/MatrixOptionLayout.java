@@ -39,6 +39,7 @@ public class MatrixOptionLayout extends LinearLayout {
 
 	public void initLayout() throws Exception {
 
+		removeAllViews();
 		this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
 		this.setOrientation(LinearLayout.HORIZONTAL);
@@ -283,28 +284,30 @@ public class MatrixOptionLayout extends LinearLayout {
 		// </setting onClickListener to individual RadioButton>
 	}
 
-	public ArrayList<HashMap<String, String>> get_hValueList() {
+	public ArrayList<HashMap<String, String>> getHValueList() {
 		return _hValueList;
 	}
 
-	public void set_hValueList(ArrayList<HashMap<String, String>> _hValueList) {
+	public void setHValueList(ArrayList<HashMap<String, String>> _hValueList) {
 		this._hValueList = _hValueList;
 	}
 
-	public ArrayList<HashMap<String, String>> get_vValueList() {
+	public ArrayList<HashMap<String, String>> getVValueList() {
 		return _vValueList;
 	}
 
-	public void set_vValueList(ArrayList<HashMap<String, String>> _vValueList) {
+	public void setVValueList(ArrayList<HashMap<String, String>> _vValueList) {
 		this._vValueList = _vValueList;
 	}
 
-	public JSONArray get_cellValueList() {
+	public JSONArray getCellValueList() {
 		return _cellValueList;
 	}
 
-	public void set_cellValueList(JSONArray _cellValueList) {
+	public void setCellValueList(JSONArray _cellValueList) {
 		this._cellValueList = _cellValueList;
 	}
+
+
 
 }
