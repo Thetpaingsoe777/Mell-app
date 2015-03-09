@@ -336,8 +336,8 @@ public class JSONReader {
 								fields.get("field_max_value"));
 						numberLayout.setTag(R.id.field_min_value,
 								fields.get("field_min_value"));
-						numberLayout.setTag(R.id.field_default_value,
-								fields.get("field_default_value"));
+//						numberLayout.setTag(R.id.field_default_value,
+//								fields.get("field_default_value"));
 						numberLayout.setTag(R.id.field_err_msg,
 								fields.get("field_err_msg"));
 						numberLayout.setTag(R.id.next_ref,
@@ -376,8 +376,8 @@ public class JSONReader {
 						String fieldHelp = "-";
 						if (fields.containsKey("field_help"))
 							fieldHelp = fields.get("field_help").toString();
-						ed1.setText(fields.get("field_default_value")
-								.toString());
+//						ed1.setText(fields.get("field_default_value")
+//								.toString());
 						ed1.setGravity(Gravity.LEFT);
 						ed1.setSingleLine(true);
 						ed1.setHint(fieldHelp);
@@ -1207,8 +1207,8 @@ public class JSONReader {
 						noteLayout.setTag(R.id.field_name_id, fields.get("field_name"));
 						noteLayout.setTag(R.id.field_label_id,
 								fields.get("field_label"));
-						noteLayout.setTag(R.id.field_default_value,
-								fields.get("field_default_value"));
+//						noteLayout.setTag(R.id.field_default_value,
+//								fields.get("field_default_value"));
 						noteLayout.setTag(R.id.next_ref, fields.get("next_ref"));
 						noteLayout.setTag(R.id.next_ref_cond,
 								fields.get("next_ref_cond"));
@@ -3012,8 +3012,8 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getString("field_required"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 				} else if (field_type.equals("option")) {
 					// with dataset (s and checklist)
 					fields.put("field_id", jChild.getString("field_id"));
@@ -3048,8 +3048,8 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getBoolean("field_required"));
-					if(jChild.has("field_default_value"))
-						fields.put("field_default_value", jChild.get("field_default_value"));
+//					if(jChild.has("field_default_value"))
+//						fields.put("field_default_value", jChild.get("field_default_value"));
 					HashMap<String, String> field_data_set = new HashMap<String, String>();
 					JSONObject field_dataset = jChild
 							.getJSONObject("field_dataset");
@@ -3096,9 +3096,9 @@ public class JSONReader {
 								"yyyy-MM-dd");
 						today = dateFormat.format(date);
 						fields.put("field_default_value", today);
-					} else
-						fields.put("field_default_value",
-								jChild.getString("field_default_value"));
+					} else{}
+//						fields.put("field_default_value",
+//								jChild.getString("field_default_value"));
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
@@ -3172,8 +3172,8 @@ public class JSONReader {
 					fields.put("field_required",
 							jChild.getString("field_required"));
 					fields.put("field_help", jChild.getString("field_help"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 					fields.put("field_err_msg",
 							jChild.getString("field_err_msg"));
 					fields.put("field_label", jChild.getString("field_label"));
@@ -3202,9 +3202,9 @@ public class JSONReader {
 							jChild.getString("field_required"));
 					if (jChild.getString("field_help").length() > 0)
 						fields.put("field_help", jChild.getString("field_help"));
-					if (jChild.getString("field_default_value").length() > 0)
-						fields.put("field_default_value",
-								jChild.getString("field_default_value"));
+//					if (jChild.getString("field_default_value").length() > 0)
+//						fields.put("field_default_value",
+//								jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
@@ -3226,9 +3226,9 @@ public class JSONReader {
 					if (jChild.has("next_ref"))
 						fields.put("next_ref", jChild.getString("next_ref"));
 
-					if (jChild.has("field_default_value"))
-						fields.put("field_default_value",
-								jChild.getString("field_default_value"));
+//					if (jChild.has("field_default_value"))
+//						fields.put("field_default_value",
+//								jChild.getString("field_default_value"));
 					fields.put("field_label", jChild.getString("field_label"));
 					if (jChild.has("next_ref_cond"))
 						fields.put("next_ref_cond", jChild.getJSONArray("next_ref_cond"));
@@ -3333,8 +3333,8 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getString("field_required"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 					JSONArray dataset_values = jChild.getJSONObject(
 							"field_dataset").getJSONArray("dataset_values");
 					fields.put("dataset_values", dataset_values);
@@ -3356,8 +3356,8 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getString("field_required"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 					JSONArray dataset_values = jChild.getJSONObject(
 							"field_dataset").getJSONArray("dataset_values");
 					fields.put("dataset_values", dataset_values);
@@ -3383,8 +3383,8 @@ public class JSONReader {
 							jChild.getString("field_min_label"));
 					fields.put("field_min_value",
 							jChild.getString("field_min_value"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 				} else if (field_type.equals("rating_set")
 						|| field_type.equals("rating_set_image")) {
 					fields.put("field_id", jChild.getString("field_id"));
@@ -3408,8 +3408,8 @@ public class JSONReader {
 							jChild.getString("field_min_label"));
 					fields.put("field_min_value",
 							jChild.getString("field_min_value"));
-					fields.put("field_default_value",
-							jChild.getString("field_default_value"));
+//					fields.put("field_default_value",
+//							jChild.getString("field_default_value"));
 					fields.put("field_audio_required",
 							jChild.getString("field_audio_required"));
 					JSONArray dataset_values = jChild.getJSONObject(

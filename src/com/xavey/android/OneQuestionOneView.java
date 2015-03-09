@@ -432,7 +432,7 @@ public class OneQuestionOneView extends FragmentActivity {
 											.get("data");
 									ArrayList<String> missingLabels = (ArrayList<String>) test
 											.get("missing_labels");
-									if (missingLabels.size() != 0) {
+									if (missingLabels.size() >= data.size()) { // all fields are not required just one of them will do
 										isAllFieldsFilled = false;
 										String allMissingLabels = "";
 										for (String missingLabel : missingLabels) {
@@ -3143,7 +3143,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout currentParentLayout = layoutList.get(currentPosition);
 		LinearLayoutManager llManager = new LinearLayoutManager();
 		LinearLayout thisLayout = llManager.getInnerLayout(currentParentLayout);
-		if (thisLayout.getTag(R.id.ref_setter) != null) {
+		if (thisLayout!= null && thisLayout.getTag(R.id.ref_setter) != null) {
 			setterPointer = thisLayout.getTag(R.id.ref_setter).toString();
 		}
 		if (setterPointer != null && setterPointer.length() > 0) {
