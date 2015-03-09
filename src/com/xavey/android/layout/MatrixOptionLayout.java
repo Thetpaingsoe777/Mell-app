@@ -5,24 +5,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.xavey.android.R;
-import com.xavey.android.model.MatrixCell;
-import com.xavey.android.util.MYHorizontalScrollView;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
+
+import com.xavey.android.R;
+import com.xavey.android.model.MatrixCell;
+import com.xavey.android.util.MYHorizontalScrollView;
 
 public class MatrixOptionLayout extends LinearLayout {
 
@@ -42,12 +37,7 @@ public class MatrixOptionLayout extends LinearLayout {
 		this(context, attrs);
 	}
 
-	public void initLayout(ArrayList<HashMap<String, String>> hValueList,
-			ArrayList<HashMap<String, String>> vValueList,
-			JSONArray cellValueList) throws Exception {
-		_hValueList = hValueList;
-		_vValueList = vValueList;
-		_cellValueList = cellValueList;
+	public void initLayout() throws Exception {
 
 		this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
 				LayoutParams.WRAP_CONTENT));
@@ -73,7 +63,6 @@ public class MatrixOptionLayout extends LinearLayout {
 				String[] parts = index_.split(",");
 				int h_ = Integer.parseInt(parts[0]);
 				int v_ = Integer.parseInt(parts[1]);
-
 				if (h_ == h) {
 					MatrixCell cell = new MatrixCell();
 					cell.setFieldSkip(fieldSkip);
@@ -131,7 +120,6 @@ public class MatrixOptionLayout extends LinearLayout {
 			// value may be useless here
 
 			row_label_column_set.addView(rowLabel);
-
 		}
 
 		this.addView(row_label_column_set);
@@ -215,7 +203,6 @@ public class MatrixOptionLayout extends LinearLayout {
 
 				for (int cs = 0; cs < columnSet.size(); cs++) {
 					MatrixCell cell = columnSet.get(cs);
-
 					LinearLayout singleRadioLayout = new LinearLayout(
 							this.getContext());
 					singleRadioLayout.setLayoutParams(new LayoutParams(
@@ -293,7 +280,31 @@ public class MatrixOptionLayout extends LinearLayout {
 			}
 			// </setting Listener>
 		}
-
 		// </setting onClickListener to individual RadioButton>
 	}
+
+	public ArrayList<HashMap<String, String>> get_hValueList() {
+		return _hValueList;
+	}
+
+	public void set_hValueList(ArrayList<HashMap<String, String>> _hValueList) {
+		this._hValueList = _hValueList;
+	}
+
+	public ArrayList<HashMap<String, String>> get_vValueList() {
+		return _vValueList;
+	}
+
+	public void set_vValueList(ArrayList<HashMap<String, String>> _vValueList) {
+		this._vValueList = _vValueList;
+	}
+
+	public JSONArray get_cellValueList() {
+		return _cellValueList;
+	}
+
+	public void set_cellValueList(JSONArray _cellValueList) {
+		this._cellValueList = _cellValueList;
+	}
+
 }
