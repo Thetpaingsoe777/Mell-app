@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -184,6 +185,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				@Override
 				public void onPageSelected(int newPosition) {
+					direction = "";
 					if (newPosition > currentPosition) {
 						// left to right
 						direction = LEFT_TO_RIGHT;
@@ -429,21 +431,10 @@ public class OneQuestionOneView extends FragmentActivity {
 												.toString());
 								if (isFieldRequired) {
 									boolean isAllFieldsFilled = true;
-									ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test
-											.get("data");
-									ArrayList<String> missingLabels = (ArrayList<String>) test
-											.get("missing_labels");
-									if (missingLabels.size() >= data.size()) { // all
-																				// fields
-																				// are
-																				// not
-																				// required
-																				// just
-																				// one
-																				// of
-																				// them
-																				// will
-																				// do
+									ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test.get("data");
+									String testValue = test.get("value").toString();
+									ArrayList<String> missingLabels = (ArrayList<String>) test.get("missing_labels");
+									if (testValue.equals(null) || testValue.length()==0) { 
 										isAllFieldsFilled = false;
 										String allMissingLabels = "";
 										for (String missingLabel : missingLabels) {
@@ -452,8 +443,8 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 										allMissingLabels = allMissingLabels
 												.substring(2);
-										toast.xaveyToast(null, allMissingLabels
-												+ " are missing.");
+//										toast.xaveyToast(null, allMissingLabels
+//												+ " are missing.");
 									}
 									// check here
 									if (!isAllFieldsFilled) {
@@ -501,40 +492,14 @@ public class OneQuestionOneView extends FragmentActivity {
 								}
 
 								if (!isValid) {
-
-									// block
-									/*
-									 * if (direction.equals(LEFT_TO_RIGHT)) {
-									 * navigator.addLast(0); used_field_ids
-									 * .addLast(currentFieldID);
-									 * vPager.setCurrentItem (currentPosition);
-									 * errorMsg.setText(field_error_msg);
-									 * errorMsg.setTextColor(Color.RED);
-									 * currentPosition = previousIndex; } else {
-									 * // RIGHT_TO_LEFT int last_range = 0; if
-									 * (navigator.getLast() != null) last_range
-									 * = navigator.getLast(); newPosition =
-									 * currentPosition - last_range;
-									 * vPager.setCurrentItem(newPosition);
-									 * currentPosition = newPosition;
-									 * navigator.removeLast();
-									 * used_field_ids.removeLast(); }
-									 */
 									navStayStill(direction, currentFieldID,
 											field_error_msg, lLManager,
 											newPosition, currentPosition, false);
 								} else {
 									// pass // LEFT to RIGHT
-
 									navLeftToRight(newPosition, currentFieldID);
 
 								}
-								// TODO:navStayStill
-								// if (errorMsg != null)
-								// errorMsg.setText("");
-								// <here is for textSetLayout (just copy from
-								// above)
-
 							}
 							// latested updated
 							// I moved the code here since it needs validation
@@ -693,155 +658,7 @@ public class OneQuestionOneView extends FragmentActivity {
 									}
 								}
 							}
-							// radio ends
-							// checkboxes start
-							/*
-							 * else if (tagID.equals("checkBoxLayout")) { for
-							 * (int i = 0; i < currentLayout .getChildCount();
-							 * i++) { String className = currentLayout
-							 * .getChildAt(i).getClass().getName() .toString();
-							 * 
-							 * if(className.equals("android.widget.ScrollView")){
-							 * ScrollView scrollView = (ScrollView)
-							 * currentLayout .getChildAt(i); LinearLayout
-							 * checkBoxLayout = (LinearLayout)
-							 * scrollView.getChildAt(0);
-							 * 
-							 * boolean isSelectedAnyCheckBox =
-							 * isSelectedAnyCheckBox(checkBoxLayout); boolean
-							 * isFieldRequired = Boolean
-							 * .parseBoolean(currentLayout.getTag(
-							 * R.id.field_required_id) .toString());
-							 * 
-							 * if(isSelectedAnyCheckBox){ // checked something
-							 * for(int cbCount=0;
-							 * cbCount<checkBoxLayout.getChildCount();
-							 * cbCount++){ LinearLayout checkBoxLine =
-							 * (LinearLayout)
-							 * checkBoxLayout.getChildAt(cbCount); CheckBox cb =
-							 * getCheckBoxFromCheckBoxLine(checkBoxLine);
-							 * EditText extra =
-							 * getExtraFromCheckBoxLine(checkBoxLine);
-							 * 
-							 * boolean isChecked = cb.isChecked(); boolean
-							 * extra_value_required =
-							 * Boolean.parseBoolean(cb.getTag
-							 * (R.id.extra_required).toString()); boolean
-							 * isExtraValueTRUE = false; // <-- what's that? no
-							 * idea.. boolean isExtraValueTyped = false;
-							 * if(extra.getText().toString().length()>0){
-							 * isExtraValueTyped |= true; }
-							 * 
-							 * // gotta decide here what to do if(isChecked){
-							 * 
-							 * }
-							 * 
-							 * } }else{ // checked nothing if(isFieldRequired){
-							 * // error , block navStayStill(tagID, className,
-							 * field_error_msg, lLManager, newPosition,
-							 * newPosition, force_stop_r_l) }else{ //
-							 * navLeftToRight(newPosition, className); }
-							 * 
-							 * }
-							 * 
-							 * }
-							 * 
-							 * 
-							 * 
-							 * String errMessage = "";
-							 * 
-							 * 
-							 * 
-							 * RadioGroup radioGroup = (RadioGroup)
-							 * currentLayout .getChildAt(i);
-							 * 
-							 * RadioButton selectedButton =
-							 * getSelectedRadioButtonMyRadioGroup(radioGroup);
-							 * 
-							 * isSelectedAnyRadio = selectedButton != null ?
-							 * true : false;
-							 * 
-							 * if (isSelectedAnyRadio && selectedButton
-							 * .getTag(R.id.extra) != null) { // Extra Value
-							 * isExtraValueTRUE = Boolean
-							 * .parseBoolean(selectedButton .getTag(R.id.extra)
-							 * .toString()); if (selectedButton
-							 * .getTag(R.id.extra_required) != null) {
-							 * extra_value_required = Boolean
-							 * .parseBoolean(selectedButton
-							 * .getTag(R.id.extra_required) .toString()); } }
-							 * 
-							 * String fieldID = currentLayout.getTag(
-							 * R.id.field_id).toString(); Log.i("fieldID",
-							 * fieldID);
-							 * 
-							 * boolean forceStopL_R = false;
-							 * 
-							 * String field_skip = ""; if (selectedButton !=
-							 * null && selectedButton .getTag(R.id.field_skip)
-							 * != null) field_skip = selectedButton.getTag(
-							 * R.id.field_skip).toString(); if
-							 * (extra_value_required) { LinearLayout
-							 * selectedButtonLine = (LinearLayout)
-							 * selectedButton .getParent(); for (int k = 0; k <
-							 * selectedButtonLine .getChildCount(); k++) { View
-							 * buttonLineChild = selectedButtonLine
-							 * .getChildAt(k); if (buttonLineChild .getClass()
-							 * .getName() .equals("android.widget.EditText")) {
-							 * EditText selectedExtra = (EditText)
-							 * buttonLineChild; if (selectedExtra.getText()
-							 * .toString() .length() > 0) isExtraValueTyped =
-							 * true; } } }
-							 * 
-							 * // start stay still validation if
-							 * (isFieldRequired && !isSelectedAnyRadio) { //
-							 * TODO Get error message from // Question
-							 * errMessage = "Required Parent."; }
-							 * 
-							 * if (isExtraValueTRUE && extra_value_required) {
-							 * if (!isExtraValueTyped) { errMessage =
-							 * "Required Child Extra"; } } if
-							 * (ApplicationValues.IS_RECORDING_NOW) {
-							 * forceStopL_R = true;
-							 * 
-							 * navStayStill( direction, currentFieldID,
-							 * 
-							 * errMessage =
-							 * "Audio recording is needed to stop.";
-							 * 
-							 * lLManager, newPosition, currentPosition,
-							 * forceStopL_R);
-							 * 
-							 * } // end stay still validation
-							 * 
-							 * if (errMessage.length() > 0) { // block
-							 * navStayStill(direction, fieldID, errMessage,
-							 * lLManager, newPosition, currentPosition,
-							 * forceStopL_R); } else { // pass if
-							 * (field_skip.length() > 0) { if
-							 * (field_skip.equals("submit")) { // skip to submit
-							 * newPosition = layoutList .size() - 1;
-							 * 
-							 * int range = newPosition - currentPosition;
-							 * navigator.addLast(range); used_field_ids
-							 * .addLast(currentFieldID);
-							 * vPager.setCurrentItem(newPosition);
-							 * currentPosition = newPosition; previousIndex =
-							 * currentPosition; // hide keyboard LinearLayout
-							 * nextLayout_ = layoutList .get(newPosition); if
-							 * (!isSubmitLayout(nextLayout_))
-							 * hideKeyboard(nextLayout_);
-							 * navLeftToRight(newPosition,currentFieldID); }
-							 * else {
-							 * 
-							 * // skip to other questions // logic skipID =
-							 * Integer .parseInt(field_skip); newPosition =
-							 * skipID - 1; navLeftToRight(newPosition,
-							 * currentFieldID); } } else {
-							 * navLeftToRight(newPosition, currentFieldID); } }
-							 * } }
-							 */
-							// checkboxes ends
+							// radio checkboxes ends
 							else if (tagID.equals("matrixCheckListLayout")
 									|| tagID.equals("matrixOptionLayout")) {
 
@@ -2619,73 +2436,69 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 					// </radioLayout>
-				} else if (render_ref_type.equals("display_append_value_set")) {
+				} else if(render_ref_type.equals("display_append_value_set")){
 					LinearLayout renderRefLayout = layoutList.get(renderRefID);
 					LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
 					String renderLayoutID = renderInnerLayout.getTag(
 							R.id.layout_id).toString();
 					// dismiss newly created labels
-					boolean isViewAlreadyExisted = Boolean
-							.parseBoolean(nextInnerLayout.getTag(
-									R.id.isViewAlreadyExisted).toString());
-					// for(int i=0; i<nextInnerLayout.getChildCount(); i++){
-					// View viewToRemove = nextInnerLayout.getChildAt(i);
-					// if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
-					// isViewAlreadyExisted =
-					// Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
-					// if(isViewAlreadyExisted){
-					// viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
-					// }
-					// }
-					// }
-					// nextInnerLayout.refreshDrawableState();
+					boolean isViewAlreadyExisted = Boolean.parseBoolean(nextInnerLayout.getTag(R.id.isViewAlreadyExisted).toString());
+//					for(int i=0; i<nextInnerLayout.getChildCount(); i++){
+//						View viewToRemove = nextInnerLayout.getChildAt(i);
+//						if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
+//							isViewAlreadyExisted = Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
+//							if(isViewAlreadyExisted){
+//								viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
+//							}
+//						}
+//					}
+//					nextInnerLayout.refreshDrawableState();
 
-					render_ref.toCharArray();
-					render_ref.toString();
 					renderRefLayout.getChildCount();
 					String[] selectedValues = null;
-					for (int i = 0; i < renderRefLayout.getChildCount(); i++) {
+					for(int i=0;i<renderRefLayout.getChildCount();i++){
 						View v = renderRefLayout.getChildAt(i);
-						if (v.getClass().getName()
-								.equals("android.widget.LinearLayout")) {
-							String layoutTagKey = v.getTag(R.id.layout_id)
-									.toString();
-							if (layoutTagKey.equals("textSetLayout")) {
+						if(v.getClass().getName().equals("android.widget.LinearLayout")){
+							String layoutTagKey = v.getTag(R.id.layout_id).toString();
+							if(layoutTagKey.equals("textSetLayout")){
 								LinearLayout textSetLayout = (LinearLayout) v;
-								for (int j = 0; j < textSetLayout
-										.getChildCount(); j++) {
-									if (textSetLayout.getChildAt(j).getClass()
-											.getName()
-											.equals("android.widget.ListView")) {
-										ListView textSetListView = (ListView) textSetLayout
-												.getChildAt(j);
-										TextSetAdapter adapter = (TextSetAdapter) textSetListView
-												.getAdapter();
+								for(int j=0; j<textSetLayout.getChildCount(); j++){
+									if(textSetLayout.getChildAt(j).getClass().getName().equals("android.widget.ListView")){
+										ListView textSetListView = (ListView) textSetLayout.getChildAt(j);
+										TextSetAdapter adapter = (TextSetAdapter) textSetListView.getAdapter();
 										selectedValues = adapter.CurrentItems;
 									}
 								}
 							}
 						}
 					}
+
+					// remove blank values from user selected Values
+					ArrayList<String> selectedValues_temp = new ArrayList<String>(Arrays.asList(selectedValues));
+					selectedValues_temp.removeAll(Arrays.asList("")); // remove empty strings , for null Arrays.asList(null), for both Arrays.asList(null,"")
+					selectedValues = selectedValues_temp.toArray(new String[selectedValues_temp.size()]); // assign to old String[]
+
 					// append selected values here..
-					if (!isViewAlreadyExisted) {
-						float textSize = 18;
-						LayoutParams labelLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.WRAP_CONTENT);
-						labelLayoutParams.setMargins(20, 10, 10, 0);
-						for (int i = 0; i < selectedValues.length; i++) {
-							String value = selectedValues[i];
-							TextView referencedLabel = new TextView(this);
-							referencedLabel.setLayoutParams(labelLayoutParams);
-							referencedLabel.setText("-" + value);
-							referencedLabel.setTextSize(textSize);
-							referencedLabel.setTag(R.id.isViewAlreadyExisted,
-									true);
-							nextInnerLayout.addView(referencedLabel);
+					if(isViewAlreadyExisted){
+						int toBeRemoved= nextInnerLayout.getChildCount()-2;
+						for(int a=toBeRemoved; a>0; a--){
+							nextInnerLayout.removeViewAt(nextInnerLayout.getChildCount()-1);
 						}
-						nextInnerLayout.setTag(R.id.isViewAlreadyExisted, true);
 					}
+					float textSize = 18;
+					LayoutParams labelLayoutParams = new LayoutParams(
+							LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+					labelLayoutParams.setMargins(20, 10, 10, 0);
+					for(int i=0; i<selectedValues.length; i++){
+						String value = selectedValues[i];
+						TextView referencedLabel = new TextView(this);
+						referencedLabel.setLayoutParams(labelLayoutParams);
+						referencedLabel.setText("-"+value);
+						referencedLabel.setTextSize(textSize);
+						referencedLabel.setTag(R.id.isViewAlreadyExisted, true);
+						nextInnerLayout.addView(referencedLabel);
+					}
+					nextInnerLayout.setTag(R.id.isViewAlreadyExisted, true);
 				} else if (render_ref_type
 						.equals("display_dataset_append_set_ref")) {
 					// if end with ref
