@@ -14,6 +14,7 @@ import com.xavey.android.util.LinearLayoutManager;
 import com.xavey.android.util.MYHorizontalScrollView;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -29,40 +30,59 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class CheckboxLayout extends LinearLayout {
 
-	private JSONArray _valueList;
-	float _radioButtonTextSize = 16;
+	private JSONArray _baseValueList;
+	float _checkBoxButtonTextSize = 16;
 	android.widget.LinearLayout.LayoutParams _extraValueLayoutParamsDisappear = new LayoutParams(0, 0);
 	android.widget.LinearLayout.LayoutParams _extraValueLayoutParamsAppear = new LayoutParams(0, 0);
 	android.widget.LinearLayout.LayoutParams _checkBoxLineLayoutParams = new LayoutParams(0, 0);
 	
-	public CheckboxLayout(Context context) {
-		super(context);		
+	public CheckboxLayout(Context context, JSONArray baseValue) {
+		super(context);
+		this._baseValueList= baseValue;
+		baseValue = null;
 	}
 
-	public CheckboxLayout(Context context, AttributeSet attrs) {
-		super(context, attrs);		
+	public void setCheckBoxButtonTextSize(float checkBoxButtonTextSize){
+		_checkBoxButtonTextSize=checkBoxButtonTextSize;
 	}
 	
-	public CheckboxLayout(Context context, AttributeSet attrs, int defStyle) {
-		this(context, attrs);	
+	public void setExtraValueLayoutParamsDisappear(android.widget.LinearLayout.LayoutParams extraValueLayoutParamsDisappear){
+		_extraValueLayoutParamsDisappear=extraValueLayoutParamsDisappear;
 	}
 	
-	public void initLayout(JSONArray valueList,android.widget.LinearLayout.LayoutParams checkBoxLineLayoutParams,android.widget.LinearLayout.LayoutParams extraValueLayoutParamsDisappear, android.widget.LinearLayout.LayoutParams extraValueLayoutParamsAppear) throws Exception{
-		
-		_valueList = valueList;
+	public void setExtraValueLayoutParamsAppear(android.widget.LinearLayout.LayoutParams extraValueLayoutParamsAppear){
+		_extraValueLayoutParamsAppear=extraValueLayoutParamsAppear;
+	}
+	
+	public void setCheckBoxLineLayoutParams(android.widget.LinearLayout.LayoutParams checkBoxLineLayoutParams){
 		_checkBoxLineLayoutParams=checkBoxLineLayoutParams;
-		_extraValueLayoutParamsDisappear = extraValueLayoutParamsDisappear;
-		_extraValueLayoutParamsAppear = extraValueLayoutParamsAppear;
+	}
+	
+	public JSONArray getFinalBaseValueList(){
+		return this._baseValueList;
+	}
+	
+	public void setFinalBaseValueList(JSONArray val){
+		this._baseValueList=val;
+		val=null;
+	}
+	
+	
+	public void initLayout(JSONArray valueList) throws Exception{
+		this.removeAllViews();
 		
 		int default_value = 1;
-		int length = _valueList.length();
+		int length = valueList.length();
 		
 		ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
-
+		
+		this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		this.setOrientation(LinearLayout.VERTICAL);
+		
 		int checkboxCount = 0;
 		for (int j = 0; j < length; j++) {
 			JSONObject obj = new JSONObject();
-			obj = _valueList.getJSONObject(j);
+			obj = valueList.getJSONObject(j);
 			String text = obj.getString("label");
 			String tag = obj.getString("value");
                         boolean ignore_other = false;
@@ -77,7 +97,7 @@ public class CheckboxLayout extends LinearLayout {
 						.getBoolean("extra_required");
 			CheckBox cb = new CheckBox(this.getContext());
 			cb.setText(text);
-			cb.setTextSize(_radioButtonTextSize); // same as
+			cb.setTextSize(_checkBoxButtonTextSize); // same as
 													// radio
 			cb.setTag(R.id.checkbox_value, tag);
 			cb.setTag(R.id.field_skip, skip);
@@ -109,14 +129,14 @@ public class CheckboxLayout extends LinearLayout {
 			LinearLayout checkBoxLine = new LinearLayout(this.getContext());
 			checkBoxLine.setTag(R.id.layout_id, "checkBoxLine");
 			checkBoxLine
-					.setLayoutParams(checkBoxLineLayoutParams);
+					.setLayoutParams(_checkBoxLineLayoutParams);
 			checkBoxLine.setOrientation(LinearLayout.VERTICAL);
 
 			Boolean extraRequired = Boolean.parseBoolean(cb
 					.getTag(R.id.extra).toString());
 
 			EditText extraValue = new EditText(this.getContext());
-			extraValue.setLayoutParams(extraValueLayoutParamsDisappear);
+			extraValue.setLayoutParams(_extraValueLayoutParamsDisappear);
 							cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 								@Override
 								public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

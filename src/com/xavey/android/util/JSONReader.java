@@ -715,7 +715,17 @@ public class JSONReader {
 							field_random = Boolean.parseBoolean(fields.get(
 									"field_random").toString());
 						}
-
+						if (fields.containsKey("render_ref"))
+							checkBoxLayout.setTag(R.id.render_ref,
+									fields.get("render_ref"));
+						if (fields.containsKey("render_ref_type"))
+							checkBoxLayout.setTag(R.id.render_ref_type,
+									fields.get("render_ref_type"));
+						// tma: tagging ref_setter value
+						if (fields.containsKey("ref_setter")) {
+							checkBoxLayout.setTag(R.id.ref_setter,
+									fields.get("ref_setter").toString());
+						}
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(checkLabel + " ");
 						tvLabel.setTextSize(labelTextSize);
@@ -747,9 +757,13 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT,
 								LayoutParams.WRAP_CONTENT);
 
-						
-						CheckboxLayout theCheckBoxLayout = new CheckboxLayout(activity);
-						theCheckBoxLayout.initLayout(dataset, checkBoxLineLayoutParams, extraValueLayoutParamsDisappear, extraValueLayoutParamsAppear);
+						CheckboxLayout theCheckBoxLayout = new CheckboxLayout(activity,dataset);
+						theCheckBoxLayout.setCheckBoxButtonTextSize(radioButtonTextSize);
+						theCheckBoxLayout.setCheckBoxLineLayoutParams(checkBoxLineLayoutParams);
+						theCheckBoxLayout.setExtraValueLayoutParamsAppear(extraValueLayoutParamsAppear);
+						theCheckBoxLayout.setExtraValueLayoutParamsDisappear(extraValueLayoutParamsDisappear);
+						theCheckBoxLayout.initLayout(dataset); 
+						dataset = null;
 						
 						checkBoxLayout.addView(theCheckBoxLayout);
 						scroll.addView(checkBoxLayout);
@@ -2715,6 +2729,19 @@ public class JSONReader {
 								dataset_values);
 						String checkLabel = fields.get("field_label")
 								.toString();
+						
+						if (fields.containsKey("render_ref"))
+							textSetLayout.setTag(R.id.render_ref,
+									fields.get("render_ref"));
+						if (fields.containsKey("render_ref_type"))
+							textSetLayout.setTag(R.id.render_ref_type,
+									fields.get("render_ref_type"));
+
+						// tma: tagging ref_setter value
+						if (fields.containsKey("ref_setter")) {
+							textSetLayout.setTag(R.id.ref_setter,
+									fields.get("ref_setter").toString());
+						}
 
 						TextView tvLabel = new TextView(activity);
 						tvLabel.setText(checkLabel + " ");

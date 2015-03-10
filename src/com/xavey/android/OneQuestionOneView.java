@@ -63,6 +63,7 @@ import com.xavey.android.adapter.QuestionPagerAdapter;
 import com.xavey.android.adapter.RatingSetAdapter;
 import com.xavey.android.adapter.TextSetAdapter;
 import com.xavey.android.db.XaveyDBHelper;
+import com.xavey.android.layout.CheckboxLayout;
 import com.xavey.android.layout.MatrixOptionLayout;
 import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Document;
@@ -432,7 +433,17 @@ public class OneQuestionOneView extends FragmentActivity {
 											.get("data");
 									ArrayList<String> missingLabels = (ArrayList<String>) test
 											.get("missing_labels");
-									if (missingLabels.size() >= data.size()) { // all fields are not required just one of them will do
+									if (missingLabels.size() >= data.size()) { // all
+																				// fields
+																				// are
+																				// not
+																				// required
+																				// just
+																				// one
+																				// of
+																				// them
+																				// will
+																				// do
 										isAllFieldsFilled = false;
 										String allMissingLabels = "";
 										for (String missingLabel : missingLabels) {
@@ -1615,7 +1626,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					Class<?> subClass = (Class<?>) linearLayout.getChildAt(y)
 							.getClass();
 
-					if (subClass.getName().equals("com.xavey.android.layout.RadioGroupLayout")) {
+					if (subClass.getName().equals(
+							"com.xavey.android.layout.RadioGroupLayout")) {
 						// radio
 						RadioGroup radioGroup = (RadioGroup) linearLayout
 								.getChildAt(y);
@@ -1683,24 +1695,38 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				LinearLayout checkBoxLayout = linearLayout;
 				for (int c = 0; c < checkBoxLayout.getChildCount(); c++) {
-					LinearLayout checkBoxLine = null;
+					CheckboxLayout checkBoxWrapper = null;
 					View cbLayoutChild = checkBoxLayout.getChildAt(c);
 					if (cbLayoutChild.getClass().getName()
-							.equals("android.widget.LinearLayout")) {
-						checkBoxLine = (LinearLayout) checkBoxLayout
+							.equals("com.xavey.android.layout.CheckboxLayout")) {
+
+						checkBoxWrapper = (CheckboxLayout) checkBoxLayout
 								.getChildAt(c);
-						CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
-						EditText extra = getExtraFromCheckBoxLine(checkBoxLine);
-						if (cb.isChecked()) {
-							String value = cb.getTag(R.id.checkbox_value)
-									.toString();
-							// checkedValues.put(value);
-							if (extra != null
-									&& extra.getText().toString().length() > 0) {
-								value += ":" + extra.getText().toString();
+						for (int d = 0; d < checkBoxWrapper.getChildCount(); d++) {
+							LinearLayout checkBoxLine = null;
+							View cbLineLayoutChild = checkBoxWrapper.getChildAt(d);
+							if (cbLineLayoutChild.getClass().getName()
+									.equals("android.widget.LinearLayout")) {
+								checkBoxLine = (LinearLayout) checkBoxWrapper.getChildAt(d);
+								CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
+								EditText extra = getExtraFromCheckBoxLine(checkBoxLine);
+								if (cb.isChecked()) {
+									String value = cb.getTag(
+											R.id.checkbox_value).toString();
+									// checkedValues.put(value);
+									if (extra != null
+											&& extra.getText().toString()
+													.length() > 0) {
+										value += ":"
+												+ extra.getText().toString();
+									}
+									checkedValues += "|" + value;
+								}
+
 							}
-							checkedValues += "|" + value;
+
 						}
+
 					}
 
 				}
@@ -2593,39 +2619,48 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 					// </radioLayout>
-				}
-				else if(render_ref_type.equals("display_append_value_set")){
+				} else if (render_ref_type.equals("display_append_value_set")) {
 					LinearLayout renderRefLayout = layoutList.get(renderRefID);
 					LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
 					String renderLayoutID = renderInnerLayout.getTag(
 							R.id.layout_id).toString();
 					// dismiss newly created labels
-					boolean isViewAlreadyExisted = Boolean.parseBoolean(nextInnerLayout.getTag(R.id.isViewAlreadyExisted).toString());
-//					for(int i=0; i<nextInnerLayout.getChildCount(); i++){
-//						View viewToRemove = nextInnerLayout.getChildAt(i);
-//						if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
-//							isViewAlreadyExisted = Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
-//							if(isViewAlreadyExisted){
-//								viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
-//							}
-//						}
-//					}
-//					nextInnerLayout.refreshDrawableState();
+					boolean isViewAlreadyExisted = Boolean
+							.parseBoolean(nextInnerLayout.getTag(
+									R.id.isViewAlreadyExisted).toString());
+					// for(int i=0; i<nextInnerLayout.getChildCount(); i++){
+					// View viewToRemove = nextInnerLayout.getChildAt(i);
+					// if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
+					// isViewAlreadyExisted =
+					// Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
+					// if(isViewAlreadyExisted){
+					// viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
+					// }
+					// }
+					// }
+					// nextInnerLayout.refreshDrawableState();
 
 					render_ref.toCharArray();
 					render_ref.toString();
 					renderRefLayout.getChildCount();
 					String[] selectedValues = null;
-					for(int i=0;i<renderRefLayout.getChildCount();i++){
+					for (int i = 0; i < renderRefLayout.getChildCount(); i++) {
 						View v = renderRefLayout.getChildAt(i);
-						if(v.getClass().getName().equals("android.widget.LinearLayout")){
-							String layoutTagKey = v.getTag(R.id.layout_id).toString();
-							if(layoutTagKey.equals("textSetLayout")){
+						if (v.getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							String layoutTagKey = v.getTag(R.id.layout_id)
+									.toString();
+							if (layoutTagKey.equals("textSetLayout")) {
 								LinearLayout textSetLayout = (LinearLayout) v;
-								for(int j=0; j<textSetLayout.getChildCount(); j++){
-									if(textSetLayout.getChildAt(j).getClass().getName().equals("android.widget.ListView")){
-										ListView textSetListView = (ListView) textSetLayout.getChildAt(j);
-										TextSetAdapter adapter = (TextSetAdapter) textSetListView.getAdapter();
+								for (int j = 0; j < textSetLayout
+										.getChildCount(); j++) {
+									if (textSetLayout.getChildAt(j).getClass()
+											.getName()
+											.equals("android.widget.ListView")) {
+										ListView textSetListView = (ListView) textSetLayout
+												.getChildAt(j);
+										TextSetAdapter adapter = (TextSetAdapter) textSetListView
+												.getAdapter();
 										selectedValues = adapter.CurrentItems;
 									}
 								}
@@ -2633,24 +2668,25 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 					// append selected values here..
-					if(!isViewAlreadyExisted){
+					if (!isViewAlreadyExisted) {
 						float textSize = 18;
 						LayoutParams labelLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+								LayoutParams.MATCH_PARENT,
+								LayoutParams.WRAP_CONTENT);
 						labelLayoutParams.setMargins(20, 10, 10, 0);
-						for(int i=0; i<selectedValues.length; i++){
+						for (int i = 0; i < selectedValues.length; i++) {
 							String value = selectedValues[i];
 							TextView referencedLabel = new TextView(this);
 							referencedLabel.setLayoutParams(labelLayoutParams);
-							referencedLabel.setText("-"+value);
+							referencedLabel.setText("-" + value);
 							referencedLabel.setTextSize(textSize);
-							referencedLabel.setTag(R.id.isViewAlreadyExisted, true);
+							referencedLabel.setTag(R.id.isViewAlreadyExisted,
+									true);
 							nextInnerLayout.addView(referencedLabel);
 						}
 						nextInnerLayout.setTag(R.id.isViewAlreadyExisted, true);
 					}
-				}
-				else if (render_ref_type
+				} else if (render_ref_type
 						.equals("display_dataset_append_set_ref")) {
 					// if end with ref
 					// read from ref values
@@ -2659,28 +2695,30 @@ public class OneQuestionOneView extends FragmentActivity {
 					String refValue = Refs.get(render_ref);
 					if (refValue != null && refValue.length() > 0) {
 
-						if (nextLayoutID.equals("radioLayout")) {
+						if (nextLayoutID.equals("checkBoxLayout")) {
 							for (int a = 0; a < nextInnerLayout.getChildCount(); a++) {
 								View view = nextInnerLayout.getChildAt(a);
 								if (view.getClass()
 										.getName()
-										.equals("com.xavey.android.layout.RadioGroupLayout")) {
+										.equals("com.xavey.android.layout.CheckboxLayout")) {
 									JSONHelper jh = new JSONHelper();
-									RadioGroupLayout radioGroup = (RadioGroupLayout) view;
-									final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
-									radioGroup.initLayout(dsArray);
+									CheckboxLayout checkboxGroup = (CheckboxLayout) view;
+									final JSONArray dsArray = jh
+											.AppendStringToDataSet(
+													checkboxGroup
+															.getFinalBaseValueList(),
+													refValue.split("\\|"));
+									checkboxGroup.initLayout(dsArray);
 								}
 							}
 
 						} else if (nextLayoutID.equals("checklistLayout")) {
 
 						} else if (nextLayoutID.equals("matrixOptionLayout")) {
-							
+
 						}
 					}
-				}
-				else if (render_ref_type
-						.equals("display_dataset_v_set_ref")) {
+				} else if (render_ref_type.equals("display_dataset_v_set_ref")) {
 					// if end with ref
 					// read from ref values
 					// prepare dataset
@@ -2696,12 +2734,18 @@ public class OneQuestionOneView extends FragmentActivity {
 										.equals("com.xavey.android.layout.MatrixOptionLayout")) {
 									JSONHelper jh = new JSONHelper();
 									MatrixOptionLayout matOpt = (MatrixOptionLayout) view;
-									//final JSONArray dsArray = jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
-//									radioGroup.initLayout(dsArray);
-									//hValueList , vValueList, cellValueList
-									ArrayList<HashMap<String, String>> hValueList = matOpt.getHValueList();
-									ArrayList<HashMap<String, String>> vValueList = jh.StringToMapDataSet(refValue.split("\\|"));
-									JSONArray cellValueList = jh.generateMatrixValues(hValueList, vValueList);
+									// final JSONArray dsArray =
+									// jh.AppendStringToDataSet(radioGroup.getFinalBaseValueList(),refValue.split("\\|"));
+									// radioGroup.initLayout(dsArray);
+									// hValueList , vValueList, cellValueList
+									ArrayList<HashMap<String, String>> hValueList = matOpt
+											.getHValueList();
+									ArrayList<HashMap<String, String>> vValueList = jh
+											.StringToMapDataSet(refValue
+													.split("\\|"));
+									JSONArray cellValueList = jh
+											.generateMatrixValues(hValueList,
+													vValueList);
 									matOpt.setHValueList(hValueList);
 									matOpt.setVValueList(vValueList);
 									matOpt.setCellValueList(cellValueList);
@@ -3143,7 +3187,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		LinearLayout currentParentLayout = layoutList.get(currentPosition);
 		LinearLayoutManager llManager = new LinearLayoutManager();
 		LinearLayout thisLayout = llManager.getInnerLayout(currentParentLayout);
-		if (thisLayout!= null && thisLayout.getTag(R.id.ref_setter) != null) {
+		if (thisLayout != null && thisLayout.getTag(R.id.ref_setter) != null) {
 			setterPointer = thisLayout.getTag(R.id.ref_setter).toString();
 		}
 		if (setterPointer != null && setterPointer.length() > 0) {
@@ -3168,7 +3212,7 @@ public class OneQuestionOneView extends FragmentActivity {
 								setterID = Integer.valueOf(setterIDRaw);
 								layoutIndex = setterID - 1;
 								if (layoutIndex <= currentPosition
-										|| layoutIndex <= 0) {
+										&& layoutIndex >= 0) {
 									// valid setter ID ready to read
 									// the value from layout
 									HashMap<String, Object> valueFromLayout = getValuesFromEachLayout(
@@ -3180,6 +3224,17 @@ public class OneQuestionOneView extends FragmentActivity {
 										String key = entry.getKey();
 										String value = entry.getValue()
 												.toString();
+										if (value.indexOf("|") > -1) {
+											String[] valList = value
+													.split("\\|");
+											value = "";
+											for (int j = 0; j < valList.length; j++) {
+												if (!valList[j].toLowerCase()
+														.equals("#novalue#")) {
+													value += valList[j] + "|";
+												}
+											}
+										}
 										refValues += value + "|";
 
 									}
