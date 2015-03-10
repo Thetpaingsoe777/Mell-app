@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.xavey.android.R;
+import com.xavey.android.layout.CheckboxLayout;
+import com.xavey.android.layout.RadioGroupLayout;
 
 public class LinearLayoutManager {
 
@@ -164,7 +166,8 @@ public class LinearLayoutManager {
 			for (int i = 0; i < linearLayout.getChildCount(); i++) {
 				String className = linearLayout.getChildAt(i).getClass()
 						.getName();
-				if (className.equals("com.xavey.android.layout.RadioGroupLayout")) {
+				if (className
+						.equals("com.xavey.android.layout.RadioGroupLayout")) {
 					RadioGroup rg = (RadioGroup) linearLayout.getChildAt(i);
 					RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(rg);
 					if (selectedButton != null)
@@ -184,10 +187,25 @@ public class LinearLayoutManager {
 			for (int i = 0; i < linearLayout.getChildCount(); i++) {
 				String className = linearLayout.getChildAt(i).getClass()
 						.getName();
-				if (className.equals("android.widget.CheckBox")) {
-					CheckBox checkBox = (CheckBox) linearLayout.getChildAt(i);
-					if (checkBox.isChecked())
-						isChecked = isChecked || true;
+				if (className.equals("com.xavey.android.layout.CheckboxLayout")) {
+					CheckboxLayout checkBoxWrapper = (CheckboxLayout) linearLayout
+							.getChildAt(i);
+					for (int j = 0; j < checkBoxWrapper.getChildCount(); j++) {
+						if (checkBoxWrapper.getChildAt(j).getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							LinearLayout llCB = (LinearLayout) checkBoxWrapper
+									.getChildAt(j);
+							for (int k = 0; k < llCB.getChildCount(); k++) {
+								if (llCB.getChildAt(k).getClass().getName()
+										.equals("android.widget.CheckBox")) {
+									CheckBox checkBox = (CheckBox) llCB.getChildAt(k);
+									if (checkBox.isChecked())
+										isChecked = isChecked || true;
+								}
+							}
+						}
+					}
+
 				}
 			}
 			if (isChecked)
@@ -288,11 +306,11 @@ public class LinearLayoutManager {
 								if (userTypedValue_.length() == 0) {
 									userTypedValue_ = "#noValue#";
 									missingLabels.add(field_label);
-								}else{
+								} else {
 									map_.put(field_value, userTypedValue_);
-									data.add(map_);									
+									data.add(map_);
 								}
-								
+
 								if (!userTypedValue_.equals("#noValue#")) {
 									if (layoutID.equals("numberSetLayout")) {
 										int inte = Integer
@@ -623,7 +641,7 @@ public class LinearLayoutManager {
 		}
 		return selectedButton;
 	}
-	
+
 	public LinearLayout getInnerLayout(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;
 		LinearLayout innerLayout2 = null;

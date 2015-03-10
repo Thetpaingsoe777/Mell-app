@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -288,9 +289,9 @@ public class OneQuestionOneView extends FragmentActivity {
 					isNeedToValid = isNeedToValid
 							|| currentLayout.getTag(R.id.layout_id).toString()
 									.equals("submitLayout");
-					isNeedToValid = isNeedToValid
-							|| currentLayout.getTag(R.id.layout_id).toString()
-									.equals("checkBoxLayout");
+					// isNeedToValid = isNeedToValid
+					// || currentLayout.getTag(R.id.layout_id).toString()
+					// .equals("checkBoxLayout");
 					// isNeedToValid = isNeedToValid ||
 					// currentLayout.getTag(R.id.layout_id).toString().equals("numberSetLayout");
 					// isNeedToValid = isNeedToValid ||
@@ -417,7 +418,125 @@ public class OneQuestionOneView extends FragmentActivity {
 							}
 							// ----
 							else if (tagID.equals("checkBoxLayout")) {
-								navLeftToRight(newPosition, currentFieldID);
+								// navLeftToRight(newPosition, currentFieldID);
+								{
+									for (int i = 0; i < currentLayout
+											.getChildCount(); i++) {
+										String className = currentLayout
+												.getChildAt(i).getClass()
+												.getName().toString();
+
+										boolean isFieldRequired = Boolean
+												.parseBoolean(currentLayout
+														.getTag(R.id.field_required_id)
+														.toString());
+										String field_skip = "";
+										boolean isSelectedAnyCheckBox = false;
+										String errMessage = "";
+										ArrayList<CheckBox> selectedButton = new ArrayList<CheckBox>();
+										if (className
+												.equals("com.xavey.android.layout.CheckboxLayout")) {
+											// radio
+
+											boolean extra_value_required = false;
+											boolean isExtraValueTRUE = false;
+											boolean isExtraValueTyped = false;
+
+											selectedButton = getSelectedCheckBoxMyCheckboxWrapper(currentLayout);
+
+											isSelectedAnyCheckBox = (selectedButton != null && selectedButton
+													.size() > 0) ? true : false;
+
+											String fieldID = currentLayout
+													.getTag(R.id.field_id)
+													.toString();
+											Log.i("fieldID", fieldID);
+
+											boolean forceStopL_R = false;
+
+											// start stay still validation
+											if (isFieldRequired
+													&& !isSelectedAnyCheckBox) {
+												// TODO Get error message from
+												// Question
+												errMessage = "Please select.";
+											}
+
+											// end stay still validation
+											if (errMessage.length() > 0) { // block
+												navStayStill(direction,
+														fieldID, errMessage,
+														lLManager, newPosition,
+														currentPosition,
+														forceStopL_R);
+											} else {
+												// pass
+												ArrayList<String> skips = new ArrayList<String>();
+												for (CheckBox thisCB : selectedButton) {
+													if (thisCB
+															.getTag(R.id.field_skip) != null) {
+														skips.add(thisCB
+																.getTag(R.id.field_skip)
+																.toString());
+													}
+												}
+												if (skips.size() > 0) {
+													if (skips.indexOf("") > -1) {
+														field_skip = "";
+													} else if (skips
+															.indexOf("submit") > -1) {
+														field_skip = "submit";
+													} else {
+														field_skip = skips
+																.get(0);
+													}
+												}
+
+												if (field_skip.length() > 0) {
+													if (field_skip
+															.equals("submit")) {
+														// skip to submit
+														newPosition = layoutList
+																.size() - 1;
+
+														int range = newPosition
+																- currentPosition;
+														navigator
+																.addLast(range);
+														used_field_ids
+																.addLast(currentFieldID);
+														vPager.setCurrentItem(newPosition);
+														currentPosition = newPosition;
+														previousIndex = currentPosition;
+														// hide keyboard
+														LinearLayout nextLayout_ = layoutList
+																.get(newPosition);
+														if (!isSubmitLayout(nextLayout_))
+															hideKeyboard(nextLayout_);
+														navLeftToRight(
+																newPosition,
+																currentFieldID);
+													} else {
+
+														// skip to other
+														// questions
+														// logic
+														skipID = Integer
+																.parseInt(field_skip);
+														newPosition = skipID - 1;
+														navLeftToRight(
+																newPosition,
+																currentFieldID);
+													}
+												} else {
+													navLeftToRight(newPosition,
+															currentFieldID);
+												}
+											}
+
+										}
+									}
+								}
 							}
 							// ----
 							else if (tagID.equals("numberSetLayout")
@@ -431,10 +550,14 @@ public class OneQuestionOneView extends FragmentActivity {
 												.toString());
 								if (isFieldRequired) {
 									boolean isAllFieldsFilled = true;
-									ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test.get("data");
-									String testValue = test.get("value").toString();
-									ArrayList<String> missingLabels = (ArrayList<String>) test.get("missing_labels");
-									if (testValue.equals(null) || testValue.length()==0) { 
+									ArrayList<HashMap<String, String>> data = (ArrayList<HashMap<String, String>>) test
+											.get("data");
+									String testValue = test.get("value")
+											.toString();
+									ArrayList<String> missingLabels = (ArrayList<String>) test
+											.get("missing_labels");
+									if (testValue.equals(null)
+											|| testValue.length() == 0) {
 										isAllFieldsFilled = false;
 										String allMissingLabels = "";
 										for (String missingLabel : missingLabels) {
@@ -443,8 +566,9 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 										allMissingLabels = allMissingLabels
 												.substring(2);
-//										toast.xaveyToast(null, allMissingLabels
-//												+ " are missing.");
+										// toast.xaveyToast(null,
+										// allMissingLabels
+										// + " are missing.");
 									}
 									// check here
 									if (!isAllFieldsFilled) {
@@ -674,121 +798,118 @@ public class OneQuestionOneView extends FragmentActivity {
 
 								ArrayList<String> selectedValueList = new ArrayList<String>();
 
-								if (isFieldRequired) {
-									for (int i = 0; i < currentLayout
-											.getChildCount(); i++) {
-										View child_ = currentLayout
-												.getChildAt(i);
-										if (child_.getTag(R.id.layout_id) != null
-												&& child_
-														.getTag(R.id.layout_id)
-														.toString()
-														.equals("theMatrixLayout")) {
-											LinearLayout theMatrixLayout = (LinearLayout) child_;
-											theMatrixLayout.getChildCount();
-											for (int j = 0; j < theMatrixLayout
-													.getChildCount(); j++) {
-												View matrix_child = theMatrixLayout
-														.getChildAt(j);
-												if (matrix_child
-														.getClass()
-														.getName()
-														.equals("com.xavey.android.util.MYHorizontalScrollView")) {
-													MYHorizontalScrollView scrollView = (MYHorizontalScrollView) matrix_child;
-													for (int k = 0; k < scrollView
-															.getChildCount(); k++) {
-														View scroll_child = scrollView
-																.getChildAt(k);
-														if (scroll_child
-																.getTag(R.id.layout_id)
-																.toString()
-																.equals("AllColumns")) {
-															LinearLayout AllColumns = (LinearLayout) scroll_child;
+								// if (isFieldRequired) {
+								for (int i = 0; i < currentLayout
+										.getChildCount(); i++) {
+									View child_ = currentLayout.getChildAt(i);
+									if (child_.getTag(R.id.layout_id) != null
+											&& child_.getTag(R.id.layout_id)
+													.toString()
+													.equals("theMatrixLayout")) {
+										LinearLayout theMatrixLayout = (LinearLayout) child_;
+										theMatrixLayout.getChildCount();
+										for (int j = 0; j < theMatrixLayout
+												.getChildCount(); j++) {
+											View matrix_child = theMatrixLayout
+													.getChildAt(j);
+											if (matrix_child
+													.getClass()
+													.getName()
+													.equals("com.xavey.android.util.MYHorizontalScrollView")) {
+												MYHorizontalScrollView scrollView = (MYHorizontalScrollView) matrix_child;
+												for (int k = 0; k < scrollView
+														.getChildCount(); k++) {
+													View scroll_child = scrollView
+															.getChildAt(k);
+													if (scroll_child
+															.getTag(R.id.layout_id)
+															.toString()
+															.equals("AllColumns")) {
+														LinearLayout AllColumns = (LinearLayout) scroll_child;
 
-															while (whileController) {
-																for (int l = 0; l < AllColumns
-																		.getChildCount(); l++) {
-																	View AllColumnsChild = AllColumns
-																			.getChildAt(l);
-																	if (AllColumnsChild
-																			.getTag(R.id.layout_id)
-																			.toString()
-																			.equals("columnLayout")) {
-																		LinearLayout columnLayout = (LinearLayout) AllColumnsChild;
-																		int selectedCount = 0;
-																		String maxRangeString = columnLayout
-																				.getTag(R.id.dataset_max_range)
-																				.toString();
-																		int maxRange = 100; // :TODO
-																							// to
+														while (whileController) {
+															for (int l = 0; l < AllColumns
+																	.getChildCount(); l++) {
+																View AllColumnsChild = AllColumns
+																		.getChildAt(l);
+																if (AllColumnsChild
+																		.getTag(R.id.layout_id)
+																		.toString()
+																		.equals("columnLayout")) {
+																	LinearLayout columnLayout = (LinearLayout) AllColumnsChild;
+																	int selectedCount = 0;
+																	String maxRangeString = columnLayout
+																			.getTag(R.id.dataset_max_range)
+																			.toString();
+																	int maxRange = 100; // :TODO
+																						// to
+																						// get
+																						// value
+																						// from
+																						// JSON
+																	if (maxRangeString
+																			.equals("#no_value#")) {
+																		Toast.makeText(
+																				getApplicationContext(),
+																				"error : ",
+																				5000);
+																	} else
+																		maxRange = Integer
+																				.parseInt(maxRangeString); // <--
+																											// will
+																											// get
+																											// from
+																											// tag
+																	String columnErorMsg = columnLayout
+																			.getTag(R.id.dataset_error_message)
+																			.toString(); // <--
+																							// will
 																							// get
-																							// value
 																							// from
-																							// JSON
-																		if (maxRangeString
-																				.equals("#no_value#")) {
-																			Toast.makeText(
-																					getApplicationContext(),
-																					"error : ",
-																					5000);
-																		} else
-																			maxRange = Integer
-																					.parseInt(maxRangeString); // <--
-																												// will
-																												// get
-																												// from
-																												// tag
-																		String columnErorMsg = columnLayout
-																				.getTag(R.id.dataset_error_message)
-																				.toString(); // <--
-																								// will
-																								// get
-																								// from
-																								// tag
+																							// tag
 
-																		selectedValueList
-																				.size();
-																		for (int m = 0; m < columnLayout
-																				.getChildCount(); m++) {
-																			View eachColumnChild = columnLayout
-																					.getChildAt(m);
-																			if (eachColumnChild
-																					.getTag(R.id.layout_id)
-																					.toString()
-																					.equals("cell")) {
-																				LinearLayout cell = (LinearLayout) eachColumnChild;
-																				for (int n = 0; n < cell
-																						.getChildCount(); n++) {
-																					View cellChild = cell
-																							.getChildAt(n);
-																					if (cellChild
-																							.getClass()
-																							.getName()
-																							.equals("android.widget.RadioButton")) {
-																						RadioButton radioBtn = (RadioButton) cellChild;
-																						if (radioBtn
-																								.isChecked()) {
-																							selectedCount++;
-																							MatrixCell selectedCell = (MatrixCell) radioBtn
-																									.getTag(R.id.matrix_cell);
-																							selectedValueList
-																									.add(selectedCell
-																											.getFieldSkip());
-																						}
+																	selectedValueList
+																			.size();
+																	for (int m = 0; m < columnLayout
+																			.getChildCount(); m++) {
+																		View eachColumnChild = columnLayout
+																				.getChildAt(m);
+																		if (eachColumnChild
+																				.getTag(R.id.layout_id)
+																				.toString()
+																				.equals("cell")) {
+																			LinearLayout cell = (LinearLayout) eachColumnChild;
+																			for (int n = 0; n < cell
+																					.getChildCount(); n++) {
+																				View cellChild = cell
+																						.getChildAt(n);
+																				if (cellChild
+																						.getClass()
+																						.getName()
+																						.equals("android.widget.RadioButton")) {
+																					RadioButton radioBtn = (RadioButton) cellChild;
+																					if (radioBtn
+																							.isChecked()) {
+																						selectedCount++;
+																						MatrixCell selectedCell = (MatrixCell) radioBtn
+																								.getTag(R.id.matrix_cell);
+																						selectedValueList
+																								.add(selectedCell
+																										.getFieldSkip());
 																					}
 																				}
 																			}
 																		}
+																	}
 
-																		if (selectedCount > maxRange) {
-																			isSelectedCountValid = false;
-																			dataset_error_msg = columnErorMsg;
-																			break;
-																		}
+																	if (selectedCount > maxRange) {
+																		isSelectedCountValid = false;
+																		dataset_error_msg = columnErorMsg;
+																		break;
 																	}
 																}
-																whileController = false;
 															}
+															whileController = false;
 														}
 													}
 												}
@@ -796,18 +917,19 @@ public class OneQuestionOneView extends FragmentActivity {
 										}
 									}
 								}
+								// }
 
-								boolean shouldSkip = true;
-								for (String selectedSingleValue : selectedValueList) {
-									if (selectedSingleValue.equals("")) { // <-
-																			// blank
-																			// string
-																			// means
-																			// no
-																			// skip
-										shouldSkip &= false;
-									}
+								boolean shouldSkip = false;
+								if (selectedValueList.indexOf("") <= -1) {
+									shouldSkip = true;
 								}
+								/*
+								 * for (String selectedSingleValue :
+								 * selectedValueList) { if
+								 * (selectedSingleValue.equals("")) { // <- //
+								 * blank // string // means // no // skip
+								 * shouldSkip &= false; } }
+								 */
 
 								if (!isValid || !isSelectedCountValid) {
 									// block
@@ -1521,10 +1643,12 @@ public class OneQuestionOneView extends FragmentActivity {
 								.getChildAt(c);
 						for (int d = 0; d < checkBoxWrapper.getChildCount(); d++) {
 							LinearLayout checkBoxLine = null;
-							View cbLineLayoutChild = checkBoxWrapper.getChildAt(d);
+							View cbLineLayoutChild = checkBoxWrapper
+									.getChildAt(d);
 							if (cbLineLayoutChild.getClass().getName()
 									.equals("android.widget.LinearLayout")) {
-								checkBoxLine = (LinearLayout) checkBoxWrapper.getChildAt(d);
+								checkBoxLine = (LinearLayout) checkBoxWrapper
+										.getChildAt(d);
 								CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
 								EditText extra = getExtraFromCheckBoxLine(checkBoxLine);
 								if (cb.isChecked()) {
@@ -1967,11 +2091,12 @@ public class OneQuestionOneView extends FragmentActivity {
 				key.toCharArray();
 				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
-					if (view.getClass().getName()
-							.equals("android.widget.LinearLayout")
+					if (view.getClass()
+							.getName()
+							.equals("com.xavey.android.layout.MatrixOptionLayout")
 							&& view.getTag(R.id.layout_id).toString()
 									.equals("theMatrixLayout")) {
-						LinearLayout theMatrixLayout = (LinearLayout) view;
+						MatrixOptionLayout theMatrixLayout = (MatrixOptionLayout) view;
 						LinearLayout rowLabelColumn = null;
 						MYHorizontalScrollView horizontalScrollView = null;
 						for (int y = 0; y < theMatrixLayout.getChildCount(); y++) {
@@ -2020,14 +2145,15 @@ public class OneQuestionOneView extends FragmentActivity {
 												if (rb.isChecked()) {
 													MatrixCell cell = (MatrixCell) rb
 															.getTag(R.id.matrix_cell);
-													checkedValues += "|"
-													/*
-													 * + "h" + cell.getH_index()
-													 * + "" + "v" +
-													 * cell.getV_index()
-													 */
-													+ cell.getValue() + ":"
-															+ cell.getValue(); // <-h0v0
+													if (needRawValue) {
+														checkedValues += "|"
+																+ cell.getValue();
+													} else {
+														checkedValues += "|"
+																+ cell.getValue()
+																+ ":"
+																+ cell.getValue();
+													}
 												}
 											}
 										}
@@ -2436,36 +2562,46 @@ public class OneQuestionOneView extends FragmentActivity {
 						}
 					}
 					// </radioLayout>
-				} else if(render_ref_type.equals("display_append_value_set")){
+				} else if (render_ref_type.equals("display_append_value_set")) {
 					LinearLayout renderRefLayout = layoutList.get(renderRefID);
 					LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
 					String renderLayoutID = renderInnerLayout.getTag(
 							R.id.layout_id).toString();
 					// dismiss newly created labels
-					boolean isViewAlreadyExisted = Boolean.parseBoolean(nextInnerLayout.getTag(R.id.isViewAlreadyExisted).toString());
-//					for(int i=0; i<nextInnerLayout.getChildCount(); i++){
-//						View viewToRemove = nextInnerLayout.getChildAt(i);
-//						if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
-//							isViewAlreadyExisted = Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
-//							if(isViewAlreadyExisted){
-//								viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
-//							}
-//						}
-//					}
-//					nextInnerLayout.refreshDrawableState();
+					boolean isViewAlreadyExisted = Boolean
+							.parseBoolean(nextInnerLayout.getTag(
+									R.id.isViewAlreadyExisted).toString());
+					// for(int i=0; i<nextInnerLayout.getChildCount(); i++){
+					// View viewToRemove = nextInnerLayout.getChildAt(i);
+					// if(viewToRemove.getTag(R.id.isViewAlreadyExisted)!=null){
+					// isViewAlreadyExisted =
+					// Boolean.parseBoolean(viewToRemove.getTag(R.id.isViewAlreadyExisted).toString());
+					// if(isViewAlreadyExisted){
+					// viewToRemove.setTag(R.id.isViewAlreadyExisted, false);
+					// }
+					// }
+					// }
+					// nextInnerLayout.refreshDrawableState();
 
 					renderRefLayout.getChildCount();
 					String[] selectedValues = null;
-					for(int i=0;i<renderRefLayout.getChildCount();i++){
+					for (int i = 0; i < renderRefLayout.getChildCount(); i++) {
 						View v = renderRefLayout.getChildAt(i);
-						if(v.getClass().getName().equals("android.widget.LinearLayout")){
-							String layoutTagKey = v.getTag(R.id.layout_id).toString();
-							if(layoutTagKey.equals("textSetLayout")){
+						if (v.getClass().getName()
+								.equals("android.widget.LinearLayout")) {
+							String layoutTagKey = v.getTag(R.id.layout_id)
+									.toString();
+							if (layoutTagKey.equals("textSetLayout")) {
 								LinearLayout textSetLayout = (LinearLayout) v;
-								for(int j=0; j<textSetLayout.getChildCount(); j++){
-									if(textSetLayout.getChildAt(j).getClass().getName().equals("android.widget.ListView")){
-										ListView textSetListView = (ListView) textSetLayout.getChildAt(j);
-										TextSetAdapter adapter = (TextSetAdapter) textSetListView.getAdapter();
+								for (int j = 0; j < textSetLayout
+										.getChildCount(); j++) {
+									if (textSetLayout.getChildAt(j).getClass()
+											.getName()
+											.equals("android.widget.ListView")) {
+										ListView textSetListView = (ListView) textSetLayout
+												.getChildAt(j);
+										TextSetAdapter adapter = (TextSetAdapter) textSetListView
+												.getAdapter();
 										selectedValues = adapter.CurrentItems;
 									}
 								}
@@ -2474,26 +2610,41 @@ public class OneQuestionOneView extends FragmentActivity {
 					}
 
 					// remove blank values from user selected Values
-					ArrayList<String> selectedValues_temp = new ArrayList<String>(Arrays.asList(selectedValues));
-					selectedValues_temp.removeAll(Arrays.asList("")); // remove empty strings , for null Arrays.asList(null), for both Arrays.asList(null,"")
-					selectedValues = selectedValues_temp.toArray(new String[selectedValues_temp.size()]); // assign to old String[]
+					ArrayList<String> selectedValues_temp = new ArrayList<String>(
+							Arrays.asList(selectedValues));
+					selectedValues_temp.removeAll(Arrays.asList("")); // remove
+																		// empty
+																		// strings
+																		// , for
+																		// null
+																		// Arrays.asList(null),
+																		// for
+																		// both
+																		// Arrays.asList(null,"")
+					selectedValues = selectedValues_temp
+							.toArray(new String[selectedValues_temp.size()]); // assign
+																				// to
+																				// old
+																				// String[]
 
 					// append selected values here..
-					if(isViewAlreadyExisted){
-						int toBeRemoved= nextInnerLayout.getChildCount()-2;
-						for(int a=toBeRemoved; a>0; a--){
-							nextInnerLayout.removeViewAt(nextInnerLayout.getChildCount()-1);
+					if (isViewAlreadyExisted) {
+						int toBeRemoved = nextInnerLayout.getChildCount() - 2;
+						for (int a = toBeRemoved; a > 0; a--) {
+							nextInnerLayout.removeViewAt(nextInnerLayout
+									.getChildCount() - 1);
 						}
 					}
 					float textSize = 18;
 					LayoutParams labelLayoutParams = new LayoutParams(
-							LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+							LayoutParams.MATCH_PARENT,
+							LayoutParams.WRAP_CONTENT);
 					labelLayoutParams.setMargins(20, 10, 10, 0);
-					for(int i=0; i<selectedValues.length; i++){
+					for (int i = 0; i < selectedValues.length; i++) {
 						String value = selectedValues[i];
 						TextView referencedLabel = new TextView(this);
 						referencedLabel.setLayoutParams(labelLayoutParams);
-						referencedLabel.setText("-"+value);
+						referencedLabel.setText("-" + value);
 						referencedLabel.setTextSize(textSize);
 						referencedLabel.setTag(R.id.isViewAlreadyExisted, true);
 						nextInnerLayout.addView(referencedLabel);
@@ -2522,6 +2673,68 @@ public class OneQuestionOneView extends FragmentActivity {
 															.getFinalBaseValueList(),
 													refValue.split("\\|"));
 									checkboxGroup.initLayout(dsArray);
+								}
+							}
+
+						} else if (nextLayoutID.equals("checklistLayout")) {
+
+						} else if (nextLayoutID.equals("matrixOptionLayout")) {
+
+						}
+					}
+				} else if (render_ref_type
+						.equals("display_dataset_prepend_set_ref")) {
+					// if end with ref
+					// read from ref values
+					// prepare dataset
+					// get target linear layout, remove and add new one
+					String refValue = Refs.get(render_ref);
+					if (refValue != null && refValue.length() > 0) {
+
+						if (nextLayoutID.equals("checkBoxLayout")) {
+							for (int a = 0; a < nextInnerLayout.getChildCount(); a++) {
+								View view = nextInnerLayout.getChildAt(a);
+								if (view.getClass()
+										.getName()
+										.equals("com.xavey.android.layout.CheckboxLayout")) {
+									JSONHelper jh = new JSONHelper();
+									CheckboxLayout checkboxGroup = (CheckboxLayout) view;
+									final JSONArray dsArray = jh
+											.PrependStringToDataSet(
+													checkboxGroup
+															.getFinalBaseValueList(),
+													refValue.split("\\|"));
+									checkboxGroup.initLayout(dsArray);
+								}
+							}
+
+						} else if (nextLayoutID.equals("checklistLayout")) {
+
+						} else if (nextLayoutID.equals("matrixOptionLayout")) {
+
+						}
+					}
+				} else if (render_ref_type
+						.equals("display_dataset_option_set_ref")) {
+					// if end with ref
+					// read from ref values
+					// prepare dataset
+					// get target linear layout, remove and add new one
+					String refValue = Refs.get(render_ref);
+					if (refValue != null && refValue.length() > 0) {
+
+						if (nextLayoutID.equals("radioLayout")) {
+							for (int a = 0; a < nextInnerLayout.getChildCount(); a++) {
+								View view = nextInnerLayout.getChildAt(a);
+								if (view.getClass()
+										.getName()
+										.equals("com.xavey.android.layout.RadioGroupLayout")) {
+									JSONHelper jh = new JSONHelper();
+									RadioGroupLayout rGroup = (RadioGroupLayout) view;
+									final JSONArray dsArray = jh
+											.StringToJSONDataSet(refValue
+													.split("\\|"));
+									rGroup.initLayout(dsArray, false);
 								}
 							}
 
@@ -2936,7 +3149,19 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (isNeedToSkip)
 							newPosition++;
 						// isNeedToSkip = false; // to break from while loop
-					} else {
+					} else if (nextConditionType.equals("less_or_equal_ref")) {
+						// count is here
+						int valueFromRef = 0;
+						String refValues = Refs.get(next_ref);
+						if (refValues.indexOf("|") > -1) {
+							valueFromRef = refValues.split("\\|").length;
+						}
+						isNeedToSkip = isNeedToSkipIfLessThan(next_cond,
+								valueFromRef);
+						if (isNeedToSkip)
+							newPosition++;
+					} // count end here
+					else {
 						// isNeedToSkip = false;
 						String value_from_ref_layout = jsonReader
 								.readValueFromLayout(ref_layout);
@@ -3012,9 +3237,8 @@ public class OneQuestionOneView extends FragmentActivity {
 					String refID = map.get("ref_id").toString();
 					String refType = map.get("ref_type").toString();
 					JSONArray refSetter = (JSONArray) map.get("ref_setter");
-					if (refID == setterPointer) { // work only for
-													// one
-													// ref:ref_setter
+					if (refID.equals(setterPointer)) {
+						// work only for one ref:ref_setter
 						String refValues = "";
 						for (int n = 0; n < refSetter.length(); n++) {
 							String setterIDRaw = "";
@@ -3032,24 +3256,135 @@ public class OneQuestionOneView extends FragmentActivity {
 											layoutList, layoutIndex,
 											layoutIndex + 1, true);
 									if (valueFromLayout != null) {
-										HashMap.Entry<String, Object> entry = valueFromLayout
-												.entrySet().iterator().next();
-										String key = entry.getKey();
-										String value = entry.getValue()
-												.toString();
-										if (value.indexOf("|") > -1) {
-											String[] valList = value
-													.split("\\|");
-											value = "";
-											for (int j = 0; j < valList.length; j++) {
-												if (!valList[j].toLowerCase()
-														.equals("#novalue#")) {
-													value += valList[j] + "|";
+										if (refType
+												.equals("dataset_row_selected_first_column")) {
+											LinearLayout renderRefLayout = layoutList
+													.get(layoutIndex);
+											LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
+											String renderLayoutID = renderInnerLayout
+													.getTag(R.id.layout_id)
+													.toString();
+											if (renderLayoutID
+													.equals("matrixOptionLayout")) {
+												for (int j = 0; j < renderInnerLayout
+														.getChildCount(); j++) {
+													View v = renderInnerLayout
+															.getChildAt(j);
+													if (v.getClass()
+															.getName()
+															.equals("com.xavey.android.layout.MatrixOptionLayout")) {
+														MatrixOptionLayout matOpt = (MatrixOptionLayout) v;
+														ArrayList<HashMap<String, String>> vValueList = matOpt
+																.getVValueList();
+														JSONArray cellList = matOpt
+																.getCellValueList();
+
+														HashMap.Entry<String, Object> entry = valueFromLayout
+																.entrySet()
+																.iterator()
+																.next();
+														String key = entry
+																.getKey();
+														String value = entry
+																.getValue()
+																.toString();
+
+														// excepted data format
+														// cell_value1|cell_value2
+														// or just single
+														// cell_value1
+														ArrayList<String> valList = new ArrayList<String>();
+														if (value.indexOf("|") > -1) {
+															valList = new ArrayList<String>(
+																	Arrays.asList(value
+																			.split("\\|")));
+														} else {
+															valList.add(value);
+														}
+														ArrayList<String> colList = new ArrayList<String>();
+														for (int k = 0; k < cellList
+																.length(); k++) {
+															JSONObject jo = cellList
+																	.getJSONObject(k);
+															String cell_value = jo
+																	.getString("value");
+															String cell_index = jo
+																	.getString("index");
+															if (valList
+																	.indexOf(cell_value) > -1) {
+																if (cell_index
+																		.trim()
+																		.startsWith(
+																				"0")) {
+																	String vIndex = cell_index
+																			.split(",")[1]
+																			.trim();
+																	refValues += vValueList
+																			.get(Integer
+																					.parseInt(vIndex))
+																			.get("label")
+																			.toString()
+																			+ "|";
+																	;
+																}
+															}
+
+														}
+													}
 												}
 											}
-										}
-										refValues += value + "|";
+										} else if (refType
+												.equals("dataset_random")) {
+											HashMap.Entry<String, Object> entry = valueFromLayout
+													.entrySet().iterator()
+													.next();
+											String key = entry.getKey();
+											String value = entry.getValue()
+													.toString();
 
+											if (value.indexOf("|") > -1) {
+												String[] valList = value
+														.split("\\|");
+												value = "";
+												ArrayList<String> temp = new ArrayList<String>(
+														Arrays.asList(valList));
+												Collections.shuffle(temp);
+												for (int j = 0; j < temp.size(); j++) {
+													if (!temp
+															.get(j)
+															.toLowerCase()
+															.equals("#novalue#")) {
+														value += temp.get(j)
+																+ "|";
+													}
+												}
+											}
+
+											refValues += value + "|";
+										} else {
+											HashMap.Entry<String, Object> entry = valueFromLayout
+													.entrySet().iterator()
+													.next();
+											String key = entry.getKey();
+											String value = entry.getValue()
+													.toString();
+
+											if (value.indexOf("|") > -1) {
+												String[] valList = value
+														.split("\\|");
+												value = "";
+												for (int j = 0; j < valList.length; j++) {
+													if (!valList[j]
+															.toLowerCase()
+															.equals("#novalue#")) {
+														value += valList[j]
+																+ "|";
+													}
+												}
+											}
+
+											refValues += value + "|";
+										}
 									}
 								}
 							} catch (Exception e) {
@@ -3135,6 +3470,32 @@ public class OneQuestionOneView extends FragmentActivity {
 			}
 		}
 		return selectedButton;
+	}
+
+	private ArrayList<CheckBox> getSelectedCheckBoxMyCheckboxWrapper(
+			LinearLayout checkBoxLayout) {
+		ArrayList<CheckBox> returnList = new ArrayList<CheckBox>();
+
+		for (int c = 0; c < checkBoxLayout.getChildCount(); c++) {
+			if (checkBoxLayout.getChildAt(c).getClass().getName()
+					.equals("com.xavey.android.layout.CheckboxLayout")) {
+				CheckboxLayout checkBoxWrapper = (CheckboxLayout) checkBoxLayout.getChildAt(c);
+				for (int d = 0; d < checkBoxWrapper.getChildCount(); d++) {
+					LinearLayout checkBoxLine = null;
+					View cbLineLayoutChild = checkBoxWrapper.getChildAt(d);
+					if (cbLineLayoutChild.getClass().getName()
+							.equals("android.widget.LinearLayout")) {
+						checkBoxLine = (LinearLayout) checkBoxWrapper
+								.getChildAt(d);
+						CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
+						if (cb.isChecked()) {
+							returnList.add(cb);
+						}
+					}
+				}
+			}
+		}
+		return returnList;
 	}
 
 	private void loadUI() {

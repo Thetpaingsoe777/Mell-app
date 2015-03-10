@@ -1,6 +1,7 @@
 package com.xavey.android.layout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import org.json.JSONArray;
@@ -55,7 +56,7 @@ public class RadioGroupLayout extends RadioGroup {
 		val=null;
 	}
 	
-	public void initLayout(JSONArray valueList) throws Exception{
+	public void initLayout(JSONArray valueList, boolean field_random) throws Exception{
 		this.removeAllViews();
 		final RadioGroup that = this;
 
@@ -272,9 +273,9 @@ public class RadioGroupLayout extends RadioGroup {
 		// random.... valid by some json in future
 		// example.. -> field_random : true
 
-		// if (field_random) {
-		// Collections.shuffle(buttonLinesToBeRandomed);
-		// }
+		if (field_random) {
+			Collections.shuffle(buttonLinesToBeRandomed);
+		 }
 
 		for (LinearLayout eachButtonLine : buttonLinesToBeRandomed) {
 			this.addView(eachButtonLine);

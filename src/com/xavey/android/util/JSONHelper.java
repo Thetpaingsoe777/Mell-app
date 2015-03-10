@@ -27,6 +27,14 @@ public class JSONHelper {
 		}
 		return thisArray;
 	}
+	
+	public JSONArray StringToJSONDataSet(ArrayList<String> StringData) throws Exception {
+		JSONArray thisArray = new JSONArray();
+		for (int i = 0; i < StringData.size(); i++) {
+			thisArray.put(StringToDataSet(StringData.get(i)));
+		}
+		return thisArray;
+	}
 
 	public ArrayList<HashMap<String, String>> StringToMapDataSet(String[] StringData) throws Exception {
 		ArrayList<HashMap<String, String>> values_list = new ArrayList<HashMap<String, String>>();
@@ -63,6 +71,34 @@ public class JSONHelper {
 				}
 			}
 		}
+		return returnArray;
+	}
+	
+	public JSONArray PrependStringToDataSet(JSONArray ParentArray,
+			String[] StringData) throws JSONException {
+
+		String[] tempCompare = new String[ParentArray.length()+StringData.length];
+		JSONArray returnArray = new JSONArray();
+		for(int x=0; x<ParentArray.length();x++){
+			JSONObject jsonO = ParentArray.getJSONObject(x);
+			tempCompare[x]=jsonO.getString("label").toLowerCase();
+			//returnArray.put(jsonO);
+		}
+
+		for (int j = 0; j < StringData.length; j++) {
+			String newLabel = StringData[j];
+			if(newLabel!=null&&newLabel.length()>0){
+				if(Arrays.asList(tempCompare).indexOf(newLabel.toLowerCase())<=-1){
+				returnArray.put(StringToDataSet(newLabel));
+				tempCompare[ParentArray.length()+j]=newLabel.toLowerCase();
+				}
+			}
+		}
+		for(int x=0; x<ParentArray.length();x++){
+			JSONObject jsonO = ParentArray.getJSONObject(x);
+			returnArray.put(jsonO);
+		}
+		
 		return returnArray;
 	}
 	

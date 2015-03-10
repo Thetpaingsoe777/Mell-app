@@ -14,6 +14,7 @@ import com.xavey.android.util.LinearLayoutManager;
 import com.xavey.android.util.MYHorizontalScrollView;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -76,7 +77,7 @@ public class CheckboxLayout extends LinearLayout {
 		
 		ArrayList<CheckBox> checkBoxList = new ArrayList<CheckBox>();
 		
-		this.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		this.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		this.setOrientation(LinearLayout.VERTICAL);
 		
 		int checkboxCount = 0;
