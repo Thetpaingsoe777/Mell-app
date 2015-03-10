@@ -25,7 +25,6 @@ public class MatrixTextLayout extends LinearLayout {
 	private ArrayList<HashMap<String, String>> _hValueList;
 	private ArrayList<HashMap<String, String>> _vValueList;
 	private JSONArray _cellValueList;
-
 	
 	public MatrixTextLayout(Context context) {
 		super(context);		

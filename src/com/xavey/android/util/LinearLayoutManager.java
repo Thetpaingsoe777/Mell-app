@@ -288,11 +288,11 @@ public class LinearLayoutManager {
 								if (userTypedValue_.length() == 0) {
 									userTypedValue_ = "#noValue#";
 									missingLabels.add(field_label);
+								}else{
+									map_.put(field_value, userTypedValue_);
+									data.add(map_);									
 								}
-
-								map_.put(field_value, userTypedValue_);
-								data.add(map_);
-
+								
 								if (!userTypedValue_.equals("#noValue#")) {
 									if (layoutID.equals("numberSetLayout")) {
 										int inte = Integer
@@ -302,6 +302,10 @@ public class LinearLayoutManager {
 								}
 							}
 						}
+						if (data.size() > 0)
+							map.put("value", "value");
+						else
+							map.put("value", "#no_value#");
 					}
 				}
 			}
