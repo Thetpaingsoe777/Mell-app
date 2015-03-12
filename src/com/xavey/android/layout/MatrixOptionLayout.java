@@ -3,6 +3,7 @@ package com.xavey.android.layout;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +25,8 @@ public class MatrixOptionLayout extends LinearLayout {
 	private ArrayList<HashMap<String, String>> _hValueList;
 	private ArrayList<HashMap<String, String>> _vValueList;
 	private JSONArray _cellValueList;
+
+	private boolean willBeRandomized = true;
 
 	public MatrixOptionLayout(Context context) {
 		super(context);
@@ -282,6 +285,119 @@ public class MatrixOptionLayout extends LinearLayout {
 			// </setting Listener>
 		}
 		// </setting onClickListener to individual RadioButton>
+		if (willBeRandomized) {
+			randomized(this);
+		}
+	}
+
+	public void randomized(MatrixOptionLayout matrixOptionLayout) {
+		LinearLayout rowLabelColumn = null;
+		LinearLayout AllColumns = null;
+		// find above two layouts from matrixOptionLayout and assigning to
+		// corresponding parameters
+		for (int index = 0; index < matrixOptionLayout.getChildCount(); index++) {
+			View v = matrixOptionLayout.getChildAt(index);
+			if (v.getTag(R.id.layout_id).toString().equals("rowLabelColumn"))
+				rowLabelColumn = (LinearLayout) v;
+			else if (v.getTag(R.id.layout_id).toString()
+					.equals("horizontalScrollView")) {
+				MYHorizontalScrollView horizontalScrollView = (MYHorizontalScrollView) v;
+				if (horizontalScrollView.getChildAt(0).getTag(R.id.layout_id)
+						.toString().equals("AllColumns")) {
+					AllColumns = (LinearLayout) horizontalScrollView
+							.getChildAt(0);
+				}
+			}
+		}
+		// -------------------------------------------------------
+		int rowLabelChildCount = rowLabelColumn.getChildCount();
+		int AllColumnsChildCount = AllColumns.getChildCount();
+		ArrayList<Integer> generatedRandomNumberList = generateRandomNumberList(rowLabelChildCount - 1);
+
+		// <collecting the child views that are about to randomize binding with
+		// numbers>
+		HashMap<Integer, View> rowLabelChildMap = new HashMap<Integer, View>();
+		for (int r = 1; r < rowLabelChildCount; r++) {
+			// r starts from 1 in order to avoid the title
+			rowLabelChildMap.put(r, rowLabelColumn.getChildAt(r));
+		}
+		ArrayList<HashMap<Integer, View>> eachColumnMapList = new ArrayList<HashMap<Integer, View>>();
+		for (int c = 0; c < AllColumnsChildCount; c++) {
+			HashMap<Integer, View> eachColumnMap = new HashMap<Integer, View>();
+			LinearLayout columnLayout = (LinearLayout) AllColumns.getChildAt(c);
+			for (int i = 1; i < columnLayout.getChildCount(); i++) {
+				// i start from 1 in order to avoid the title like above
+				// rowlabelColumn stuffs
+				eachColumnMap.put(i, columnLayout.getChildAt(i));
+			}
+			eachColumnMapList.add(eachColumnMap);
+		}
+		// </collecting the child views that are about to randomize binding with
+		// numbers>
+
+		// remove views of rowLabelChildMap
+		for (int i = rowLabelColumn.getChildCount(); i > 1; i--) {
+			rowLabelColumn.removeViewAt(i - 1);
+		}
+		// add views from rowLabelChildMap according to the randomizedNumbers
+		for (int i = 0; i < generatedRandomNumberList.size(); i++) {
+			int currentRandomedIndex = generatedRandomNumberList.get(i);
+			View rowLabelColumnChild = rowLabelChildMap
+					.get(currentRandomedIndex);
+			rowLabelColumn.addView(rowLabelColumnChild);
+		}
+		rowLabelColumn.getChildCount();
+
+		for (int i = 0; i < AllColumns.getChildCount(); i++) {
+			LinearLayout columnLayout = null;
+			if (AllColumns.getChildAt(i).getTag(R.id.layout_id).toString()
+					.equals("columnLayout")) {
+				columnLayout = (LinearLayout) AllColumns.getChildAt(i);
+				// remove views from columnLayout
+				for (int j = columnLayout.getChildCount(); j > 1; j--) {
+					columnLayout.removeViewAt(j - 1);
+				}
+
+				// add views from columnLayout according to the
+				// randomizedNumbers
+
+//				for (int j = 0; j < eachColumnMapList.size(); j++) {
+					HashMap<Integer, View> eachColumnMap = eachColumnMapList
+							.get(i);
+					for (int k = 0; k < generatedRandomNumberList.size(); k++) {
+						int currentRandomedIndex = generatedRandomNumberList
+								.get(k);
+						View columnLayoutChild = eachColumnMap
+								.get(currentRandomedIndex);
+						columnLayout.addView(columnLayoutChild);
+					}
+//				}
+			}
+		}
+
+		matrixOptionLayout.refreshDrawableState();
+	}
+
+	private ArrayList<Integer> generateRandomNumberList(int range) {
+		ArrayList<Integer> randomNumberList = new ArrayList<Integer>();
+		while (randomNumberList.size() <= range - 1) {
+			int randomedNumber = randInt(1, range);
+			if (!randomNumberList.contains(randomedNumber))
+				randomNumberList.add(randomedNumber);
+		}
+		return randomNumberList;
+	}
+
+	public static int randInt(int min, int max) {
+		// copied from
+		// http://stackoverflow.com/questions/363681/generating-random-integers-in-a-range-with-java
+		// NOTE: Usually this should be a field rather than a method
+		// variable so that it is not re-seeded every call.
+		Random rand = new Random();
+		// nextInt is normally exclusive of the top value,
+		// so add 1 to make it inclusive
+		int randomNum = rand.nextInt((max - min) + 1) + min;
+		return randomNum;
 	}
 
 	public ArrayList<HashMap<String, String>> getHValueList() {
@@ -308,6 +424,12 @@ public class MatrixOptionLayout extends LinearLayout {
 		this._cellValueList = _cellValueList;
 	}
 
+	public boolean isWillBeRandomized() {
+		return willBeRandomized;
+	}
 
+	public void setWillBeRandomized(boolean willBeRandomized) {
+		this.willBeRandomized = willBeRandomized;
+	}
 
 }
