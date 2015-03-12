@@ -70,4 +70,6 @@
     <!-- checklist stuff -->
     <item type="id" name="ignore_other" />
     
+    <!-- matrix option layout -->
+    <item type="id" name="field_random_v"/>
 </resources>

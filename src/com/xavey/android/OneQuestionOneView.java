@@ -2612,7 +2612,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					// remove blank values from user selected Values
 					ArrayList<String> selectedValues_temp = new ArrayList<String>(
 							Arrays.asList(selectedValues));
-					selectedValues_temp.removeAll(Arrays.asList("")); // remove
+					selectedValues_temp.removeAll(Arrays.asList(null,"null","")); // remove
 																		// empty
 																		// strings
 																		// , for

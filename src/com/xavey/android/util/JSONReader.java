@@ -587,9 +587,10 @@ public class JSONReader {
 						}
 
 						if (fields.containsKey("field_random")) {
-							field_random=Boolean.getBoolean(fields.get("field_random").toString());
+							field_random = Boolean.getBoolean(fields.get(
+									"field_random").toString());
 						}
-						
+
 						String radioLabel = fields.get("field_label")
 								.toString();
 						TextView tvLabel = new TextView(activity);
@@ -629,7 +630,7 @@ public class JSONReader {
 								.setExtraValueLayoutParamsAppear(extraValueLayoutParamsAppear);
 						radioGroupLayout
 								.setExtraValueLayoutParamsDisappear(extraValueLayoutParamsDisappear);
-						radioGroupLayout.initLayout(dataset,field_random);
+						radioGroupLayout.initLayout(dataset, field_random);
 						dataset = null;
 
 						radioLayout.addView(radioGroupLayout);
@@ -731,9 +732,10 @@ public class JSONReader {
 									"field_random").toString());
 						}
 						if (fields.containsKey("field_err_msg")) {
-							checkBoxLayout.setTag(fields.get("field_err_msg").toString());
+							checkBoxLayout.setTag(fields.get("field_err_msg")
+									.toString());
 						}
-						
+
 						if (fields.containsKey("render_ref"))
 							checkBoxLayout.setTag(R.id.render_ref,
 									fields.get("render_ref"));
@@ -1832,6 +1834,20 @@ public class JSONReader {
 						if (fields.containsKey("render_ref_type"))
 							matrixOptionLayout.setTag(R.id.render_ref_type,
 									fields.get("render_ref_type"));
+
+						boolean fieldRandomV = false;
+
+						if (fields.containsKey("field_random_v")){
+							matrixOptionLayout.setTag(R.id.field_random_v,
+									fields.get("field_random_v"));
+							fieldRandomV = Boolean.parseBoolean(fields.get("field_random_v").toString());
+						}
+						
+						boolean fieldRandomH = false;
+						/*if(fields.containsKey("field_random_h")){
+							
+						}*/
+							
 						String field_label = fields.get("field_label")
 								.toString();
 
@@ -1937,6 +1953,9 @@ public class JSONReader {
 						theMatrixLayout.setHValueList(h_values_list);
 						theMatrixLayout.setVValueList(v_values_list);
 						theMatrixLayout.setCellValueList(matrix_values);
+						theMatrixLayout.setWillBeRandomizedV(fieldRandomV);
+						theMatrixLayout.setWillBeRandomizedH(fieldRandomH);
+						// setWillBeRandomizedH
 						theMatrixLayout.initLayout(); // above three params are
 														// needed to init this
 
@@ -3153,10 +3172,11 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_required",
 							jChild.getBoolean("field_required"));
-					
+
 					if (jChild.has("field_err_msg"))
-						fields.put("field_err_msg", jChild.getString("field_err_msg"));
-					
+						fields.put("field_err_msg",
+								jChild.getString("field_err_msg"));
+
 					// fields.put("field_default_value",
 					// jChild.getInt("field_default_value"));
 					fields.put("field_default_value", 1);
@@ -3379,6 +3399,9 @@ public class JSONReader {
 					if (jChild.has("render_ref_type"))
 						fields.put("render_ref_type",
 								jChild.getString("render_ref_type"));
+					if (jChild.has("field_random_v"))
+						fields.put("field_random_v",
+								jChild.getString("field_random_v"));
 					fields.put("field_label", jChild.getString("field_label"));
 					fields.put("field_id", jChild.getString("field_id"));
 				} else if (field_type.equals("matrix_checklist")) {

@@ -26,7 +26,8 @@ public class MatrixOptionLayout extends LinearLayout {
 	private ArrayList<HashMap<String, String>> _vValueList;
 	private JSONArray _cellValueList;
 
-	private boolean willBeRandomized = true;
+	private boolean willBeRandomizedV = true;
+	private boolean willBeRandomizedH = false;
 
 	public MatrixOptionLayout(Context context) {
 		super(context);
@@ -285,7 +286,7 @@ public class MatrixOptionLayout extends LinearLayout {
 			// </setting Listener>
 		}
 		// </setting onClickListener to individual RadioButton>
-		if (willBeRandomized) {
+		if (willBeRandomizedV) {
 			randomized(this);
 		}
 	}
@@ -424,12 +425,20 @@ public class MatrixOptionLayout extends LinearLayout {
 		this._cellValueList = _cellValueList;
 	}
 
-	public boolean isWillBeRandomized() {
-		return willBeRandomized;
+	public boolean isWillBeRandomizedV() {
+		return willBeRandomizedV;
 	}
 
-	public void setWillBeRandomized(boolean willBeRandomized) {
-		this.willBeRandomized = willBeRandomized;
+	public void setWillBeRandomizedV(boolean willBeRandomizedV) {
+		this.willBeRandomizedV = willBeRandomizedV;
+	}
+
+	public boolean isWillBeRandomizedH() {
+		return willBeRandomizedH;
+	}
+
+	public void setWillBeRandomizedH(boolean willBeRandomizedH) {
+		this.willBeRandomizedH = willBeRandomizedH;
 	}
 
 }
