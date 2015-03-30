@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+     >
+     
+    <TextView
+        android:id="@+id/logged_in_as"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tvWelcomeText"
+        android:gravity="left"
+        android:paddingTop="5dp"
+        
+        android:text="User name : " 
+        android:textSize="13sp"
+        android:textStyle="italic"
+        android:textColor="@android:color/secondary_text_light"
+        />
+
+    <TextView
+        android:id="@id/tvWelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:gravity="left"
+		android:paddingTop="5dp"
+		android:paddingRight="5dp"
+		android:paddingLeft="5dp"
+		
+        android:text="" 
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/secondary_text_light"
+        />
+
+    <GridView
+        android:id="@+id/gridViewHOME"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:horizontalSpacing="30dp"
+        android:verticalSpacing="20dp"
+        android:numColumns="2"
+        android:layout_below="@id/tvWelcomeText"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        >
+    </GridView>
+
+</RelativeLayout>

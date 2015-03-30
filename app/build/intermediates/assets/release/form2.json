@@ -1,0 +1,14 @@
+{
+	"form_name" 	: "Tasks",
+	"form_title"	: "My Tasks",
+	"form_fields" : [
+		{
+			"field_name" : "task_name",
+			"field_type" : "text",
+			"field_hint" : "Enter task name",
+			"form_list_title" : true,
+			"form_list_subtitle" : false,
+			"field_required" : true
+		}
+	]
+}

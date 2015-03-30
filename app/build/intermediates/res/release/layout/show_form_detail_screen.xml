@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>
+   
+    <ScrollView
+        android:id="@+id/svShowFormDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:layout_above="@+id/documentSubmitButton"
+        >
+    </ScrollView>
+    
+    <Button 
+        android:id="@id/documentSubmitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit to server"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+</RelativeLayout><!-- From: file:/Users/tinmaungaye/Development/xavey/xavey-android/app/src/main/res/layout/show_form_detail_screen.xml -->
