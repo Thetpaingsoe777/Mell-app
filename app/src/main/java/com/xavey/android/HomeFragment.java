@@ -109,7 +109,8 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 		//Intent i = new Intent(activity, DocumentInputActivity.class);
-		GPSTracker gps = new GPSTracker(getActivity().getApplicationContext());
+		GPSTracker gps = new GPSTracker(getActivity(), getActivity().getApplicationContext());
+        gps.setActivity(getActivity());
 		ViewHolder holder = (ViewHolder)view.getTag();
 		String id_from_holder = holder.getFormID();
 		Form clickedForm = dbHelper.getFormByFormID(id_from_holder);
@@ -117,19 +118,25 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 		if(ApplicationValues.CURRENT_LOGIN_MODE==LOGIN_TYPE.DEMO_LOGIN){
 			clickedForm.setImageSynced(true);
 		}
-		
+
 		if(clickedForm.isImageSynced()){
 			// image is synced here
 			if(clickedForm.isForm_location_required()) //
 			{
+
+
+
 				if(gps.canGetLocation()){
 					Intent i = new Intent(activity, OneQuestionOneView.class);
 					i.putExtra("formID", id_from_holder);
+                    i.putExtra("lat", gps.getLatitude()+"");
+                    i.putExtra("lng", gps.getLongitude()+"");
 					startActivity(i);
 				}
 				else{
 					ToastManager toast = new ToastManager(activity);
-					toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
+//					toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
+                    toast.xaveyToast(null, "GPS can't be detected.");
 				}
 			}
 			else{

@@ -6,4 +6,4 @@
     <ProgressBar android:layout_width="32dp"
        android:layout_height="32dp"
        android:layout_gravity="center"/>
-</FrameLayout><!-- From: file:/Users/tinmaungaye/Development/xavey/xavey-android/app/src/main/res/layout/actionbar_indeterminate_progress.xml -->
+</FrameLayout><!-- From: file:/C:/AndroidStudioWorkspace/xavey-android/app/src/main/res/layout/actionbar_indeterminate_progress.xml -->

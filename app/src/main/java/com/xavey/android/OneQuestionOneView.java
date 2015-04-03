@@ -58,7 +58,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.NumberSetAdapter;
 import com.xavey.android.adapter.QuestionPagerAdapter;
@@ -86,6 +85,8 @@ import com.xavey.android.util.ToastManager;
 import com.xavey.android.util.TypeFaceManager;
 import com.xavey.android.util.UUIDGenerator;
 
+
+
 public class OneQuestionOneView extends FragmentActivity {
 
 	private QuestionPagerAdapter qAdapter; // 19-9-2014
@@ -97,6 +98,9 @@ public class OneQuestionOneView extends FragmentActivity {
 	LinearLayout currentLayout = null;
 	ViewPager vPager;
 	// int pageTotal;
+
+    private  String FORM_ENTERED_LAT="";
+    private  String FORM_ENTERED_LNG="";
 
 	Intent intent;
 	JSONReader jsonReader;
@@ -110,7 +114,11 @@ public class OneQuestionOneView extends FragmentActivity {
 	HashMap<String, String> Refs;
 	ArrayList<LinearLayout> layoutList;
 
+    int midPoint;
+
 	TypeFaceManager typeface;
+
+
 
 	boolean isAllRequiredFieldFilled = true;
 	ArrayList<HashMap<String, String>> mediaToSubmit = new ArrayList<HashMap<String, String>>();
@@ -140,7 +148,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.screen_slide);
 		loadUI();
-		gps = new GPSTracker(getApplicationContext());
 		toast = new ToastManager(this);
 		currentDocumentID = UUIDGenerator.getUUIDForDocument();
 		jsonReader.setCurrentDocumentID(currentDocumentID);
@@ -148,6 +155,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		try {
 			layoutList = jsonReader.readForm2(currentForm);
 			layoutList.add(produceSubmitLayout());
+            midPoint = layoutList.size()/2;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -187,6 +195,9 @@ public class OneQuestionOneView extends FragmentActivity {
 
 				@Override
 				public void onPageSelected(int newPosition) {
+                    if(newPosition==midPoint){
+                        gps.getLocation();
+                    }
 					direction = "";
 					if (newPosition > currentPosition) {
 						// left to right
@@ -1229,12 +1240,15 @@ public class OneQuestionOneView extends FragmentActivity {
 				// testing...
 				// toast.xaveyToast(null, "lat: "+ gps.getLatitude()
 				// +"\nlong: "+gps.getLongitude());
+                boolean isLocation = gps.canGetLocation2();
 
 				Document document = new Document();
 				ArrayList<LinearLayout> completeList = getCompleteList(
 						layoutList, used_field_ids);
 				HashMap<String, Object> incompleteMap = getValuesFromEachLayout(
 						completeList, 0, completeList.size(), false);
+
+
 
 				JSONObject document_json = new JSONObject();
 				JSONArray jsonArray = new JSONArray();
@@ -1380,6 +1394,12 @@ public class OneQuestionOneView extends FragmentActivity {
 				// document_json(structure) is needed everytime before
 				// upload
 				try {
+
+                    HashMap<String,String> gpsInfo = new HashMap<String, String>();
+                    gpsInfo.put("lat", FORM_ENTERED_LAT);
+                    gpsInfo.put("lng", FORM_ENTERED_LNG);
+                    document.setGpsInfo(gpsInfo);
+
 					JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
 							document, currentForm);
 					// here.. may be shock
@@ -3519,14 +3539,21 @@ public class OneQuestionOneView extends FragmentActivity {
 		getActionBar().setTitle("Home");
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		intent = getIntent();
-		jsonReader = new JSONReader(this);
+        //testing for gps
+
+        FORM_ENTERED_LNG = intent.getStringExtra("lng");
+        FORM_ENTERED_LAT = intent.getStringExtra("lat");
+
+        Toast.makeText(this, "form clicked_lat : " + FORM_ENTERED_LAT + "\nform clicked_lat : " + FORM_ENTERED_LNG, Toast.LENGTH_LONG);
+
 		jsonWriter = new JSONWriter(this);
 		dbHelper = new XaveyDBHelper(this);
 		currentForm = dbHelper.getFormByFormID(intent.getStringExtra("formID"));
 		connectionDetector = new ConnectionDetector(getApplicationContext());
-		formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
 		recordingManager = new AudioRecordingManager(this);
-
+        gps = new GPSTracker(this, getApplicationContext());
+        jsonReader = new JSONReader(this);
+        formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
 		formRefList = jsonReader.getFormRefs(currentForm.getForm_json());
 		prepareDataSets();
 	}
@@ -3711,4 +3738,12 @@ public class OneQuestionOneView extends FragmentActivity {
 		alertDialogBuilder.create().show();
 
 	}
+
+    public String getFORM_ENTERED_LNG() {
+        return FORM_ENTERED_LNG;
+    }
+
+    public void setFORM_ENTERED_LNG(String FORM_ENTERED_LNG) {
+        this.FORM_ENTERED_LNG = FORM_ENTERED_LNG;
+    }
 }

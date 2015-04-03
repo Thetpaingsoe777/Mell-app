@@ -3,6 +3,7 @@ package com.xavey.android.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import android.widget.Toast;
 
@@ -16,6 +17,9 @@ public class Document implements Comparable {
 	private String form_id;
 	private String created_worker;
 	private String submitted;
+
+    // newly added
+    private HashMap<String,String> gpsInfo;
 
 	public Document() {
 
@@ -104,7 +108,15 @@ public class Document implements Comparable {
 		this.submitted = submitted;
 	}
 
-	@Override
+    public HashMap<String, String> getGpsInfo() {
+        return gpsInfo;
+    }
+
+    public void setGpsInfo(HashMap<String, String> gpsInfo) {
+        this.gpsInfo = gpsInfo;
+    }
+
+    @Override
 	public int compareTo(Object another) {
 		Date compareDate = ((Document) another).getParsedDate();
 		Date myDate = getParsedDate();

@@ -665,10 +665,10 @@ public class SyncManager {
 				ApplicationValues.loginUser = loggedInUser;
 			}
 			else if(responseCode==401){
-				Toast.makeText(activity_, "Unauthroized..!", 1000).show();
+				Toast.makeText(activity_, "Unauthroized..!", Toast.LENGTH_LONG).show();
 			}
 			else{
-				Toast.makeText(activity_, "Server Error..!", 1000).show();
+				Toast.makeText(activity_, "Server Error..!", Toast.LENGTH_LONG).show();
 			}
 
 		}
@@ -688,7 +688,7 @@ public class SyncManager {
 				user.setOrganization(result.getOrganization());*/
 				dbHelper.addNewUser(result);
 			} else {
-				Toast.makeText(activity_.getApplicationContext(), "AlreadyExist", 500)
+				Toast.makeText(activity_.getApplicationContext(), "AlreadyExist", Toast.LENGTH_SHORT)
 						.show();
 				dbHelper.updateUser(result);
 			}

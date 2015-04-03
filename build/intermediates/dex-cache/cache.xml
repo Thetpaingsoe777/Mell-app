@@ -2,18 +2,18 @@
 <items version="2" >
 
     <item
-        jar="/Applications/adt-bundle/sdk/extras/android/m2repository/com/android/support/support-v4/19.0.0/support-v4-19.0.0.jar"
+        jar="C:\New ADT\adt-bundle-windows-x86_64-20131030\sdk\extras\android\m2repository\com\android\support\support-v4\19.0.0\support-v4-19.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="afee690af14bd2c32d400cdf78e746fd45c386fa">
-        <dex dex="/Users/tinmaungaye/Development/xavey/xavey-android/app/build/intermediates/pre-dexed/debug/support-v4-19.0.0-4059c8c268fd6e9ad8015d803a4394f64268f1a7.jar" />
+        <dex dex="C:\AndroidStudioWorkspace\xavey-android\app\build\intermediates\pre-dexed\debug\support-v4-19.0.0-05b733aa8181c943dbc03c15348e9fd29e5b11d8.jar" />
     </item>
     <item
-        jar="/Users/tinmaungaye/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/1.7.1/697e3a1fa094a983cd12f7f6f61abf9c6ea52e2/gson-1.7.1.jar"
+        jar="C:\Users\Aung Sithu Kyaw\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\1.7.1\697e3a1fa094a983cd12f7f6f61abf9c6ea52e2\gson-1.7.1.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="0697e3a1fa094a983cd12f7f6f61abf9c6ea52e2">
-        <dex dex="/Users/tinmaungaye/Development/xavey/xavey-android/app/build/intermediates/pre-dexed/debug/gson-1.7.1-2c275e6865df0fc0d624b466d8d87c6934b25392.jar" />
+        <dex dex="C:\AndroidStudioWorkspace\xavey-android\app\build\intermediates\pre-dexed\debug\gson-1.7.1-9e3d5d490eb330388155cbec881b479f300f6ad3.jar" />
     </item>
 
 </items>

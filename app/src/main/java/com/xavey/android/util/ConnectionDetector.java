@@ -110,9 +110,7 @@ public class ConnectionDetector {
 				{
 					// Log.d("Connected", "Finished Connect");
 					online = true;
-
 				} else {
-
 					online = false;
 				}
 			}

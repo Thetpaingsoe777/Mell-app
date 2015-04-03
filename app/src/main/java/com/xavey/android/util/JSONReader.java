@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.xavey.android.ApplicationValues;
+import com.xavey.android.OneQuestionOneView;
 import com.xavey.android.R;
 import com.xavey.android.adapter.ImageAdapter;
 import com.xavey.android.adapter.NumberSetAdapter;
@@ -69,8 +70,8 @@ public class JSONReader {
 	Activity activity;
 	// putting DisplayMetric here didn't work
 	XaveyDBHelper dbHelper;
-    TypeFaceManager tfManager;
-	GPSTracker gps;
+//	private GPSTracker gps;
+	TypeFaceManager tfManager;
 	DisplayManager displayManager;
 	ToastManager xaveyToast;
 	AudioRecordingManager recordingManager;
@@ -81,7 +82,7 @@ public class JSONReader {
 		this.activity = activity;
 		dbHelper = new XaveyDBHelper(activity);
         tfManager = new TypeFaceManager(activity);
-		gps = new GPSTracker(activity);
+		//gps = new GPSTracker(activity);
 		displayManager = new DisplayManager(this.activity);
 		xaveyToast = new ToastManager(this.activity);
 		recordingManager = new AudioRecordingManager(activity);
@@ -912,6 +913,7 @@ public class JSONReader {
 
 							@Override
 							public void onClick(View v) {
+                                GPSTracker gps = new GPSTracker(activity, activity.getApplicationContext());
 								if (gps.canGetLocation()) {
 									double latitude = gps.getLatitude();
 									double longitude = gps.getLongitude();
@@ -3829,8 +3831,9 @@ public class JSONReader {
 
 		// location child node
 		JSONObject locationChildNode = new JSONObject();
-		locationChildNode.put("lat", gps.getLatitude());
-		locationChildNode.put("lng", gps.getLongitude());
+
+		locationChildNode.put("lat", document.getGpsInfo().get("lat"));
+		locationChildNode.put("lng", document.getGpsInfo().get("lng"));
 
 		document_json.put("data", dataArray);
 		document_json.put("timestamp", timestamp);

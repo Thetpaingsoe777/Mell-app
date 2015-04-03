@@ -6,4 +6,4 @@
         android:userVisible="false"
         android:supportsUploading="false"
         android:allowParallelSyncs="false"
-        android:isAlwaysSyncable="true"/><!-- From: file:/Users/tinmaungaye/Development/xavey/xavey-android/app/src/main/res/xml/syncadapter.xml -->
+        android:isAlwaysSyncable="true"/><!-- From: file:/C:/AndroidStudioWorkspace/xavey-android/app/src/main/res/xml/syncadapter.xml -->
