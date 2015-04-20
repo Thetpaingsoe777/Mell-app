@@ -526,12 +526,12 @@ public class MainActivity extends Activity {
 					Log.e("form error :", e.getMessage());
 				}
 			} else if (userResponseCode == 401) {
-				toastManager.xaveyToast(null,
-						"Authenticating failed when downloading form..");
+				//toastManager.xaveyToast(null,
+				//		"Authenticating failed when downloading form..");
 			} else if (userResponseCode == 403) {
-				toastManager
-						.xaveyToast(null,
-								"server error when downloading form.. at Main Activity");
+				//toastManager
+				//		.xaveyToast(null,
+				//				"server error when downloading form.. at Main Activity");
 			}
 			return userFormsList;
 		}

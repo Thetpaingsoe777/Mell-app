@@ -3181,6 +3181,17 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (isNeedToSkip)
 							newPosition++;
 					} // count end here
+                    else if (nextConditionType.equals("value_ref")) {
+                        // count is here
+                        int valueFromRef = 0;
+                        String refValues = Refs.get(next_ref);
+                        if (refValues.indexOf("|") > -1) {
+                            valueFromRef = refValues.split("\\|").length;
+                        }
+                        isNeedToSkip = (refValues.length()>0 || valueFromRef>0);
+                        if (isNeedToSkip)
+                            newPosition++;
+                    }
 					else {
 						// isNeedToSkip = false;
 						String value_from_ref_layout = jsonReader
@@ -3256,6 +3267,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					HashMap<String, Object> map = formRefList.get(i);
 					String refID = map.get("ref_id").toString();
 					String refType = map.get("ref_type").toString();
+                    JSONArray refMatch = (JSONArray) map.get("ref_match");
 					JSONArray refSetter = (JSONArray) map.get("ref_setter");
 					if (refID.equals(setterPointer)) {
 						// work only for one ref:ref_setter
@@ -3381,7 +3393,85 @@ public class OneQuestionOneView extends FragmentActivity {
 											}
 
 											refValues += value + "|";
-										} else {
+										}
+                                        else if (refType
+                                                .equals("in_predefined_dataset") && refMatch != null) {
+                                            LinearLayout renderRefLayout = layoutList
+                                                    .get(layoutIndex);
+                                            LinearLayout renderInnerLayout = getInnerLayout(renderRefLayout);
+                                            String renderLayoutID = renderInnerLayout
+                                                    .getTag(R.id.layout_id)
+                                                    .toString();
+                                            if (renderLayoutID
+                                                    .equals("matrixOptionLayout")) {
+                                                for (int j = 0; j < renderInnerLayout
+                                                        .getChildCount(); j++) {
+                                                    View v = renderInnerLayout
+                                                            .getChildAt(j);
+                                                    if (v.getClass()
+                                                            .getName()
+                                                            .equals("com.xavey.android.layout.MatrixOptionLayout")) {
+                                                        MatrixOptionLayout matOpt = (MatrixOptionLayout) v;
+                                                        ArrayList<HashMap<String, String>> vValueList = matOpt
+                                                                .getVValueList();
+                                                        JSONArray cellList = matOpt
+                                                                .getCellValueList();
+
+                                                        HashMap.Entry<String, Object> entry = valueFromLayout
+                                                                .entrySet()
+                                                                .iterator()
+                                                                .next();
+                                                        String key = entry
+                                                                .getKey();
+                                                        String value = entry
+                                                                .getValue()
+                                                                .toString();
+
+                                                        // excepted data format
+                                                        // cell_value1|cell_value2
+                                                        // or just single
+                                                        // cell_value1
+                                                        ArrayList<String> valList = new ArrayList<String>();
+                                                        if (value.indexOf("|") > -1) {
+                                                            valList = new ArrayList<String>(
+                                                                    Arrays.asList(value
+                                                                            .split("\\|")));
+                                                        } else {
+                                                            valList.add(value);
+                                                        }
+                                                        ArrayList<String> colList = new ArrayList<String>();
+                                                        for (int k = 0; k < cellList
+                                                                .length(); k++) {
+                                                            JSONObject jo = cellList
+                                                                    .getJSONObject(k);
+                                                            String cell_value = jo
+                                                                    .getString("value");
+                                                            String cell_index = jo
+                                                                    .getString("index");
+                                                            if (valList
+                                                                    .indexOf(cell_value) > -1) {
+                                                                for(int h=0; h<refMatch.length(); h++ ) {
+                                                                    if (valList.get(valList.indexOf(cell_value)).toLowerCase().equals(refMatch.getString(h).toLowerCase())) {
+                                                                        String vIndex = cell_index
+                                                                                .split(",")[1]
+                                                                                .trim();
+                                                                        refValues += vValueList
+                                                                                .get(Integer
+                                                                                        .parseInt(vIndex))
+                                                                                .get("label")
+                                                                                .toString()
+                                                                                + "|";
+                                                                    }
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else {
 											HashMap.Entry<String, Object> entry = valueFromLayout
 													.entrySet().iterator()
 													.next();
@@ -3412,8 +3502,8 @@ public class OneQuestionOneView extends FragmentActivity {
 							}
 						}
 						// after looping ref:ref_setter values
-						Refs.put(refID,
-								refValues.substring(0, refValues.length() - 1));
+						Refs.put(refID, refValues.length()>0?
+								refValues.substring(0, refValues.length() - 1):"");
 						Log.i("test", Refs.get(refID));
 					}
 				}

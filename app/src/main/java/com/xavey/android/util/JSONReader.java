@@ -3598,6 +3598,9 @@ public class JSONReader {
                     fields.put("ref_name", jChild.getString("ref_name"));
                     fields.put("ref_type", jChild.getString("ref_type"));
                     fields.put("ref_setter", jChild.getJSONArray("ref_setter"));
+                    if (jChild.has("ref_match")) {
+                        fields.put("ref_match",jChild.getJSONArray("ref_match"));
+                    }
                     if (!fields.isEmpty()) {
                         refList.add(fields);
                     }
