@@ -325,15 +325,15 @@ public class JSONReader {
 						numberLayout.setOrientation(LinearLayout.VERTICAL);
 						numberLayout.setTag(R.id.layout_id, "numberLayout");
 						numberLayout.setTag(R.id.field_id,
-								fields.get("field_id"));
+                                fields.get("field_id"));
 						numberLayout.setTag(R.id.field_name_id,
 								fields.get("field_name"));
 						numberLayout.setTag(R.id.field_required_id,
 								fields.get("field_required"));
 						numberLayout.setTag(R.id.field_label_id,
-								fields.get("field_label"));
+                                fields.get("field_label"));
 						numberLayout.setTag(R.id.field_max_value,
-								fields.get("field_max_value"));
+                                fields.get("field_max_value"));
 						numberLayout.setTag(R.id.field_min_value,
 								fields.get("field_min_value"));
 						// numberLayout.setTag(R.id.field_default_value,
@@ -353,7 +353,7 @@ public class JSONReader {
 						tvLabel.setTextSize(labelTextSize);
 						tvLabel.setTag("label");
 						tvLabel.setTag(R.id.field_name_id,
-								fields.get("field_name"));
+                                fields.get("field_name"));
 						tvLabel.setTag(R.id.field_required_id,
 								isFieldRequired(fields.get("field_required")));
 						tvLabel.setTag(R.id.field_label_id, textLabel);
@@ -388,7 +388,7 @@ public class JSONReader {
 						// ed1.setEms(50);
 						ed1.setInputType(InputType.TYPE_CLASS_NUMBER);
 						ed1.setKeyListener(DigitsKeyListener
-								.getInstance("0123456789."));
+                                .getInstance("0123456789."));
 						numberLayout.addView(ed1);
 
 						scroll.addView(numberLayout);
@@ -793,147 +793,8 @@ public class JSONReader {
 						parentLayout.addView(scroll);
 						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
-					} else if (fields.get(key).equals("location")) {
-
-						ScrollView scroll = new ScrollView(activity);
-						scroll.setLayoutParams(new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT));
-
-						LinearLayout parentLayout = new LinearLayout(activity);
-						parentLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						LayoutParams parentLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT,
-								LayoutParams.MATCH_PARENT);
-						parentLayout.setLayoutParams(parentLayoutParams);
-						parentLayout.setOrientation(LinearLayout.VERTICAL);
-						RelativeLayout upLayout = new RelativeLayout(activity);
-						upLayout.setPadding(0, 10, 20, 0);
-						int relative_MATCH_PARENT = RelativeLayout.LayoutParams.MATCH_PARENT;
-						int relative_WRAP_CONTENT = RelativeLayout.LayoutParams.WRAP_CONTENT;
-						RelativeLayout.LayoutParams upLayoutParams = new RelativeLayout.LayoutParams(
-								relative_MATCH_PARENT, relative_MATCH_PARENT);
-						upLayout.setLayoutParams(upLayoutParams);
-						TextView index = new TextView(activity);
-						RelativeLayout.LayoutParams tvLayoutParams = new android.widget.RelativeLayout.LayoutParams(
-								relative_WRAP_CONTENT, relative_WRAP_CONTENT);
-						tvLayoutParams
-								.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-						index.setLayoutParams(tvLayoutParams);
-						index.setText("index/index");
-						index.setTag("index");
-						upLayout.addView(index);
-						// upLayout.addView(getLine(lineColor));
-						parentLayout.addView(upLayout);
-
-						final LinearLayout locationLayout = new LinearLayout(
-								activity);
-						// LayoutParams locationLayoutParams = new LayoutParams(
-						// LayoutParams.MATCH_PARENT,
-						// LayoutParams.WRAP_CONTENT);
-						// locationLayoutParams.setMargins(0, 20, 0, 0);
-						// locationLayout.setLayoutParams(locationLayoutParams);
-						locationLayout.setLayoutParams(innerLayoutParams);
-						locationLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-						// locationLayout.setBackgroundResource(R.drawable.linear_layout_ui);
-						locationLayout.setOrientation(LinearLayout.VERTICAL);
-						locationLayout.setPadding(0, 10, 0, 0);
-						locationLayout.setTag(R.id.layout_id, "locationLayout");
-						locationLayout.setTag(R.id.field_id,
-								fields.get("field_id"));
-						locationLayout.setTag(R.id.field_name_id,
-								fields.get("field_name"));
-						locationLayout.setTag(R.id.field_required_id,
-								fields.get("field_required"));
-						locationLayout.setTag(R.id.field_label_id,
-								fields.get("field_label"));
-						locationLayout.setTag(R.id.field_err_msg,
-								fields.get("field_err_msg"));
-						locationLayout.setTag(R.id.next_ref,
-								fields.get("next_ref"));
-						locationLayout.setTag(R.id.next_ref_cond,
-								fields.get("next_ref_cond"));
-						String field_label = fields.get("field_label")
-								.toString();
-						String field_name = fields.get("field_name").toString();
-						String field_required = fields.get("field_required")
-								.toString();
-						TextView tvLabel = new TextView(activity);
-						tvLabel.setText(field_label + " : ");
-						tvLabel.setTag("label");
-						tvLabel.setTag(R.id.field_name_id, field_name);
-						tvLabel.setTag(R.id.field_required_id, field_required);
-						tvLabel.setTag(R.id.field_label_id, field_label);
-						// tvLabel.setTag(fields.get("field_name"));
-						tvLabel.setLayoutParams(labelLayoutParams);
-                        tfManager.setTypeFace(tvLabel);
-						locationLayout.addView(tvLabel);
-
-						// adding description
-						String description = fields.get("field_desc")
-								.toString();
-						TextView tvdescription = new TextView(activity);
-						tvdescription.setPadding(10, 0, 0, 0);
-						tvdescription.setText(description);
-						tvdescription.setTextSize(18);
-						tvdescription.setLayoutParams(labelLayoutParams);
-                        tfManager.setTypeFace(tvdescription);
-						locationLayout.addView(tvdescription);
-
-						int sevenPercentHeight = displayManager.getHeigth(7);
-
-						LayoutParams editTextLayoutParam = new LayoutParams(
-								LayoutParams.MATCH_PARENT, sevenPercentHeight);
-						editTextLayoutParam.setMargins(10, 5, 10, 15);
-						final EditText edtLat = new EditText(activity);
-						edtLat.setEnabled(false);
-						edtLat.setHint("Latitude");
-						edtLat.setPadding(5, 0, 0, 0);
-						edtLat.setLayoutParams(editTextLayoutParam); //
-						edtLat.setBackgroundResource(R.drawable.edittext_style);
-						final EditText edtLong = new EditText(activity);
-						edtLong.setEnabled(false);
-						edtLong.setHint("Longitude");
-						edtLong.setPadding(5, 0, 0, 0);
-						edtLong.setLayoutParams(editTextLayoutParam); //
-                        tfManager.setTypeFace(edtLat);
-                        tfManager.setTypeFace(edtLong);
-						edtLong.setBackgroundResource(R.drawable.edittext_style);
-						locationLayout.addView(edtLat);
-						locationLayout.addView(edtLong);
-						int sevenPerscentHeight = displayManager.getHeigth(7);
-						LayoutParams buttonLayoutParams = new LayoutParams(
-								LayoutParams.MATCH_PARENT, sevenPerscentHeight);
-						buttonLayoutParams.setMargins(30, 20, 30, 20);
-						Button btnGPS = new Button(activity);
-						btnGPS.setLayoutParams(buttonLayoutParams);
-						btnGPS.setText("Get Location");
-						btnGPS.setBackgroundResource(R.drawable.button_border);
-						btnGPS.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-                                GPSTracker gps = new GPSTracker(activity, activity.getApplicationContext());
-								if (gps.canGetLocation()) {
-									double latitude = gps.getLatitude();
-									double longitude = gps.getLongitude();
-									edtLat.setTag(latitude);
-									edtLong.setTag(longitude);
-									edtLat.setText(latitude + "");
-									edtLong.setText(longitude + "");
-								} else {
-									gps.showSettingsAlert();
-								}
-							}
-						});
-                        tfManager.setTypeFace(btnGPS);
-
-						locationLayout.addView(btnGPS);
-						scroll.addView(locationLayout);
-						parentLayout.addView(scroll);
-						addErrorMsg(parentLayout);
-						layoutList.add(parentLayout);
-					} else if (fields.get(key).equals("drawing")) {
+					}
+                    else if (fields.get(key).equals("drawing")) {
 
 						ScrollView scroll = new ScrollView(activity);
 						scroll.setLayoutParams(new LayoutParams(
@@ -1090,7 +951,7 @@ public class JSONReader {
 								LayoutParams.MATCH_PARENT);
 						int fivePercentWidth = displayManager.getWidth(5);
 						parentLayoutParams.setMargins(fivePercentWidth, 0,
-								fivePercentWidth, 0);
+                                fivePercentWidth, 0);
 						parentLayout.setLayoutParams(parentLayoutParams);
 						parentLayout.setOrientation(LinearLayout.VERTICAL);
 						RelativeLayout upLayout = new RelativeLayout(activity);
@@ -1183,12 +1044,12 @@ public class JSONReader {
 								.toString();
 						final String view_id_ = Integer.toString(randomID);
 						button.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								selectImage(field_name_, field_type_,
-										field_help_, view_id_);
-							}
-						});
+                            @Override
+                            public void onClick(View v) {
+                                selectImage(field_name_, field_type_,
+                                        field_help_, view_id_);
+                            }
+                        });
 
 						LayoutParams errorMsgLayoutParams2 = new LayoutParams(
 								LayoutParams.MATCH_PARENT, 60);
@@ -1334,9 +1195,9 @@ public class JSONReader {
 						matrixNumberLayout.setTag(R.id.field_id,
 								fields.get("field_id"));
 						matrixNumberLayout.setTag(R.id.field_name_id,
-								fields.get("field_name"));
+                                fields.get("field_name"));
 						matrixNumberLayout.setTag(R.id.field_required_id,
-								fields.get("field_required"));
+                                fields.get("field_required"));
 						matrixNumberLayout.setTag(R.id.field_label_id,
 								fields.get("field_label"));
 						matrixNumberLayout.setTag(R.id.field_err_msg, "-");
@@ -3625,14 +3486,16 @@ public class JSONReader {
 			for (int i = 0; i < document_fields.length(); i++) {
 				JSONObject jChild = document_fields.getJSONObject(i);
 				HashMap<String, String> fields = new HashMap<String, String>();
-				fields.put("field_id", jChild.getString("field_id"));
-				fields.put("field_name", jChild.getString("field_name"));
-				fields.put("field_value", jChild.getString("field_value"));
-				fields.put("field_label", jChild.getString("field_label"));
-				if (jChild.has("field_audio")) {
-					fields.put("field_audio", jChild.getString("field_audio"));
-				}
-				fieldList.add(fields);
+                if (jChild.has("field_id")) {
+                    fields.put("field_id", jChild.getString("field_id"));
+                    fields.put("field_name", jChild.getString("field_name"));
+                    fields.put("field_value", jChild.getString("field_value"));
+                    fields.put("field_label", jChild.getString("field_label"));
+                    if (jChild.has("field_audio")) {
+                        fields.put("field_audio", jChild.getString("field_audio"));
+                    }
+                    fieldList.add(fields);
+                }
 			}
 
 		} catch (JSONException e) {
@@ -3822,26 +3685,39 @@ public class JSONReader {
 		for (int i = 0; i < fieldList.size(); i++) {
 			HashMap<String, String> map = fieldList.get(i);
 			JSONObject fieldNode = new JSONObject();
-			fieldNode.put("field_id", map.get("field_id"));
-			fieldNode.put("field_label", map.get("field_label"));
-			fieldNode.put("field_name", map.get("field_name"));
-			fieldNode.put("field_value", map.get("field_value"));
-			if (map.containsKey("field_audio")) {
-				fieldNode.put("field_audio", map.get("field_audio"));
-			}
+            if (map.containsKey("field_id")) {
+                fieldNode.put("field_id", map.get("field_id"));
+                fieldNode.put("field_label", map.get("field_label"));
+                fieldNode.put("field_name", map.get("field_name"));
+                fieldNode.put("field_value", map.get("field_value"));
+                if (map.containsKey("field_audio")) {
+                    fieldNode.put("field_audio", map.get("field_audio"));
+                }
+            }
 			dataArray.put(fieldNode);
 		}
+
+        JSONObject tempJSONLoc = new JSONObject(
+                convertStandardJSONString(document_JSON));
+        JSONArray tempJSONLocArray = tempJSONLoc.getJSONArray("document_json");
+        for(int i=0; i<tempJSONLocArray.length(); i++){
+            if(tempJSONLocArray.getJSONObject(i).has("location")){
+                document_json.put("location", tempJSONLocArray.getJSONObject(i).get("location"));
+            }
+        }
+
+        //tempJSONLoc.
 
 		// location child node
 		JSONObject locationChildNode = new JSONObject();
 
-		locationChildNode.put("lat", document.getGpsInfo().get("lat"));
-		locationChildNode.put("lng", document.getGpsInfo().get("lng"));
+		//locationChildNode.put("lat", document.getGpsInfo().get("lat"));
+		//locationChildNode.put("lng", document.getGpsInfo().get("lng"));
 
 		document_json.put("data", dataArray);
 		document_json.put("timestamp", timestamp);
         document_json.put("submit_datetime", document.getCreated_at());
-		document_json.put("location", locationChildNode);
+		//document_json.put("location", locationChildNode);
 		document_json.put("org", orgChildNode);
 		document_json.put("form", formChildNode);
 		document_json.put("worker", workerChildNode);

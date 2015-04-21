@@ -175,5 +175,19 @@
             android:text="@string/xavey_link"
             android:textColor="@android:color/secondary_text_dark_nodisable" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp" >
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/about_version"
+            android:textColor="@android:color/secondary_text_dark_nodisable"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

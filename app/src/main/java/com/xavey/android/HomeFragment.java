@@ -109,8 +109,9 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
 		//Intent i = new Intent(activity, DocumentInputActivity.class);
-		GPSTracker gps = new GPSTracker(getActivity(), getActivity().getApplicationContext());
-        gps.setActivity(getActivity());
+		GPSTracker gps = GPSTracker.getInstance();
+        gps.set_context(view.getContext());
+        gps.getLocation(view.getContext()); //just poke the funciton
 		ViewHolder holder = (ViewHolder)view.getTag();
 		String id_from_holder = holder.getFormID();
 		Form clickedForm = dbHelper.getFormByFormID(id_from_holder);
@@ -121,26 +122,24 @@ public class HomeFragment extends Fragment implements OnItemClickListener{
 
 		if(clickedForm.isImageSynced()){
 			// image is synced here
-			if(clickedForm.isForm_location_required()) //
+            Intent i = new Intent(activity, OneQuestionOneView.class);
+            //either true or false
+            i.putExtra("form_location_required",clickedForm.isForm_location_required());
+
+            if(clickedForm.isForm_location_required()) //
 			{
-
-
-
 				if(gps.canGetLocation()){
-					Intent i = new Intent(activity, OneQuestionOneView.class);
 					i.putExtra("formID", id_from_holder);
-                    i.putExtra("lat", gps.getLatitude()+"");
-                    i.putExtra("lng", gps.getLongitude()+"");
+                    //i.putExtra("lat", gps.getLatitude()+"");
+                    //i.putExtra("lng", gps.getLongitude()+"");
+                    i.putExtra("form_location_required",clickedForm.isForm_location_required());
 					startActivity(i);
 				}
 				else{
-					ToastManager toast = new ToastManager(activity);
-//					toast.xaveyToast(null, "This form is needed location. Please turn your GPS on to continue.");
-                    toast.xaveyToast(null, "GPS can't be detected.");
+                    gps.showSettingsAlert("GPS Setting","This form needs GPS location. Please turn on your GPS to continue.");
 				}
 			}
 			else{
-				Intent i = new Intent(activity, OneQuestionOneView.class);
 				i.putExtra("formID", id_from_holder);
 				startActivity(i);
 			}

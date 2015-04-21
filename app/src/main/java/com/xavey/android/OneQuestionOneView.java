@@ -27,6 +27,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore.MediaColumns;
@@ -98,9 +99,10 @@ public class OneQuestionOneView extends FragmentActivity {
 	LinearLayout currentLayout = null;
 	ViewPager vPager;
 	// int pageTotal;
-
+    private int LOCATION_WARNING_COUNT=0;
     private  String FORM_ENTERED_LAT="";
     private  String FORM_ENTERED_LNG="";
+    private boolean FORM_LOCATION_REQ=false;
 
 	Intent intent;
 	JSONReader jsonReader;
@@ -139,7 +141,8 @@ public class OneQuestionOneView extends FragmentActivity {
 
 	AudioRecordingManager recordingManager;
 
-	GPSTracker gps;
+    //singleton
+    GPSTracker gps = GPSTracker.getInstance();
 	ToastManager toast;
 
 	@Override
@@ -148,6 +151,8 @@ public class OneQuestionOneView extends FragmentActivity {
 		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.screen_slide);
 		loadUI();
+        gps.set_context(getApplicationContext());
+        gps.getLocation(getApplicationContext());//just poke the function
 		toast = new ToastManager(this);
 		currentDocumentID = UUIDGenerator.getUUIDForDocument();
 		jsonReader.setCurrentDocumentID(currentDocumentID);
@@ -196,7 +201,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				@Override
 				public void onPageSelected(int newPosition) {
                     if(newPosition==midPoint){
-                        gps.getLocation();
+                        gps.getLocation(getApplicationContext());
                     }
 					direction = "";
 					if (newPosition > currentPosition) {
@@ -1237,146 +1242,167 @@ public class OneQuestionOneView extends FragmentActivity {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// testing...
-				// toast.xaveyToast(null, "lat: "+ gps.getLatitude()
-				// +"\nlong: "+gps.getLongitude());
-                boolean isLocation = gps.canGetLocation2();
+                if(FORM_LOCATION_REQ && (gps.getLatitude()==0 || gps.getLongitude()==0)) {
+                    Location submitScreenGPS = gps.getLocation(OneQuestionOneView.this);
+                    if (gps.canGetLocation() == false)  {
+                        AlertGPSSetting();
+                    }
+                    else if(submitScreenGPS==null){
+                        toast.xaveyToast(null, "Waiting for GPS location, please submit again.");
+                        LOCATION_WARNING_COUNT++;
+                    }
+                    else{
 
-				Document document = new Document();
-				ArrayList<LinearLayout> completeList = getCompleteList(
-						layoutList, used_field_ids);
-				HashMap<String, Object> incompleteMap = getValuesFromEachLayout(
-						completeList, 0, completeList.size(), false);
+                    }
+                }
+                else if (FORM_LOCATION_REQ && gps.getLatitude()!=0 && gps.getLongitude()!=0) {
+                    FORM_ENTERED_LNG = String.valueOf(gps.getLongitude());
+                    FORM_ENTERED_LAT = String.valueOf(gps.getLatitude());
+                }
 
 
+                if(LOCATION_WARNING_COUNT>1||FORM_LOCATION_REQ==false||(!FORM_ENTERED_LNG.equals("")||!FORM_ENTERED_LAT.equals(""))) {
+                    Document document = new Document();
+                    ArrayList<LinearLayout> completeList = getCompleteList(
+                            layoutList, used_field_ids);
+                    HashMap<String, Object> incompleteMap = getValuesFromEachLayout(
+                            completeList, 0, completeList.size(), false);
 
-				JSONObject document_json = new JSONObject();
-				JSONArray jsonArray = new JSONArray();
-				// notes...
-				// formFieldsList က form �?စ်�?ုလုံးရဲ့ structure မှာပါ�?ဲ့
-				// မှန်သမျှကိုယူထား�?ာ..
-				// အဲဒီ့�?ော့ user skip လုပ်လိုက်�?ဲ့ ဖီးလ်�?ွေပါ ပါလာမှာ...
-				// အဲဒါကြောင့် incompleteMap ထဲမှာ မပါရင် မယူဘူးဆိုပြီး filter
-				// �?စ်�?ု�?ံထားလိုက်�?ာ...
-				for (int i = 0; i < formFieldsList.size(); i++) {
-					if (formFieldsList.get(i).size() > 0) {
-						HashMap<String, Object> map = formFieldsList.get(i);
-						String fieldID = map.get("field_id").toString();
-						String fieldLabel = map.get("field_label").toString();
-						String fieldName = map.get("field_name").toString();
-						String fieldValueAudio = "";
-						boolean is_audio_required = false;
-						if (map.containsKey("field_audio_required")) {
-							is_audio_required = Boolean.parseBoolean(map.get(
-									"field_audio_required").toString());
-						}
 
-						// if (is_audio_required) {
-						// String audio_file = recordingManager
-						// .getFilename(fieldName + " - "
-						// + currentDocumentID);
-						// File file = new File(audio_file);
-						// if (file.exists()) {
-						// fieldValueAudio = audio_file;
-						// }
-						// }
+                    JSONObject document_json = new JSONObject();
+                    JSONArray jsonArray = new JSONArray();
+                    // notes...
+                    // formFieldsList က form �?စ်�?ုလုံးရဲ့ structure မှာပါ�?ဲ့
+                    // မှန်သမျှကိုယူထား�?ာ..
+                    // အဲဒီ့�?ော့ user skip လုပ်လိုက်�?ဲ့ ဖီးလ်�?ွေပါ ပါလာမှာ...
+                    // အဲဒါကြောင့် incompleteMap ထဲမှာ မပါရင် မယူဘူးဆိုပြီး filter
+                    // �?စ်�?ု�?ံထားလိုက်�?ာ...
+                    for (int i = 0; i < formFieldsList.size(); i++) {
+                        if (formFieldsList.get(i).size() > 0) {
+                            HashMap<String, Object> map = formFieldsList.get(i);
+                            String fieldID = map.get("field_id").toString();
+                            String fieldLabel = map.get("field_label").toString();
+                            String fieldName = map.get("field_name").toString();
+                            String fieldValueAudio = "";
+                            boolean is_audio_required = false;
+                            if (map.containsKey("field_audio_required")) {
+                                is_audio_required = Boolean.parseBoolean(map.get(
+                                        "field_audio_required").toString());
+                            }
 
-						String userTypedValue = "";
-						if (incompleteMap.containsKey(fieldID)) { // <--filter
-							userTypedValue = incompleteMap.get(fieldID)
-									.toString();
-							try {
-								JSONObject child = new JSONObject();
-								child.put("field_id", fieldID);
-								child.put("field_name", fieldName);
-								child.put("field_value", userTypedValue);
-								child.put("field_label", fieldLabel);
+                            // if (is_audio_required) {
+                            // String audio_file = recordingManager
+                            // .getFilename(fieldName + " - "
+                            // + currentDocumentID);
+                            // File file = new File(audio_file);
+                            // if (file.exists()) {
+                            // fieldValueAudio = audio_file;
+                            // }
+                            // }
 
-								String audioPath = "";
-								String mp4FileName = fieldID + "-"
-										+ currentDocumentID + ".mp4";
+                            String userTypedValue = "";
+                            if (incompleteMap.containsKey(fieldID)) { // <--filter
+                                userTypedValue = incompleteMap.get(fieldID)
+                                        .toString();
+                                try {
+                                    JSONObject child = new JSONObject();
+                                    child.put("field_id", fieldID);
+                                    child.put("field_name", fieldName);
+                                    child.put("field_value", userTypedValue);
+                                    child.put("field_label", fieldLabel);
 
-								File file = new File(
-										ApplicationValues.XAVEY_DIRECTORY,
-										"AudioRecorder");
-								if (file.exists()) {
-									audioPath = file.getAbsolutePath() + "/"
-											+ mp4FileName;
-									File audioFile = new File(audioPath);
-									if (audioFile.exists()) {
-										child.put("field_audio", audioFile);
-									}
-								}
+                                    String audioPath = "";
+                                    String mp4FileName = fieldID + "-"
+                                            + currentDocumentID + ".mp4";
 
-								// if (fieldValueAudio.length() > 0) {
-								// child.put("field_value_audio",
-								// fieldValueAudio);
-								// }
+                                    File file = new File(
+                                            ApplicationValues.XAVEY_DIRECTORY,
+                                            "AudioRecorder");
+                                    if (file.exists()) {
+                                        audioPath = file.getAbsolutePath() + "/"
+                                                + mp4FileName;
+                                        File audioFile = new File(audioPath);
+                                        if (audioFile.exists()) {
+                                            child.put("field_audio", audioFile);
+                                        }
+                                    }
 
-								jsonArray.put(child);
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				}
+                                    // if (fieldValueAudio.length() > 0) {
+                                    // child.put("field_value_audio",
+                                    // fieldValueAudio);
+                                    // }
 
-				try {
-					// document json start here
-					document_json.put("document_json", jsonArray);
-					document.setDocument_id(currentDocumentID);
-					document.setDocument_name(currentForm.getForm_title());
-                    String currentDateTime = getCurrentDateTime();
-					document.setCreated_at(getCurrentDateTime());
-					document.setDocument_json(document_json.toString());
-					document.setForm_id(currentForm.getForm_id());
-					document.setCreated_worker(ApplicationValues.loginUser.getUser_id());
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				// just put this outside....
-				// whatever internet's avaliable or not.., it will store in
-				// local first
-				// ---------------------------------------------------------
-
-				// offline mode
-				document.setSubmitted("0");
-
-				// fill the audios to audiosToSubmit here
-				for (int j = 0; j < jsonArray.length(); j++) {
-					try {
-						JSONObject obj = jsonArray.getJSONObject(j);
-						if (obj.has("field_audio")) {
-							String audioPath = obj.getString("field_audio");
-							String fieldID = obj.getString("field_id");
-							String fieldName = obj.getString("field_name");
-							String documentID = document.getDocument_id();
-							HashMap<String, String> map = new HashMap<String, String>();
-							map.put("media_path", audioPath);
-							map.put("field_id", fieldID);
-							map.put("field_name", fieldName);
-							map.put("document_id", documentID);
-							map.put("media_type", "audio");
-							mediaToSubmit.add(map);
+                                    jsonArray.put(child);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
-					} catch (JSONException e) {
-						//
-					}
-				}
+                    }
 
-				// save image too.
-				String docID = document.getDocument_id();
-				for (HashMap<String, String> image_map : mediaToSubmit) {
-					String media_name = image_map.get("field_name");
-					String media_path = image_map.get("media_path");
-					XMedia media = new XMedia();
-					media.setMedia_id("media_id");
-					media.setDoc_id(docID);
-					media.setMedia_name(media_name);
-					media.setMedia_path(media_path);
-					media.setMedia_type(image_map.get("media_type"));
-					dbHelper.addNewMedia(media);
-				}
+                    try {
+
+                        JSONObject gpschild = new JSONObject();
+                        JSONObject gpsNestChild = new JSONObject();
+                        gpsNestChild.put("lat",FORM_ENTERED_LAT); gpsNestChild.put("lng",FORM_ENTERED_LNG);
+                        gpschild.put("location",gpsNestChild);
+                        jsonArray.put(gpschild);
+
+                        // document json start here
+                        document_json.put("document_json", jsonArray);
+                        document.setDocument_id(currentDocumentID);
+                        document.setDocument_name(currentForm.getForm_title());
+                        String currentDateTime = getCurrentDateTime();
+                        document.setCreated_at(getCurrentDateTime());
+                        document.setDocument_json(document_json.toString());
+                        document.setForm_id(currentForm.getForm_id());
+                        document.setCreated_worker(ApplicationValues.loginUser.getUser_id());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    // just put this outside....
+                    // whatever internet's avaliable or not.., it will store in
+                    // local first
+                    // ---------------------------------------------------------
+
+                    // offline mode
+                    document.setSubmitted("0");
+
+                    // fill the audios to audiosToSubmit here
+                    for (int j = 0; j < jsonArray.length(); j++) {
+                        try {
+                            JSONObject obj = jsonArray.getJSONObject(j);
+                            if (obj.has("field_audio")) {
+                                String audioPath = obj.getString("field_audio");
+                                String fieldID = obj.getString("field_id");
+                                String fieldName = obj.getString("field_name");
+                                String documentID = document.getDocument_id();
+                                HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("media_path", audioPath);
+                                map.put("field_id", fieldID);
+                                map.put("field_name", fieldName);
+                                map.put("document_id", documentID);
+                                map.put("media_type", "audio");
+                                mediaToSubmit.add(map);
+                            }
+                        } catch (JSONException e) {
+                            //
+                        }
+                    }
+
+                    // save image too.
+                    String docID = document.getDocument_id();
+                    for (HashMap<String, String> image_map : mediaToSubmit) {
+                        String media_name = image_map.get("field_name");
+                        String media_path = image_map.get("media_path");
+                        XMedia media = new XMedia();
+                        media.setMedia_id("media_id");
+                        media.setDoc_id(docID);
+                        media.setMedia_name(media_name);
+                        media.setMedia_path(media_path);
+                        media.setMedia_type(image_map.get("media_type"));
+                        dbHelper.addNewMedia(media);
+                    }
 
 				/*
 				 * // save audio for (HashMap<String, String> audio_map :
@@ -1388,51 +1414,56 @@ public class OneQuestionOneView extends FragmentActivity {
 				 * media.setMedia_type("audio"); dbHelper.addNewMedia(media); }
 				 */
 
-				SyncManager syncManager = new SyncManager(
-						OneQuestionOneView.this);
+                    SyncManager syncManager = new SyncManager(
+                            OneQuestionOneView.this);
 
-				// document_json(structure) is needed everytime before
-				// upload
-				try {
+                    // document_json(structure) is needed everytime before
+                    // upload
+                    try {
 
-                    HashMap<String,String> gpsInfo = new HashMap<String, String>();
-                    gpsInfo.put("lat", FORM_ENTERED_LAT);
-                    gpsInfo.put("lng", FORM_ENTERED_LNG);
-                    document.setGpsInfo(gpsInfo);
+                        HashMap<String, String> gpsInfo = new HashMap<String, String>();
 
-					JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
-							document, currentForm);
-					// here.. may be shock
-					document.setDocument_json_to_submit(mainArray
-							.getJSONObject(0).toString());
-					// following line won't be needed , but not sure..., fix
-					// later
-					document.setSubmitted("0");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+                        gpsInfo.put("lat", FORM_ENTERED_LAT);
+                        gpsInfo.put("lng", FORM_ENTERED_LNG);
 
-				// ---------------------------------------------------------
+                        document.setGpsInfo(gpsInfo);
 
-				// -----
-				isInternetAvailable = connectionDetector
-						.isConnectingToInternet();
-				if (isInternetAvailable
-						&& ApplicationValues.CURRENT_LOGIN_MODE
-								.equals(LOGIN_TYPE.REGULAR_LOGIN)) {
-					try {
-						syncManager = new SyncManager(OneQuestionOneView.this);
-						if (mediaToSubmit.size() > 0) {
-							syncManager.submitDocument2(document, currentForm,
-									mediaToSubmit); // <--
-						} else {
-							syncManager.submitDocument(document, currentForm);
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					// -------------------------------------------------------------------
+                        JSONArray mainArray = jsonReader.getJSONArrayToSubmit(
+                                document, currentForm);
+                        // here.. may be shock
+                        document.setDocument_json_to_submit(mainArray
+                                .getJSONObject(0).toString());
+                        // following line won't be needed , but not sure..., fix
+                        // later
+                        document.setSubmitted("0");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    // ---------------------------------------------------------
+
+                    // -----
+                    isInternetAvailable = connectionDetector
+                            .isConnectingToInternet();
+                    /*
+                    if (isInternetAvailable
+                            && ApplicationValues.CURRENT_LOGIN_MODE
+                            .equals(LOGIN_TYPE.REGULAR_LOGIN))
+                        */
+                    if(false){
+                        try {
+                            syncManager = new SyncManager(OneQuestionOneView.this);
+                            if (mediaToSubmit.size() > 0) {
+                                syncManager.submitDocument2(document, currentForm,
+                                        mediaToSubmit); // <--
+                            } else {
+                                syncManager.submitDocument(document, currentForm);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        // -------------------------------------------------------------------
 					/*
 					 * // offline mode document.setSubmitted("0"); // save image
 					 * too. String docID = document.getDocument_id(); for
@@ -1455,17 +1486,23 @@ public class OneQuestionOneView extends FragmentActivity {
 					 * document.setSubmitted("0"); } catch (JSONException e) {
 					 * e.printStackTrace(); }
 					 */
-					// -----------------------------------------------------------
-				}
-				dbHelper.addNewDocument(document);
-				finish();
+                        // -----------------------------------------------------------
+                    }
+                    dbHelper.addNewDocument(document);
+                    finish();
+                }
 			}// onclick
 		});
 		lL.addView(btnSubmit);
 		return lL;
 	}
 
-	// this method only select user typed values
+    private void AlertGPSSetting() {
+        gps.showSettingsAlert("GPS Setting", "This form needs GPS location. Please turn on your GPS to continue.");
+
+    }
+
+    // this method only select user typed values
 	private ArrayList<LinearLayout> getCompleteList(
 			ArrayList<LinearLayout> layoutList,
 			LinkedList<String> used_field_ids) {
@@ -3534,6 +3571,12 @@ public class OneQuestionOneView extends FragmentActivity {
 		if (!isSubmitLayout(nextLayout_))
 			hideKeyboard(nextLayout_);
 		isValidating = false;
+        if(FORM_LOCATION_REQ && (gps.getLatitude()==0 && gps.getLongitude()==0)){
+            Location trans = gps.getLocation(OneQuestionOneView.this);
+            if(trans==null && !gps.canGetLocation()){
+                AlertGPSSetting();
+            }
+        }
 	}
 
 	private void navRightToLeft(int newPosition) {
@@ -3631,17 +3674,18 @@ public class OneQuestionOneView extends FragmentActivity {
 		intent = getIntent();
         //testing for gps
 
-        FORM_ENTERED_LNG = intent.getStringExtra("lng");
-        FORM_ENTERED_LAT = intent.getStringExtra("lat");
+       // FORM_ENTERED_LNG = intent.getStringExtra("lng");
+       // FORM_ENTERED_LAT = intent.getStringExtra("lat");
+        FORM_LOCATION_REQ = intent.getBooleanExtra("form_location_required",false);
 
-        Toast.makeText(this, "form clicked_lat : " + FORM_ENTERED_LAT + "\nform clicked_lat : " + FORM_ENTERED_LNG, Toast.LENGTH_LONG);
+        //Toast.makeText(this, "form clicked_lat : " + FORM_ENTERED_LAT + "\nform clicked_lat : " + FORM_ENTERED_LNG, Toast.LENGTH_LONG);
 
 		jsonWriter = new JSONWriter(this);
 		dbHelper = new XaveyDBHelper(this);
 		currentForm = dbHelper.getFormByFormID(intent.getStringExtra("formID"));
 		connectionDetector = new ConnectionDetector(getApplicationContext());
 		recordingManager = new AudioRecordingManager(this);
-        gps = new GPSTracker(this, getApplicationContext());
+        //gps = new GPSTracker(this, getApplicationContext());
         jsonReader = new JSONReader(this);
         formFieldsList = jsonReader.getFormFields(currentForm.getForm_json());
 		formRefList = jsonReader.getFormRefs(currentForm.getForm_json());
@@ -3828,12 +3872,4 @@ public class OneQuestionOneView extends FragmentActivity {
 		alertDialogBuilder.create().show();
 
 	}
-
-    public String getFORM_ENTERED_LNG() {
-        return FORM_ENTERED_LNG;
-    }
-
-    public void setFORM_ENTERED_LNG(String FORM_ENTERED_LNG) {
-        this.FORM_ENTERED_LNG = FORM_ENTERED_LNG;
-    }
 }
