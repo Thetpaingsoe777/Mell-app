@@ -214,11 +214,12 @@ public class OneQuestionOneView extends FragmentActivity {
 						String s = "";
 						s.length();
 					}
-					if (direction == RIGHT_TO_LEFT && !isValidating) {
-						// isValidating = false;
+					if (direction == RIGHT_TO_LEFT ) {
+						isValidating = false;
 						navRightToLeft(newPosition);
 						// break from this method
-					} else if (direction == LEFT_TO_RIGHT) {
+					}
+                    else if (direction == LEFT_TO_RIGHT) {
 						isValidating = true;
 						try {
 							validateOnPageSelected(newPosition);
@@ -3262,6 +3263,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		if (direction.equals(LEFT_TO_RIGHT)) {
 			// navigator.addLast(0);
 			used_field_ids.addLast(currentFieldID);
+//            errorMsg.setText(vPager.getCurrentItem());
 			vPager.setCurrentItem(currentPosition);
 			if (field_error_msg.length() > 0)
 				errorMsg.setText(field_error_msg);
@@ -3551,7 +3553,6 @@ public class OneQuestionOneView extends FragmentActivity {
 	private void navLeftToRight(int newPosition, String currentFieldID)
 			throws Exception {
 		prepRefValues();
-
         LinearLayout currentParentLayout = layoutList.get(currentPosition);
         TextView errorMsg = lLManager.getErrorMsgTextView(currentParentLayout);
         if (errorMsg != null){
@@ -3580,10 +3581,9 @@ public class OneQuestionOneView extends FragmentActivity {
 	}
 
 	private void navRightToLeft(int newPosition) {
-
+        LinearLayout recordingLayout = null;
 		if (ApplicationValues.IS_RECORDING_NOW) {
 			LinearLayout thisLayout = layoutList.get(currentPosition);
-			LinearLayout recordingLayout = null;
 			for (int i = 0; i < thisLayout.getChildCount(); i++) {
 				if (thisLayout.getChildAt(i).getTag(R.id.layout_id) != null
 						&& thisLayout.getChildAt(i).getTag(R.id.layout_id)
@@ -3596,12 +3596,15 @@ public class OneQuestionOneView extends FragmentActivity {
 				AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout
 						.getTag(R.id.recording_manager);
 				currentRecording.triggerStopClick();
+                currentRecording.stopRecording();
 			}
 		}
 		int last_range = 0;
 		if (navigator.getLast() != null)
 			last_range = navigator.getLast();
 		newPosition = currentPosition - last_range;
+
+
 		vPager.setCurrentItem(newPosition);
 		currentPosition = newPosition;
 		navigator.removeLast();

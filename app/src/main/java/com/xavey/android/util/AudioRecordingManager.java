@@ -126,7 +126,7 @@ public class AudioRecordingManager {
 		recorder.setOnInfoListener(infoListener);
 
 		try {
-			ApplicationValues.IS_RECORDING_NOW = true;
+ 			ApplicationValues.IS_RECORDING_NOW = true;
 			recorder.prepare();
 			recorder.start();
 		}catch (Exception e){

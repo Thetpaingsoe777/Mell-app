@@ -278,6 +278,7 @@ public class JSONReader {
 									.getRecordingLayout();
 							recordingLayout.setTag(R.id.layout_id,
 									"recordingLayout");
+                            recordingLayout.setTag(R.id.recording_manager,recordingManager);
 							parentLayout.addView(recordingLayout);
 						}
 
