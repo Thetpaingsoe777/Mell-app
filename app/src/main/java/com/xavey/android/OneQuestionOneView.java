@@ -355,24 +355,41 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (!isNotTyped) {
 							// user typed values
 							if (ApplicationValues.IS_RECORDING_NOW) {
+                                LinearLayout thisLayout = layoutList.get(currentPosition);
+                                LinearLayout recordingLayout = null;
+                                for (int i = 0; i < thisLayout.getChildCount(); i++) {
+                                    if (thisLayout.getChildAt(i).getTag(R.id.layout_id) != null
+                                            && thisLayout.getChildAt(i).getTag(R.id.layout_id)
+                                            .toString().equals("recordingLayout")) {
+                                        recordingLayout = (LinearLayout) thisLayout.getChildAt(i);
+                                        break;
+                                    }
+                                }
+                                if (recordingLayout != null) {
+                                    AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout
+                                            .getTag(R.id.recording_manager);
+                                    currentRecording.triggerStopClick();
+                                    currentRecording.stopRecording();
+                                }
 								// still recording...
 								// block..
 								// there is no direction validation...
 								// bcuz it will block both direction if
 								// recording is not ending
-								// navigator.addLast(0);
-								// used_field_ids.addLast(currentFieldID);
-								// vPager.setCurrentItem(currentPosition);
-								// errorMsg.setText("Audo recording is need to stop.");
-								// errorMsg.setTextColor(Color.RED);
-								// errorMsg.setLayoutParams(errorMsgLayoutOpen);
-								// currentPosition = previousIndex;
+//								navigator.addLast(0);
+//								used_field_ids.addLast(currentFieldID);
+//								vPager.setCurrentItem(currentPosition);
+//								errorMsg.setText("Audo recording is need to stop.");
+//								errorMsg.setTextColor(Color.RED);
+//							    errorMsg.setLayoutParams(errorMsgLayoutOpen);
+//								currentPosition = previousIndex;
 								boolean forceStopL_R = true;
 								navStayStill(direction, currentFieldID,
 										field_error_msg, lLManager,
 										newPosition, currentPosition,
 										forceStopL_R);
 							}
+
 
 							String tagID = currentLayout.getTag(R.id.layout_id)
 									.toString();
@@ -639,8 +656,13 @@ public class OneQuestionOneView extends FragmentActivity {
 											newPosition, currentPosition, false);
 								} else {
 									// pass // LEFT to RIGHT
-									navLeftToRight(newPosition, currentFieldID);
-
+                                    boolean forceStopL_R=true;
+                                    if(!ApplicationValues.IS_RECORDING_NOW){
+                                        navStayStill(direction,currentFieldID,"You need to Stop Recording",lLManager,newPosition,currentPosition,forceStopL_R);
+                                    }
+                                    else{
+                                        navLeftToRight(newPosition, currentFieldID);
+                                    }
 								}
 							}
 							// latested updated
@@ -3261,15 +3283,25 @@ public class OneQuestionOneView extends FragmentActivity {
 		errorMsg.setTextColor(Color.RED);
 
 		if (direction.equals(LEFT_TO_RIGHT)) {
-			// navigator.addLast(0);
-			used_field_ids.addLast(currentFieldID);
+            if(force_stop_r_l){
+                // navigator.addLast(0);
+                used_field_ids.addLast(currentFieldID);
 //            errorMsg.setText(vPager.getCurrentItem());
-			vPager.setCurrentItem(currentPosition);
-			if (field_error_msg.length() > 0)
-				errorMsg.setText(field_error_msg);
-			else
-				errorMsg.setText("Some fields are required..");
-			currentPosition = previousIndex;
+                vPager.setCurrentItem(currentPosition);
+                if (field_error_msg.length() > 0)
+                    errorMsg.setText(field_error_msg);
+                else
+                    errorMsg.setText("Some fields are required..");
+                currentPosition = previousIndex;
+            }
+            else{
+                int last_range= navigator.getLast();
+                newPosition = currentPosition-last_range;
+                vPager.setCurrentItem(currentPosition);
+                currentPosition = newPosition;
+                used_field_ids.removeLast();
+            }
+
 		} else {
 			if (force_stop_r_l) { // RIGHT_TO_LEFT
 				used_field_ids.addLast(currentFieldID);
@@ -3875,4 +3907,6 @@ public class OneQuestionOneView extends FragmentActivity {
 		alertDialogBuilder.create().show();
 
 	}
+
+
 }

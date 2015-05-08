@@ -1,6 +1,7 @@
 package com.xavey.android;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,19 +27,26 @@ import android.os.StrictMode;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.xavey.android.ApplicationValues.LOGIN_TYPE;
 import com.xavey.android.adapter.CustomDrawerAdapter;
 import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
+import com.xavey.android.model.SYNC;
 import com.xavey.android.model.XMedia;
 import com.xavey.android.model.RequestMethod;
 import com.xavey.android.model.RestClient;
@@ -51,6 +59,7 @@ import com.xavey.android.util.SessionManager;
 import com.xavey.android.util.SyncManager;
 import com.xavey.android.util.ToastManager;
 import com.xavey.android.util.UUIDGenerator;
+import com.xavey.android.util.Utils;
 import com.xavey.android.util.XaveyProperties;
 import com.xavey.android.util.XaveyUtils;
 
@@ -80,23 +89,27 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		// http://stackoverflow.com/questions/22395417/error-strictmodeandroidblockguardpolicy-onnetwork
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
 				.permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
-		sharedPreferences = getSharedPreferences("XaveyFONTPref",
+		sharedPreferences = getSharedPreferences(ApplicationValues.preferenceKey,
 				Context.MODE_PRIVATE);
 		editor = sharedPreferences.edit();
+
+        Utils.setAppValueFromPreference(this);
+
 		// setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setContentView(R.layout.activity_main);
 		String root = Environment.getExternalStorageDirectory().toString();
 		ApplicationValues.XAVEY_DIRECTORY = new File(root, "/Xavey");
 		ApplicationValues.appContext = getApplicationContext();
 		ApplicationValues.mainActivity = this;
-		ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
-				.getDeviceUniqueID(this);
+        if(ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
+            ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
+                    .getDeviceUniqueID(this);
+        }
 		initializeUI();
 
 		if (session.isLoggedIn()) {
@@ -142,7 +155,7 @@ public class MainActivity extends Activity {
 			else{
 				// downloading forms and background thread only works in normal login mode
 				downloadForms();
-				customHandler.postDelayed(updateTimerThread, 1000 * 30);
+                    customHandler.postDelayed(updateTimerThread, 1000 * 30);
 			}
 		} else {
 			session.initLogin();
@@ -205,24 +218,9 @@ public class MainActivity extends Activity {
 	Editor editor = null;
 
 	protected void onStop() {
-		super.onStop();
-		switch (ApplicationValues.CURRENT_FONT) {
-		case DEFAULT_:
-			editor.putString("font", "DEFAULT_");
-			editor.commit();
-			break;
-		case ZAWGYI:
-			editor.putString("font", "ZAWGYI");
-			editor.commit();
-			break;
-		case MYANMAR3:
-			editor.putString("font", "MYANMAR3");
-			editor.commit();
-			break;
-		default:
-			break;
-		}
-	};
+        super.onStop();
+    };
+
 
 	private void initializeUI() {
 		session = new SessionManager(getApplicationContext());
@@ -277,7 +275,7 @@ public class MainActivity extends Activity {
 	// }
 
 	public static void selectItem(int position, final Activity mainAct) {
-		Fragment fragment = null;
+        Fragment fragment = null;
 		Bundle args = new Bundle();
 		switch (position) {
 		case 0:
@@ -369,17 +367,16 @@ public class MainActivity extends Activity {
 		inflater.inflate(R.menu.app_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
-		} else {
+		} else{
 			switch (item.getItemId()) {
 			case R.id.app_menuRefresh:
 				setRefreshActionButtonState(true);
 				ConnectionDetector detector = new ConnectionDetector(this);
-				if (detector.isConnectingToInternet()) {
+				if (detector.isConnectingToInternet()&& (current_position ==0)&& ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
 					ArrayList<Document> unsubmittedDocList = dbHelper
 							.getDocumentsBySubmitted("0"); // get all
 															// unsubmitted docs
@@ -396,6 +393,7 @@ public class MainActivity extends Activity {
 							Form form = dbHelper.getFormByFormID(formID);
 							try {
 								syncManager.submitDocument(doc, form);
+
 							} catch (JSONException e) {
 								e.printStackTrace();
 							}
@@ -405,17 +403,46 @@ public class MainActivity extends Activity {
 					// here is form download
 					// MainActivity.this.onResume();
 					if(ApplicationValues.CURRENT_LOGIN_MODE.equals(LOGIN_TYPE.DEMO_LOGIN)){
-						
+
 					}
 					else{
 						downloadForms();						
 					}
 
-				} else {
+				}
+                 else if(detector.isConnectingToInternet() && (current_position==2) && ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)){
+                    ArrayList<Document> unsubmittedDocList = dbHelper
+                            .getDocumentsBySubmitted("0"); // get all
+                    // unsubmitted docs
+
+                    // document submit...
+                    if (unsubmittedDocList.size() == 0) {
+                        Toast.makeText(getApplicationContext(),
+                                "No documents to submit...", Toast.LENGTH_LONG)
+                                .show();
+
+                    } else {
+                        for (Document doc : unsubmittedDocList) {
+                            SyncManager syncManager = new SyncManager(this);
+                            String formID = doc.getForm_id();
+                            Form form = dbHelper.getFormByFormID(formID);
+                            try {
+                                syncManager.submitDocument(doc, form);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    setRefreshActionButtonState(false);
+                }
+                else if(!detector.isConnectingToInternet()){
 					toastManager.xaveyToast(null,
 							"Not connecting with server...");
 					setRefreshActionButtonState(false);
 				}
+                else if(detector.isConnectingToInternet()&& ApplicationValues.CURRENT_SYNC.equals(SYNC.OFF)){
+                    setRefreshActionButtonState(false);
+                }
 				return true;
 			default:
 				break;
@@ -894,6 +921,7 @@ public class MainActivity extends Activity {
 			if (current_position == 0) {
 				selectItem(0, MainActivity.this);
 			}
+
 		}
 	}
 
@@ -915,5 +943,6 @@ public class MainActivity extends Activity {
 			}
 		}
 	}
+
 
 }

@@ -33,7 +33,7 @@ public class HistoryFragment extends Fragment {
 		View view = inflater.inflate(R.layout.history_fragment, container,
 				false);
 		//refreshItem = (MenuItem) view.findViewById(R.id.app_menuRefresh);
-		MainActivity.optionMenu.getItem(0).setVisible(false);
+		MainActivity.optionMenu.getItem(0).setVisible(true);
 		loadUI(view);
 		getActivity().getActionBar().setIcon(R.drawable.history);
 		getActivity().getActionBar().setTitle("History");

@@ -9,6 +9,7 @@ import android.telephony.TelephonyManager;
 
 import com.xavey.android.model.FONT;
 import com.xavey.android.model.Form;
+import com.xavey.android.model.SYNC;
 import com.xavey.android.model.User;
 
 public class ApplicationValues {
@@ -27,6 +28,16 @@ public class ApplicationValues {
 	public static String IMAGE_PATH_TMP = "";
 	public static String PHOTO_NAME_TMP = "";
 
+    public static final String preferenceKey = "XaveyFONTPref";
+    public static final String prefSyncKey = "SYNC";
+    public static final String prefSyncOffKey = "SYNC_OFF";
+    public static final String prefSyncOnKey = "SYNC_ON";
+
+    public static final String prefFontKey = "font";
+    public static final String prefFontDefaultKey = "DEFAULT_";
+    public static final String prefFontZawgyiKey = "ZAWGYI";
+    public static final String prefFontMyanmarKey = "MYANMAR3";
+
 	public static Context appContext = null;
 	public static Activity mainActivity = null;
 
@@ -39,9 +50,13 @@ public class ApplicationValues {
 	public static String UNIQUE_DEVICE_ID = "";
 	
 	public static LOGIN_TYPE CURRENT_LOGIN_MODE = LOGIN_TYPE.REGULAR_LOGIN;
+
+    public static SYNC CURRENT_SYNC =SYNC.OFF;
 	
 	public static enum LOGIN_TYPE{
 		DEMO_LOGIN, REGULAR_LOGIN
 	}
+
+
 
 }

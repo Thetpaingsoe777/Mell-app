@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:padding="30dp"
      >
-
     <TextView
         android:id="@+id/tvSettingTitle"
         android:layout_width="wrap_content"
@@ -29,8 +28,7 @@
        	android:layout_below="@id/tvSettingTitle"
        	android:layout_marginTop="5dp"
         >
-        
-        
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,9 +66,32 @@
             android:textSize="14sp"
             />
     </RadioGroup>
-        
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sync Setting"
+            android:textSize="16sp"/>
+
+        <RadioGroup
+            android:id="@+id/syncRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/rb_autoSync"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AutoSync"
+                android:textSize="14sp"/>
+            <RadioButton
+                android:id="@+id/rb_off"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Off"
+                android:textSize="14sp"/>
+
+            </RadioGroup>
     </LinearLayout>
-    
-    
 
 </RelativeLayout>
