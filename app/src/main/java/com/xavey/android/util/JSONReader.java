@@ -662,7 +662,8 @@ public class JSONReader {
 
 						addErrorMsg(parentLayout);
 						layoutList.add(parentLayout);
-					} else if (fields.get(key).equals("checklist")) {
+
+                    } else if (fields.get(key).equals("checklist")) {
 
 						ScrollView scroll = new ScrollView(activity);
 						scroll.setLayoutParams(new LayoutParams(
@@ -3163,6 +3164,12 @@ public class JSONReader {
 					fields.put("field_type", jChild.getString("field_type"));
 					fields.put("field_audio_required",
 							jChild.getBoolean("field_audio_required"));
+
+                    if(jChild.has("field_audio_recorder_display")){
+                        fields.put("field_audio_recorder_display",
+                                jChild.getBoolean("field_audio_recorder_display"));
+                    }
+
 					fields.put("field_required",
 							jChild.getString("field_required"));
 					if (jChild.getString("field_help").length() > 0)
