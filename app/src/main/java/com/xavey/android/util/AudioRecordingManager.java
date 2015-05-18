@@ -116,7 +116,7 @@ public class AudioRecordingManager {
 		fileName = file_name;
 	}
 	
-	private void startRecording() {
+	public void startRecording() {
 		recorder = new MediaRecorder();
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		recorder.setOutputFormat(output_formats[currentFormat]);
