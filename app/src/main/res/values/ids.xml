@@ -72,4 +72,6 @@
     
     <!-- matrix option layout -->
     <item type="id" name="field_random_v"/>
+
+    <item type="id" name="recorder_auto"/>
 </resources>

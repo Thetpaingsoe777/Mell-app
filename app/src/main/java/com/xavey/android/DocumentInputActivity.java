@@ -780,7 +780,7 @@ public class DocumentInputActivity extends Activity {
 				String imagePath = bundle.getString("signPath");
 				HashMap<String, String> hashMap = new HashMap<String, String>();
 				hashMap.put("field_name", field_name);
-				hashMap.put("imagePath", imagePath);
+				hashMap.put("media_path", imagePath);
 				imagesToSubmit.add(hashMap);
 				int lLchildCount = lL.getChildCount();
 				for (int i = 0; i < lLchildCount; i++) {
@@ -818,7 +818,7 @@ public class DocumentInputActivity extends Activity {
 				// MainActivity's onActivityResult
 				HashMap<String, String> hashMap = new HashMap<String, String>();
 				hashMap.put("field_name", field_name);
-				hashMap.put("imagePath", imagePath);
+				hashMap.put("media_path", imagePath);
 				imagesToSubmit.add(hashMap);
 				int lLchildCount = lL.getChildCount();
 				for (int i = 0; i < lLchildCount; i++) {
@@ -856,7 +856,7 @@ public class DocumentInputActivity extends Activity {
 				// MainActivity's onActivityResult
 				HashMap<String, String> hashMap = new HashMap<String, String>();
 				hashMap.put("field_name", field_name);
-				hashMap.put("imagePath", imagePath);
+				hashMap.put("media_path", imagePath);
 				imagesToSubmit.add(hashMap);
 				int lLchildCount = lL.getChildCount();
 				for (int i = 0; i < lLchildCount; i++) {

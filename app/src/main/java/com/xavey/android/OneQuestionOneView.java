@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -814,8 +815,8 @@ public class OneQuestionOneView extends FragmentActivity {
 															currentFieldID);
 												}
 											} else {
-												navLeftToRight(newPosition,
-														currentFieldID);
+                                                    navLeftToRight(newPosition,
+                                                            currentFieldID);
 											}
 										}
 
@@ -1005,7 +1006,6 @@ public class OneQuestionOneView extends FragmentActivity {
 								navLeftToRight(newPosition, currentFieldID);
 							}
 						} else {
-
 							navStayStill(direction, currentFieldID,
 									field_error_msg, lLManager, newPosition,
 									currentPosition, false);
@@ -1039,7 +1039,12 @@ public class OneQuestionOneView extends FragmentActivity {
 
 		}
 
-		// here
+        try {
+            renderNextLayout(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // here
 
 	}
 
@@ -2711,7 +2716,7 @@ public class OneQuestionOneView extends FragmentActivity {
 					if (isViewAlreadyExisted) {
 						int toBeRemoved = nextInnerLayout.getChildCount() - 2;
 						for (int a = toBeRemoved; a > 0; a--) {
-							nextInnerLayout.removeViewAt(nextInnerLayout
+                            nextInnerLayout.removeViewAt(nextInnerLayout
 									.getChildCount() - 1);
 						}
 					}
@@ -2871,8 +2876,29 @@ public class OneQuestionOneView extends FragmentActivity {
 				 * //</numberSetLayout>
 				 */
 			} else {
-				// nothing to do here since there is no render_ref
+                // nothing to do here since there is no render_ref
 			}
+
+            //get audio recording layout
+            //LinearLayout nextLayout1=layoutList.get(currentPosition);
+            LinearLayout autoRecordingLayout=null;
+            for(int i=0 ;i<nextLayout.getChildCount();i++){
+                if(nextLayout.getChildAt(i).getTag(R.id.layout_id) !=null && nextLayout.getChildAt(i).getTag(R.id.layout_id).toString().equals("recordingLayout")){
+                    autoRecordingLayout =(LinearLayout)nextLayout.getChildAt(i);
+                    break;
+                }
+            }
+
+            if(autoRecordingLayout != null){
+                //set auto recording
+                AudioRecordingManager autoRecordiong = (AudioRecordingManager)autoRecordingLayout.getTag(R.id.recording_manager);
+                if((Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto))){
+                    autoRecordiong.startRecording();
+                }
+
+            }
+
+
 		}
 	}
 
@@ -3585,7 +3611,9 @@ public class OneQuestionOneView extends FragmentActivity {
 	private void navLeftToRight(int newPosition, String currentFieldID)
 			throws Exception {
 		prepRefValues();
+        LinearLayout autoRecordingLayout =null;
         LinearLayout currentParentLayout = layoutList.get(currentPosition);
+
         TextView errorMsg = lLManager.getErrorMsgTextView(currentParentLayout);
         if (errorMsg != null){
             errorMsg.setText("");

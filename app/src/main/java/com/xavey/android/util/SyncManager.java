@@ -330,7 +330,7 @@ public class SyncManager {
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-							toast.xaveyToast(null, "can't reach to server");
+							//toast.xaveyToast(null, "can't reach to server");
 						}
 						String response = c.getResponse();
 						String image_id = "";
@@ -356,7 +356,8 @@ public class SyncManager {
 				}
 			}
 			else{
-				toast.xaveyToast(null, "Authenticate occurs error before downloading images.");
+				//toast.xaveyToast(null, "Authenticate occurs error before downloading images.");
+                Log.d("auth",String.valueOf(userResponseCode));
 			}
 
 			return uploadedImages;
@@ -471,7 +472,7 @@ public class SyncManager {
 
 		// properties
 		Properties properties;
-		ToastManager xToast;
+		//ToastManager xToast;
 
 //		private ProgressDialog Dialog;
 

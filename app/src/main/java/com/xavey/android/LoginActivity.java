@@ -523,11 +523,9 @@ public class LoginActivity extends Activity {
 					Log.e("logo server error :", e.getMessage());
 				}
 			} else if (userResponseCode_ == 401) {
-				toastManager.xaveyToast(null,
-						"Authenticating failed when downloading form!");
+				//toastManager.xaveyToast(null,"Authenticating failed when downloading form!");
 			} else if (userResponseCode_ == 403) {
-				toastManager.xaveyToast(null,
-						"Server error when downloading form! (MainActivity)");
+				//toastManager.xaveyToast(null,"Server error when downloading form! (MainActivity)");
 			}
 			return result;
 		}

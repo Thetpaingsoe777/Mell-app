@@ -106,10 +106,10 @@ public class MainActivity extends Activity {
 		ApplicationValues.XAVEY_DIRECTORY = new File(root, "/Xavey");
 		ApplicationValues.appContext = getApplicationContext();
 		ApplicationValues.mainActivity = this;
-        if(ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
+        //if(ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
             ApplicationValues.UNIQUE_DEVICE_ID = new SyncManager(this)
                     .getDeviceUniqueID(this);
-        }
+        //}
 		initializeUI();
 
 		if (session.isLoggedIn()) {
@@ -197,7 +197,7 @@ public class MainActivity extends Activity {
 								String image_path = image.getMedia_path();
 								String field_name = image.getMedia_name();
 								HashMap<String, String> map = new HashMap<String, String>();
-								map.put("imagePath", image_path);
+								map.put("media_path", image_path);
 								map.put("field_name", field_name);
 								list.add(map);
 							}
@@ -376,7 +376,7 @@ public class MainActivity extends Activity {
 			case R.id.app_menuRefresh:
 				setRefreshActionButtonState(true);
 				ConnectionDetector detector = new ConnectionDetector(this);
-				if (detector.isConnectingToInternet()&& (current_position ==0)&& ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
+				if (detector.isConnectingToInternet()&& (current_position ==0)) {
 					ArrayList<Document> unsubmittedDocList = dbHelper
 							.getDocumentsBySubmitted("0"); // get all
 															// unsubmitted docs
@@ -386,18 +386,20 @@ public class MainActivity extends Activity {
 						Toast.makeText(getApplicationContext(),
 								"No documents to submit...", Toast.LENGTH_LONG)
 								.show();
-					} else {
-						for (Document doc : unsubmittedDocList) {
-							SyncManager syncManager = new SyncManager(this);
-							String formID = doc.getForm_id();
-							Form form = dbHelper.getFormByFormID(formID);
-							try {
-								syncManager.submitDocument(doc, form);
+					} else if(ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)){
+//                        if(ApplicationValues.CURRENT_SYNC.equals(SYNC.AUTO_SYNC)) {
+                            for (Document doc : unsubmittedDocList) {
+                                SyncManager syncManager = new SyncManager(this);
+                                String formID = doc.getForm_id();
+                                Form form = dbHelper.getFormByFormID(formID);
+                                try {
+                                    syncManager.submitDocument(doc, form);
 
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-						}
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+//                            }
+                        }
 					}
 
 					// here is form download
