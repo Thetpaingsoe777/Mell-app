@@ -69,6 +69,7 @@ import com.xavey.android.db.XaveyDBHelper;
 import com.xavey.android.layout.CheckboxLayout;
 import com.xavey.android.layout.MatrixOptionLayout;
 import com.xavey.android.layout.RadioGroupLayout;
+import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
 import com.xavey.android.model.Form;
 import com.xavey.android.model.XMedia;
@@ -226,7 +227,7 @@ public class OneQuestionOneView extends FragmentActivity {
 							validateOnPageSelected(newPosition);
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+                            e.printStackTrace();
 						}
 					}
 				}
@@ -356,22 +357,6 @@ public class OneQuestionOneView extends FragmentActivity {
 						if (!isNotTyped) {
 							// user typed values
 							if (ApplicationValues.IS_RECORDING_NOW) {
-                                LinearLayout thisLayout = layoutList.get(currentPosition);
-                                LinearLayout recordingLayout = null;
-                                for (int i = 0; i < thisLayout.getChildCount(); i++) {
-                                    if (thisLayout.getChildAt(i).getTag(R.id.layout_id) != null
-                                            && thisLayout.getChildAt(i).getTag(R.id.layout_id)
-                                            .toString().equals("recordingLayout")) {
-                                        recordingLayout = (LinearLayout) thisLayout.getChildAt(i);
-                                        break;
-                                    }
-                                }
-                                if (recordingLayout != null) {
-                                    AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout
-                                            .getTag(R.id.recording_manager);
-                                    currentRecording.triggerStopClick();
-                                    currentRecording.stopRecording();
-                                }
 								// still recording...
 								// block..
 								// there is no direction validation...
@@ -384,7 +369,7 @@ public class OneQuestionOneView extends FragmentActivity {
 //								errorMsg.setTextColor(Color.RED);
 //							    errorMsg.setLayoutParams(errorMsgLayoutOpen);
 //								currentPosition = previousIndex;
-								boolean forceStopL_R = true;
+								boolean forceStopL_R = false;
 								navStayStill(direction, currentFieldID,
 										field_error_msg, lLManager,
 										newPosition, currentPosition,
@@ -1005,11 +990,14 @@ public class OneQuestionOneView extends FragmentActivity {
 							else {
 								navLeftToRight(newPosition, currentFieldID);
 							}
-						} else {
+						}
+                        else {
+                            boolean forceStopl_r = true;
 							navStayStill(direction, currentFieldID,
 									field_error_msg, lLManager, newPosition,
-									currentPosition, false);
+									currentPosition, forceStopl_r);
 						}
+
 					} else {
 						// pass all
 						navLeftToRight(newPosition, currentFieldID);
@@ -1040,6 +1028,7 @@ public class OneQuestionOneView extends FragmentActivity {
 		}
 
         try {
+            //for started page
             renderNextLayout(0);
         } catch (Exception e) {
             e.printStackTrace();
@@ -2889,14 +2878,21 @@ public class OneQuestionOneView extends FragmentActivity {
                 }
             }
 
+            Boolean recorder_display = false;
+            //TO DO: get json field_audio_recorder_display value
+
             if(autoRecordingLayout != null){
                 //set auto recording
                 AudioRecordingManager autoRecordiong = (AudioRecordingManager)autoRecordingLayout.getTag(R.id.recording_manager);
                 if((Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto))){
                     autoRecordiong.startRecording();
                 }
-
             }
+            else if (!recorder_display) {
+                AudioRecordingManager hiddenRecording = new AudioRecordingManager(this);
+                hiddenRecording.startRecording();
+            }
+
 
 
 		}
@@ -3308,6 +3304,10 @@ public class OneQuestionOneView extends FragmentActivity {
 		errorMsgLayoutOpen.setMargins(10, 20, 10, 20);
 		errorMsg.setTextColor(Color.RED);
 
+        int range = newPosition
+                - currentPosition;
+        navigator.addLast(range);
+
 		if (direction.equals(LEFT_TO_RIGHT)) {
             if(force_stop_r_l){
                 // navigator.addLast(0);
@@ -3321,11 +3321,11 @@ public class OneQuestionOneView extends FragmentActivity {
                 currentPosition = previousIndex;
             }
             else{
-                int last_range= navigator.getLast();
-                newPosition = currentPosition-last_range;
-                vPager.setCurrentItem(currentPosition);
-                currentPosition = newPosition;
-                used_field_ids.removeLast();
+                int last_range = navigator.getLast();
+                newPosition =last_range-currentPosition;
+                vPager.setCurrentItem(newPosition);
+                currentPosition = newPosition-1;
+//                used_field_ids.removeLast();
             }
 
 		} else {
@@ -3346,7 +3346,12 @@ public class OneQuestionOneView extends FragmentActivity {
 				used_field_ids.removeLast();
 			}
 		}
-	}
+//        try {
+//            renderNextLayout(newPosition);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+    }
 
 	private void prepRefValues() {
 		String setterPointer = "";
