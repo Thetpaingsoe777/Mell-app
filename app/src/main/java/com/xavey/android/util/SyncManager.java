@@ -378,10 +378,11 @@ public class SyncManager {
 					String field_name = child.getString("field_name");
 					String field_label = child.getString("field_label");
 					String field_value = child.getString("field_value");
+                    String field_audio = child.has("field_audio")==true ? child.getString("field_audio") : "";
 					boolean isAudio = false;
 					boolean isImage = false;
 					//TODO: add other audio extension;
-					isAudio = isAudio(field_value);
+					isAudio = isAudio(field_audio);
 					isImage = isImage(field_value);
 					//:TODO include PNG extension
 					if (isAudio||isImage) {

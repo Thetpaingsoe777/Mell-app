@@ -2998,11 +2998,8 @@ public class JSONReader {
                         fields.put("field_audio_required",audio);
                     }
 //                    jChild.getBoolean("field_audio_recorder_display");
-                    if((!audio) && jChild.has("field_audio_recorder_display")){
-                        fields.put("field_audio_recorder_display",false);
-                    }
-                    else{
-                        fields.put("field_audio_recorder_display",true);
+                    if((audio) && jChild.has("field_audio_recorder_display")){
+                        fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
                     }
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
@@ -3174,26 +3171,36 @@ public class JSONReader {
 						fields.put("field_desc", "-");
 					fields.put("field_id", jChild.getString("field_id"));
 					fields.put("field_type", jChild.getString("field_type"));
-                    Boolean fieldAudio = null;
+                    Boolean audio = null;
+                    audio = jChild.getBoolean("field_audio_required");
                     if(jChild.has("field_audio_required")){
-                        fieldAudio = jChild.getBoolean("field_audio_required");
-                        fields.put("field_audio_required",fieldAudio);
+                        fields.put("field_audio_required",audio);
+                    }
+//                    jChild.getBoolean("field_audio_recorder_display");
+                    if((audio) && jChild.has("field_audio_recorder_display")){
+                        fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
                     }
 
-//                    if(jChild.has("field_audio_recorder_display") && (!fieldAudio)){
-//                        fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
+//                    Boolean fieldAudio = null;
+//                    if(jChild.has("field_audio_required")){
+//                        fieldAudio = jChild.getBoolean("field_audio_required");
+//                        fields.put("field_audio_required",fieldAudio);
 //                    }
-//                    else {
+//
+////                    if(jChild.has("field_audio_recorder_display") && (!fieldAudio)){
+////                        fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
+////                    }
+////                    else {
+////                        fields.put("field_audio_recorder_display",true);
+////                    }
+//
+//
+//                    if((!fieldAudio) && jChild.has("field_audio_recorder_display")){
 //                        fields.put("field_audio_recorder_display",true);
 //                    }
-
-
-                    if((!fieldAudio) && jChild.has("field_audio_recorder_display")){
-                        fields.put("field_audio_recorder_display",true);
-                    }
-                    else{
-                        fields.put("field_audio_recorder_display",false);
-                    }
+//                    else{
+//                        fields.put("field_audio_recorder_display",false);
+//                    }
 					fields.put("field_required",
 							jChild.getString("field_required"));
 					if (jChild.getString("field_help").length() > 0)
