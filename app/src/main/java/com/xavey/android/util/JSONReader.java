@@ -264,26 +264,27 @@ public class JSONReader {
 						addErrorMsg(parentLayout);
 
 						// audio stuff
-						boolean isAudioRequired = Boolean.parseBoolean(fields
-								.get("field_audio_required").toString());
-						if (isAudioRequired) {
-							Audio audioinfo = new Audio();
-							audioinfo.setAudio_name(fieldName);
-							recordingManager = new AudioRecordingManager(
-									activity);
-							recordingManager.setAudioInfo(audioinfo);
-							recordingManager.setFileName(fieldID + "-"
-									+ getCurrentDocumentID());
-							LinearLayout recordingLayout = recordingManager
-									.getRecordingLayout();
-							recordingLayout.setTag(R.id.layout_id,
-									"recordingLayout");
-                            recordingLayout.setTag(R.id.recording_manager,recordingManager);
+                        boolean isAudioRequired = Boolean.parseBoolean(fields
+                                .get("field_audio_required").toString());
+                        if (isAudioRequired) {
+                            Audio audioinfo = new Audio();
+                            audioinfo.setAudio_name(fieldName);
+                            recordingManager = new AudioRecordingManager(
+                                    activity);
+                            recordingManager.setAudioInfo(audioinfo);
+                            recordingManager.setFileName(fieldID + "-"
+                                    + getCurrentDocumentID());
+                            LinearLayout recordingLayout = recordingManager
+                                    .getRecordingLayout();
+                            recordingLayout.setTag(R.id.layout_id,
+                                    "recordingLayout");
+                            recordingLayout.setTag(R.id.recording_manager,
+                                    recordingManager);
                             //check this tag @ pre-render stage
-//                            recordingLayout.setTag(R.id.recorder_auto,(Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString())));
-							parentLayout.addView(recordingLayout);
-						}
-						layoutList.add(parentLayout);
+                            recordingLayout.setTag(R.id.recorder_auto,!(Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString())));
+                            parentLayout.addView(recordingLayout);
+                        }
+                        layoutList.add(parentLayout);
 					}
 					if (fields.get(key).equals("number")) {
 
@@ -2997,10 +2998,14 @@ public class JSONReader {
                     if(jChild.has("field_audio_required")){
                         fields.put("field_audio_required",audio);
                     }
-//                    jChild.getBoolean("field_audio_recorder_display");
                     if((audio) && jChild.has("field_audio_recorder_display")){
                         fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
                     }
+                    else if(audio){
+                        //default to true
+                        fields.put("field_audio_recorder_display",true);
+                    }
+
 					String field_desc = jChild.getString("field_desc");
 					if (field_desc.length() > 0)
 						fields.put("field_desc", field_desc);
@@ -3176,31 +3181,13 @@ public class JSONReader {
                     if(jChild.has("field_audio_required")){
                         fields.put("field_audio_required",audio);
                     }
-//                    jChild.getBoolean("field_audio_recorder_display");
                     if((audio) && jChild.has("field_audio_recorder_display")){
                         fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
                     }
+                    else if(audio){
+                        fields.put("field_audio_recorder_display",true);
+                    }
 
-//                    Boolean fieldAudio = null;
-//                    if(jChild.has("field_audio_required")){
-//                        fieldAudio = jChild.getBoolean("field_audio_required");
-//                        fields.put("field_audio_required",fieldAudio);
-//                    }
-//
-////                    if(jChild.has("field_audio_recorder_display") && (!fieldAudio)){
-////                        fields.put("field_audio_recorder_display",jChild.getBoolean("field_audio_recorder_display"));
-////                    }
-////                    else {
-////                        fields.put("field_audio_recorder_display",true);
-////                    }
-//
-//
-//                    if((!fieldAudio) && jChild.has("field_audio_recorder_display")){
-//                        fields.put("field_audio_recorder_display",true);
-//                    }
-//                    else{
-//                        fields.put("field_audio_recorder_display",false);
-//                    }
 					fields.put("field_required",
 							jChild.getString("field_required"));
 					if (jChild.getString("field_help").length() > 0)

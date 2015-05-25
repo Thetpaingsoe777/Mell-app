@@ -355,22 +355,16 @@ public class OneQuestionOneView extends FragmentActivity {
 						String dataset_error_msg = "";
 						boolean isNotTyped = field_required.equals("true")
 								&& value.equals("#no_value#");
-						if (!isNotTyped) {
+                        String tagID = currentLayout.getTag(R.id.layout_id)
+                                .toString();
+                        Boolean auto_recording = false;
+
+                        if (!isNotTyped) {
 							// user typed values
 							if (ApplicationValues.IS_RECORDING_NOW) {
                                 // still recording...
                                 // block..
                                 // there is no direction validation...
-                                // bcuz it will block both direction if
-                                // recording is not ending
-//								navigator.addLast(0);
-//								used_field_ids.addLast(currentFieldID);
-//								vPager.setCurrentItem(currentPosition);
-//								errorMsg.setText("Audo recording is need to stop.");
-//								errorMsg.setTextColor(Color.RED);
-//							    errorMsg.setLayoutParams(errorMsgLayoutOpen);
-//								currentPosition = previousIndex;
-
                                 //if this is an auto record, stopping the recording here....
 
 
@@ -382,7 +376,6 @@ public class OneQuestionOneView extends FragmentActivity {
                                     }
                                 }
 
-                                Boolean auto_recording = false;
                                 AudioRecordingManager autoRecordiong=null;
                                 //TO DO: get json field_audio_recorder_display value
 
@@ -395,19 +388,17 @@ public class OneQuestionOneView extends FragmentActivity {
                                 if (auto_recording){
                                     autoRecordiong.stopRecording();
                                 }
-                                else{
-                                    boolean forceStopL_R = true;
-                                    navStayStill(direction, currentFieldID,
-                                            field_error_msg, lLManager,
-                                            newPosition, currentPosition,
-                                            forceStopL_R);
-                                }
                             }
 
-
-							String tagID = currentLayout.getTag(R.id.layout_id)
-									.toString();
-							if (tagID.equals("numberLayout")) {
+                            if (ApplicationValues.IS_RECORDING_NOW && !auto_recording){
+                                boolean forceStopL_R = true;
+                                field_error_msg = "Audio recording is needed to stop.";
+                                navStayStill(direction, currentFieldID,
+                                        field_error_msg, lLManager,
+                                        newPosition, currentPosition,
+                                        forceStopL_R);
+                            }
+                            else if (tagID.equals("numberLayout")) {
 								String value_ = test.get("value").toString();
 								String field_max_value = test.get(
 										"field_max_value").toString();
@@ -668,39 +659,10 @@ public class OneQuestionOneView extends FragmentActivity {
 									navStayStill(direction, currentFieldID,
 											field_error_msg, lLManager,
 											newPosition, currentPosition, false);
-								} else {
-									// pass // LEFT to RIGHT
-                                    boolean forceStopL_R=true;
-//                                    if(!ApplicationValues.IS_RECORDING_NOW){
-//                                        navStayStill(direction,currentFieldID,"You need to Stop Recording",lLManager,newPosition,currentPosition,forceStopL_R);
-//                                    }
-                                    if(ApplicationValues.IS_RECORDING_NOW){
-                                        LinearLayout autoRecordingLayout=null;
-                                        for(int i=0 ;i<currentParentLayout.getChildCount();i++){
-                                            if(currentParentLayout.getChildAt(i).getTag(R.id.layout_id) !=null && currentParentLayout.getChildAt(i).getTag(R.id.layout_id).toString().equals("recordingLayout")){
-                                                autoRecordingLayout =(LinearLayout)currentParentLayout.getChildAt(i);
-                                                break;
-                                            }
-                                        }
-
-                                        Boolean auto_recording = false;
-                                        AudioRecordingManager autoRecordiong=null;
-                                        //TO DO: get json field_audio_recorder_display value
-
-                                        if(autoRecordingLayout != null){
-                                            //set auto recording
-                                            autoRecordiong = (AudioRecordingManager)autoRecordingLayout.getTag(R.id.recording_manager);
-                                            auto_recording = (Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto));
-                                        }
-
-                                        if (auto_recording){
-                                            autoRecordiong.stopRecording();
-                                        }
-                                    }
-                                    else{
+								} else{
                                         navLeftToRight(newPosition, currentFieldID);
                                     }
-								}
+
 							}
 							// latested updated
 							// I moved the code here since it needs validation
@@ -797,19 +759,6 @@ public class OneQuestionOneView extends FragmentActivity {
 												errMessage = "Required Child Extra";
 											}
 										}
-										if (ApplicationValues.IS_RECORDING_NOW) {
-											forceStopL_R = true;
-											/*
-											 * navStayStill( direction,
-											 * currentFieldID,
-											 */
-											errMessage = "Audio recording is needed to stop.";
-											/*
-											 * lLManager, newPosition,
-											 * currentPosition, forceStopL_R);
-											 */
-										}
-										// end stay still validation
 
 										if (errMessage.length() > 0) { // block
 											navStayStill(direction, fieldID,
@@ -2549,14 +2498,7 @@ public class OneQuestionOneView extends FragmentActivity {
 	}
 
 	public void renderNextLayout(int newPosition) throws Exception {
-        if(ApplicationValues.IS_RECORDING_NOW){
-            AudioRecordingManager hiddenRecord = new AudioRecordingManager(this);
-            hiddenRecord.stopRecording();
-        }
-
-
-
-		if (newPosition != layoutList.size() - 1) {
+        if (newPosition != layoutList.size() - 1) {
 			ArrayList<LinearLayout> layoutList_ = layoutList;
 			LinearLayout nextLayout = layoutList.get(newPosition);
 			LinearLayout nextInnerLayout = getInnerLayout(nextLayout);

@@ -375,6 +375,7 @@ public class SyncManager {
 
 				for (int i = 0; i < incompleteDataArray.length(); i++) {
 					JSONObject child = incompleteDataArray.getJSONObject(i);
+                    String field_id = child.getString("field_id");
 					String field_name = child.getString("field_name");
 					String field_label = child.getString("field_label");
 					String field_value = child.getString("field_value");
@@ -391,12 +392,16 @@ public class SyncManager {
 							JSONObject updatedObject = new JSONObject();
 							if (resultMap.containsKey(field_name)) {
 								String serverID = resultMap.get(field_name);
-								updatedObject.put("field_name", field_name);
+                                updatedObject.put("field_id", field_id);
+                                updatedObject.put("field_name", field_name);
 								updatedObject.put("field_label", field_label);
-								if(isAudio)
-									updatedObject.put("field_audio", serverID);
-								else if(isImage)
-									updatedObject.put("field_value", serverID);
+								if(isAudio) {
+                                    updatedObject.put("field_audio", serverID);
+                                    updatedObject.put("field_value", field_value);
+                                }
+                                else if(isImage) {
+                                    updatedObject.put("field_value", serverID);
+                                }
 								completeDataArray.put(updatedObject);
 							}
 						}
