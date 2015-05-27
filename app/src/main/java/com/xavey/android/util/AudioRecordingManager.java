@@ -120,8 +120,8 @@ public class AudioRecordingManager {
 	public void startRecording() {
 		recorder = new MediaRecorder();
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-		recorder.setOutputFormat(output_formats[currentFormat]);
-		recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        recorder.setOutputFormat(MediaRecorder.AudioEncoder.AAC);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setAudioEncodingBitRate(16);
         recorder.setAudioSamplingRate(44100);
 		recorder.setOutputFile(getFilename());
@@ -187,27 +187,5 @@ public class AudioRecordingManager {
 	
 	private Audio audioInfo;
 
-
-    public void startRecording(String fileName) {
-        recorder = new MediaRecorder();
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(output_formats[currentFormat]);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-        recorder.setAudioEncodingBitRate(16);
-        recorder.setAudioSamplingRate(44100);
-        recorder.setOutputFile(fileName);
-        recorder.setOnErrorListener(errorListener);
-        recorder.setOnInfoListener(infoListener);
-        Log.i("Recorder",recorder.getClass().toString());
-
-        try {
-            ApplicationValues.IS_RECORDING_NOW = true;
-            recorder.prepare();
-            recorder.start();
-        }catch (Exception e){
-            e.printStackTrace();
-            ApplicationValues.IS_RECORDING_NOW = false;
-        }
-    }
 
 }

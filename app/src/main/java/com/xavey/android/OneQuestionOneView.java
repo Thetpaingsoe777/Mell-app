@@ -2549,13 +2549,6 @@ public class OneQuestionOneView extends FragmentActivity {
 	}
 
 	public void renderNextLayout(int newPosition) throws Exception {
-        if(ApplicationValues.IS_RECORDING_NOW){
-            AudioRecordingManager hiddenRecord = new AudioRecordingManager(this);
-            hiddenRecord.stopRecording();
-        }
-
-
-
 		if (newPosition != layoutList.size() - 1) {
 			ArrayList<LinearLayout> layoutList_ = layoutList;
 			LinearLayout nextLayout = layoutList.get(newPosition);
