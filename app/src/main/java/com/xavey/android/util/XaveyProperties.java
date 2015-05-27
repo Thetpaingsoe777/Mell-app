@@ -60,7 +60,7 @@ public class XaveyProperties {
 			e.printStackTrace();
 		}*/
 
-        //dev
+        /*/dev
             authenticateURL = "http://dev.xavey.com:3000/authenticate/";
 			serverFormDownloadURL = "http://dev.xavey.com:3000/forms/worker/";
 			serverImageUploadURL = "http://dev.xavey.com:3000/collections/upload";
@@ -69,13 +69,14 @@ public class XaveyProperties {
 			setSyncImageDownloadURL("http://dev.xavey.com:3000/forms/image/");
             setCurrentlyPointingURL("dev.xavey.com");
 
-       /* authenticateURL = "http://api.xavey.com:3000/authenticate/";
+       */
+        authenticateURL = "http://api.xavey.com:3000/authenticate/";
         serverFormDownloadURL = "http://api.xavey.com:3000/forms/worker/";
         serverImageUploadURL = "http://api.xavey.com:3000/collections/upload";
         serverDocumentUploadURL = "http://api.xavey.com:3000/collections/data";
         zawgyi_font = "on";
         setSyncImageDownloadURL("http://api.xavey.com:3000/forms/image/");
-        setCurrentlyPointingURL("api.xavey.com");*/
+        setCurrentlyPointingURL("api.xavey.com");
     }
 
 	public String getAuthenticateURL() {

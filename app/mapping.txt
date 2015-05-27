@@ -2051,10 +2051,780 @@ android.support.v4.widget.ViewDragHelper$Callback -> android.support.v4.widget.a
     boolean tryCaptureView(android.view.View,int) -> a
     int clampViewPositionHorizontal(android.view.View,int,int) -> a
     int clampViewPositionVertical(android.view.View,int,int) -> b
+com.crashlytics.android.BuildIdValidator -> com.a.a.a:
+    java.lang.String buildId -> a
+    boolean requiringBuildId -> b
+    void validate(java.lang.String,java.lang.String) -> a
+    java.lang.String getMessage(java.lang.String,java.lang.String) -> b
+com.crashlytics.android.ByteString -> com.a.a.b:
+    byte[] bytes -> b
+    com.crashlytics.android.ByteString EMPTY -> a
+    int hash -> c
+    int size() -> a
+    com.crashlytics.android.ByteString copyFrom(byte[],int,int) -> a
+    com.crashlytics.android.ByteString copyFromUtf8(java.lang.String) -> a
+    void copyTo(byte[],int,int,int) -> a
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+    java.io.InputStream newInput() -> b
+com.crashlytics.android.CLSUUID -> com.a.a.c:
+    java.util.concurrent.atomic.AtomicLong _sequenceNumber -> a
+    java.lang.String _clsId -> b
+    void populateTime(byte[]) -> a
+    void populateSequenceNumber(byte[]) -> b
+    void populatePID(byte[]) -> c
+    byte[] convertLongToFourByteBuffer(long) -> a
+    byte[] convertLongToTwoByteBuffer(long) -> b
+    java.lang.String toString() -> toString
+com.crashlytics.android.ClsFileOutputStream -> com.a.a.d:
+    java.lang.String root -> b
+    java.io.File inProgress -> c
+    java.io.File complete -> d
+    boolean closed -> e
+    java.io.FilenameFilter TEMP_FILENAME_FILTER -> a
+    void close() -> close
+    void closeInProgressStream() -> a
+com.crashlytics.android.ClsFileOutputStream$1 -> com.a.a.e:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CodedOutputStream -> com.a.a.f:
+    byte[] buffer -> a
+    int limit -> b
+    int position -> c
+    java.io.OutputStream output -> d
+    com.crashlytics.android.CodedOutputStream newInstance(java.io.OutputStream) -> a
+    com.crashlytics.android.CodedOutputStream newInstance(java.io.OutputStream,int) -> a
+    void writeFloat(int,float) -> a
+    void writeUInt64(int,long) -> a
+    void writeBool(int,boolean) -> a
+    void writeString(int,java.lang.String) -> a
+    void writeBytes(int,com.crashlytics.android.ByteString) -> a
+    void writeUInt32(int,int) -> a
+    void writeEnum(int,int) -> b
+    void writeSInt32(int,int) -> c
+    void writeFloatNoTag(float) -> a
+    void writeUInt64NoTag(long) -> a
+    void writeInt32NoTag(int) -> a
+    void writeBoolNoTag(boolean) -> a
+    void writeStringNoTag(java.lang.String) -> a
+    void writeBytesNoTag(com.crashlytics.android.ByteString) -> a
+    void writeUInt32NoTag(int) -> b
+    void writeEnumNoTag(int) -> c
+    void writeSInt32NoTag(int) -> d
+    int computeFloatSize(int,float) -> b
+    int computeUInt64Size(int,long) -> b
+    int computeBoolSize(int,boolean) -> b
+    int computeBytesSize(int,com.crashlytics.android.ByteString) -> b
+    int computeUInt32Size(int,int) -> d
+    int computeEnumSize(int,int) -> e
+    int computeSInt32Size(int,int) -> f
+    int computeFloatSizeNoTag(float) -> b
+    int computeUInt64SizeNoTag(long) -> b
+    int computeInt32SizeNoTag(int) -> e
+    int computeBoolSizeNoTag(boolean) -> b
+    int computeBytesSizeNoTag(com.crashlytics.android.ByteString) -> b
+    int computeUInt32SizeNoTag(int) -> f
+    int computeEnumSizeNoTag(int) -> g
+    int computeSInt32SizeNoTag(int) -> h
+    void refreshBuffer() -> a
+    void flush() -> flush
+    void writeRawByte(byte) -> a
+    void writeRawByte(int) -> i
+    void writeRawBytes(com.crashlytics.android.ByteString) -> c
+    void writeRawBytes(byte[]) -> a
+    void writeRawBytes(byte[],int,int) -> a
+    void writeRawBytes(com.crashlytics.android.ByteString,int,int) -> a
+    void writeTag(int,int) -> g
+    int computeTagSize(int) -> j
+    void writeRawVarint32(int) -> k
+    int computeRawVarint32Size(int) -> l
+    void writeRawVarint64(long) -> c
+    int computeRawVarint64Size(long) -> d
+    void writeRawLittleEndian32(int) -> m
+    int encodeZigZag32(int) -> n
+com.crashlytics.android.CodedOutputStream$OutOfSpaceException -> com.a.a.g:
+com.crashlytics.android.Crashlytics -> com.a.a.h:
+    long startTime -> a
+    java.util.concurrent.ConcurrentHashMap attributes -> g
+    java.util.Collection kits -> h
+    java.io.File initializationMarkerFile -> i
+    com.crashlytics.android.CrashlyticsListener listener -> j
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler handler -> k
+    java.lang.String userId -> l
+    java.lang.String userEmail -> m
+    java.lang.String userName -> n
+    java.lang.String buildId -> o
+    java.lang.String packageName -> p
+    java.lang.String installerPackageName -> q
+    java.lang.String versionCode -> r
+    java.lang.String versionName -> s
+    float delay -> t
+    boolean disabled -> u
+    com.crashlytics.android.PinningInfoProvider pinningInfo -> v
+    io.fabric.sdk.android.services.network.HttpRequestFactory httpRequestFactory -> w
+    com.crashlytics.android.CrashlyticsExecutorServiceWrapper executorServiceWrapper -> x
+    com.crashlytics.android.internal.CrashEventDataProvider externalCrashEventDataProvider -> y
+    boolean onPreExecute() -> a
+    boolean onPreExecute(android.content.Context) -> a
+    void setAndValidateKitProperties(android.content.Context,java.lang.String) -> a
+    java.lang.Void doInBackground() -> b
+    java.lang.String getIdentifier() -> c
+    java.lang.String getVersion() -> d
+    java.util.Collection getKits() -> e
+    com.crashlytics.android.Crashlytics getInstance() -> f
+    void finishInitSynchronously() -> H
+    void recordFatalExceptionEvent(java.lang.String) -> a
+    java.util.Map getAttributes() -> g
+    com.crashlytics.android.BuildIdValidator getBuildIdValidator(java.lang.String,boolean) -> a
+    java.lang.String getPackageName() -> h
+    java.lang.String getInstallerPackageName() -> i
+    java.lang.String getVersionName() -> j
+    java.lang.String getVersionCode() -> k
+    java.lang.String getOverridenSpiEndpoint() -> l
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler getHandler() -> m
+    java.lang.String getUserIdentifier() -> n
+    java.lang.String getUserEmail() -> o
+    java.lang.String getUserName() -> p
+    void markInitializationStarted() -> q
+    void markInitializationComplete() -> r
+    boolean didPreviousInitializationComplete() -> s
+    com.crashlytics.android.internal.models.SessionEventData getExternalCrashEventData() -> t
+    java.io.File getSdkDirectory() -> u
+    boolean shouldPromptUserBeforeSendingCrashReports() -> v
+    boolean shouldSendReportsWithoutPrompting() -> w
+    void setShouldSendUserReportsWithoutPrompting(boolean) -> a
+    boolean canSendWithUserApproval() -> x
+    com.crashlytics.android.CreateReportSpiCall getCreateReportSpiCall(io.fabric.sdk.android.services.settings.SettingsData) -> a
+    boolean getSendDecisionFromUser(android.app.Activity,io.fabric.sdk.android.services.settings.PromptSettingsData) -> a
+    io.fabric.sdk.android.services.settings.SessionSettingsData getSessionSettingsData() -> y
+    boolean isRequiringBuildId(android.content.Context) -> b
+    int dipsToPixels(float,int) -> a
+    java.lang.Object doInBackground() -> z
+    java.io.File access$000(com.crashlytics.android.Crashlytics) -> a
+    boolean access$100(com.crashlytics.android.Crashlytics,android.app.Activity,io.fabric.sdk.android.services.settings.PromptSettingsData) -> a
+    int access$300(com.crashlytics.android.Crashlytics,float,int) -> a
+com.crashlytics.android.Crashlytics$1 -> com.a.a.i:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Void call() -> a
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+    java.lang.Object call() -> call
+com.crashlytics.android.Crashlytics$2 -> com.a.a.j:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Void call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.Crashlytics$3 -> com.a.a.k:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Boolean call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.Crashlytics$4 -> com.a.a.l:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Boolean call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.Crashlytics$5 -> com.a.a.m:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Boolean usingSettings(io.fabric.sdk.android.services.settings.SettingsData) -> a
+    java.lang.Object usingSettings(io.fabric.sdk.android.services.settings.SettingsData) -> b
+com.crashlytics.android.Crashlytics$6 -> com.a.a.n:
+    com.crashlytics.android.Crashlytics this$0 -> a
+    java.lang.Boolean usingSettings(io.fabric.sdk.android.services.settings.SettingsData) -> a
+    java.lang.Object usingSettings(io.fabric.sdk.android.services.settings.SettingsData) -> b
+com.crashlytics.android.Crashlytics$7 -> com.a.a.o:
+    android.app.Activity val$activity -> a
+    com.crashlytics.android.Crashlytics$OptInLatch val$latch -> b
+    com.crashlytics.android.DialogStringResolver val$stringResolver -> c
+    io.fabric.sdk.android.services.settings.PromptSettingsData val$promptData -> d
+    com.crashlytics.android.Crashlytics this$0 -> e
+    void run() -> run
+com.crashlytics.android.Crashlytics$7$1 -> com.a.a.p:
+    com.crashlytics.android.Crashlytics$7 this$1 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.crashlytics.android.Crashlytics$7$2 -> com.a.a.q:
+    com.crashlytics.android.Crashlytics$7 this$1 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.crashlytics.android.Crashlytics$7$3 -> com.a.a.r:
+    com.crashlytics.android.Crashlytics$7 this$1 -> a
+    void onClick(android.content.DialogInterface,int) -> onClick
+com.crashlytics.android.Crashlytics$OptInLatch -> com.a.a.s:
+    boolean send -> b
+    java.util.concurrent.CountDownLatch latch -> c
+    com.crashlytics.android.Crashlytics this$0 -> a
+    void setOptIn(boolean) -> a
+    boolean getOptIn() -> a
+    void await() -> b
+com.crashlytics.android.CrashlyticsExecutorServiceWrapper -> com.a.a.t:
+    java.util.concurrent.ExecutorService executorService -> a
+    java.lang.Object executeSyncLoggingException(java.util.concurrent.Callable) -> a
+    java.util.concurrent.Future executeAsync(java.lang.Runnable) -> a
+    java.util.concurrent.Future executeAsync(java.util.concurrent.Callable) -> b
+com.crashlytics.android.CrashlyticsExecutorServiceWrapper$1 -> com.a.a.u:
+    java.lang.Runnable val$runnable -> a
+    com.crashlytics.android.CrashlyticsExecutorServiceWrapper this$0 -> b
+    void run() -> run
+com.crashlytics.android.CrashlyticsExecutorServiceWrapper$2 -> com.a.a.v:
+    java.util.concurrent.Callable val$callable -> a
+    com.crashlytics.android.CrashlyticsExecutorServiceWrapper this$0 -> b
+    java.lang.Object call() -> call
+com.crashlytics.android.CrashlyticsListener -> com.a.a.w:
+    void crashlyticsDidDetectCrashDuringPreviousExecution() -> a
+com.crashlytics.android.CrashlyticsMissingDependencyException -> com.a.a.x:
+    java.lang.String buildExceptionMessage(java.lang.String) -> a
+com.crashlytics.android.CrashlyticsPinningInfoProvider -> com.a.a.y:
+    com.crashlytics.android.PinningInfoProvider pinningInfo -> a
+    java.io.InputStream getKeyStoreStream() -> a
+    java.lang.String getKeyStorePassword() -> b
+    java.lang.String[] getPins() -> c
+    long getPinCreationTimeInMillis() -> d
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler -> com.a.a.z:
+    java.io.FilenameFilter SESSION_FILE_FILTER -> a
+    java.util.Comparator LARGEST_FILE_NAME_FIRST -> b
+    java.util.Comparator SMALLEST_FILE_NAME_FIRST -> c
+    java.io.FilenameFilter ANY_SESSION_FILENAME_FILTER -> d
+    java.util.regex.Pattern SESSION_FILE_PATTERN -> e
+    java.util.Map SEND_AT_CRASHTIME_HEADER -> f
+    java.util.concurrent.atomic.AtomicInteger eventCounter -> g
+    java.util.concurrent.atomic.AtomicBoolean receiversRegistered -> h
+    java.lang.Thread$UncaughtExceptionHandler defaultHandler -> i
+    java.io.File filesDir -> j
+    java.util.concurrent.atomic.AtomicBoolean isHandlingException -> k
+    android.content.BroadcastReceiver powerDisconnectedReceiver -> l
+    android.content.BroadcastReceiver powerConnectedReceiver -> m
+    com.crashlytics.android.CrashlyticsExecutorServiceWrapper executorServiceWrapper -> n
+    io.fabric.sdk.android.services.common.IdManager idManager -> o
+    boolean powerConnected -> p
+    com.crashlytics.android.Crashlytics crashlytics -> q
+    com.crashlytics.android.LogFileManager logFileManager -> r
+    com.crashlytics.android.SessionDataWriter sessionDataWriter -> s
+    void uncaughtException(java.lang.Thread,java.lang.Throwable) -> uncaughtException
+    void handleUncaughtException(java.util.Date,java.lang.Thread,java.lang.Throwable) -> a
+    boolean isHandlingException() -> a
+    void notifyCrashlyticsListenerOfPreviousCrash(com.crashlytics.android.CrashlyticsListener) -> a
+    void writeFatal(java.util.Date,java.lang.Thread,java.lang.Throwable) -> b
+    void writeExternalCrashEvent(com.crashlytics.android.internal.models.SessionEventData) -> a
+    void ensureOpenSessionExists() -> b
+    java.lang.String getCurrentSessionId() -> j
+    java.lang.String getSessionIdFromSessionFile(java.io.File) -> a
+    boolean hasOpenSession() -> c
+    boolean finalizeSessions() -> d
+    void doOpenSession() -> k
+    void doCloseSessions() -> l
+    void closeWithoutRenamingOrLog(com.crashlytics.android.ClsFileOutputStream) -> a
+    void deleteSessionPartFilesFor(java.lang.String) -> a
+    java.io.File[] listSessionPartFilesFor(java.lang.String) -> b
+    java.io.File[] listCompleteSessionFiles() -> m
+    java.io.File[] listSessionBeginFiles() -> e
+    java.io.File[] listFilesMatching(java.io.FilenameFilter) -> a
+    java.io.File[] ensureFileArrayNotNull(java.io.File[]) -> b
+    void trimSessionEventFiles(java.lang.String,int) -> a
+    void trimSessionFiles() -> f
+    void trimOpenSessions(int) -> a
+    void cleanInvalidTempFiles() -> g
+    void doCleanInvalidTempFiles(java.io.File[]) -> a
+    void deleteLegacyInvalidCacheDir() -> n
+    void writeBeginSession(java.lang.String,java.util.Date) -> a
+    void writeSessionApp(java.lang.String) -> c
+    void writeSessionOS(java.lang.String) -> d
+    void writeSessionDevice(java.lang.String) -> e
+    void writeSessionUser(java.lang.String) -> f
+    void writeSessionEvent(com.crashlytics.android.CodedOutputStream,java.util.Date,java.lang.Thread,java.lang.Throwable,java.lang.String,boolean) -> a
+    void writeSessionPartsToSessionFile(java.io.File,java.lang.String,int) -> a
+    void writeNonFatalEventsTo(com.crashlytics.android.CodedOutputStream,java.io.File[],java.lang.String) -> a
+    void writeInitialPartsTo(com.crashlytics.android.CodedOutputStream,java.lang.String) -> a
+    void writeToCosFromFile(com.crashlytics.android.CodedOutputStream,java.io.File) -> a
+    void sendSessionReports() -> o
+    java.util.regex.Pattern access$000() -> h
+    boolean access$102(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler,boolean) -> a
+    void access$200(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler,java.util.Date,java.lang.Thread,java.lang.Throwable) -> a
+    java.util.concurrent.atomic.AtomicBoolean access$300(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler) -> a
+    void access$600(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler) -> b
+    com.crashlytics.android.Crashlytics access$700(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler) -> c
+    void access$800(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler,com.crashlytics.android.internal.models.SessionEventData) -> a
+    void access$900(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler) -> d
+    java.io.File[] access$1100(com.crashlytics.android.CrashlyticsUncaughtExceptionHandler,java.io.FilenameFilter) -> a
+    java.util.Map access$1200() -> i
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$1 -> com.a.a.aa:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$10 -> com.a.a.ab:
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> a
+    java.lang.Void call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$11 -> com.a.a.ac:
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> a
+    java.lang.Boolean call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$12 -> com.a.a.ad:
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> a
+    void run() -> run
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$13 -> com.a.a.ae:
+    java.lang.String val$sessionId -> a
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> b
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$14 -> com.a.a.af:
+    java.io.File val$toSend -> a
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> b
+    void run() -> run
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$2 -> com.a.a.ag:
+    int compare(java.io.File,java.io.File) -> a
+    int compare(java.lang.Object,java.lang.Object) -> compare
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$3 -> com.a.a.ah:
+    int compare(java.io.File,java.io.File) -> a
+    int compare(java.lang.Object,java.lang.Object) -> compare
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$4 -> com.a.a.ai:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$5 -> com.a.a.aj:
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$6 -> com.a.a.ak:
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> a
+    void onReceive(android.content.Context,android.content.Intent) -> onReceive
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$7 -> com.a.a.al:
+    java.util.Date val$now -> a
+    java.lang.Thread val$thread -> b
+    java.lang.Throwable val$ex -> c
+    com.crashlytics.android.CrashlyticsUncaughtExceptionHandler this$0 -> d
+    java.lang.Void call() -> a
+    java.lang.Object call() -> call
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$AnySessionPartFileFilter -> com.a.a.am:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$FileNameContainsFilter -> com.a.a.an:
+    java.lang.String string -> a
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CrashlyticsUncaughtExceptionHandler$SessionPartFileFilter -> com.a.a.ao:
+    java.lang.String sessionId -> a
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.CreateReportRequest -> com.a.a.ap:
+    java.lang.String apiKey -> a
+    com.crashlytics.android.Report report -> b
+com.crashlytics.android.CreateReportSpiCall -> com.a.a.aq:
+    boolean invoke(com.crashlytics.android.CreateReportRequest) -> a
+com.crashlytics.android.DefaultCreateReportSpiCall -> com.a.a.ar:
+    boolean invoke(com.crashlytics.android.CreateReportRequest) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyHeadersTo(io.fabric.sdk.android.services.network.HttpRequest,com.crashlytics.android.CreateReportRequest) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyMultipartDataTo(io.fabric.sdk.android.services.network.HttpRequest,com.crashlytics.android.CreateReportRequest) -> b
+com.crashlytics.android.DialogStringResolver -> com.a.a.as:
+    android.content.Context context -> a
+    io.fabric.sdk.android.services.settings.PromptSettingsData promptData -> b
+    java.lang.String getTitle() -> a
+    java.lang.String getMessage() -> b
+    java.lang.String getSendButtonTitle() -> c
+    java.lang.String getAlwaysSendButtonTitle() -> d
+    java.lang.String getCancelButtonTitle() -> e
+    java.lang.String resourceOrFallbackValue(java.lang.String,java.lang.String) -> a
+    java.lang.String stringOrFallback(java.lang.String,java.lang.String) -> b
+    boolean isNullOrEmpty(java.lang.String) -> a
+com.crashlytics.android.ExceptionUtils -> com.a.a.at:
+    void writeStackTraceIfNotNull(java.lang.Throwable,java.io.OutputStream) -> a
+    void writeStackTrace(java.lang.Throwable,java.io.OutputStream) -> b
+    void writeStackTrace(java.lang.Throwable,java.io.Writer) -> a
+    java.lang.String getMessage(java.lang.Throwable) -> a
+com.crashlytics.android.LogFileManager -> com.a.a.au:
+    android.content.Context context -> a
+    java.io.File filesDir -> b
+    io.fabric.sdk.android.services.common.QueueFile logFile -> c
+    com.crashlytics.android.ByteString getByteStringForLog() -> a
+    void closeLogFile() -> b
+com.crashlytics.android.LogFileManager$1 -> com.a.a.av:
+    byte[] val$logBytes -> a
+    int[] val$offsetHolder -> b
+    com.crashlytics.android.LogFileManager this$0 -> c
+    void read(java.io.InputStream,int) -> a
+com.crashlytics.android.NativeCrashWriter -> com.a.a.aw:
+    com.crashlytics.android.internal.models.SignalData DEFAULT_SIGNAL -> a
+    com.crashlytics.android.NativeCrashWriter$ProtobufMessage[] EMPTY_CHILDREN -> b
+    com.crashlytics.android.NativeCrashWriter$ThreadMessage[] EMPTY_THREAD_MESSAGES -> c
+    com.crashlytics.android.NativeCrashWriter$FrameMessage[] EMPTY_FRAME_MESSAGES -> d
+    com.crashlytics.android.NativeCrashWriter$BinaryImageMessage[] EMPTY_BINARY_IMAGE_MESSAGES -> e
+    com.crashlytics.android.NativeCrashWriter$CustomAttributeMessage[] EMPTY_CUSTOM_ATTRIBUTE_MESSAGES -> f
+    com.crashlytics.android.NativeCrashWriter$EventMessage readCrashEventData(com.crashlytics.android.internal.models.SessionEventData) -> a
+    com.crashlytics.android.NativeCrashWriter$DeviceMessage createDeviceMessage(com.crashlytics.android.internal.models.DeviceData) -> a
+    com.crashlytics.android.NativeCrashWriter$RepeatedMessage createThreadsMessage(com.crashlytics.android.internal.models.ThreadData[]) -> a
+    com.crashlytics.android.NativeCrashWriter$RepeatedMessage createFramesMessage(com.crashlytics.android.internal.models.ThreadData$FrameData[]) -> a
+    com.crashlytics.android.NativeCrashWriter$RepeatedMessage createBinaryImagesMessage(com.crashlytics.android.internal.models.BinaryImageData[]) -> a
+    com.crashlytics.android.NativeCrashWriter$RepeatedMessage createCustomAttributesMessage(com.crashlytics.android.internal.models.CustomAttributeData[]) -> a
+    void writeNativeCrash(com.crashlytics.android.internal.models.SessionEventData,com.crashlytics.android.CodedOutputStream) -> a
+    com.crashlytics.android.NativeCrashWriter$ProtobufMessage[] access$000() -> a
+com.crashlytics.android.NativeCrashWriter$ApplicationMessage -> com.a.a.ax:
+com.crashlytics.android.NativeCrashWriter$BinaryImageMessage -> com.a.a.ay:
+    long baseAddr -> a
+    long imageSize -> b
+    java.lang.String filePath -> c
+    java.lang.String uuid -> d
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$CustomAttributeMessage -> com.a.a.az:
+    java.lang.String key -> a
+    java.lang.String value -> b
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$DeviceMessage -> com.a.a.ba:
+    float batteryLevel -> a
+    int batteryVelocity -> b
+    boolean proximityOn -> c
+    int orientation -> d
+    long ramUsed -> e
+    long diskUsed -> f
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$EventMessage -> com.a.a.bb:
+    long time -> a
+    java.lang.String crashType -> b
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$ExecutionMessage -> com.a.a.bc:
+com.crashlytics.android.NativeCrashWriter$FrameMessage -> com.a.a.bd:
+    long address -> a
+    java.lang.String symbol -> b
+    java.lang.String file -> c
+    long offset -> d
+    int importance -> e
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$ProtobufMessage -> com.a.a.be:
+    int tag -> a
+    com.crashlytics.android.NativeCrashWriter$ProtobufMessage[] children -> b
+    int getSize() -> b
+    int getSizeNoTag() -> c
+    void write(com.crashlytics.android.CodedOutputStream) -> b
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$RepeatedMessage -> com.a.a.bf:
+    com.crashlytics.android.NativeCrashWriter$ProtobufMessage[] messages -> a
+    void write(com.crashlytics.android.CodedOutputStream) -> b
+    int getSize() -> b
+com.crashlytics.android.NativeCrashWriter$SignalMessage -> com.a.a.bg:
+    java.lang.String sigName -> a
+    java.lang.String sigCode -> b
+    long sigAddr -> c
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+com.crashlytics.android.NativeCrashWriter$ThreadMessage -> com.a.a.bh:
+    java.lang.String name -> a
+    int importance -> b
+    int getPropertiesSize() -> a
+    void writeProperties(com.crashlytics.android.CodedOutputStream) -> a
+    boolean hasName() -> d
+com.crashlytics.android.PinningInfoProvider -> com.a.a.bi:
+    java.io.InputStream getKeyStoreStream() -> a
+    java.lang.String getKeyStorePassword() -> b
+    java.lang.String[] getPins() -> c
+com.crashlytics.android.Report -> com.a.a.bj:
+    boolean remove() -> a
+    java.lang.String getFileName() -> b
+    java.lang.String getIdentifier() -> c
+    java.io.File getFile() -> d
+    java.util.Map getCustomHeaders() -> e
+com.crashlytics.android.ReportUploader -> com.a.a.bk:
+    java.io.FilenameFilter crashFileFilter -> b
+    java.util.Map HEADER_INVALID_CLS_FILE -> a
+    short[] RETRY_INTERVALS -> c
+    java.lang.Object fileAccessLock -> d
+    com.crashlytics.android.CreateReportSpiCall createReportCall -> e
+    java.lang.Thread uploadThread -> f
+    void uploadReports(float) -> a
+    boolean forceUpload(com.crashlytics.android.Report) -> a
+    java.util.List findReports() -> a
+    java.lang.Thread access$002(com.crashlytics.android.ReportUploader,java.lang.Thread) -> a
+    short[] access$100() -> b
+com.crashlytics.android.ReportUploader$1 -> com.a.a.bl:
+    boolean accept(java.io.File,java.lang.String) -> accept
+com.crashlytics.android.ReportUploader$Worker -> com.a.a.bm:
+    float delay -> b
+    com.crashlytics.android.ReportUploader this$0 -> a
+    void onRun() -> a
+    void attemptUploadWithRetry() -> b
+com.crashlytics.android.SessionDataWriter -> com.a.a.bn:
+    com.crashlytics.android.ByteString SIGNAL_DEFAULT_BYTE_STRING -> a
+    android.app.ActivityManager$RunningAppProcessInfo runningAppProcessInfo -> b
+    java.lang.Thread[] threads -> c
+    java.util.List stacks -> d
+    java.lang.StackTraceElement[] exceptionStack -> e
+    android.content.Context context -> f
+    com.crashlytics.android.ByteString packageNameBytes -> g
+    com.crashlytics.android.ByteString optionalBuildIdBytes -> h
+    int maxChainedExceptionsDepth -> i
+    void writeBeginSession(com.crashlytics.android.CodedOutputStream,java.lang.String,java.lang.String,long) -> a
+    void writeSessionApp(com.crashlytics.android.CodedOutputStream,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int) -> a
+    void writeSessionOS(com.crashlytics.android.CodedOutputStream,boolean) -> a
+    void writeSessionDevice(com.crashlytics.android.CodedOutputStream,java.lang.String,int,java.lang.String,int,long,long,boolean,java.util.Map,int,java.lang.String,java.lang.String) -> a
+    void writeSessionUser(com.crashlytics.android.CodedOutputStream,java.lang.String,java.lang.String,java.lang.String) -> a
+    void writeSessionEvent(com.crashlytics.android.CodedOutputStream,long,java.lang.Thread,java.lang.Throwable,java.lang.String,java.lang.Thread[],float,int,boolean,int,long,long,android.app.ActivityManager$RunningAppProcessInfo,java.util.List,java.lang.StackTraceElement[],com.crashlytics.android.LogFileManager,java.util.Map) -> a
+    void writeSessionEventApp(com.crashlytics.android.CodedOutputStream,java.lang.Thread,java.lang.Throwable,int,java.util.Map) -> a
+    void writeSessionEventAppExecution(com.crashlytics.android.CodedOutputStream,java.lang.Thread,java.lang.Throwable) -> a
+    void writeSessionEventAppCustomAttributes(com.crashlytics.android.CodedOutputStream,java.util.Map) -> a
+    void writeSessionEventAppExecutionException(com.crashlytics.android.CodedOutputStream,java.lang.Throwable,int,int) -> a
+    void writeThread(com.crashlytics.android.CodedOutputStream,java.lang.Thread,java.lang.StackTraceElement[],int,boolean) -> a
+    void writeFrame(com.crashlytics.android.CodedOutputStream,int,java.lang.StackTraceElement,boolean) -> a
+    void writeSessionEventDevice(com.crashlytics.android.CodedOutputStream,float,int,boolean,int,long,long) -> a
+    void writeSessionEventLog(com.crashlytics.android.CodedOutputStream,com.crashlytics.android.ByteString) -> a
+    int getSessionAppSize(com.crashlytics.android.ByteString,com.crashlytics.android.ByteString,com.crashlytics.android.ByteString,com.crashlytics.android.ByteString,int) -> a
+    int getSessionAppOrgSize() -> a
+    int getSessionOSSize(com.crashlytics.android.ByteString,com.crashlytics.android.ByteString,boolean) -> a
+    int getDeviceIdentifierSize(io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType,java.lang.String) -> a
+    int getSessionDeviceSize(int,com.crashlytics.android.ByteString,com.crashlytics.android.ByteString,int,long,long,boolean,java.util.Map,int,com.crashlytics.android.ByteString,com.crashlytics.android.ByteString) -> a
+    int getBinaryImageSize() -> b
+    int getSessionEventSize(java.lang.Thread,java.lang.Throwable,java.lang.String,long,java.util.Map,float,int,boolean,int,long,long,com.crashlytics.android.ByteString) -> a
+    int getEventAppSize(java.lang.Thread,java.lang.Throwable,int,java.util.Map) -> a
+    int getEventAppExecutionSize(java.lang.Thread,java.lang.Throwable) -> a
+    int getEventAppCustomAttributeSize(java.lang.String,java.lang.String) -> a
+    int getEventDeviceSize(float,int,boolean,int,long,long) -> a
+    int getEventLogSize(com.crashlytics.android.ByteString) -> a
+    int getEventAppExecutionExceptionSize(java.lang.Throwable,int) -> a
+    int getEventAppExecutionSignalSize() -> c
+    int getFrameSize(java.lang.StackTraceElement,boolean) -> a
+    int getThreadSize(java.lang.Thread,java.lang.StackTraceElement[],int,boolean) -> a
+    com.crashlytics.android.ByteString stringToByteString(java.lang.String) -> a
+com.crashlytics.android.SessionReport -> com.a.a.bo:
+    java.io.File file -> a
+    java.util.Map customHeaders -> b
+    java.io.File getFile() -> d
+    java.lang.String getFileName() -> b
+    java.lang.String getIdentifier() -> c
+    java.util.Map getCustomHeaders() -> e
+    boolean remove() -> a
+com.crashlytics.android.Utils -> com.a.a.bp:
+    void capFileCount(java.io.File,java.io.FilenameFilter,int,java.util.Comparator) -> a
+com.crashlytics.android.WireFormat -> com.a.a.bq:
+    int MESSAGE_SET_ITEM_TAG -> a
+    int MESSAGE_SET_ITEM_END_TAG -> b
+    int MESSAGE_SET_TYPE_ID_TAG -> c
+    int MESSAGE_SET_MESSAGE_TAG -> d
+    int makeTag(int,int) -> a
+com.crashlytics.android.answers.Answers -> com.a.a.a.a:
+    java.lang.String versionCode -> g
+    java.lang.String versionName -> h
+    io.fabric.sdk.android.services.persistence.PreferenceStore preferenceStore -> i
+    long installedAt -> j
+    com.crashlytics.android.answers.SessionAnalyticsManager sessionAnalyticsManager -> a
+    com.crashlytics.android.answers.Answers getInstance() -> b
+    void onException(io.fabric.sdk.android.services.common.Crash$FatalException) -> a
+    boolean onPreExecute() -> a
+    java.lang.Boolean doInBackground() -> e
+    java.lang.String getIdentifier() -> c
+    java.lang.String getVersion() -> d
+    void initializeSessionAnalytics(android.content.Context) -> a
+    java.lang.String getOverridenSpiEndpoint() -> f
+    boolean getAnalyticsLaunched() -> g
+    boolean isFirstLaunch(long) -> a
+    boolean installedRecently(long) -> b
+    java.io.File getSdkDirectory() -> h
+    java.lang.Object doInBackground() -> z
+com.crashlytics.android.answers.AnswersRetryFilesSender -> com.a.a.a.b:
+    com.crashlytics.android.answers.SessionAnalyticsFilesSender filesSender -> a
+    com.crashlytics.android.answers.RetryManager retryManager -> b
+    com.crashlytics.android.answers.AnswersRetryFilesSender build(com.crashlytics.android.answers.SessionAnalyticsFilesSender) -> a
+    boolean send(java.util.List) -> a
+com.crashlytics.android.answers.AutoSessionAnalyticsManager -> com.a.a.a.c:
+    android.app.Application application -> d
+    android.app.Application$ActivityLifecycleCallbacks activityLifecycleCallbacks -> e
+    com.crashlytics.android.answers.AutoSessionAnalyticsManager build(android.app.Application,com.crashlytics.android.answers.SessionEventMetadata,com.crashlytics.android.answers.SessionAnalyticsFilesManager,io.fabric.sdk.android.services.network.HttpRequestFactory) -> a
+    void disable() -> a
+com.crashlytics.android.answers.AutoSessionAnalyticsManager$1 -> com.a.a.a.d:
+    com.crashlytics.android.answers.AutoSessionAnalyticsManager this$0 -> a
+    void onActivityCreated(android.app.Activity,android.os.Bundle) -> onActivityCreated
+    void onActivityDestroyed(android.app.Activity) -> onActivityDestroyed
+    void onActivityPaused(android.app.Activity) -> onActivityPaused
+    void onActivityResumed(android.app.Activity) -> onActivityResumed
+    void onActivitySaveInstanceState(android.app.Activity,android.os.Bundle) -> onActivitySaveInstanceState
+    void onActivityStarted(android.app.Activity) -> onActivityStarted
+    void onActivityStopped(android.app.Activity) -> onActivityStopped
+com.crashlytics.android.answers.DisabledSessionAnalyticsManagerStrategy -> com.a.a.a.e:
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData,java.lang.String) -> a
+com.crashlytics.android.answers.EnabledSessionAnalyticsManagerStrategy -> com.a.a.a.f:
+    io.fabric.sdk.android.services.network.HttpRequestFactory httpRequestFactory -> g
+    io.fabric.sdk.android.services.events.FilesSender filesSender -> a
+    io.fabric.sdk.android.services.events.FilesSender getFilesSender() -> a
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData,java.lang.String) -> a
+com.crashlytics.android.answers.RandomBackoff -> com.a.a.a.g:
+    io.fabric.sdk.android.services.concurrency.internal.Backoff backoff -> a
+    java.util.Random random -> b
+    double jitterPercent -> c
+    long getDelayMillis(int) -> a
+    double randomJitter() -> a
+com.crashlytics.android.answers.RetryManager -> com.a.a.a.h:
+    long lastRetry -> a
+    io.fabric.sdk.android.services.concurrency.internal.RetryState retryState -> b
+    boolean canRetry(long) -> a
+    void recordRetry(long) -> b
+    void reset() -> a
+com.crashlytics.android.answers.SessionAnalyticsFilesManager -> com.a.a.a.i:
+    io.fabric.sdk.android.services.settings.AnalyticsSettingsData analyticsSettingsData -> g
+    java.lang.String generateUniqueRollOverFileName() -> a
+    int getMaxFilesToKeep() -> b
+    int getMaxByteSizePerFile() -> c
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData) -> a
+com.crashlytics.android.answers.SessionAnalyticsFilesSender -> com.a.a.a.j:
+    java.lang.String apiKey -> b
+    boolean send(java.util.List) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyHeadersTo(io.fabric.sdk.android.services.network.HttpRequest,java.lang.String) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyMultipartDataTo(io.fabric.sdk.android.services.network.HttpRequest,java.util.List) -> a
+com.crashlytics.android.answers.SessionAnalyticsManager -> com.a.a.a.k:
+    com.crashlytics.android.answers.SessionEventMetadata metadata -> a
+    com.crashlytics.android.answers.SessionEventsHandler eventsHandler -> b
+    boolean customEventsEnabled -> c
+    com.crashlytics.android.answers.SessionAnalyticsManager build(android.content.Context,com.crashlytics.android.answers.SessionEventMetadata,com.crashlytics.android.answers.SessionAnalyticsFilesManager,io.fabric.sdk.android.services.network.HttpRequestFactory) -> a
+    void onCrash(java.lang.String) -> a
+    void onInstall() -> b
+    void onCreate(android.app.Activity) -> a
+    void onDestroy(android.app.Activity) -> b
+    void onPause(android.app.Activity) -> c
+    void onResume(android.app.Activity) -> d
+    void onSaveInstanceState(android.app.Activity) -> e
+    void onStart(android.app.Activity) -> f
+    void onStop(android.app.Activity) -> g
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData,java.lang.String) -> a
+    void disable() -> a
+com.crashlytics.android.answers.SessionAnalyticsManagerStrategy -> com.a.a.a.l:
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData,java.lang.String) -> a
+com.crashlytics.android.answers.SessionEvent -> com.a.a.a.m:
+    com.crashlytics.android.answers.SessionEventMetadata sessionEventMetadata -> a
+    long timestamp -> b
+    com.crashlytics.android.answers.SessionEvent$Type type -> c
+    java.util.Map details -> d
+    java.lang.String customType -> e
+    java.util.Map customAttributes -> f
+    java.lang.String stringRepresentation -> g
+    com.crashlytics.android.answers.SessionEvent buildActivityLifecycleEvent(com.crashlytics.android.answers.SessionEventMetadata,com.crashlytics.android.answers.SessionEvent$Type,android.app.Activity) -> a
+    com.crashlytics.android.answers.SessionEvent buildInstallEvent(com.crashlytics.android.answers.SessionEventMetadata) -> a
+    com.crashlytics.android.answers.SessionEvent buildCrashEvent(com.crashlytics.android.answers.SessionEventMetadata,java.lang.String) -> a
+    com.crashlytics.android.answers.SessionEvent buildEvent(com.crashlytics.android.answers.SessionEventMetadata,com.crashlytics.android.answers.SessionEvent$Type,java.util.Map) -> a
+    com.crashlytics.android.answers.SessionEvent buildEvent(com.crashlytics.android.answers.SessionEventMetadata,com.crashlytics.android.answers.SessionEvent$Type,java.util.Map,java.lang.String,java.util.Map) -> a
+    java.lang.String toString() -> toString
+com.crashlytics.android.answers.SessionEvent$Type -> com.a.a.a.n:
+    com.crashlytics.android.answers.SessionEvent$Type CREATE -> a
+    com.crashlytics.android.answers.SessionEvent$Type START -> b
+    com.crashlytics.android.answers.SessionEvent$Type RESUME -> c
+    com.crashlytics.android.answers.SessionEvent$Type SAVE_INSTANCE_STATE -> d
+    com.crashlytics.android.answers.SessionEvent$Type PAUSE -> e
+    com.crashlytics.android.answers.SessionEvent$Type STOP -> f
+    com.crashlytics.android.answers.SessionEvent$Type DESTROY -> g
+    com.crashlytics.android.answers.SessionEvent$Type ERROR -> h
+    com.crashlytics.android.answers.SessionEvent$Type CRASH -> i
+    com.crashlytics.android.answers.SessionEvent$Type INSTALL -> j
+    com.crashlytics.android.answers.SessionEvent$Type CUSTOM -> k
+    com.crashlytics.android.answers.SessionEvent$Type[] $VALUES -> l
+    com.crashlytics.android.answers.SessionEvent$Type[] values() -> values
+    com.crashlytics.android.answers.SessionEvent$Type valueOf(java.lang.String) -> valueOf
+com.crashlytics.android.answers.SessionEventMetadata -> com.a.a.a.o:
+    java.lang.String appBundleId -> a
+    java.lang.String executionId -> b
+    java.lang.String installationId -> c
+    java.lang.String androidId -> d
+    java.lang.String advertisingId -> e
+    java.lang.String betaDeviceToken -> f
+    java.lang.String buildId -> g
+    java.lang.String osVersion -> h
+    java.lang.String deviceModel -> i
+    java.lang.String appVersionCode -> j
+    java.lang.String appVersionName -> k
+    java.lang.String stringRepresentation -> l
+    java.lang.String toString() -> toString
+com.crashlytics.android.answers.SessionEventTransform -> com.a.a.a.p:
+    byte[] toBytes(com.crashlytics.android.answers.SessionEvent) -> a
+    org.json.JSONObject buildJsonForEvent(com.crashlytics.android.answers.SessionEvent) -> b
+    byte[] toBytes(java.lang.Object) -> a
+com.crashlytics.android.answers.SessionEventsHandler -> com.a.a.a.q:
+    io.fabric.sdk.android.services.events.EventsStrategy getDisabledEventsStrategy() -> a
+    void setAnalyticsSettingsData(io.fabric.sdk.android.services.settings.AnalyticsSettingsData,java.lang.String) -> a
+    io.fabric.sdk.android.services.events.EventsStrategy access$000(com.crashlytics.android.answers.SessionEventsHandler) -> a
+com.crashlytics.android.answers.SessionEventsHandler$1 -> com.a.a.a.r:
+    io.fabric.sdk.android.services.settings.AnalyticsSettingsData val$analyticsSettingsData -> a
+    java.lang.String val$protocolAndHostOverride -> b
+    com.crashlytics.android.answers.SessionEventsHandler this$0 -> c
+    void run() -> run
+com.crashlytics.android.beta.Beta -> com.a.a.b.a:
+    io.fabric.sdk.android.services.cache.MemoryValueCache deviceTokenCache -> a
+    com.crashlytics.android.beta.DeviceTokenLoader deviceTokenLoader -> g
+    java.lang.Boolean doInBackground() -> b
+    java.util.Map getDeviceIdentifiers() -> e
+    java.lang.String getIdentifier() -> c
+    java.lang.String getVersion() -> d
+    void checkForUpdates(android.content.Context,io.fabric.sdk.android.services.common.IdManager,io.fabric.sdk.android.services.settings.BetaSettingsData,com.crashlytics.android.beta.BuildProperties) -> a
+    boolean isAppPossiblyInstalledByBeta(java.lang.String,int) -> a
+    boolean canCheckForUpdates(io.fabric.sdk.android.services.settings.BetaSettingsData,com.crashlytics.android.beta.BuildProperties) -> a
+    java.lang.String getBetaDeviceToken(android.content.Context,java.lang.String) -> a
+    io.fabric.sdk.android.services.settings.BetaSettingsData getBetaSettingsData() -> g
+    com.crashlytics.android.beta.BuildProperties loadBuildProperties(android.content.Context) -> a
+    java.lang.String getOverridenSpiEndpoint() -> f
+    java.lang.Object doInBackground() -> z
+com.crashlytics.android.beta.BuildProperties -> com.a.a.b.b:
+    java.lang.String versionCode -> a
+    java.lang.String versionName -> b
+    java.lang.String buildId -> c
+    java.lang.String packageName -> d
+    com.crashlytics.android.beta.BuildProperties fromProperties(java.util.Properties) -> a
+    com.crashlytics.android.beta.BuildProperties fromPropertiesStream(java.io.InputStream) -> a
+com.crashlytics.android.beta.CheckForUpdatesController -> com.a.a.b.c:
+    android.content.Context context -> a
+    com.crashlytics.android.beta.Beta beta -> b
+    io.fabric.sdk.android.services.common.IdManager idManager -> c
+    io.fabric.sdk.android.services.settings.BetaSettingsData betaSettings -> d
+    com.crashlytics.android.beta.BuildProperties buildProps -> e
+    io.fabric.sdk.android.services.persistence.PreferenceStore preferenceStore -> f
+    io.fabric.sdk.android.services.common.CurrentTimeProvider currentTimeProvider -> g
+    io.fabric.sdk.android.services.network.HttpRequestFactory httpRequestFactory -> h
+    void checkForUpdates() -> a
+com.crashlytics.android.beta.CheckForUpdatesRequest -> com.a.a.b.d:
+    com.crashlytics.android.beta.CheckForUpdatesResponseTransform responseTransform -> b
+    com.crashlytics.android.beta.CheckForUpdatesResponse invoke(java.lang.String,java.lang.String,com.crashlytics.android.beta.BuildProperties) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyHeadersTo(io.fabric.sdk.android.services.network.HttpRequest,java.lang.String,java.lang.String) -> a
+    java.util.Map getQueryParamsFor(com.crashlytics.android.beta.BuildProperties) -> a
+com.crashlytics.android.beta.CheckForUpdatesResponse -> com.a.a.b.e:
+    java.lang.String url -> a
+    java.lang.String versionString -> b
+    java.lang.String displayVersion -> c
+    java.lang.String buildVersion -> d
+    java.lang.String packageName -> e
+    java.lang.String instanceId -> f
+com.crashlytics.android.beta.CheckForUpdatesResponseTransform -> com.a.a.b.f:
+    com.crashlytics.android.beta.CheckForUpdatesResponse fromJson(org.json.JSONObject) -> a
+com.crashlytics.android.beta.DeviceTokenLoader -> com.a.a.b.g:
+    java.lang.String load(android.content.Context) -> a
+    java.util.zip.ZipInputStream getZipInputStreamOfAppApkFrom(android.content.Context) -> b
+    java.lang.String determineDeviceToken(java.util.zip.ZipInputStream) -> a
+    java.lang.Object load(android.content.Context) -> c
+com.crashlytics.android.internal.CrashEventDataProvider -> com.a.a.c.a:
+    com.crashlytics.android.internal.models.SessionEventData getCrashEventData() -> a
+com.crashlytics.android.internal.models.BinaryImageData -> com.a.a.c.a.a:
+    long baseAddress -> a
+    long size -> b
+    java.lang.String path -> c
+    java.lang.String id -> d
+com.crashlytics.android.internal.models.CustomAttributeData -> com.a.a.c.a.b:
+    java.lang.String key -> a
+    java.lang.String value -> b
+com.crashlytics.android.internal.models.DeviceData -> com.a.a.c.a.c:
+    int orientation -> a
+    long totalPhysicalMemory -> b
+    long totalInternalStorage -> c
+    long availablePhysicalMemory -> d
+    long availableInternalStorage -> e
+    int batteryCapacity -> f
+    int batteryVelocity -> g
+    boolean proximity -> h
+com.crashlytics.android.internal.models.SessionEventData -> com.a.a.c.a.d:
+    long timestamp -> a
+    com.crashlytics.android.internal.models.SignalData signal -> b
+    com.crashlytics.android.internal.models.ThreadData[] threads -> c
+    com.crashlytics.android.internal.models.BinaryImageData[] binaryImages -> d
+    com.crashlytics.android.internal.models.CustomAttributeData[] customAttributes -> e
+    com.crashlytics.android.internal.models.DeviceData deviceData -> f
+com.crashlytics.android.internal.models.SignalData -> com.a.a.c.a.e:
+    java.lang.String name -> a
+    java.lang.String code -> b
+    long faultAddress -> c
+com.crashlytics.android.internal.models.ThreadData -> com.a.a.c.a.f:
+    java.lang.String name -> a
+    int importance -> b
+    com.crashlytics.android.internal.models.ThreadData$FrameData[] frames -> c
+com.crashlytics.android.internal.models.ThreadData$FrameData -> com.a.a.c.a.g:
+    long address -> a
+    java.lang.String symbol -> b
+    java.lang.String file -> c
+    long offset -> d
+    int importance -> e
 com.xavey.android.AboutFragment -> com.xavey.android.a:
     java.lang.String about_text -> a
+    java.lang.String version_name -> b
+    java.lang.String version_code -> c
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
-    void loadProperties() -> a
 com.xavey.android.ApplicationValues -> com.xavey.android.b:
     int numberOfForm -> a
     java.util.ArrayList userFormList -> b
@@ -2076,6 +2846,7 @@ com.xavey.android.ApplicationValues -> com.xavey.android.b:
     boolean IS_RECORDING_NOW -> r
     java.lang.String UNIQUE_DEVICE_ID -> s
     com.xavey.android.ApplicationValues$LOGIN_TYPE CURRENT_LOGIN_MODE -> t
+    com.xavey.android.model.SYNC CURRENT_SYNC -> u
 com.xavey.android.ApplicationValues$LOGIN_TYPE -> com.xavey.android.c:
     com.xavey.android.ApplicationValues$LOGIN_TYPE DEMO_LOGIN -> a
     com.xavey.android.ApplicationValues$LOGIN_TYPE REGULAR_LOGIN -> b
@@ -2279,9 +3050,7 @@ com.xavey.android.MainActivity$3 -> com.xavey.android.s:
     void onClick(android.content.DialogInterface,int) -> onClick
 com.xavey.android.MainActivity$4 -> com.xavey.android.t:
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.MainActivity$5 -> com.xavey.android.u:
-    int[] $SwitchMap$com$xavey$android$model$FONT -> a
-com.xavey.android.MainActivity$FormDownloadTask -> com.xavey.android.v:
+com.xavey.android.MainActivity$FormDownloadTask -> com.xavey.android.u:
     android.app.ProgressDialog Dialog -> e
     com.xavey.android.util.XaveyProperties xavey_properties -> a
     java.lang.String serverFormDownloadURL -> b
@@ -2292,7 +3061,7 @@ com.xavey.android.MainActivity$FormDownloadTask -> com.xavey.android.v:
     void onPostExecute(java.util.ArrayList) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.xavey.android.MainActivity$SyncImagesDownloadTask -> com.xavey.android.w:
+com.xavey.android.MainActivity$SyncImagesDownloadTask -> com.xavey.android.v:
     android.app.ProgressDialog Dialog -> e
     com.xavey.android.util.XaveyProperties xavey_properties -> a
     java.lang.String imageDownloadURL -> b
@@ -2304,14 +3073,18 @@ com.xavey.android.MainActivity$SyncImagesDownloadTask -> com.xavey.android.w:
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
 com.xavey.android.OneQuestionOneView -> com.xavey.android.OneQuestionOneView:
-    com.xavey.android.adapter.QuestionPagerAdapter qAdapter -> P
-    java.lang.String LEFT_TO_RIGHT -> Q
-    java.lang.String RIGHT_TO_LEFT -> R
-    boolean isValidating -> S
+    com.xavey.android.adapter.QuestionPagerAdapter qAdapter -> Q
+    java.lang.String LEFT_TO_RIGHT -> R
+    java.lang.String RIGHT_TO_LEFT -> S
+    boolean isValidating -> T
     int currentPosition -> n
     com.xavey.android.util.LinearLayoutManager lLManager -> o
     android.widget.LinearLayout currentLayout -> p
     android.support.v4.view.ViewPager vPager -> q
+    int LOCATION_WARNING_COUNT -> U
+    java.lang.String FORM_ENTERED_LAT -> V
+    java.lang.String FORM_ENTERED_LNG -> W
+    boolean FORM_LOCATION_REQ -> X
     android.content.Intent intent -> r
     com.xavey.android.util.JSONReader jsonReader -> s
     com.xavey.android.util.JSONWriter jsonWriter -> t
@@ -2323,26 +3096,28 @@ com.xavey.android.OneQuestionOneView -> com.xavey.android.OneQuestionOneView:
     java.util.ArrayList formRefList -> z
     java.util.HashMap Refs -> A
     java.util.ArrayList layoutList -> B
-    boolean isAllRequiredFieldFilled -> C
-    java.util.ArrayList mediaToSubmit -> D
-    android.util.DisplayMetrics dm -> E
-    int screenWidth -> F
-    int screenHeight -> G
-    int previousIndex -> H
-    int jump -> I
-    java.util.LinkedList navigator -> J
-    java.util.LinkedList used_field_ids -> K
-    java.lang.String currentDocumentID -> L
-    com.xavey.android.util.AudioRecordingManager recordingManager -> M
-    com.xavey.android.util.GPSTracker gps -> N
-    com.xavey.android.util.ToastManager toast -> O
+    int midPoint -> C
+    boolean isAllRequiredFieldFilled -> D
+    java.util.ArrayList mediaToSubmit -> E
+    android.util.DisplayMetrics dm -> F
+    int screenWidth -> G
+    int screenHeight -> H
+    int previousIndex -> I
+    int jump -> J
+    java.util.LinkedList navigator -> K
+    java.util.LinkedList used_field_ids -> L
+    java.lang.String currentDocumentID -> M
+    com.xavey.android.util.AudioRecordingManager recordingManager -> N
+    com.xavey.android.util.GPSTracker gps -> O
+    com.xavey.android.util.ToastManager toast -> P
     void onCreate(android.os.Bundle) -> onCreate
     java.lang.String getPath(android.net.Uri,android.app.Activity) -> a
     void onActivityResult(int,int,android.content.Intent) -> onActivityResult
     android.widget.LinearLayout produceSubmitLayout() -> f
+    void AlertGPSSetting() -> g
     java.util.ArrayList getCompleteList(java.util.ArrayList,java.util.LinkedList) -> a
     java.util.LinkedList removeDups(java.util.LinkedList) -> a
-    java.lang.String getCurrentDateTime() -> g
+    java.lang.String getCurrentDateTime() -> h
     java.util.HashMap getValuesFromEachLayout(java.util.ArrayList,int,int,boolean) -> a
     java.lang.String getSelectedExtraValueBySelectedButton(android.widget.RadioButton) -> a
     android.widget.LinearLayout getInnerLayout(android.widget.LinearLayout) -> a
@@ -2357,23 +3132,22 @@ com.xavey.android.OneQuestionOneView -> com.xavey.android.OneQuestionOneView:
     boolean isFieldInvolvedReference(android.widget.LinearLayout) -> f
     int getNextRoute(int) -> b
     void navStayStill(java.lang.String,java.lang.String,java.lang.String,com.xavey.android.util.LinearLayoutManager,int,int,boolean) -> a
-    void prepRefValues() -> h
+    void prepRefValues() -> i
     void navLeftToRight(int,java.lang.String) -> a
     void navRightToLeft(int) -> c
     android.widget.RadioButton getSelectedRadioButtonMyRadioGroup(android.widget.RadioGroup) -> a
     java.util.ArrayList getSelectedCheckBoxMyCheckboxWrapper(android.widget.LinearLayout) -> g
-    void loadUI() -> i
-    void prepareDataSets() -> j
-    void getScreenInfo() -> k
+    void loadUI() -> j
+    void prepareDataSets() -> k
+    void getScreenInfo() -> l
     void hideKeyboard(android.widget.LinearLayout) -> h
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
     android.widget.CheckBox getCheckBoxFromCheckBoxLine(android.widget.LinearLayout) -> i
     android.widget.EditText getExtraFromCheckBoxLine(android.widget.LinearLayout) -> j
     boolean isSubmitLayout(android.widget.LinearLayout) -> k
     void onBackPressed() -> onBackPressed
-    boolean access$000(com.xavey.android.OneQuestionOneView) -> a
-    void access$100(com.xavey.android.OneQuestionOneView,int) -> a
     boolean access$002(com.xavey.android.OneQuestionOneView,boolean) -> a
+    void access$100(com.xavey.android.OneQuestionOneView,int) -> a
     android.widget.LinearLayout access$200(com.xavey.android.OneQuestionOneView,android.widget.LinearLayout) -> a
     boolean access$300(com.xavey.android.OneQuestionOneView,android.widget.LinearLayout) -> b
     void access$400(com.xavey.android.OneQuestionOneView,java.lang.String,java.lang.String,java.lang.String,com.xavey.android.util.LinearLayoutManager,int,int,boolean) -> a
@@ -2381,10 +3155,18 @@ com.xavey.android.OneQuestionOneView -> com.xavey.android.OneQuestionOneView:
     java.util.ArrayList access$600(com.xavey.android.OneQuestionOneView,android.widget.LinearLayout) -> c
     void access$700(com.xavey.android.OneQuestionOneView,android.widget.LinearLayout) -> d
     android.widget.RadioButton access$800(com.xavey.android.OneQuestionOneView,android.widget.RadioGroup) -> a
-    java.util.ArrayList access$900(com.xavey.android.OneQuestionOneView,java.util.ArrayList,java.util.LinkedList) -> a
-    java.util.HashMap access$1000(com.xavey.android.OneQuestionOneView,java.util.ArrayList,int,int,boolean) -> a
-    java.lang.String access$1100(com.xavey.android.OneQuestionOneView) -> b
-com.xavey.android.OneQuestionOneView$1 -> com.xavey.android.x:
+    boolean access$900(com.xavey.android.OneQuestionOneView) -> a
+    void access$1000(com.xavey.android.OneQuestionOneView) -> b
+    int access$1108(com.xavey.android.OneQuestionOneView) -> c
+    java.lang.String access$1202(com.xavey.android.OneQuestionOneView,java.lang.String) -> a
+    java.lang.String access$1302(com.xavey.android.OneQuestionOneView,java.lang.String) -> b
+    int access$1100(com.xavey.android.OneQuestionOneView) -> d
+    java.lang.String access$1200(com.xavey.android.OneQuestionOneView) -> e
+    java.lang.String access$1300(com.xavey.android.OneQuestionOneView) -> f
+    java.util.ArrayList access$1400(com.xavey.android.OneQuestionOneView,java.util.ArrayList,java.util.LinkedList) -> a
+    java.util.HashMap access$1500(com.xavey.android.OneQuestionOneView,java.util.ArrayList,int,int,boolean) -> a
+    java.lang.String access$1600(com.xavey.android.OneQuestionOneView) -> g
+com.xavey.android.OneQuestionOneView$1 -> com.xavey.android.w:
     int index -> a
     android.widget.LinearLayout nextLayout -> b
     android.widget.RelativeLayout currentUpperLayout -> c
@@ -2400,22 +3182,22 @@ com.xavey.android.OneQuestionOneView$1 -> com.xavey.android.x:
     void validateOnPageSelected(int) -> c
     void onPageScrolled(int,float,int) -> a
     void onPageScrollStateChanged(int) -> b
-com.xavey.android.OneQuestionOneView$2 -> com.xavey.android.y:
+com.xavey.android.OneQuestionOneView$2 -> com.xavey.android.x:
     com.xavey.android.OneQuestionOneView this$0 -> a
     void onClick(android.view.View) -> onClick
-com.xavey.android.OneQuestionOneView$3 -> com.xavey.android.z:
+com.xavey.android.OneQuestionOneView$3 -> com.xavey.android.y:
     com.xavey.android.OneQuestionOneView this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.OneQuestionOneView$4 -> com.xavey.android.aa:
+com.xavey.android.OneQuestionOneView$4 -> com.xavey.android.z:
     com.xavey.android.OneQuestionOneView this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.OneQuestionOneView$5 -> com.xavey.android.ab:
+com.xavey.android.OneQuestionOneView$5 -> com.xavey.android.aa:
     com.xavey.android.OneQuestionOneView this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.OneQuestionOneView$6 -> com.xavey.android.ac:
+com.xavey.android.OneQuestionOneView$6 -> com.xavey.android.ab:
     com.xavey.android.OneQuestionOneView this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.QuestionFragment -> com.xavey.android.ad:
+com.xavey.android.QuestionFragment -> com.xavey.android.ac:
     android.widget.LinearLayout parentLayout -> Q
     android.widget.LinearLayout linearLayout -> R
     int field_id -> S
@@ -2425,25 +3207,25 @@ com.xavey.android.QuestionFragment -> com.xavey.android.ad:
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> a
     void setLinearLayout(android.widget.LinearLayout) -> a
     void setField_id(int) -> a
-com.xavey.android.SettingFragment -> com.xavey.android.ae:
+com.xavey.android.SettingFragment -> com.xavey.android.ad:
     android.widget.RadioButton rb_default -> a
     android.widget.RadioButton rb_zawgyi -> b
     android.widget.RadioButton rb_myanmar3 -> c
+    android.widget.RadioButton rb_autoSync -> d
+    android.widget.RadioButton rb_off -> e
     android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle) -> onCreateView
     void loadUI(android.view.View) -> a
     void loadFontSetting(android.view.View) -> b
     void onDestroyView() -> onDestroyView
-com.xavey.android.SettingFragment$1 -> com.xavey.android.af:
+com.xavey.android.SettingFragment$1 -> com.xavey.android.ae:
     com.xavey.android.SettingFragment this$0 -> a
-    void onClick(android.view.View) -> onClick
-com.xavey.android.SettingFragment$2 -> com.xavey.android.ag:
+    void onCheckedChanged(android.widget.RadioGroup,int) -> onCheckedChanged
+com.xavey.android.SettingFragment$2 -> com.xavey.android.af:
     com.xavey.android.SettingFragment this$0 -> a
-    void onClick(android.view.View) -> onClick
-com.xavey.android.SettingFragment$3 -> com.xavey.android.ah:
-    com.xavey.android.SettingFragment this$0 -> a
-    void onClick(android.view.View) -> onClick
-com.xavey.android.SettingFragment$4 -> com.xavey.android.ai:
+    void onCheckedChanged(android.widget.RadioGroup,int) -> onCheckedChanged
+com.xavey.android.SettingFragment$3 -> com.xavey.android.ag:
     int[] $SwitchMap$com$xavey$android$model$FONT -> a
+    int[] $SwitchMap$com$xavey$android$model$SYNC -> b
 com.xavey.android.ShowDocumentDetailActivity -> com.xavey.android.ShowDocumentDetailActivity:
     android.widget.ScrollView scrollView -> a
     android.widget.Button btnSubmit -> b
@@ -2459,7 +3241,7 @@ com.xavey.android.ShowDocumentDetailActivity -> com.xavey.android.ShowDocumentDe
     void loadUI() -> a
     void getScreenInfo() -> b
     boolean onOptionsItemSelected(android.view.MenuItem) -> onOptionsItemSelected
-com.xavey.android.ShowDocumentDetailActivity$1 -> com.xavey.android.aj:
+com.xavey.android.ShowDocumentDetailActivity$1 -> com.xavey.android.ah:
     com.xavey.android.ShowDocumentDetailActivity this$0 -> a
     void onClick(android.view.View) -> onClick
 com.xavey.android.SignatureActivity -> com.xavey.android.SignatureActivity:
@@ -2469,15 +3251,17 @@ com.xavey.android.SignatureActivity -> com.xavey.android.SignatureActivity:
     android.widget.Button btnCancelSignature -> d
     void onCreate(android.os.Bundle) -> onCreate
     void loadUI() -> a
-com.xavey.android.SignatureActivity$1 -> com.xavey.android.ak:
+com.xavey.android.SignatureActivity$1 -> com.xavey.android.ai:
     com.xavey.android.SignatureActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-com.xavey.android.SignatureActivity$2 -> com.xavey.android.al:
+com.xavey.android.SignatureActivity$2 -> com.xavey.android.aj:
     com.xavey.android.SignatureActivity this$0 -> a
     void onClick(android.view.View) -> onClick
-com.xavey.android.SignatureActivity$3 -> com.xavey.android.am:
+com.xavey.android.SignatureActivity$3 -> com.xavey.android.ak:
     com.xavey.android.SignatureActivity this$0 -> a
     void onClick(android.view.View) -> onClick
+com.xavey.android.XaveyApp -> com.xavey.android.XaveyApp:
+    void onCreate() -> onCreate
 com.xavey.android.adapter.CustomDrawerAdapter -> com.xavey.android.a.a:
     android.content.Context context -> a
     java.util.List drawerItemList -> b
@@ -2738,6 +3522,7 @@ com.xavey.android.model.Document -> com.xavey.android.d.b:
     java.lang.String form_id -> g
     java.lang.String created_worker -> h
     java.lang.String submitted -> i
+    java.util.HashMap gpsInfo -> j
     void setId(java.lang.String) -> a
     java.lang.String getDocument_id() -> a
     void setDocument_id(java.lang.String) -> b
@@ -2755,6 +3540,7 @@ com.xavey.android.model.Document -> com.xavey.android.d.b:
     void setCreated_worker(java.lang.String) -> h
     java.lang.String getSubmitted() -> h
     void setSubmitted(java.lang.String) -> i
+    void setGpsInfo(java.util.HashMap) -> a
     int compareTo(java.lang.Object) -> compareTo
     java.util.Date getParsedDate() -> i
 com.xavey.android.model.FONT -> com.xavey.android.d.c:
@@ -2862,7 +3648,13 @@ com.xavey.android.model.RestClient -> com.xavey.android.d.g:
     void setMainActivity(android.app.Activity) -> a
 com.xavey.android.model.RestClient$1 -> com.xavey.android.d.h:
     int[] $SwitchMap$com$xavey$android$model$RequestMethod -> a
-com.xavey.android.model.SyncImage -> com.xavey.android.d.i:
+com.xavey.android.model.SYNC -> com.xavey.android.d.i:
+    com.xavey.android.model.SYNC OFF -> a
+    com.xavey.android.model.SYNC AUTO_SYNC -> b
+    com.xavey.android.model.SYNC[] $VALUES -> c
+    com.xavey.android.model.SYNC[] values() -> values
+    com.xavey.android.model.SYNC valueOf(java.lang.String) -> valueOf
+com.xavey.android.model.SyncImage -> com.xavey.android.d.j:
     java.lang.String id -> a
     java.lang.String imageID -> b
     java.lang.String synceID -> c
@@ -2874,7 +3666,7 @@ com.xavey.android.model.SyncImage -> com.xavey.android.d.i:
     void setSynceID(java.lang.String) -> c
     byte[] getImgByte() -> c
     void setImgByte(byte[]) -> a
-com.xavey.android.model.User -> com.xavey.android.d.j:
+com.xavey.android.model.User -> com.xavey.android.d.k:
     java.lang.String user_id -> a
     java.lang.String user_name -> b
     java.lang.String pwd -> c
@@ -2905,7 +3697,7 @@ com.xavey.android.model.User -> com.xavey.android.d.j:
     void setLogoName(java.lang.String) -> i
     byte[] getLogoImage() -> j
     void setLogoImage(byte[]) -> a
-com.xavey.android.model.XMedia -> com.xavey.android.d.k:
+com.xavey.android.model.XMedia -> com.xavey.android.d.l:
     java.lang.String id -> a
     java.lang.String media_name -> b
     java.lang.String media_path -> c
@@ -2959,15 +3751,14 @@ com.xavey.android.util.AudioRecordingManager -> com.xavey.android.util.a:
     com.xavey.android.model.Audio audioInfo -> l
     android.widget.LinearLayout getRecordingLayout() -> a
     void enableButtons(boolean) -> a
-    java.lang.String getFilename() -> d
+    java.lang.String getFilename() -> e
     void setFileName(java.lang.String) -> a
-    void startRecording() -> e
-    void stopRecording() -> b
-    void triggerStopClick() -> c
+    void startRecording() -> b
+    void stopRecording() -> c
+    void triggerStopClick() -> d
     void setAudioInfo(com.xavey.android.model.Audio) -> a
     void access$000(com.xavey.android.util.AudioRecordingManager,boolean) -> a
-    void access$100(com.xavey.android.util.AudioRecordingManager) -> a
-    java.lang.String access$200(com.xavey.android.util.AudioRecordingManager) -> b
+    java.lang.String access$100(com.xavey.android.util.AudioRecordingManager) -> a
 com.xavey.android.util.AudioRecordingManager$1 -> com.xavey.android.util.b:
     com.xavey.android.util.ToastManager val$xToast -> a
     android.widget.LinearLayout val$recordingLayout -> b
@@ -3028,25 +3819,31 @@ com.xavey.android.util.DrawSignature$DrawingView -> com.xavey.android.util.i:
     boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
     android.graphics.Bitmap getBitmap() -> getBitmap
 com.xavey.android.util.GPSTracker -> com.xavey.android.util.j:
-    android.content.Context mContext -> h
-    boolean isGPSEnabled -> a
-    boolean isNetworkEnabled -> b
-    boolean canGetLocation -> c
-    android.location.Location location -> d
-    double latitude -> e
-    double longitude -> f
-    android.location.LocationManager locationManager -> g
-    android.location.Location getLocation() -> a
+    java.lang.String TAG -> h
+    boolean showingDialog -> i
+    android.content.Context _context -> j
+    com.xavey.android.util.GPSTracker _instance -> k
+    android.location.LocationManager _locationManager -> a
+    boolean _isGPSEnabled -> b
+    boolean _isNetworkEnabled -> c
+    boolean _canGetLocation -> d
+    android.location.Location _location -> e
+    double _latitude -> f
+    double _longitude -> g
+    com.xavey.android.util.GPSTracker getInstance() -> a
+    void set_context(android.content.Context) -> a
+    android.location.Location getLocation(android.content.Context) -> b
     double getLatitude() -> b
     double getLongitude() -> c
     boolean canGetLocation() -> d
-    void showSettingsAlert() -> e
+    void showSettingsAlert(java.lang.String,java.lang.String) -> a
     void onLocationChanged(android.location.Location) -> onLocationChanged
     void onProviderDisabled(java.lang.String) -> onProviderDisabled
     void onProviderEnabled(java.lang.String) -> onProviderEnabled
     void onStatusChanged(java.lang.String,int,android.os.Bundle) -> onStatusChanged
     android.os.IBinder onBind(android.content.Intent) -> onBind
-    android.content.Context access$000(com.xavey.android.util.GPSTracker) -> a
+    boolean access$002(boolean) -> a
+    android.content.Context access$100(com.xavey.android.util.GPSTracker) -> a
 com.xavey.android.util.GPSTracker$1 -> com.xavey.android.util.k:
     com.xavey.android.util.GPSTracker this$0 -> a
     void onClick(android.content.DialogInterface,int) -> onClick
@@ -3066,13 +3863,12 @@ com.xavey.android.util.JSONReader -> com.xavey.android.util.o:
     android.app.Activity activity -> a
     com.xavey.android.db.XaveyDBHelper dbHelper -> b
     com.xavey.android.util.TypeFaceManager tfManager -> c
-    com.xavey.android.util.GPSTracker gps -> d
-    com.xavey.android.util.DisplayManager displayManager -> e
-    com.xavey.android.util.ToastManager xaveyToast -> f
-    com.xavey.android.util.AudioRecordingManager recordingManager -> g
-    java.lang.String currentDocumentID -> i
-    android.widget.LinearLayout$LayoutParams errorMsgLayoutParams -> h
-    java.util.concurrent.atomic.AtomicLong UNIQUE_TIMESTAMP -> j
+    com.xavey.android.util.DisplayManager displayManager -> d
+    com.xavey.android.util.ToastManager xaveyToast -> e
+    com.xavey.android.util.AudioRecordingManager recordingManager -> f
+    java.lang.String currentDocumentID -> h
+    android.widget.LinearLayout$LayoutParams errorMsgLayoutParams -> g
+    java.util.concurrent.atomic.AtomicLong UNIQUE_TIMESTAMP -> i
     java.util.ArrayList readForm2(com.xavey.android.model.Form) -> a
     java.lang.String isFieldRequired(java.lang.Object) -> a
     java.util.ArrayList getFormFields(java.lang.String) -> a
@@ -3091,29 +3887,24 @@ com.xavey.android.util.JSONReader -> com.xavey.android.util.o:
     void addErrorMsg(android.widget.LinearLayout) -> b
     void access$000(com.xavey.android.util.JSONReader,java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
 com.xavey.android.util.JSONReader$1 -> com.xavey.android.util.p:
-    android.widget.EditText val$edtLat -> a
-    android.widget.EditText val$edtLong -> b
-    com.xavey.android.util.JSONReader this$0 -> c
-    void onClick(android.view.View) -> onClick
-com.xavey.android.util.JSONReader$2 -> com.xavey.android.util.q:
     java.lang.String val$field_help -> a
     java.lang.String val$field_name_ -> b
     java.lang.String val$field_type_ -> c
     int val$randomID -> d
     com.xavey.android.util.JSONReader this$0 -> e
     void onClick(android.view.View) -> onClick
-com.xavey.android.util.JSONReader$3 -> com.xavey.android.util.r:
+com.xavey.android.util.JSONReader$2 -> com.xavey.android.util.q:
     java.lang.String val$field_name_ -> a
     java.lang.String val$field_type_ -> b
     java.lang.String val$field_help_ -> c
     java.lang.String val$view_id_ -> d
     com.xavey.android.util.JSONReader this$0 -> e
     void onClick(android.view.View) -> onClick
-com.xavey.android.util.JSONReader$4 -> com.xavey.android.util.s:
+com.xavey.android.util.JSONReader$3 -> com.xavey.android.util.r:
     java.lang.CharSequence[] val$items -> a
     com.xavey.android.util.JSONReader this$0 -> b
     void onClick(android.content.DialogInterface,int) -> onClick
-com.xavey.android.util.JSONWriter -> com.xavey.android.util.t:
+com.xavey.android.util.JSONWriter -> com.xavey.android.util.s:
     android.app.Activity activity -> a
     org.json.JSONObject jsonObject -> b
     com.xavey.android.util.JSONReader jsonReader -> c
@@ -3126,7 +3917,7 @@ com.xavey.android.util.JSONWriter -> com.xavey.android.util.t:
     android.view.View produceALine(int,int) -> a
     android.widget.LinearLayout writeHorizontalView(java.util.HashMap,java.util.HashMap) -> a
     android.widget.LinearLayout writeHorizontalViewForImage(java.util.HashMap,java.util.HashMap,java.lang.String) -> a
-com.xavey.android.util.LinearLayoutManager -> com.xavey.android.util.u:
+com.xavey.android.util.LinearLayoutManager -> com.xavey.android.util.t:
     com.xavey.android.util.XaveyUtils xaveyUtils -> a
     android.widget.TextView getErrorMsgTextView(android.widget.LinearLayout) -> a
     android.widget.CheckBox getCheckBoxFromCheckBoxLine(android.widget.LinearLayout) -> b
@@ -3135,11 +3926,11 @@ com.xavey.android.util.LinearLayoutManager -> com.xavey.android.util.u:
     java.util.HashMap test(android.widget.LinearLayout) -> d
     android.widget.RadioButton getSelectedRadioButtonMyRadioGroup(android.widget.RadioGroup) -> a
     android.widget.LinearLayout getInnerLayout(android.widget.LinearLayout) -> e
-com.xavey.android.util.MYHorizontalScrollView -> com.xavey.android.util.v:
+com.xavey.android.util.MYHorizontalScrollView -> com.xavey.android.util.u:
     android.content.Context context -> a
     boolean onTouchEvent(android.view.MotionEvent) -> onTouchEvent
     boolean onInterceptTouchEvent(android.view.MotionEvent) -> onInterceptTouchEvent
-com.xavey.android.util.SessionManager -> com.xavey.android.util.w:
+com.xavey.android.util.SessionManager -> com.xavey.android.util.v:
     android.content.SharedPreferences pref -> a
     android.content.SharedPreferences$Editor editor -> b
     android.content.Context _context -> c
@@ -3149,9 +3940,9 @@ com.xavey.android.util.SessionManager -> com.xavey.android.util.w:
     java.util.HashMap getUserDetails() -> b
     void logoutUser() -> c
     boolean isLoggedIn() -> d
-com.xavey.android.util.StringEncrytDecryManager -> com.xavey.android.util.x:
+com.xavey.android.util.StringEncrytDecryManager -> com.xavey.android.util.w:
     java.lang.String getMD5(java.lang.String) -> a
-com.xavey.android.util.SyncManager -> com.xavey.android.util.y:
+com.xavey.android.util.SyncManager -> com.xavey.android.util.x:
     com.xavey.android.db.XaveyDBHelper dbHelper -> a
     android.app.Activity activity_ -> b
     android.content.Context context -> c
@@ -3173,8 +3964,8 @@ com.xavey.android.util.SyncManager -> com.xavey.android.util.y:
     java.lang.String access$100(com.xavey.android.util.SyncManager) -> a
     boolean access$300(com.xavey.android.util.SyncManager,java.lang.String) -> a
     boolean access$400(com.xavey.android.util.SyncManager,java.lang.String) -> b
-com.xavey.android.util.SyncManager$1 -> com.xavey.android.util.z:
-com.xavey.android.util.SyncManager$DocumentSubmitTask -> com.xavey.android.util.aa:
+com.xavey.android.util.SyncManager$1 -> com.xavey.android.util.y:
+com.xavey.android.util.SyncManager$DocumentSubmitTask -> com.xavey.android.util.z:
     android.app.ProgressDialog Dialog -> d
     com.xavey.android.util.XaveyProperties xavey_properties -> a
     java.lang.String documentUploadURL -> b
@@ -3184,7 +3975,7 @@ com.xavey.android.util.SyncManager$DocumentSubmitTask -> com.xavey.android.util.
     void onPostExecute(com.xavey.android.model.RestClient) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.xavey.android.util.SyncManager$MediaAsyncTask -> com.xavey.android.util.ab:
+com.xavey.android.util.SyncManager$MediaAsyncTask -> com.xavey.android.util.aa:
     android.app.ProgressDialog Dialog -> e
     java.util.ArrayList uploadedImages -> f
     java.util.ArrayList mediaToStoreLocally -> a
@@ -3196,10 +3987,10 @@ com.xavey.android.util.SyncManager$MediaAsyncTask -> com.xavey.android.util.ab:
     void onPostExecute(java.util.ArrayList) -> a
     void onPostExecute(java.lang.Object) -> onPostExecute
     java.lang.Object doInBackground(java.lang.Object[]) -> doInBackground
-com.xavey.android.util.ToastManager -> com.xavey.android.util.ac:
+com.xavey.android.util.ToastManager -> com.xavey.android.util.ab:
     android.app.Activity act_ -> a
     void xaveyToast(android.widget.TextView,java.lang.String) -> a
-com.xavey.android.util.TypeFaceManager -> com.xavey.android.util.ad:
+com.xavey.android.util.TypeFaceManager -> com.xavey.android.util.ac:
     android.graphics.Typeface zawgyiTypeFace -> a
     android.graphics.Typeface myanmar3TypeFace -> b
     android.app.Activity activity_ -> c
@@ -3207,17 +3998,22 @@ com.xavey.android.util.TypeFaceManager -> com.xavey.android.util.ad:
     java.lang.String zawGyiFontStatus -> e
     void setTypeFace(android.view.View) -> a
     android.graphics.Typeface getTypeFace() -> a
-com.xavey.android.util.TypeFaceManager$1 -> com.xavey.android.util.ae:
+com.xavey.android.util.TypeFaceManager$1 -> com.xavey.android.util.ad:
     int[] $SwitchMap$com$xavey$android$model$FONT -> a
-com.xavey.android.util.UUIDGenerator -> com.xavey.android.util.af:
+com.xavey.android.util.UUIDGenerator -> com.xavey.android.util.ae:
     java.lang.String getUUIDForDocument() -> a
     java.lang.String getUUIDForSyncedID() -> b
-com.xavey.android.util.Utils -> com.xavey.android.util.ag:
+com.xavey.android.util.Utils -> com.xavey.android.util.af:
     java.lang.String PREFERENCE_NAME -> a
     java.lang.String PATH -> b
     java.lang.String Sign_Pathe -> c
     java.util.concurrent.atomic.AtomicInteger sNextGeneratedId -> d
+    void setAppPreference(android.content.Context) -> a
+    void setAppValueFromPreference(android.content.Context) -> b
     int generateViewId() -> a
+com.xavey.android.util.Utils$1 -> com.xavey.android.util.ag:
+    int[] $SwitchMap$com$xavey$android$model$FONT -> a
+    int[] $SwitchMap$com$xavey$android$model$SYNC -> b
 com.xavey.android.util.XaveyProperties -> com.xavey.android.util.ah:
     java.lang.String AUTHENTICATE -> a
     java.lang.String SERVER_FORM_DOWNLOAD -> b
@@ -3258,3 +4054,1147 @@ com.xavey.android.util.XaveyUtils -> com.xavey.android.util.ai:
     android.graphics.Bitmap convertByteArrayToBitmap(byte[]) -> b
     java.util.ArrayList removeDuplicateString(java.util.ArrayList) -> a
     java.lang.String getDeviceUniqueID() -> a
+io.fabric.sdk.android.ActivityLifecycleManager -> a.a.a.a.a:
+    android.app.Application application -> a
+    io.fabric.sdk.android.ActivityLifecycleManager$ActivityLifecycleCallbacksWrapper callbacksWrapper -> b
+    boolean registerCallbacks(io.fabric.sdk.android.ActivityLifecycleManager$Callbacks) -> a
+io.fabric.sdk.android.ActivityLifecycleManager$ActivityLifecycleCallbacksWrapper -> a.a.a.a.b:
+    java.util.Set registeredCallbacks -> a
+    android.app.Application application -> b
+    boolean registerLifecycleCallbacks(io.fabric.sdk.android.ActivityLifecycleManager$Callbacks) -> a
+    boolean access$000(io.fabric.sdk.android.ActivityLifecycleManager$ActivityLifecycleCallbacksWrapper,io.fabric.sdk.android.ActivityLifecycleManager$Callbacks) -> a
+io.fabric.sdk.android.ActivityLifecycleManager$ActivityLifecycleCallbacksWrapper$1 -> a.a.a.a.c:
+    io.fabric.sdk.android.ActivityLifecycleManager$Callbacks val$callbacks -> a
+    io.fabric.sdk.android.ActivityLifecycleManager$ActivityLifecycleCallbacksWrapper this$0 -> b
+    void onActivityCreated(android.app.Activity,android.os.Bundle) -> onActivityCreated
+    void onActivityStarted(android.app.Activity) -> onActivityStarted
+    void onActivityResumed(android.app.Activity) -> onActivityResumed
+    void onActivityPaused(android.app.Activity) -> onActivityPaused
+    void onActivityStopped(android.app.Activity) -> onActivityStopped
+    void onActivitySaveInstanceState(android.app.Activity,android.os.Bundle) -> onActivitySaveInstanceState
+    void onActivityDestroyed(android.app.Activity) -> onActivityDestroyed
+io.fabric.sdk.android.ActivityLifecycleManager$Callbacks -> a.a.a.a.d:
+    void onActivityCreated(android.app.Activity,android.os.Bundle) -> a
+    void onActivityStarted(android.app.Activity) -> a
+    void onActivityResumed(android.app.Activity) -> b
+    void onActivityPaused(android.app.Activity) -> c
+    void onActivityStopped(android.app.Activity) -> d
+    void onActivitySaveInstanceState(android.app.Activity,android.os.Bundle) -> b
+    void onActivityDestroyed(android.app.Activity) -> e
+io.fabric.sdk.android.DefaultLogger -> a.a.a.a.e:
+    int logLevel -> a
+    boolean isLoggable(java.lang.String,int) -> a
+    void d(java.lang.String,java.lang.String,java.lang.Throwable) -> a
+    void i(java.lang.String,java.lang.String,java.lang.Throwable) -> b
+    void w(java.lang.String,java.lang.String,java.lang.Throwable) -> c
+    void e(java.lang.String,java.lang.String,java.lang.Throwable) -> d
+    void d(java.lang.String,java.lang.String) -> a
+    void i(java.lang.String,java.lang.String) -> b
+    void w(java.lang.String,java.lang.String) -> c
+    void e(java.lang.String,java.lang.String) -> d
+    void log(int,java.lang.String,java.lang.String) -> a
+    void log(int,java.lang.String,java.lang.String,boolean) -> a
+io.fabric.sdk.android.Fabric -> a.a.a.a.f:
+    io.fabric.sdk.android.Fabric singleton -> a
+    io.fabric.sdk.android.Logger DEFAULT_LOGGER -> b
+    android.content.Context context -> e
+    java.util.Map kits -> f
+    java.util.concurrent.ExecutorService executorService -> g
+    android.os.Handler mainHandler -> h
+    io.fabric.sdk.android.InitializationCallback initializationCallback -> i
+    io.fabric.sdk.android.InitializationCallback kitInitializationCallback -> j
+    io.fabric.sdk.android.services.common.IdManager idManager -> k
+    io.fabric.sdk.android.ActivityLifecycleManager activityLifecycleManager -> l
+    java.lang.ref.WeakReference activity -> m
+    java.util.concurrent.atomic.AtomicBoolean initialized -> n
+    io.fabric.sdk.android.Logger logger -> c
+    boolean debuggable -> d
+    io.fabric.sdk.android.Fabric singleton() -> a
+    io.fabric.sdk.android.Fabric with(android.content.Context,io.fabric.sdk.android.Kit[]) -> a
+    void setFabric(io.fabric.sdk.android.Fabric) -> c
+    io.fabric.sdk.android.Fabric setCurrentActivity(android.app.Activity) -> a
+    android.app.Activity getCurrentActivity() -> b
+    void init() -> i
+    java.lang.String getVersion() -> c
+    java.lang.String getIdentifier() -> d
+    void initializeKits(android.content.Context) -> a
+    void addAnnotatedDependencies(java.util.Map,io.fabric.sdk.android.Kit) -> a
+    android.app.Activity extractActivity(android.content.Context) -> b
+    java.util.concurrent.ExecutorService getExecutorService() -> e
+    java.util.Collection getKits() -> f
+    io.fabric.sdk.android.Kit getKit(java.lang.Class) -> a
+    io.fabric.sdk.android.Logger getLogger() -> g
+    boolean isDebuggable() -> h
+    java.util.Map getKitMap(java.util.Collection) -> b
+    void addToKitMap(java.util.Map,java.util.Collection) -> a
+    io.fabric.sdk.android.InitializationCallback createKitInitializationCallback(int) -> a
+    java.util.Map access$000(java.util.Collection) -> a
+    java.util.concurrent.atomic.AtomicBoolean access$100(io.fabric.sdk.android.Fabric) -> a
+    io.fabric.sdk.android.InitializationCallback access$200(io.fabric.sdk.android.Fabric) -> b
+io.fabric.sdk.android.Fabric$1 -> a.a.a.a.g:
+    io.fabric.sdk.android.Fabric this$0 -> a
+    void onActivityCreated(android.app.Activity,android.os.Bundle) -> a
+    void onActivityStarted(android.app.Activity) -> a
+    void onActivityResumed(android.app.Activity) -> b
+io.fabric.sdk.android.Fabric$2 -> a.a.a.a.h:
+    java.util.concurrent.CountDownLatch kitInitializedLatch -> a
+    int val$size -> b
+    io.fabric.sdk.android.Fabric this$0 -> c
+    void success(java.lang.Object) -> a
+    void failure(java.lang.Exception) -> a
+io.fabric.sdk.android.Fabric$Builder -> a.a.a.a.i:
+    android.content.Context context -> a
+    io.fabric.sdk.android.Kit[] kits -> b
+    io.fabric.sdk.android.services.concurrency.PriorityThreadPoolExecutor threadPoolExecutor -> c
+    android.os.Handler handler -> d
+    io.fabric.sdk.android.Logger logger -> e
+    boolean debuggable -> f
+    java.lang.String appInstallIdentifier -> g
+    java.lang.String appIdentifier -> h
+    io.fabric.sdk.android.InitializationCallback initializationCallback -> i
+    io.fabric.sdk.android.Fabric$Builder kits(io.fabric.sdk.android.Kit[]) -> a
+    io.fabric.sdk.android.Fabric build() -> a
+io.fabric.sdk.android.FabricContext -> a.a.a.a.j:
+    java.lang.String componentPath -> a
+    java.lang.String componentName -> b
+    java.io.File getDatabasePath(java.lang.String) -> getDatabasePath
+    android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String,int,android.database.sqlite.SQLiteDatabase$CursorFactory) -> openOrCreateDatabase
+    android.database.sqlite.SQLiteDatabase openOrCreateDatabase(java.lang.String,int,android.database.sqlite.SQLiteDatabase$CursorFactory,android.database.DatabaseErrorHandler) -> openOrCreateDatabase
+    java.io.File getFilesDir() -> getFilesDir
+    java.io.File getExternalFilesDir(java.lang.String) -> getExternalFilesDir
+    java.io.File getCacheDir() -> getCacheDir
+    java.io.File getExternalCacheDir() -> getExternalCacheDir
+    android.content.SharedPreferences getSharedPreferences(java.lang.String,int) -> getSharedPreferences
+io.fabric.sdk.android.InitializationCallback -> a.a.a.a.k:
+    io.fabric.sdk.android.InitializationCallback EMPTY -> d
+    void success(java.lang.Object) -> a
+    void failure(java.lang.Exception) -> a
+io.fabric.sdk.android.InitializationCallback$1 -> a.a.a.a.l:
+io.fabric.sdk.android.InitializationCallback$Empty -> a.a.a.a.m:
+    void success(java.lang.Object) -> a
+    void failure(java.lang.Exception) -> a
+io.fabric.sdk.android.InitializationException -> a.a.a.a.n:
+io.fabric.sdk.android.InitializationTask -> a.a.a.a.o:
+    io.fabric.sdk.android.Kit kit -> a
+    void onPreExecute() -> a
+    java.lang.Object doInBackground(java.lang.Void[]) -> a
+    void onPostExecute(java.lang.Object) -> a
+    void onCancelled(java.lang.Object) -> b
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+    io.fabric.sdk.android.services.common.TimingMetric createAndStartTimingMetric(java.lang.String) -> a
+    java.lang.Object doInBackground(java.lang.Object[]) -> a
+io.fabric.sdk.android.Kit -> a.a.a.a.p:
+    io.fabric.sdk.android.Fabric fabric -> b
+    io.fabric.sdk.android.InitializationTask initializationTask -> c
+    android.content.Context context -> d
+    io.fabric.sdk.android.InitializationCallback initializationCallback -> e
+    io.fabric.sdk.android.services.common.IdManager idManager -> f
+    java.lang.String getVersion() -> d
+    void injectParameters(android.content.Context,io.fabric.sdk.android.Fabric,io.fabric.sdk.android.InitializationCallback,io.fabric.sdk.android.services.common.IdManager) -> a
+    void initialize() -> A
+    boolean onPreExecute() -> a
+    java.lang.Object doInBackground() -> z
+    void onPostExecute(java.lang.Object) -> a
+    void onCancelled(java.lang.Object) -> b
+    io.fabric.sdk.android.services.common.IdManager getIdManager() -> B
+    android.content.Context getContext() -> C
+    io.fabric.sdk.android.Fabric getFabric() -> D
+    java.lang.String getIdentifier() -> c
+    java.lang.String getPath() -> E
+    int compareTo(io.fabric.sdk.android.Kit) -> a
+    boolean containsAnnotatedDependency(io.fabric.sdk.android.Kit) -> b
+    boolean hasAnnotatedDependency() -> F
+    java.util.Collection getDependencies() -> G
+    int compareTo(java.lang.Object) -> compareTo
+io.fabric.sdk.android.KitGroup -> a.a.a.a.q:
+    java.util.Collection getKits() -> e
+io.fabric.sdk.android.Logger -> a.a.a.a.r:
+    boolean isLoggable(java.lang.String,int) -> a
+    void d(java.lang.String,java.lang.String,java.lang.Throwable) -> a
+    void w(java.lang.String,java.lang.String,java.lang.Throwable) -> c
+    void e(java.lang.String,java.lang.String,java.lang.Throwable) -> d
+    void d(java.lang.String,java.lang.String) -> a
+    void i(java.lang.String,java.lang.String) -> b
+    void w(java.lang.String,java.lang.String) -> c
+    void e(java.lang.String,java.lang.String) -> d
+    void log(int,java.lang.String,java.lang.String) -> a
+io.fabric.sdk.android.Onboarding -> a.a.a.a.s:
+    java.util.Collection kits -> a
+    io.fabric.sdk.android.services.network.HttpRequestFactory requestFactory -> g
+    android.content.pm.PackageManager packageManager -> h
+    java.lang.String packageName -> i
+    android.content.pm.PackageInfo packageInfo -> j
+    java.lang.String versionCode -> k
+    java.lang.String versionName -> l
+    java.lang.String installerPackageName -> m
+    java.lang.String applicationLabel -> n
+    java.lang.String targetAndroidSdkVersion -> o
+    java.lang.String getVersion() -> d
+    boolean onPreExecute() -> a
+    java.lang.Boolean doInBackground() -> b
+    java.lang.String getIdentifier() -> c
+    boolean performAutoConfigure(java.lang.String,io.fabric.sdk.android.services.settings.AppSettingsData,java.util.Collection) -> a
+    boolean performCreateApp(java.lang.String,io.fabric.sdk.android.services.settings.AppSettingsData,java.util.Collection) -> b
+    boolean performUpdateApp(java.lang.String,io.fabric.sdk.android.services.settings.AppSettingsData,java.util.Collection) -> c
+    boolean performUpdateApp(io.fabric.sdk.android.services.settings.AppSettingsData,io.fabric.sdk.android.services.settings.IconRequest,java.util.Collection) -> a
+    io.fabric.sdk.android.services.settings.AppRequestData buildAppRequest(io.fabric.sdk.android.services.settings.IconRequest,java.util.Collection) -> a
+    java.lang.String getOverridenSpiEndpoint() -> e
+    java.lang.Object doInBackground() -> z
+io.fabric.sdk.android.services.cache.AbstractValueCache -> a.a.a.a.a.a.a:
+    io.fabric.sdk.android.services.cache.ValueCache childCache -> a
+    java.lang.Object get(android.content.Context,io.fabric.sdk.android.services.cache.ValueLoader) -> a
+    java.lang.Object getCached(android.content.Context) -> a
+    void cacheValue(android.content.Context,java.lang.Object) -> a
+    void cache(android.content.Context,java.lang.Object) -> b
+io.fabric.sdk.android.services.cache.MemoryValueCache -> a.a.a.a.a.a.b:
+    java.lang.Object value -> a
+    java.lang.Object getCached(android.content.Context) -> a
+    void cacheValue(android.content.Context,java.lang.Object) -> a
+io.fabric.sdk.android.services.cache.ValueCache -> a.a.a.a.a.a.c:
+    java.lang.Object get(android.content.Context,io.fabric.sdk.android.services.cache.ValueLoader) -> a
+io.fabric.sdk.android.services.cache.ValueLoader -> a.a.a.a.a.a.d:
+    java.lang.Object load(android.content.Context) -> c
+io.fabric.sdk.android.services.common.AbstractSpiCall -> a.a.a.a.a.b.a:
+    java.util.regex.Pattern PROTOCOL_AND_HOST_PATTERN -> b
+    java.lang.String url -> c
+    io.fabric.sdk.android.services.network.HttpRequestFactory requestFactory -> d
+    io.fabric.sdk.android.services.network.HttpMethod method -> e
+    java.lang.String protocolAndHostOverride -> f
+    io.fabric.sdk.android.Kit kit -> a
+    java.lang.String getUrl() -> a
+    io.fabric.sdk.android.services.network.HttpRequest getHttpRequest() -> b
+    io.fabric.sdk.android.services.network.HttpRequest getHttpRequest(java.util.Map) -> a
+    java.lang.String overrideProtocolAndHost(java.lang.String) -> a
+io.fabric.sdk.android.services.common.AdvertisingInfo -> a.a.a.a.a.b.b:
+    java.lang.String advertisingId -> a
+    boolean limitAdTrackingEnabled -> b
+    boolean equals(java.lang.Object) -> equals
+    int hashCode() -> hashCode
+io.fabric.sdk.android.services.common.AdvertisingInfoProvider -> a.a.a.a.a.b.c:
+    android.content.Context context -> a
+    io.fabric.sdk.android.services.persistence.PreferenceStore preferenceStore -> b
+    io.fabric.sdk.android.services.common.AdvertisingInfo getAdvertisingInfo() -> a
+    void refreshInfoIfNeededAsync(io.fabric.sdk.android.services.common.AdvertisingInfo) -> a
+    void storeInfoToPreferences(io.fabric.sdk.android.services.common.AdvertisingInfo) -> b
+    io.fabric.sdk.android.services.common.AdvertisingInfo getInfoFromPreferences() -> b
+    io.fabric.sdk.android.services.common.AdvertisingInfoStrategy getReflectionStrategy() -> c
+    io.fabric.sdk.android.services.common.AdvertisingInfoStrategy getServiceStrategy() -> d
+    boolean isInfoValid(io.fabric.sdk.android.services.common.AdvertisingInfo) -> c
+    io.fabric.sdk.android.services.common.AdvertisingInfo getAdvertisingInfoFromStrategies() -> e
+    io.fabric.sdk.android.services.common.AdvertisingInfo access$000(io.fabric.sdk.android.services.common.AdvertisingInfoProvider) -> a
+    void access$100(io.fabric.sdk.android.services.common.AdvertisingInfoProvider,io.fabric.sdk.android.services.common.AdvertisingInfo) -> a
+io.fabric.sdk.android.services.common.AdvertisingInfoProvider$1 -> a.a.a.a.a.b.d:
+    io.fabric.sdk.android.services.common.AdvertisingInfo val$advertisingInfo -> a
+    io.fabric.sdk.android.services.common.AdvertisingInfoProvider this$0 -> b
+    void onRun() -> a
+io.fabric.sdk.android.services.common.AdvertisingInfoReflectionStrategy -> a.a.a.a.a.b.e:
+    android.content.Context context -> a
+    boolean isGooglePlayServiceAvailable(android.content.Context) -> a
+    io.fabric.sdk.android.services.common.AdvertisingInfo getAdvertisingInfo() -> a
+    java.lang.String getAdvertisingId() -> b
+    boolean isLimitAdTrackingEnabled() -> c
+    java.lang.Object getInfo() -> d
+io.fabric.sdk.android.services.common.AdvertisingInfoServiceStrategy -> a.a.a.a.a.b.f:
+    android.content.Context context -> a
+    io.fabric.sdk.android.services.common.AdvertisingInfo getAdvertisingInfo() -> a
+io.fabric.sdk.android.services.common.AdvertisingInfoServiceStrategy$1 -> a.a.a.a.a.b.g:
+io.fabric.sdk.android.services.common.AdvertisingInfoServiceStrategy$AdvertisingConnection -> a.a.a.a.a.b.h:
+    boolean retrieved -> a
+    java.util.concurrent.LinkedBlockingQueue queue -> b
+    void onServiceConnected(android.content.ComponentName,android.os.IBinder) -> onServiceConnected
+    void onServiceDisconnected(android.content.ComponentName) -> onServiceDisconnected
+    android.os.IBinder getBinder() -> a
+io.fabric.sdk.android.services.common.AdvertisingInfoServiceStrategy$AdvertisingInterface -> a.a.a.a.a.b.i:
+    android.os.IBinder binder -> a
+    android.os.IBinder asBinder() -> asBinder
+    java.lang.String getId() -> a
+    boolean isLimitAdTrackingEnabled() -> b
+io.fabric.sdk.android.services.common.AdvertisingInfoStrategy -> a.a.a.a.a.b.j:
+    io.fabric.sdk.android.services.common.AdvertisingInfo getAdvertisingInfo() -> a
+io.fabric.sdk.android.services.common.ApiKey -> a.a.a.a.a.b.k:
+    java.lang.String getValue(android.content.Context) -> a
+    java.lang.String getApiKeyFromManifest(android.content.Context) -> b
+    java.lang.String getApiKeyFromStrings(android.content.Context) -> c
+    void logErrorOrThrowException(android.content.Context) -> d
+    java.lang.String buildApiKeyInstructions() -> a
+io.fabric.sdk.android.services.common.BackgroundPriorityRunnable -> a.a.a.a.a.b.l:
+    void run() -> run
+    void onRun() -> a
+io.fabric.sdk.android.services.common.CommonUtils -> a.a.a.a.a.b.m:
+    java.lang.Boolean clsTrace -> b
+    char[] HEX_VALUES -> c
+    long totalRamInBytes -> d
+    java.lang.Boolean loggingEnabled -> e
+    java.util.Comparator FILE_MODIFIED_COMPARATOR -> a
+    android.content.SharedPreferences getSharedPrefs(android.content.Context) -> a
+    java.lang.String extractFieldFromSystemFile(java.io.File,java.lang.String) -> a
+    int getCpuArchitectureInt() -> a
+    long getTotalRamInBytes() -> b
+    long convertMemInfoToBytes(java.lang.String,java.lang.String,int) -> a
+    android.app.ActivityManager$RunningAppProcessInfo getAppProcessInfo(java.lang.String,android.content.Context) -> a
+    java.lang.String streamToString(java.io.InputStream) -> a
+    java.lang.String sha1(java.lang.String) -> a
+    java.lang.String sha1(java.io.InputStream) -> b
+    java.lang.String hash(java.io.InputStream,java.lang.String) -> a
+    java.lang.String hash(byte[],java.lang.String) -> a
+    java.lang.String hash(java.lang.String,java.lang.String) -> a
+    java.lang.String createInstanceIdFrom(java.lang.String[]) -> a
+    long calculateFreeRamInBytes(android.content.Context) -> b
+    long calculateUsedDiskSpaceInBytes(java.lang.String) -> b
+    float getBatteryLevel(android.content.Context) -> c
+    boolean getProximitySensorEnabled(android.content.Context) -> d
+    void logControlled(android.content.Context,java.lang.String) -> a
+    void logControlledError(android.content.Context,java.lang.String,java.lang.Throwable) -> a
+    void logControlled(android.content.Context,int,java.lang.String,java.lang.String) -> a
+    boolean isClsTrace(android.content.Context) -> e
+    boolean getBooleanResourceValue(android.content.Context,java.lang.String,boolean) -> a
+    int getResourcesIdentifier(android.content.Context,java.lang.String,java.lang.String) -> a
+    boolean isEmulator(android.content.Context) -> f
+    boolean isRooted(android.content.Context) -> g
+    boolean isDebuggerAttached() -> c
+    int getDeviceState(android.content.Context) -> h
+    int getBatteryVelocity(android.content.Context,boolean) -> a
+    javax.crypto.Cipher createCipher(int,java.lang.String) -> a
+    java.lang.String hexify(byte[]) -> a
+    boolean isAppDebuggable(android.content.Context) -> i
+    java.lang.String getStringsFileValue(android.content.Context,java.lang.String) -> b
+    void closeOrLog(java.io.Closeable,java.lang.String) -> a
+    void flushOrLog(java.io.Flushable,java.lang.String) -> a
+    boolean isNullOrEmpty(java.lang.String) -> c
+    java.lang.String getResourcePackageName(android.content.Context) -> j
+    void copyStream(java.io.InputStream,java.io.OutputStream,byte[]) -> a
+    java.lang.String getAppIconHashOrNull(android.content.Context) -> k
+    int getAppIconResourceId(android.content.Context) -> l
+    java.lang.String resolveBuildId(android.content.Context) -> m
+    boolean checkPermission(android.content.Context,java.lang.String) -> c
+    boolean canTryConnection(android.content.Context) -> n
+io.fabric.sdk.android.services.common.CommonUtils$1 -> a.a.a.a.a.b.n:
+    int compare(java.io.File,java.io.File) -> a
+    int compare(java.lang.Object,java.lang.Object) -> compare
+io.fabric.sdk.android.services.common.CommonUtils$Architecture -> a.a.a.a.a.b.o:
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture X86_32 -> a
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture X86_64 -> b
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture ARM_UNKNOWN -> c
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture PPC -> d
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture PPC64 -> e
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture ARMV6 -> f
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture ARMV7 -> g
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture UNKNOWN -> h
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture ARMV7S -> i
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture ARM64 -> j
+    java.util.Map matcher -> k
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture[] $VALUES -> l
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture[] values() -> values
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture valueOf(java.lang.String) -> valueOf
+    io.fabric.sdk.android.services.common.CommonUtils$Architecture getValue() -> a
+io.fabric.sdk.android.services.common.Crash -> a.a.a.a.a.b.p:
+    java.lang.String sessionId -> a
+    java.lang.String getSessionId() -> a
+io.fabric.sdk.android.services.common.Crash$FatalException -> a.a.a.a.a.b.q:
+io.fabric.sdk.android.services.common.CurrentTimeProvider -> a.a.a.a.a.b.r:
+    long getCurrentTimeMillis() -> a
+io.fabric.sdk.android.services.common.DeliveryMechanism -> a.a.a.a.a.b.s:
+    io.fabric.sdk.android.services.common.DeliveryMechanism DEVELOPER -> a
+    io.fabric.sdk.android.services.common.DeliveryMechanism USER_SIDELOAD -> b
+    io.fabric.sdk.android.services.common.DeliveryMechanism TEST_DISTRIBUTION -> c
+    io.fabric.sdk.android.services.common.DeliveryMechanism APP_STORE -> d
+    int id -> e
+    io.fabric.sdk.android.services.common.DeliveryMechanism[] $VALUES -> f
+    io.fabric.sdk.android.services.common.DeliveryMechanism[] values() -> values
+    io.fabric.sdk.android.services.common.DeliveryMechanism valueOf(java.lang.String) -> valueOf
+    int getId() -> a
+    java.lang.String toString() -> toString
+    io.fabric.sdk.android.services.common.DeliveryMechanism determineFrom(java.lang.String) -> a
+io.fabric.sdk.android.services.common.DeviceIdentifierProvider -> a.a.a.a.a.b.t:
+    java.util.Map getDeviceIdentifiers() -> e
+io.fabric.sdk.android.services.common.ExecutorUtils -> a.a.a.a.a.b.u:
+    java.util.concurrent.ExecutorService buildSingleThreadExecutorService(java.lang.String) -> a
+    java.util.concurrent.ScheduledExecutorService buildSingleThreadScheduledExecutorService(java.lang.String) -> b
+    java.util.concurrent.ThreadFactory getNamedThreadFactory(java.lang.String) -> c
+    void addDelayedShutdownHook(java.lang.String,java.util.concurrent.ExecutorService) -> a
+    void addDelayedShutdownHook(java.lang.String,java.util.concurrent.ExecutorService,long,java.util.concurrent.TimeUnit) -> a
+io.fabric.sdk.android.services.common.ExecutorUtils$1 -> a.a.a.a.a.b.v:
+    java.lang.String val$threadNameTemplate -> a
+    java.util.concurrent.atomic.AtomicLong val$count -> b
+    java.lang.Thread newThread(java.lang.Runnable) -> newThread
+io.fabric.sdk.android.services.common.ExecutorUtils$1$1 -> a.a.a.a.a.b.w:
+    java.lang.Runnable val$runnable -> a
+    io.fabric.sdk.android.services.common.ExecutorUtils$1 this$0 -> b
+    void onRun() -> a
+io.fabric.sdk.android.services.common.ExecutorUtils$2 -> a.a.a.a.a.b.x:
+    java.lang.String val$serviceName -> a
+    java.util.concurrent.ExecutorService val$service -> b
+    long val$terminationTimeout -> c
+    java.util.concurrent.TimeUnit val$timeUnit -> d
+    void onRun() -> a
+io.fabric.sdk.android.services.common.IdManager -> a.a.a.a.a.b.y:
+    java.util.regex.Pattern ID_PATTERN -> a
+    java.lang.String FORWARD_SLASH_REGEX -> b
+    java.util.concurrent.locks.ReentrantLock installationIdLock -> c
+    io.fabric.sdk.android.services.common.InstallerPackageNameProvider installerPackageNameProvider -> d
+    boolean collectHardwareIds -> e
+    boolean collectUserIds -> f
+    android.content.Context appContext -> g
+    java.lang.String appIdentifier -> h
+    java.lang.String appInstallIdentifier -> i
+    java.util.Collection kits -> j
+    java.lang.String createIdHeaderValue(java.lang.String,java.lang.String) -> a
+    void addAppInstallIdTo(org.json.JSONObject) -> a
+    void addDeviceIdentifiersTo(org.json.JSONObject) -> b
+    void addOsVersionTo(org.json.JSONObject) -> c
+    void addModelName(org.json.JSONObject) -> d
+    boolean canCollectUserIds() -> a
+    boolean hasPermission(java.lang.String) -> a
+    java.lang.String formatId(java.lang.String) -> b
+    java.lang.String getAppInstallIdentifier() -> b
+    java.lang.String getAppIdentifier() -> c
+    java.lang.String getOsVersionString() -> d
+    java.lang.String getModelName() -> e
+    java.lang.String removeForwardSlashesIn(java.lang.String) -> c
+    java.lang.String getDeviceUUID() -> f
+    java.lang.String createInstallationUUID(android.content.SharedPreferences) -> a
+    java.util.Map getDeviceIdentifiers() -> g
+    java.lang.String getInstallerPackageName() -> h
+    java.lang.String getAdvertisingId() -> i
+    void putNonNullIdInto(java.util.Map,io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType,java.lang.String) -> a
+    java.lang.String getAndroidId() -> j
+    java.lang.String getTelephonyId() -> k
+    java.lang.String getWifiMacAddress() -> l
+    java.lang.String getBluetoothMacAddress() -> m
+    java.lang.String getSerialNumber() -> n
+io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType -> a.a.a.a.a.b.z:
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType WIFI_MAC_ADDRESS -> a
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType BLUETOOTH_MAC_ADDRESS -> b
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType FONT_TOKEN -> c
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType ANDROID_ID -> d
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType ANDROID_DEVICE_ID -> e
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType ANDROID_SERIAL -> f
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType ANDROID_ADVERTISING_ID -> g
+    int protobufIndex -> h
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType[] $VALUES -> i
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType[] values() -> values
+    io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType valueOf(java.lang.String) -> valueOf
+io.fabric.sdk.android.services.common.InstallerPackageNameProvider -> a.a.a.a.a.b.aa:
+    io.fabric.sdk.android.services.cache.ValueLoader installerPackageNameLoader -> a
+    io.fabric.sdk.android.services.cache.MemoryValueCache installerPackageNameCache -> b
+    java.lang.String getInstallerPackageName(android.content.Context) -> a
+io.fabric.sdk.android.services.common.InstallerPackageNameProvider$1 -> a.a.a.a.a.b.ab:
+    io.fabric.sdk.android.services.common.InstallerPackageNameProvider this$0 -> a
+    java.lang.String load(android.content.Context) -> a
+    java.lang.Object load(android.content.Context) -> c
+io.fabric.sdk.android.services.common.QueueFile -> a.a.a.a.a.b.ac:
+    java.util.logging.Logger LOGGER -> b
+    java.io.RandomAccessFile raf -> c
+    int fileLength -> a
+    int elementCount -> d
+    io.fabric.sdk.android.services.common.QueueFile$Element first -> e
+    io.fabric.sdk.android.services.common.QueueFile$Element last -> f
+    byte[] buffer -> g
+    void writeInt(byte[],int,int) -> b
+    void writeInts(byte[],int[]) -> a
+    int readInt(byte[],int) -> a
+    void readHeader() -> c
+    void writeHeader(int,int,int,int) -> a
+    io.fabric.sdk.android.services.common.QueueFile$Element readElement(int) -> a
+    void initialize(java.io.File) -> a
+    java.io.RandomAccessFile open(java.io.File) -> b
+    int wrapPosition(int) -> b
+    void ringWrite(int,byte[],int,int) -> a
+    void ringRead(int,byte[],int,int) -> b
+    void add(byte[]) -> a
+    void add(byte[],int,int) -> a
+    int usedBytes() -> a
+    int remainingBytes() -> d
+    boolean isEmpty() -> b
+    void expandIfNecessary(int) -> c
+    void setLength(int) -> d
+    void forEach(io.fabric.sdk.android.services.common.QueueFile$ElementReader) -> a
+    java.lang.Object nonNull(java.lang.Object,java.lang.String) -> b
+    void close() -> close
+    boolean hasSpaceFor(int,int) -> a
+    java.lang.String toString() -> toString
+    int access$100(io.fabric.sdk.android.services.common.QueueFile,int) -> a
+    java.lang.Object access$200(java.lang.Object,java.lang.String) -> a
+    void access$300(io.fabric.sdk.android.services.common.QueueFile,int,byte[],int,int) -> a
+    java.io.RandomAccessFile access$400(io.fabric.sdk.android.services.common.QueueFile) -> a
+io.fabric.sdk.android.services.common.QueueFile$1 -> a.a.a.a.a.b.ad:
+    boolean first -> a
+    java.lang.StringBuilder val$builder -> b
+    io.fabric.sdk.android.services.common.QueueFile this$0 -> c
+    void read(java.io.InputStream,int) -> a
+io.fabric.sdk.android.services.common.QueueFile$Element -> a.a.a.a.a.b.ae:
+    io.fabric.sdk.android.services.common.QueueFile$Element NULL -> a
+    int position -> b
+    int length -> c
+    java.lang.String toString() -> toString
+io.fabric.sdk.android.services.common.QueueFile$ElementInputStream -> a.a.a.a.a.b.af:
+    int position -> b
+    int remaining -> c
+    io.fabric.sdk.android.services.common.QueueFile this$0 -> a
+    int read(byte[],int,int) -> read
+    int read() -> read
+io.fabric.sdk.android.services.common.QueueFile$ElementReader -> a.a.a.a.a.b.ag:
+    void read(java.io.InputStream,int) -> a
+io.fabric.sdk.android.services.common.ResponseParser -> a.a.a.a.a.b.ah:
+    int parse(int) -> a
+io.fabric.sdk.android.services.common.SystemCurrentTimeProvider -> a.a.a.a.a.b.ai:
+    long getCurrentTimeMillis() -> a
+io.fabric.sdk.android.services.common.TimingMetric -> a.a.a.a.a.b.aj:
+    java.lang.String eventName -> a
+    java.lang.String tag -> b
+    boolean disabled -> c
+    long start -> d
+    long duration -> e
+    void startMeasuring() -> a
+    void stopMeasuring() -> b
+    void reportToLog() -> c
+io.fabric.sdk.android.services.concurrency.AsyncTask -> a.a.a.a.a.c.a:
+    int CPU_COUNT -> a
+    int CORE_POOL_SIZE -> d
+    int MAXIMUM_POOL_SIZE -> e
+    java.util.concurrent.ThreadFactory threadFactory -> f
+    java.util.concurrent.BlockingQueue poolWorkQueue -> g
+    java.util.concurrent.Executor THREAD_POOL_EXECUTOR -> b
+    java.util.concurrent.Executor SERIAL_EXECUTOR -> c
+    io.fabric.sdk.android.services.concurrency.AsyncTask$InternalHandler handler -> h
+    java.util.concurrent.Executor defaultExecutor -> i
+    io.fabric.sdk.android.services.concurrency.AsyncTask$WorkerRunnable worker -> j
+    java.util.concurrent.FutureTask future -> k
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status status -> l
+    java.util.concurrent.atomic.AtomicBoolean cancelled -> m
+    java.util.concurrent.atomic.AtomicBoolean taskInvoked -> n
+    void postResultIfNotInvoked(java.lang.Object) -> d
+    java.lang.Object postResult(java.lang.Object) -> e
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status getStatus() -> a_
+    java.lang.Object doInBackground(java.lang.Object[]) -> a
+    void onPreExecute() -> a
+    void onPostExecute(java.lang.Object) -> a
+    void onProgressUpdate(java.lang.Object[]) -> b
+    void onCancelled(java.lang.Object) -> b
+    void onCancelled() -> b_
+    boolean isCancelled() -> e
+    boolean cancel(boolean) -> a
+    io.fabric.sdk.android.services.concurrency.AsyncTask executeOnExecutor(java.util.concurrent.Executor,java.lang.Object[]) -> a
+    void finish(java.lang.Object) -> f
+    java.util.concurrent.atomic.AtomicBoolean access$200(io.fabric.sdk.android.services.concurrency.AsyncTask) -> a
+    java.lang.Object access$300(io.fabric.sdk.android.services.concurrency.AsyncTask,java.lang.Object) -> a
+    void access$400(io.fabric.sdk.android.services.concurrency.AsyncTask,java.lang.Object) -> b
+    void access$500(io.fabric.sdk.android.services.concurrency.AsyncTask,java.lang.Object) -> c
+io.fabric.sdk.android.services.concurrency.AsyncTask$1 -> a.a.a.a.a.c.b:
+    java.util.concurrent.atomic.AtomicInteger count -> a
+    java.lang.Thread newThread(java.lang.Runnable) -> newThread
+io.fabric.sdk.android.services.concurrency.AsyncTask$2 -> a.a.a.a.a.c.c:
+    io.fabric.sdk.android.services.concurrency.AsyncTask this$0 -> a
+    java.lang.Object call() -> call
+io.fabric.sdk.android.services.concurrency.AsyncTask$3 -> a.a.a.a.a.c.d:
+    io.fabric.sdk.android.services.concurrency.AsyncTask this$0 -> a
+    void done() -> done
+io.fabric.sdk.android.services.concurrency.AsyncTask$4 -> a.a.a.a.a.c.e:
+    int[] $SwitchMap$io$fabric$sdk$android$services$concurrency$AsyncTask$Status -> a
+io.fabric.sdk.android.services.concurrency.AsyncTask$AsyncTaskResult -> a.a.a.a.a.c.f:
+    io.fabric.sdk.android.services.concurrency.AsyncTask task -> a
+    java.lang.Object[] data -> b
+io.fabric.sdk.android.services.concurrency.AsyncTask$InternalHandler -> a.a.a.a.a.c.g:
+    void handleMessage(android.os.Message) -> handleMessage
+io.fabric.sdk.android.services.concurrency.AsyncTask$SerialExecutor -> a.a.a.a.a.c.h:
+    java.util.LinkedList tasks -> a
+    java.lang.Runnable active -> b
+    void execute(java.lang.Runnable) -> execute
+    void scheduleNext() -> a
+io.fabric.sdk.android.services.concurrency.AsyncTask$SerialExecutor$1 -> a.a.a.a.a.c.i:
+    java.lang.Runnable val$r -> a
+    io.fabric.sdk.android.services.concurrency.AsyncTask$SerialExecutor this$0 -> b
+    void run() -> run
+io.fabric.sdk.android.services.concurrency.AsyncTask$Status -> a.a.a.a.a.c.j:
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status PENDING -> a
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status RUNNING -> b
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status FINISHED -> c
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status[] $VALUES -> d
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status[] values() -> values
+    io.fabric.sdk.android.services.concurrency.AsyncTask$Status valueOf(java.lang.String) -> valueOf
+io.fabric.sdk.android.services.concurrency.AsyncTask$WorkerRunnable -> a.a.a.a.a.c.k:
+    java.lang.Object[] params -> b
+io.fabric.sdk.android.services.concurrency.Dependency -> a.a.a.a.a.c.l:
+    void addDependency(java.lang.Object) -> c
+    java.util.Collection getDependencies() -> c
+    boolean areDependenciesMet() -> d
+io.fabric.sdk.android.services.concurrency.DependencyPriorityBlockingQueue -> a.a.a.a.a.c.m:
+    java.util.Queue blockedQueue -> a
+    java.util.concurrent.locks.ReentrantLock lock -> b
+    io.fabric.sdk.android.services.concurrency.Dependency take() -> a
+    io.fabric.sdk.android.services.concurrency.Dependency peek() -> b
+    io.fabric.sdk.android.services.concurrency.Dependency poll(long,java.util.concurrent.TimeUnit) -> a
+    io.fabric.sdk.android.services.concurrency.Dependency poll() -> c
+    int size() -> size
+    java.lang.Object[] toArray(java.lang.Object[]) -> toArray
+    java.lang.Object[] toArray() -> toArray
+    int drainTo(java.util.Collection) -> drainTo
+    int drainTo(java.util.Collection,int) -> drainTo
+    boolean contains(java.lang.Object) -> contains
+    void clear() -> clear
+    boolean remove(java.lang.Object) -> remove
+    boolean removeAll(java.util.Collection) -> removeAll
+    io.fabric.sdk.android.services.concurrency.Dependency performOperation(int,java.lang.Long,java.util.concurrent.TimeUnit) -> a
+    boolean offerBlockedResult(int,io.fabric.sdk.android.services.concurrency.Dependency) -> a
+    io.fabric.sdk.android.services.concurrency.Dependency get(int,java.lang.Long,java.util.concurrent.TimeUnit) -> b
+    boolean canProcess(io.fabric.sdk.android.services.concurrency.Dependency) -> a
+    void recycleBlockedQueue() -> d
+    java.lang.Object[] concatenate(java.lang.Object[],java.lang.Object[]) -> a
+    java.lang.Object peek() -> peek
+    java.lang.Object poll(long,java.util.concurrent.TimeUnit) -> poll
+    java.lang.Object take() -> take
+    java.lang.Object poll() -> poll
+io.fabric.sdk.android.services.concurrency.DependsOn -> a.a.a.a.a.c.n:
+    java.lang.Class[] value() -> a
+io.fabric.sdk.android.services.concurrency.Priority -> a.a.a.a.a.c.o:
+    io.fabric.sdk.android.services.concurrency.Priority LOW -> a
+    io.fabric.sdk.android.services.concurrency.Priority NORMAL -> b
+    io.fabric.sdk.android.services.concurrency.Priority HIGH -> c
+    io.fabric.sdk.android.services.concurrency.Priority IMMEDIATE -> d
+    io.fabric.sdk.android.services.concurrency.Priority[] $VALUES -> e
+    io.fabric.sdk.android.services.concurrency.Priority[] values() -> values
+    io.fabric.sdk.android.services.concurrency.Priority valueOf(java.lang.String) -> valueOf
+    int compareTo(io.fabric.sdk.android.services.concurrency.PriorityProvider,java.lang.Object) -> a
+io.fabric.sdk.android.services.concurrency.PriorityAsyncTask -> a.a.a.a.a.c.p:
+    io.fabric.sdk.android.services.concurrency.PriorityTask priorityTask -> a
+    void executeOnExecutor(java.util.concurrent.ExecutorService,java.lang.Object[]) -> a
+    int compareTo(java.lang.Object) -> compareTo
+    void addDependency(io.fabric.sdk.android.services.concurrency.Task) -> a
+    java.util.Collection getDependencies() -> c
+    boolean areDependenciesMet() -> d
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+    void setFinished(boolean) -> b
+    boolean isFinished() -> f
+    void setError(java.lang.Throwable) -> a
+    io.fabric.sdk.android.services.concurrency.Dependency getDelegate() -> g
+    void addDependency(java.lang.Object) -> c
+io.fabric.sdk.android.services.concurrency.PriorityAsyncTask$ProxyExecutor -> a.a.a.a.a.c.q:
+    java.util.concurrent.Executor executor -> a
+    io.fabric.sdk.android.services.concurrency.PriorityAsyncTask task -> b
+    void execute(java.lang.Runnable) -> execute
+    io.fabric.sdk.android.services.concurrency.PriorityAsyncTask access$000(io.fabric.sdk.android.services.concurrency.PriorityAsyncTask$ProxyExecutor) -> a
+io.fabric.sdk.android.services.concurrency.PriorityAsyncTask$ProxyExecutor$1 -> a.a.a.a.a.c.r:
+    io.fabric.sdk.android.services.concurrency.PriorityAsyncTask$ProxyExecutor this$0 -> a
+    io.fabric.sdk.android.services.concurrency.Dependency getDelegate() -> a
+io.fabric.sdk.android.services.concurrency.PriorityCallable -> a.a.a.a.a.c.s:
+io.fabric.sdk.android.services.concurrency.PriorityFutureTask -> a.a.a.a.a.c.t:
+    java.lang.Object delegate -> b
+    int compareTo(java.lang.Object) -> compareTo
+    void addDependency(io.fabric.sdk.android.services.concurrency.Task) -> a
+    java.util.Collection getDependencies() -> c
+    boolean areDependenciesMet() -> d
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+    void setFinished(boolean) -> b
+    boolean isFinished() -> f
+    void setError(java.lang.Throwable) -> a
+    io.fabric.sdk.android.services.concurrency.Dependency getDelegate() -> a
+    io.fabric.sdk.android.services.concurrency.Dependency checkAndInitDelegate(java.lang.Object) -> a
+    void addDependency(java.lang.Object) -> c
+io.fabric.sdk.android.services.concurrency.PriorityProvider -> a.a.a.a.a.c.u:
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+io.fabric.sdk.android.services.concurrency.PriorityTask -> a.a.a.a.a.c.v:
+    java.util.List dependencies -> a
+    java.util.concurrent.atomic.AtomicBoolean hasRun -> b
+    java.util.concurrent.atomic.AtomicReference throwable -> c
+    java.util.Collection getDependencies() -> c
+    void addDependency(io.fabric.sdk.android.services.concurrency.Task) -> a
+    boolean areDependenciesMet() -> d
+    void setFinished(boolean) -> b
+    boolean isFinished() -> f
+    io.fabric.sdk.android.services.concurrency.Priority getPriority() -> b
+    void setError(java.lang.Throwable) -> a
+    int compareTo(java.lang.Object) -> compareTo
+    boolean isProperDelegate(java.lang.Object) -> a
+    void addDependency(java.lang.Object) -> c
+io.fabric.sdk.android.services.concurrency.PriorityThreadPoolExecutor -> a.a.a.a.a.c.w:
+    int CPU_COUNT -> a
+    int CORE_POOL_SIZE -> b
+    int MAXIMUM_POOL_SIZE -> c
+    io.fabric.sdk.android.services.concurrency.PriorityThreadPoolExecutor create(int,int) -> a
+    io.fabric.sdk.android.services.concurrency.PriorityThreadPoolExecutor create() -> a
+    java.util.concurrent.RunnableFuture newTaskFor(java.lang.Runnable,java.lang.Object) -> newTaskFor
+    java.util.concurrent.RunnableFuture newTaskFor(java.util.concurrent.Callable) -> newTaskFor
+    void execute(java.lang.Runnable) -> execute
+    void afterExecute(java.lang.Runnable,java.lang.Throwable) -> afterExecute
+    io.fabric.sdk.android.services.concurrency.DependencyPriorityBlockingQueue getQueue() -> b
+    java.util.concurrent.BlockingQueue getQueue() -> getQueue
+io.fabric.sdk.android.services.concurrency.PriorityThreadPoolExecutor$PriorityThreadFactory -> a.a.a.a.a.c.x:
+    int threadPriority -> a
+    java.lang.Thread newThread(java.lang.Runnable) -> newThread
+io.fabric.sdk.android.services.concurrency.Task -> a.a.a.a.a.c.y:
+    void setFinished(boolean) -> b
+    boolean isFinished() -> f
+    void setError(java.lang.Throwable) -> a
+io.fabric.sdk.android.services.concurrency.UnmetDependencyException -> a.a.a.a.a.c.z:
+io.fabric.sdk.android.services.concurrency.internal.Backoff -> a.a.a.a.a.c.a.a:
+    long getDelayMillis(int) -> a
+io.fabric.sdk.android.services.concurrency.internal.DefaultRetryPolicy -> a.a.a.a.a.c.a.b:
+    int maxRetries -> a
+io.fabric.sdk.android.services.concurrency.internal.ExponentialBackoff -> a.a.a.a.a.c.a.c:
+    long baseTimeMillis -> a
+    int power -> b
+    long getDelayMillis(int) -> a
+io.fabric.sdk.android.services.concurrency.internal.RetryPolicy -> a.a.a.a.a.c.a.d:
+io.fabric.sdk.android.services.concurrency.internal.RetryState -> a.a.a.a.a.c.a.e:
+    int retryCount -> a
+    io.fabric.sdk.android.services.concurrency.internal.Backoff backoff -> b
+    io.fabric.sdk.android.services.concurrency.internal.RetryPolicy retryPolicy -> c
+    long getRetryDelay() -> a
+    io.fabric.sdk.android.services.concurrency.internal.RetryState nextRetryState() -> b
+    io.fabric.sdk.android.services.concurrency.internal.RetryState initialRetryState() -> c
+io.fabric.sdk.android.services.events.DisabledEventsStrategy -> a.a.a.a.a.d.a:
+    void sendEvents() -> b
+    void deleteAllEvents() -> c
+    void recordEvent(java.lang.Object) -> a
+    void cancelTimeBasedFileRollOver() -> d
+    boolean rollFileOver() -> e
+    io.fabric.sdk.android.services.events.FilesSender getFilesSender() -> a
+io.fabric.sdk.android.services.events.EnabledEventsStrategy -> a.a.a.a.a.d.b:
+    android.content.Context context -> b
+    java.util.concurrent.ScheduledExecutorService executorService -> c
+    io.fabric.sdk.android.services.events.EventsFilesManager filesManager -> d
+    java.util.concurrent.atomic.AtomicReference scheduledRolloverFutureRef -> e
+    int rolloverIntervalSeconds -> f
+    void scheduleTimeBasedRollOverIfNeeded() -> f
+    void sendAndCleanUpIfSuccess() -> g
+    void sendEvents() -> b
+    void scheduleTimeBasedFileRollOver(int,int) -> a
+    void cancelTimeBasedFileRollOver() -> d
+    void configureRollover(int) -> a
+    void deleteAllEvents() -> c
+    void recordEvent(java.lang.Object) -> a
+    boolean rollFileOver() -> e
+io.fabric.sdk.android.services.events.EventTransform -> a.a.a.a.a.d.c:
+    byte[] toBytes(java.lang.Object) -> a
+io.fabric.sdk.android.services.events.EventsFilesManager -> a.a.a.a.a.d.d:
+    android.content.Context context -> a
+    io.fabric.sdk.android.services.events.EventTransform transform -> b
+    io.fabric.sdk.android.services.common.CurrentTimeProvider currentTimeProvider -> c
+    io.fabric.sdk.android.services.events.EventsStorage eventStorage -> d
+    int defaultMaxFilesToKeep -> g
+    long lastRollOverTime -> e
+    java.util.List rollOverListeners -> f
+    void writeEvent(java.lang.Object) -> a
+    void registerRollOverListener(io.fabric.sdk.android.services.events.EventsStorageListener) -> a
+    boolean rollFileOver() -> d
+    void rollFileOverIfNeeded(int) -> a
+    java.lang.String generateUniqueRollOverFileName() -> a
+    int getMaxFilesToKeep() -> b
+    int getMaxByteSizePerFile() -> c
+    void triggerRollOverOnListeners(java.lang.String) -> b
+    java.util.List getBatchOfFilesToSend() -> e
+    void deleteSentFiles(java.util.List) -> a
+    void deleteAllEventsFiles() -> f
+    void deleteOldestInRollOverIfOverMax() -> g
+    long parseCreationTimestampFromFileName(java.lang.String) -> a
+io.fabric.sdk.android.services.events.EventsFilesManager$1 -> a.a.a.a.a.d.e:
+    io.fabric.sdk.android.services.events.EventsFilesManager this$0 -> a
+    int compare(io.fabric.sdk.android.services.events.EventsFilesManager$FileWithTimestamp,io.fabric.sdk.android.services.events.EventsFilesManager$FileWithTimestamp) -> a
+    int compare(java.lang.Object,java.lang.Object) -> compare
+io.fabric.sdk.android.services.events.EventsFilesManager$FileWithTimestamp -> a.a.a.a.a.d.f:
+    java.io.File file -> a
+    long timestamp -> b
+io.fabric.sdk.android.services.events.EventsHandler -> a.a.a.a.a.d.g:
+    android.content.Context context -> a
+    java.util.concurrent.ScheduledExecutorService executor -> b
+    io.fabric.sdk.android.services.events.EventsStrategy strategy -> c
+    void recordEventAsync(java.lang.Object,boolean) -> a
+    void recordEventSync(java.lang.Object) -> a
+    void onRollOver(java.lang.String) -> a
+    void disable() -> b
+    io.fabric.sdk.android.services.events.EventsStrategy getDisabledEventsStrategy() -> a
+    void executeSync(java.lang.Runnable) -> a
+    void executeAsync(java.lang.Runnable) -> b
+io.fabric.sdk.android.services.events.EventsHandler$1 -> a.a.a.a.a.d.h:
+    java.lang.Object val$event -> a
+    boolean val$sendImmediately -> b
+    io.fabric.sdk.android.services.events.EventsHandler this$0 -> c
+    void run() -> run
+io.fabric.sdk.android.services.events.EventsHandler$2 -> a.a.a.a.a.d.i:
+    java.lang.Object val$event -> a
+    io.fabric.sdk.android.services.events.EventsHandler this$0 -> b
+    void run() -> run
+io.fabric.sdk.android.services.events.EventsHandler$3 -> a.a.a.a.a.d.j:
+    io.fabric.sdk.android.services.events.EventsHandler this$0 -> a
+    void run() -> run
+io.fabric.sdk.android.services.events.EventsHandler$4 -> a.a.a.a.a.d.k:
+    io.fabric.sdk.android.services.events.EventsHandler this$0 -> a
+    void run() -> run
+io.fabric.sdk.android.services.events.EventsManager -> a.a.a.a.a.d.l:
+    void sendEvents() -> b
+    void deleteAllEvents() -> c
+    void recordEvent(java.lang.Object) -> a
+io.fabric.sdk.android.services.events.EventsStorage -> a.a.a.a.a.d.m:
+    void add(byte[]) -> a
+    int getWorkingFileUsedSizeInBytes() -> a
+    boolean isWorkingFileEmpty() -> b
+    void rollOver(java.lang.String) -> a
+    java.util.List getBatchOfFilesToSend(int) -> a
+    java.util.List getAllFilesInRollOverDirectory() -> c
+    void deleteFilesInRollOverDirectory(java.util.List) -> a
+    void deleteWorkingFile() -> d
+    boolean canWorkingFileStore(int,int) -> a
+io.fabric.sdk.android.services.events.EventsStorageListener -> a.a.a.a.a.d.n:
+    void onRollOver(java.lang.String) -> a
+io.fabric.sdk.android.services.events.EventsStrategy -> a.a.a.a.a.d.o:
+    io.fabric.sdk.android.services.events.FilesSender getFilesSender() -> a
+io.fabric.sdk.android.services.events.FileRollOverManager -> a.a.a.a.a.d.p:
+    boolean rollFileOver() -> e
+    void cancelTimeBasedFileRollOver() -> d
+io.fabric.sdk.android.services.events.FilesSender -> a.a.a.a.a.d.q:
+    boolean send(java.util.List) -> a
+io.fabric.sdk.android.services.events.GZIPQueueFileEventStorage -> a.a.a.a.a.d.r:
+    java.io.OutputStream getMoveOutputStream(java.io.File) -> a
+io.fabric.sdk.android.services.events.QueueFileEventStorage -> a.a.a.a.a.d.s:
+    android.content.Context context -> a
+    java.io.File workingDirectory -> b
+    java.lang.String targetDirectoryName -> c
+    java.io.File workingFile -> d
+    io.fabric.sdk.android.services.common.QueueFile queueFile -> e
+    java.io.File targetDirectory -> f
+    void createTargetDirectory() -> e
+    void add(byte[]) -> a
+    int getWorkingFileUsedSizeInBytes() -> a
+    void rollOver(java.lang.String) -> a
+    void move(java.io.File,java.io.File) -> a
+    java.io.OutputStream getMoveOutputStream(java.io.File) -> a
+    java.util.List getBatchOfFilesToSend(int) -> a
+    void deleteFilesInRollOverDirectory(java.util.List) -> a
+    java.util.List getAllFilesInRollOverDirectory() -> c
+    void deleteWorkingFile() -> d
+    boolean isWorkingFileEmpty() -> b
+    boolean canWorkingFileStore(int,int) -> a
+io.fabric.sdk.android.services.events.TimeBasedFileRollOverRunnable -> a.a.a.a.a.d.t:
+    android.content.Context context -> a
+    io.fabric.sdk.android.services.events.FileRollOverManager fileRollOverManager -> b
+    void run() -> run
+io.fabric.sdk.android.services.network.CertificateChainCleaner -> a.a.a.a.a.e.a:
+    java.security.cert.X509Certificate[] getCleanChain(java.security.cert.X509Certificate[],io.fabric.sdk.android.services.network.SystemKeyStore) -> a
+    boolean isValidLink(java.security.cert.X509Certificate,java.security.cert.X509Certificate) -> a
+io.fabric.sdk.android.services.network.DefaultHttpRequestFactory -> a.a.a.a.a.e.b:
+    io.fabric.sdk.android.Logger logger -> a
+    io.fabric.sdk.android.services.network.PinningInfoProvider pinningInfo -> b
+    javax.net.ssl.SSLSocketFactory sslSocketFactory -> c
+    boolean attemptedSslInit -> d
+    void setPinningInfoProvider(io.fabric.sdk.android.services.network.PinningInfoProvider) -> a
+    void resetSSLSocketFactory() -> a
+    io.fabric.sdk.android.services.network.HttpRequest buildHttpRequest(io.fabric.sdk.android.services.network.HttpMethod,java.lang.String,java.util.Map) -> a
+    boolean isHttps(java.lang.String) -> a
+    javax.net.ssl.SSLSocketFactory getSSLSocketFactory() -> b
+    javax.net.ssl.SSLSocketFactory initSSLSocketFactory() -> c
+io.fabric.sdk.android.services.network.DefaultHttpRequestFactory$1 -> a.a.a.a.a.e.c:
+    int[] $SwitchMap$io$fabric$sdk$android$services$network$HttpMethod -> a
+io.fabric.sdk.android.services.network.HttpMethod -> a.a.a.a.a.e.d:
+    io.fabric.sdk.android.services.network.HttpMethod GET -> a
+    io.fabric.sdk.android.services.network.HttpMethod POST -> b
+    io.fabric.sdk.android.services.network.HttpMethod PUT -> c
+    io.fabric.sdk.android.services.network.HttpMethod DELETE -> d
+    io.fabric.sdk.android.services.network.HttpMethod[] $VALUES -> e
+    io.fabric.sdk.android.services.network.HttpMethod[] values() -> values
+    io.fabric.sdk.android.services.network.HttpMethod valueOf(java.lang.String) -> valueOf
+io.fabric.sdk.android.services.network.HttpRequest -> a.a.a.a.a.e.e:
+    java.lang.String[] EMPTY_STRINGS -> b
+    io.fabric.sdk.android.services.network.HttpRequest$ConnectionFactory CONNECTION_FACTORY -> c
+    java.net.HttpURLConnection connection -> d
+    java.net.URL url -> a
+    java.lang.String requestMethod -> e
+    io.fabric.sdk.android.services.network.HttpRequest$RequestOutputStream output -> f
+    boolean multipart -> g
+    boolean ignoreCloseExceptions -> h
+    boolean uncompress -> i
+    int bufferSize -> j
+    java.lang.String httpProxyHost -> k
+    int httpProxyPort -> l
+    java.lang.String getValidCharset(java.lang.String) -> f
+    java.lang.StringBuilder addPathSeparator(java.lang.String,java.lang.StringBuilder) -> a
+    java.lang.StringBuilder addParamPrefix(java.lang.String,java.lang.StringBuilder) -> b
+    java.lang.String encode(java.lang.CharSequence) -> a
+    java.lang.String append(java.lang.CharSequence,java.util.Map) -> a
+    io.fabric.sdk.android.services.network.HttpRequest get(java.lang.CharSequence) -> b
+    io.fabric.sdk.android.services.network.HttpRequest get(java.lang.CharSequence,java.util.Map,boolean) -> a
+    io.fabric.sdk.android.services.network.HttpRequest post(java.lang.CharSequence) -> c
+    io.fabric.sdk.android.services.network.HttpRequest post(java.lang.CharSequence,java.util.Map,boolean) -> b
+    io.fabric.sdk.android.services.network.HttpRequest put(java.lang.CharSequence) -> d
+    io.fabric.sdk.android.services.network.HttpRequest delete(java.lang.CharSequence) -> e
+    java.net.Proxy createProxy() -> q
+    java.net.HttpURLConnection createConnection() -> r
+    java.lang.String toString() -> toString
+    java.net.HttpURLConnection getConnection() -> a
+    int code() -> b
+    boolean ok() -> c
+    java.io.ByteArrayOutputStream byteStream() -> d
+    java.lang.String body(java.lang.String) -> a
+    java.lang.String body() -> e
+    java.io.BufferedInputStream buffer() -> f
+    java.io.InputStream stream() -> g
+    io.fabric.sdk.android.services.network.HttpRequest connectTimeout(int) -> a
+    io.fabric.sdk.android.services.network.HttpRequest header(java.lang.String,java.lang.String) -> a
+    io.fabric.sdk.android.services.network.HttpRequest header(java.util.Map$Entry) -> a
+    java.lang.String header(java.lang.String) -> b
+    int intHeader(java.lang.String) -> c
+    int intHeader(java.lang.String,int) -> a
+    java.lang.String parameter(java.lang.String,java.lang.String) -> b
+    java.lang.String getParam(java.lang.String,java.lang.String) -> c
+    java.lang.String charset() -> h
+    io.fabric.sdk.android.services.network.HttpRequest useCaches(boolean) -> a
+    java.lang.String contentEncoding() -> i
+    io.fabric.sdk.android.services.network.HttpRequest contentType(java.lang.String) -> d
+    io.fabric.sdk.android.services.network.HttpRequest contentType(java.lang.String,java.lang.String) -> d
+    int contentLength() -> j
+    io.fabric.sdk.android.services.network.HttpRequest copy(java.io.InputStream,java.io.OutputStream) -> a
+    io.fabric.sdk.android.services.network.HttpRequest closeOutput() -> k
+    io.fabric.sdk.android.services.network.HttpRequest closeOutputQuietly() -> l
+    io.fabric.sdk.android.services.network.HttpRequest openOutput() -> m
+    io.fabric.sdk.android.services.network.HttpRequest startPart() -> n
+    io.fabric.sdk.android.services.network.HttpRequest writePartHeader(java.lang.String,java.lang.String,java.lang.String) -> a
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String) -> e
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String,java.lang.String) -> b
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String,java.lang.String,java.lang.String) -> a
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.Number) -> a
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String,java.lang.Number) -> a
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String,java.lang.String,java.io.File) -> a
+    io.fabric.sdk.android.services.network.HttpRequest part(java.lang.String,java.lang.String,java.lang.String,java.io.InputStream) -> a
+    io.fabric.sdk.android.services.network.HttpRequest partHeader(java.lang.String,java.lang.String) -> f
+    io.fabric.sdk.android.services.network.HttpRequest send(java.lang.CharSequence) -> f
+    java.net.URL url() -> o
+    java.lang.String method() -> p
+    java.lang.String access$000(java.lang.String) -> e
+    int access$100(io.fabric.sdk.android.services.network.HttpRequest) -> a
+io.fabric.sdk.android.services.network.HttpRequest$8 -> a.a.a.a.a.e.f:
+    java.io.InputStream val$input -> a
+    java.io.OutputStream val$output -> b
+    io.fabric.sdk.android.services.network.HttpRequest this$0 -> c
+    io.fabric.sdk.android.services.network.HttpRequest run() -> a
+    java.lang.Object run() -> b
+io.fabric.sdk.android.services.network.HttpRequest$CloseOperation -> a.a.a.a.a.e.g:
+    java.io.Closeable closeable -> a
+    boolean ignoreCloseExceptions -> b
+    void done() -> c
+io.fabric.sdk.android.services.network.HttpRequest$ConnectionFactory -> a.a.a.a.a.e.h:
+    io.fabric.sdk.android.services.network.HttpRequest$ConnectionFactory DEFAULT -> a
+    java.net.HttpURLConnection create(java.net.URL) -> a
+    java.net.HttpURLConnection create(java.net.URL,java.net.Proxy) -> a
+io.fabric.sdk.android.services.network.HttpRequest$ConnectionFactory$1 -> a.a.a.a.a.e.i:
+    java.net.HttpURLConnection create(java.net.URL) -> a
+    java.net.HttpURLConnection create(java.net.URL,java.net.Proxy) -> a
+io.fabric.sdk.android.services.network.HttpRequest$HttpRequestException -> a.a.a.a.a.e.j:
+    java.io.IOException getCause() -> a
+    java.lang.Throwable getCause() -> getCause
+io.fabric.sdk.android.services.network.HttpRequest$Operation -> a.a.a.a.a.e.k:
+    java.lang.Object run() -> b
+    void done() -> c
+    java.lang.Object call() -> call
+io.fabric.sdk.android.services.network.HttpRequest$RequestOutputStream -> a.a.a.a.a.e.l:
+    java.nio.charset.CharsetEncoder encoder -> a
+    io.fabric.sdk.android.services.network.HttpRequest$RequestOutputStream write(java.lang.String) -> a
+io.fabric.sdk.android.services.network.HttpRequestFactory -> a.a.a.a.a.e.m:
+    void setPinningInfoProvider(io.fabric.sdk.android.services.network.PinningInfoProvider) -> a
+    io.fabric.sdk.android.services.network.HttpRequest buildHttpRequest(io.fabric.sdk.android.services.network.HttpMethod,java.lang.String,java.util.Map) -> a
+io.fabric.sdk.android.services.network.NetworkUtils -> a.a.a.a.a.e.n:
+    javax.net.ssl.SSLSocketFactory getSSLSocketFactory(io.fabric.sdk.android.services.network.PinningInfoProvider) -> a
+io.fabric.sdk.android.services.network.PinningInfoProvider -> a.a.a.a.a.e.o:
+    java.io.InputStream getKeyStoreStream() -> a
+    java.lang.String getKeyStorePassword() -> b
+    java.lang.String[] getPins() -> c
+    long getPinCreationTimeInMillis() -> d
+io.fabric.sdk.android.services.network.PinningTrustManager -> a.a.a.a.a.e.p:
+    javax.net.ssl.TrustManager[] systemTrustManagers -> a
+    io.fabric.sdk.android.services.network.SystemKeyStore systemKeyStore -> b
+    long pinCreationTimeMillis -> c
+    java.util.List pins -> d
+    java.util.Set cache -> e
+    javax.net.ssl.TrustManager[] initializeSystemTrustManagers(io.fabric.sdk.android.services.network.SystemKeyStore) -> a
+    boolean isValidPin(java.security.cert.X509Certificate) -> a
+    void checkSystemTrust(java.security.cert.X509Certificate[],java.lang.String) -> a
+    void checkPinTrust(java.security.cert.X509Certificate[]) -> a
+    void checkClientTrusted(java.security.cert.X509Certificate[],java.lang.String) -> checkClientTrusted
+    void checkServerTrusted(java.security.cert.X509Certificate[],java.lang.String) -> checkServerTrusted
+    java.security.cert.X509Certificate[] getAcceptedIssuers() -> getAcceptedIssuers
+    byte[] hexStringToByteArray(java.lang.String) -> a
+io.fabric.sdk.android.services.network.SystemKeyStore -> a.a.a.a.a.e.q:
+    java.security.KeyStore trustStore -> a
+    java.util.HashMap trustRoots -> b
+    boolean isTrustRoot(java.security.cert.X509Certificate) -> a
+    java.security.cert.X509Certificate getTrustRootFor(java.security.cert.X509Certificate) -> b
+    java.util.HashMap initializeTrustedRoots(java.security.KeyStore) -> a
+    java.security.KeyStore getTrustStore(java.io.InputStream,java.lang.String) -> a
+io.fabric.sdk.android.services.persistence.FileStoreImpl -> a.a.a.a.a.f.a:
+    android.content.Context context -> a
+    java.lang.String contentPath -> b
+    java.lang.String legacySupport -> c
+    java.io.File getFilesDir() -> a
+    java.io.File prepare(java.io.File) -> a
+io.fabric.sdk.android.services.persistence.PreferenceStore -> a.a.a.a.a.f.b:
+    android.content.SharedPreferences get() -> a
+    android.content.SharedPreferences$Editor edit() -> b
+    boolean save(android.content.SharedPreferences$Editor) -> a
+io.fabric.sdk.android.services.persistence.PreferenceStoreImpl -> a.a.a.a.a.f.c:
+    android.content.SharedPreferences sharedPreferences -> a
+    java.lang.String preferenceName -> b
+    android.content.Context context -> c
+    android.content.SharedPreferences get() -> a
+    android.content.SharedPreferences$Editor edit() -> b
+    boolean save(android.content.SharedPreferences$Editor) -> a
+io.fabric.sdk.android.services.settings.AbstractAppSpiCall -> a.a.a.a.a.g.a:
+    boolean invoke(io.fabric.sdk.android.services.settings.AppRequestData) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyHeadersTo(io.fabric.sdk.android.services.network.HttpRequest,io.fabric.sdk.android.services.settings.AppRequestData) -> a
+    io.fabric.sdk.android.services.network.HttpRequest applyMultipartDataTo(io.fabric.sdk.android.services.network.HttpRequest,io.fabric.sdk.android.services.settings.AppRequestData) -> b
+    java.lang.String sdkKitParamName(io.fabric.sdk.android.Kit) -> a
+io.fabric.sdk.android.services.settings.AnalyticsSettingsData -> a.a.a.a.a.g.b:
+    java.lang.String analyticsURL -> a
+    int flushIntervalSeconds -> b
+    int maxByteSizePerFile -> c
+    int maxFileCountPerSend -> d
+    int maxPendingSendFileCount -> e
+    boolean trackCustomEvents -> f
+io.fabric.sdk.android.services.settings.AppIconSettingsData -> a.a.a.a.a.g.c:
+    java.lang.String hash -> a
+    int width -> b
+    int height -> c
+io.fabric.sdk.android.services.settings.AppRequestData -> a.a.a.a.a.g.d:
+    java.lang.String apiKey -> a
+    java.lang.String appId -> b
+    java.lang.String displayVersion -> c
+    java.lang.String buildVersion -> d
+    java.lang.String instanceIdentifier -> e
+    java.lang.String name -> f
+    int source -> g
+    java.lang.String minSdkVersion -> h
+    java.lang.String builtSdkVersion -> i
+    io.fabric.sdk.android.services.settings.IconRequest icon -> j
+    java.util.Collection sdkKits -> k
+io.fabric.sdk.android.services.settings.AppSettingsData -> a.a.a.a.a.g.e:
+    java.lang.String identifier -> a
+    java.lang.String status -> b
+    java.lang.String url -> c
+    java.lang.String reportsUrl -> d
+    boolean updateRequired -> e
+    io.fabric.sdk.android.services.settings.AppIconSettingsData icon -> f
+io.fabric.sdk.android.services.settings.BetaSettingsData -> a.a.a.a.a.g.f:
+    java.lang.String updateUrl -> a
+    int updateSuspendDurationSeconds -> b
+io.fabric.sdk.android.services.settings.CachedSettingsIo -> a.a.a.a.a.g.g:
+    org.json.JSONObject readCachedSettings() -> a
+    void writeCachedSettings(long,org.json.JSONObject) -> a
+io.fabric.sdk.android.services.settings.CreateAppSpiCall -> a.a.a.a.a.g.h:
+    boolean invoke(io.fabric.sdk.android.services.settings.AppRequestData) -> a
+io.fabric.sdk.android.services.settings.DefaultCachedSettingsIo -> a.a.a.a.a.g.i:
+    io.fabric.sdk.android.Kit kit -> a
+    org.json.JSONObject readCachedSettings() -> a
+    void writeCachedSettings(long,org.json.JSONObject) -> a
+io.fabric.sdk.android.services.settings.DefaultSettingsController -> a.a.a.a.a.g.j:
+    io.fabric.sdk.android.services.settings.SettingsRequest settingsRequest -> a
+    io.fabric.sdk.android.services.settings.SettingsJsonTransform settingsJsonTransform -> b
+    io.fabric.sdk.android.services.common.CurrentTimeProvider currentTimeProvider -> c
+    io.fabric.sdk.android.services.settings.CachedSettingsIo cachedSettingsIo -> d
+    io.fabric.sdk.android.services.settings.SettingsSpiCall settingsSpiCall -> e
+    io.fabric.sdk.android.Kit kit -> f
+    io.fabric.sdk.android.services.persistence.PreferenceStore preferenceStore -> g
+    io.fabric.sdk.android.services.settings.SettingsData loadSettingsData() -> a
+    io.fabric.sdk.android.services.settings.SettingsData loadSettingsData(io.fabric.sdk.android.services.settings.SettingsCacheBehavior) -> a
+    io.fabric.sdk.android.services.settings.SettingsData getCachedSettingsData(io.fabric.sdk.android.services.settings.SettingsCacheBehavior) -> b
+    void logSettings(org.json.JSONObject,java.lang.String) -> a
+    java.lang.String getBuildInstanceIdentifierFromContext() -> b
+    java.lang.String getStoredBuildInstanceIdentifier() -> c
+    boolean setStoredBuildInstanceIdentifier(java.lang.String) -> a
+    boolean buildInstanceIdentifierChanged() -> d
+io.fabric.sdk.android.services.settings.DefaultSettingsJsonTransform -> a.a.a.a.a.g.k:
+    io.fabric.sdk.android.services.settings.SettingsData buildFromJson(io.fabric.sdk.android.services.common.CurrentTimeProvider,org.json.JSONObject) -> a
+    org.json.JSONObject sanitizeTraceInfo(org.json.JSONObject) -> a
+    io.fabric.sdk.android.services.settings.AppSettingsData buildAppDataFrom(org.json.JSONObject) -> b
+    io.fabric.sdk.android.services.settings.AppIconSettingsData buildIconDataFrom(org.json.JSONObject) -> c
+    io.fabric.sdk.android.services.settings.FeaturesSettingsData buildFeaturesSessionDataFrom(org.json.JSONObject) -> d
+    io.fabric.sdk.android.services.settings.AnalyticsSettingsData buildAnalyticsSessionDataFrom(org.json.JSONObject) -> e
+    io.fabric.sdk.android.services.settings.SessionSettingsData buildSessionDataFrom(org.json.JSONObject) -> f
+    io.fabric.sdk.android.services.settings.PromptSettingsData buildPromptDataFrom(org.json.JSONObject) -> g
+    io.fabric.sdk.android.services.settings.BetaSettingsData buildBetaSettingsDataFrom(org.json.JSONObject) -> h
+    long getExpiresAtFrom(io.fabric.sdk.android.services.common.CurrentTimeProvider,long,org.json.JSONObject) -> a
+io.fabric.sdk.android.services.settings.DefaultSettingsSpiCall -> a.a.a.a.a.g.l:
+    org.json.JSONObject invoke(io.fabric.sdk.android.services.settings.SettingsRequest) -> a
+    org.json.JSONObject handleResponse(io.fabric.sdk.android.services.network.HttpRequest) -> a
+    boolean requestWasSuccessful(int) -> a
+    org.json.JSONObject getJsonObjectFrom(java.lang.String) -> a
+    java.util.Map getQueryParamsFor(io.fabric.sdk.android.services.settings.SettingsRequest) -> b
+    io.fabric.sdk.android.services.network.HttpRequest applyHeadersTo(io.fabric.sdk.android.services.network.HttpRequest,io.fabric.sdk.android.services.settings.SettingsRequest) -> a
+io.fabric.sdk.android.services.settings.FeaturesSettingsData -> a.a.a.a.a.g.m:
+    boolean promptEnabled -> a
+    boolean collectLoggedException -> b
+    boolean collectReports -> c
+    boolean collectAnalytics -> d
+io.fabric.sdk.android.services.settings.IconRequest -> a.a.a.a.a.g.n:
+    java.lang.String hash -> a
+    int iconResourceId -> b
+    int width -> c
+    int height -> d
+    io.fabric.sdk.android.services.settings.IconRequest build(android.content.Context,java.lang.String) -> a
+io.fabric.sdk.android.services.settings.PromptSettingsData -> a.a.a.a.a.g.o:
+    java.lang.String title -> a
+    java.lang.String message -> b
+    java.lang.String sendButtonTitle -> c
+    boolean showCancelButton -> d
+    java.lang.String cancelButtonTitle -> e
+    boolean showAlwaysSendButton -> f
+    java.lang.String alwaysSendButtonTitle -> g
+io.fabric.sdk.android.services.settings.SessionSettingsData -> a.a.a.a.a.g.p:
+    int logBufferSize -> a
+    int maxChainedExceptionDepth -> b
+    int maxCustomExceptionEvents -> c
+    int maxCustomKeyValuePairs -> d
+    int identifierMask -> e
+    boolean sendSessionWithoutCrash -> f
+io.fabric.sdk.android.services.settings.Settings -> a.a.a.a.a.g.q:
+    java.util.concurrent.atomic.AtomicReference settingsData -> a
+    java.util.concurrent.CountDownLatch settingsDataLatch -> b
+    io.fabric.sdk.android.services.settings.SettingsController settingsController -> c
+    boolean initialized -> d
+    io.fabric.sdk.android.services.settings.Settings getInstance() -> a
+    io.fabric.sdk.android.services.settings.Settings initialize(io.fabric.sdk.android.Kit,io.fabric.sdk.android.services.common.IdManager,io.fabric.sdk.android.services.network.HttpRequestFactory,java.lang.String,java.lang.String,java.lang.String) -> a
+    java.lang.Object withSettings(io.fabric.sdk.android.services.settings.Settings$SettingsAccess,java.lang.Object) -> a
+    io.fabric.sdk.android.services.settings.SettingsData awaitSettingsData() -> b
+    boolean loadSettingsData() -> c
+    boolean loadSettingsSkippingCache() -> d
+    void setSettingsData(io.fabric.sdk.android.services.settings.SettingsData) -> a
+io.fabric.sdk.android.services.settings.Settings$1 -> a.a.a.a.a.g.r:
+io.fabric.sdk.android.services.settings.Settings$LazyHolder -> a.a.a.a.a.g.s:
+    io.fabric.sdk.android.services.settings.Settings INSTANCE -> a
+    io.fabric.sdk.android.services.settings.Settings access$100() -> a
+io.fabric.sdk.android.services.settings.Settings$SettingsAccess -> a.a.a.a.a.g.t:
+    java.lang.Object usingSettings(io.fabric.sdk.android.services.settings.SettingsData) -> b
+io.fabric.sdk.android.services.settings.SettingsCacheBehavior -> a.a.a.a.a.g.u:
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior USE_CACHE -> a
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior SKIP_CACHE_LOOKUP -> b
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior IGNORE_CACHE_EXPIRATION -> c
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior[] $VALUES -> d
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior[] values() -> values
+    io.fabric.sdk.android.services.settings.SettingsCacheBehavior valueOf(java.lang.String) -> valueOf
+io.fabric.sdk.android.services.settings.SettingsController -> a.a.a.a.a.g.v:
+    io.fabric.sdk.android.services.settings.SettingsData loadSettingsData() -> a
+    io.fabric.sdk.android.services.settings.SettingsData loadSettingsData(io.fabric.sdk.android.services.settings.SettingsCacheBehavior) -> a
+io.fabric.sdk.android.services.settings.SettingsData -> a.a.a.a.a.g.w:
+    io.fabric.sdk.android.services.settings.AppSettingsData appData -> a
+    io.fabric.sdk.android.services.settings.SessionSettingsData sessionData -> b
+    io.fabric.sdk.android.services.settings.PromptSettingsData promptData -> c
+    io.fabric.sdk.android.services.settings.FeaturesSettingsData featuresData -> d
+    io.fabric.sdk.android.services.settings.AnalyticsSettingsData analyticsSettingsData -> e
+    io.fabric.sdk.android.services.settings.BetaSettingsData betaSettingsData -> f
+    long expiresAtMillis -> g
+    int settingsVersion -> h
+    int cacheDuration -> i
+    boolean isExpired(long) -> a
+io.fabric.sdk.android.services.settings.SettingsJsonConstants -> a.a.a.a.a.g.x:
+    java.lang.String BETA_UPDATE_ENDPOINT_DEFAULT -> a
+io.fabric.sdk.android.services.settings.SettingsJsonTransform -> a.a.a.a.a.g.y:
+    io.fabric.sdk.android.services.settings.SettingsData buildFromJson(io.fabric.sdk.android.services.common.CurrentTimeProvider,org.json.JSONObject) -> a
+    org.json.JSONObject sanitizeTraceInfo(org.json.JSONObject) -> a
+io.fabric.sdk.android.services.settings.SettingsRequest -> a.a.a.a.a.g.z:
+    java.lang.String apiKey -> a
+    java.lang.String deviceId -> b
+    java.lang.String instanceId -> c
+    java.lang.String displayVersion -> d
+    java.lang.String buildVersion -> e
+    int source -> f
+    java.lang.String iconHash -> g
+io.fabric.sdk.android.services.settings.SettingsSpiCall -> a.a.a.a.a.g.aa:
+    org.json.JSONObject invoke(io.fabric.sdk.android.services.settings.SettingsRequest) -> a
+io.fabric.sdk.android.services.settings.UpdateAppSpiCall -> a.a.a.a.a.g.ab:
+    boolean invoke(io.fabric.sdk.android.services.settings.AppRequestData) -> a

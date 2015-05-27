@@ -70,6 +70,12 @@ android.support.v4.widget.SlidingPaneLayout: void setShadowDrawable(android.grap
 android.support.v4.widget.SlidingPaneLayout: void setShadowResource(int)
 android.support.v4.widget.SlidingPaneLayout$SavedState
 android.support.v4.widget.SlidingPaneLayout$SavedState: android.os.Parcelable$Creator CREATOR
+com.crashlytics.android.WireFormat$FieldType: com.crashlytics.android.WireFormat$FieldType[] values()
+com.crashlytics.android.WireFormat$FieldType: com.crashlytics.android.WireFormat$FieldType valueOf(java.lang.String)
+com.crashlytics.android.WireFormat$JavaType: com.crashlytics.android.WireFormat$JavaType[] values()
+com.crashlytics.android.WireFormat$JavaType: com.crashlytics.android.WireFormat$JavaType valueOf(java.lang.String)
+com.crashlytics.android.answers.SessionEvent$Type: com.crashlytics.android.answers.SessionEvent$Type[] values()
+com.crashlytics.android.answers.SessionEvent$Type: com.crashlytics.android.answers.SessionEvent$Type valueOf(java.lang.String)
 com.google.gson.FieldNamingPolicy: com.google.gson.FieldNamingPolicy[] values()
 com.google.gson.FieldNamingPolicy: com.google.gson.FieldNamingPolicy valueOf(java.lang.String)
 com.google.gson.LongSerializationPolicy: com.google.gson.LongSerializationPolicy[] values()
@@ -132,6 +138,7 @@ com.xavey.android.R$drawable: int xavey_logo
 com.xavey.android.R$drawable: int xavey_orange_black
 com.xavey.android.R$id: int TextView01
 com.xavey.android.R$id: int about_form_x
+com.xavey.android.R$id: int about_version
 com.xavey.android.R$id: int action_settings
 com.xavey.android.R$id: int app_menuRefresh
 com.xavey.android.R$id: int audio_path
@@ -220,9 +227,12 @@ com.xavey.android.R$id: int radio_random_value
 com.xavey.android.R$id: int radio_value
 com.xavey.android.R$id: int ratingBarLayout_ratingSet
 com.xavey.android.R$id: int ratingBar_ratingSet
+com.xavey.android.R$id: int rb_autoSync
 com.xavey.android.R$id: int rb_default
 com.xavey.android.R$id: int rb_myanmar3
+com.xavey.android.R$id: int rb_off
 com.xavey.android.R$id: int rb_zawgyi
+com.xavey.android.R$id: int recorder_auto
 com.xavey.android.R$id: int recording_manager
 com.xavey.android.R$id: int ref_setter
 com.xavey.android.R$id: int render_ref
@@ -232,6 +242,7 @@ com.xavey.android.R$id: int selected_grid_values
 com.xavey.android.R$id: int sv
 com.xavey.android.R$id: int svQuestionFragment
 com.xavey.android.R$id: int svShowFormDetail
+com.xavey.android.R$id: int syncRadioGroup
 com.xavey.android.R$id: int textView1
 com.xavey.android.R$id: int tvErrorMsg
 com.xavey.android.R$id: int tvErrorMsgDocumentInput
@@ -292,6 +303,8 @@ com.xavey.android.ShowDocumentDetailActivity
 com.xavey.android.ShowDocumentDetailActivity: ShowDocumentDetailActivity()
 com.xavey.android.SignatureActivity
 com.xavey.android.SignatureActivity: SignatureActivity()
+com.xavey.android.XaveyApp
+com.xavey.android.XaveyApp: XaveyApp()
 com.xavey.android.layout.CheckboxLayout: void setCheckBoxButtonTextSize(float)
 com.xavey.android.layout.CheckboxLayout: void setExtraValueLayoutParamsDisappear(android.widget.LinearLayout$LayoutParams)
 com.xavey.android.layout.CheckboxLayout: void setExtraValueLayoutParamsAppear(android.widget.LinearLayout$LayoutParams)
@@ -316,6 +329,8 @@ com.xavey.android.model.FONT: com.xavey.android.model.FONT[] values()
 com.xavey.android.model.FONT: com.xavey.android.model.FONT valueOf(java.lang.String)
 com.xavey.android.model.RequestMethod: com.xavey.android.model.RequestMethod[] values()
 com.xavey.android.model.RequestMethod: com.xavey.android.model.RequestMethod valueOf(java.lang.String)
+com.xavey.android.model.SYNC: com.xavey.android.model.SYNC[] values()
+com.xavey.android.model.SYNC: com.xavey.android.model.SYNC valueOf(java.lang.String)
 com.xavey.android.service.SyncService
 com.xavey.android.service.SyncService: SyncService()
 com.xavey.android.testing.TestActivity
@@ -323,3 +338,17 @@ com.xavey.android.testing.TestActivity: TestActivity()
 com.xavey.android.util.DrawSignature
 com.xavey.android.util.DrawSignature: DrawSignature()
 com.xavey.android.util.DrawSignature$DrawingView: android.graphics.Bitmap getBitmap()
+io.fabric.sdk.android.services.common.CommonUtils$Architecture: io.fabric.sdk.android.services.common.CommonUtils$Architecture[] values()
+io.fabric.sdk.android.services.common.CommonUtils$Architecture: io.fabric.sdk.android.services.common.CommonUtils$Architecture valueOf(java.lang.String)
+io.fabric.sdk.android.services.common.DeliveryMechanism: io.fabric.sdk.android.services.common.DeliveryMechanism[] values()
+io.fabric.sdk.android.services.common.DeliveryMechanism: io.fabric.sdk.android.services.common.DeliveryMechanism valueOf(java.lang.String)
+io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType: io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType[] values()
+io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType: io.fabric.sdk.android.services.common.IdManager$DeviceIdentifierType valueOf(java.lang.String)
+io.fabric.sdk.android.services.concurrency.AsyncTask$Status: io.fabric.sdk.android.services.concurrency.AsyncTask$Status[] values()
+io.fabric.sdk.android.services.concurrency.AsyncTask$Status: io.fabric.sdk.android.services.concurrency.AsyncTask$Status valueOf(java.lang.String)
+io.fabric.sdk.android.services.concurrency.Priority: io.fabric.sdk.android.services.concurrency.Priority[] values()
+io.fabric.sdk.android.services.concurrency.Priority: io.fabric.sdk.android.services.concurrency.Priority valueOf(java.lang.String)
+io.fabric.sdk.android.services.network.HttpMethod: io.fabric.sdk.android.services.network.HttpMethod[] values()
+io.fabric.sdk.android.services.network.HttpMethod: io.fabric.sdk.android.services.network.HttpMethod valueOf(java.lang.String)
+io.fabric.sdk.android.services.settings.SettingsCacheBehavior: io.fabric.sdk.android.services.settings.SettingsCacheBehavior[] values()
+io.fabric.sdk.android.services.settings.SettingsCacheBehavior: io.fabric.sdk.android.services.settings.SettingsCacheBehavior valueOf(java.lang.String)
