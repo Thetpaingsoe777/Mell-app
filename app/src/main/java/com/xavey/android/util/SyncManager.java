@@ -311,7 +311,7 @@ public class SyncManager {
 			try {
 				c_.Execute(RequestMethod.POST);
 			} catch (Exception e2) {
-				
+                e2.printStackTrace();
 			}
 			int userResponseCode = c_.getResponseCode();
 			if(userResponseCode==200){

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaRecorder;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 
@@ -45,9 +46,9 @@ public class ApplicationValues {
 
 	public static FONT CURRENT_FONT = FONT.DEFAULT_;
 
-	public static boolean IS_RECORDING_NOW = false;
-	
-	public static String UNIQUE_DEVICE_ID = "";
+    public static MediaRecorder CURRENT_RECORDER = null;
+
+    public static String UNIQUE_DEVICE_ID = "";
 	
 	public static LOGIN_TYPE CURRENT_LOGIN_MODE = LOGIN_TYPE.REGULAR_LOGIN;
 

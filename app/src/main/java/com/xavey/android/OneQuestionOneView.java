@@ -361,7 +361,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
                         if (!isNotTyped) {
 							// user typed values
-							if (ApplicationValues.IS_RECORDING_NOW) {
+							if (ApplicationValues.CURRENT_RECORDER!=null) {
                                 // still recording...
                                 // block..
                                 // there is no direction validation...
@@ -390,7 +390,7 @@ public class OneQuestionOneView extends FragmentActivity {
                                 }
                             }
 
-                            if (ApplicationValues.IS_RECORDING_NOW && !auto_recording){
+                            if (ApplicationValues.CURRENT_RECORDER!=null && !auto_recording){
                                 boolean forceStopL_R = true;
                                 field_error_msg = "Audio recording is needed to stop.";
                                 navStayStill(direction, currentFieldID,
@@ -1257,6 +1257,10 @@ public class OneQuestionOneView extends FragmentActivity {
 		btnSubmit.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+
+                AudioRecordingManager audMan = new AudioRecordingManager(getParent());
+                audMan.stopRecording();
+
                 if(FORM_LOCATION_REQ && (gps.getLatitude()==0 || gps.getLongitude()==0)) {
                     Location submitScreenGPS = gps.getLocation(OneQuestionOneView.this);
                     if (gps.canGetLocation() == false)  {
@@ -3647,7 +3651,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
 	private void navRightToLeft(int newPosition) {
         LinearLayout recordingLayout = null;
-		if (ApplicationValues.IS_RECORDING_NOW) {
+		if (ApplicationValues.CURRENT_RECORDER!=null) {
 			LinearLayout thisLayout = layoutList.get(currentPosition);
 			for (int i = 0; i < thisLayout.getChildCount(); i++) {
 				if (thisLayout.getChildAt(i).getTag(R.id.layout_id) != null
@@ -3857,6 +3861,8 @@ public class OneQuestionOneView extends FragmentActivity {
 							// homeIntent.addCategory(Intent.CATEGORY_HOME);
 							// homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 							// startActivity(homeIntent);
+                            AudioRecordingManager audMan = new AudioRecordingManager(getParent());
+                            audMan.stopRecording();
 							finish();
 						}
 					});
@@ -3943,6 +3949,8 @@ public class OneQuestionOneView extends FragmentActivity {
 						// homeIntent.addCategory(Intent.CATEGORY_HOME);
 						// homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						// startActivity(homeIntent);
+                        AudioRecordingManager audMan = new AudioRecordingManager(getParent());
+                        audMan.stopRecording();
 						finish();
 					}
 				});

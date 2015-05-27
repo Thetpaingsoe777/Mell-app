@@ -120,7 +120,7 @@ public class AudioRecordingManager {
 	public void startRecording() {
 		recorder = new MediaRecorder();
 		recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        recorder.setOutputFormat(MediaRecorder.AudioEncoder.AAC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         recorder.setAudioEncodingBitRate(16);
         recorder.setAudioSamplingRate(44100);
@@ -129,24 +129,24 @@ public class AudioRecordingManager {
 		recorder.setOnInfoListener(infoListener);
 
 		try {
- 			ApplicationValues.IS_RECORDING_NOW = true;
 			recorder.prepare();
 			recorder.start();
+            ApplicationValues.CURRENT_RECORDER=recorder;
 		}catch (Exception e){
 			e.printStackTrace();
-			ApplicationValues.IS_RECORDING_NOW = false;
+            ApplicationValues.CURRENT_RECORDER=null;
 		}
 	}
 
 	public void stopRecording(){
-		ApplicationValues.IS_RECORDING_NOW = false;
+        recorder=ApplicationValues.CURRENT_RECORDER;
 		//boolean isAudioAlreadyExist = dbHelper.isAudioAlreadyExistInDB(getAudioInfo().getAudio_path());
 		if (null != recorder) {
 			recorder.stop();
 			recorder.reset();
 			recorder.release();
 			recorder = null;
-			
+            ApplicationValues.CURRENT_RECORDER=null;
 //			if(!isAudioAlreadyExist){
 //				dbHelper.addNewAudio(getAudioInfo());
 //			}
