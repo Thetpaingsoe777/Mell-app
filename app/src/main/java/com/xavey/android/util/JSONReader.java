@@ -281,7 +281,11 @@ public class JSONReader {
                             recordingLayout.setTag(R.id.recording_manager,
                                     recordingManager);
                             //check this tag @ pre-render stage
-                            recordingLayout.setTag(R.id.recorder_auto,!(Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString())));
+                            Boolean isRecorderDisplay = Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString());
+                            if(isRecorderDisplay == false){
+                                recordingLayout.setVisibility(View.INVISIBLE);
+                                recordingLayout.setTag(R.id.recorder_auto, !isRecorderDisplay);
+                            }
                             parentLayout.addView(recordingLayout);
                         }
                         layoutList.add(parentLayout);
@@ -660,7 +664,12 @@ public class JSONReader {
 							recordingLayout.setTag(R.id.recording_manager,
 									recordingManager);
                             //check this tag @ pre-render stage
-                            recordingLayout.setTag(R.id.recorder_auto,!(Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString())));
+                            Boolean isRecorderDisplay = Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString());
+                            if(isRecorderDisplay == false){
+                                recordingLayout.setVisibility(View.INVISIBLE);
+                                recordingLayout.setTag(R.id.recorder_auto, !isRecorderDisplay);
+                            }
+//                            recordingLayout.setTag(R.id.recorder_auto,!(Boolean.parseBoolean(fields.get("field_audio_recorder_display").toString())));
 							parentLayout.addView(recordingLayout);
 						}
 						addErrorMsg(parentLayout);

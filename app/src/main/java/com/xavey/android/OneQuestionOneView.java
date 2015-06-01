@@ -2886,8 +2886,9 @@ public class OneQuestionOneView extends FragmentActivity {
                     //set auto recording
                     AudioRecordingManager autoRecordiong = (AudioRecordingManager)autoRecordingLayout.getTag(R.id.recording_manager);
                     if((Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto))){
-                        autoRecordiong.startRecording();
                         autoRecordingLayout.setVisibility(View.INVISIBLE);
+                        autoRecordiong.startRecording();
+
                     }
                 }
                 /*else if (!recorder_display) {
