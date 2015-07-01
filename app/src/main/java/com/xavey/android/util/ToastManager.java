@@ -23,10 +23,15 @@ public class ToastManager {
 				(ViewGroup) act_.findViewById(R.id.custom_toast_layout_id));
 		TextView tv = (TextView)layout.findViewById(R.id.tvGreenToastMsg);
 		tv.setText(msg);
-		Toast toast = new Toast(act_);
-		toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0,100);
-		toast.setDuration(5000);
-		toast.setView(layout);
-		toast.show();
+		try {
+			Toast toast = new Toast(act_);
+			toast.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 100);
+			toast.setDuration(5000);
+			toast.setView(layout);
+			toast.show();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 }

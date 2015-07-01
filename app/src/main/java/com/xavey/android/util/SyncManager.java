@@ -444,7 +444,7 @@ public class SyncManager {
 	}
 
 	private boolean isAudio(String media_name){
-		return (media_name.endsWith(".mp4") || media_name.endsWith(".mp3"));
+		return (media_name.endsWith(".m4a") || media_name.endsWith(".mp4") || media_name.endsWith(".mp3"));
 	}
 
 	private boolean isImage(String media_name){

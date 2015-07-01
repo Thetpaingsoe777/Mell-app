@@ -1332,7 +1332,7 @@ public class OneQuestionOneView extends FragmentActivity {
 
                                     String audioPath = "";
                                     String mp4FileName = fieldID + "-"
-                                            + currentDocumentID + ".mp4";
+                                            + currentDocumentID + ".m4a";
 
                                     File file = new File(
                                             ApplicationValues.XAVEY_DIRECTORY,
@@ -1882,7 +1882,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
 					if (view.getClass().getName()
-							.equals("android.widget.LinearLayout")
+							.equals("com.xavey.android.layout.MatrixTextLayout")
 							&& view.getTag(R.id.layout_id).toString()
 									.equals("theMatrixLayout")) {
 						LinearLayout theMatrixLayout = (LinearLayout) view;
@@ -1978,7 +1978,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
 					if (view.getClass().getName()
-							.equals("android.widget.LinearLayout")
+							.equals("com.xavey.android.layout.MatrixNumberLayout")
 							&& view.getTag(R.id.layout_id).toString()
 									.equals("theMatrixLayout")) {
 						LinearLayout theMatrixLayout = (LinearLayout) view;
@@ -2074,7 +2074,7 @@ public class OneQuestionOneView extends FragmentActivity {
 				for (int x = 0; x < linearLayout.getChildCount(); x++) {
 					View view = linearLayout.getChildAt(x);
 					if (view.getClass().getName()
-							.equals("android.widget.LinearLayout")
+							.equals("com.xavey.android.layout.MatrixCheckListLayout")
 							&& view.getTag(R.id.layout_id).toString()
 									.equals("theMatrixLayout")) {
 						LinearLayout theMatrixLayout = (LinearLayout) view;
@@ -2536,7 +2536,7 @@ public class OneQuestionOneView extends FragmentActivity {
 						for (int i = 0; i < renderInnerLayout.getChildCount(); i++) {
 							View v = renderInnerLayout.getChildAt(i);
 							if (v.getClass().getName()
-									.equals("android.widget.RadioGroup")) {
+									.equals("com.xavey.android.layout.RadioGroupLayout")) {
 								RadioGroup radioGroup = (RadioGroup) v;
 								RadioButton selectedButton = getSelectedRadioButtonMyRadioGroup(radioGroup);
 								String selectedButtonValue = selectedButton
@@ -2885,7 +2885,7 @@ public class OneQuestionOneView extends FragmentActivity {
                 if(autoRecordingLayout != null){
                     //set auto recording
                     AudioRecordingManager autoRecordiong = (AudioRecordingManager)autoRecordingLayout.getTag(R.id.recording_manager);
-                    if((Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto))){
+					if(autoRecordingLayout.getTag(R.id.recorder_auto)!= null && ((Boolean)(autoRecordingLayout.getTag(R.id.recorder_auto)))){
                         autoRecordingLayout.setVisibility(View.INVISIBLE);
                         autoRecordiong.startRecording();
 
@@ -2931,8 +2931,10 @@ public class OneQuestionOneView extends FragmentActivity {
 						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
-					nextConditionType = innerLayout.getTag(R.id.next_ref_type)
-							.toString();
+                    if(innerLayout.getTag(R.id.next_ref_type)!=null) {
+                        nextConditionType = innerLayout.getTag(R.id.next_ref_type)
+                                .toString();
+                    }
 				}
 			} else if (parrentLayout.getChildAt(i).getClass().getName()
 					.equals("android.widget.ScrollView")) {
@@ -2945,9 +2947,10 @@ public class OneQuestionOneView extends FragmentActivity {
 						&& !linearLayout.getTag(R.id.layout_id).toString()
 								.equals("recordingLayout")) {
 					innerLayout = linearLayout;
-					nextConditionType = innerLayout.getTag(R.id.next_ref_type)
-							.toString();
-					nextConditionType.toString();
+                    if(innerLayout.getTag(R.id.next_ref_type)!=null) {
+                        nextConditionType = innerLayout.getTag(R.id.next_ref_type)
+                                .toString();
+                    }
 				}
 			}
 		}
@@ -2999,12 +3002,48 @@ public class OneQuestionOneView extends FragmentActivity {
 		return nextCondition;
 	}
 
+    private boolean isNeedToSkipNotInvolve(JSONArray next_cond, String value) {
+        boolean isNeedToSkip = true;
+        if (value.contains("|")) {
+            // for values which contain pipes
+            // like checklist and location
+            String[] values = value.split("\\|");
+            for (int i = 0; i < next_cond.length(); i++) {
+                try {
+                    String cond = next_cond.getString(i);
+                    for (int j = 0; j < values.length; j++) {
+                        String value_item = values[j];
+                        if (cond.equals(value_item)) {
+                            isNeedToSkip = false;
+                        }
+                    }
+                } catch (JSONException e) {
+                    toast.xaveyToast(null, e.getMessage());
+                }
+            }
+        } else {
+            for (int i = 0; i < next_cond.length(); i++) {
+                String cond = "";
+                try {
+                    cond = next_cond.getString(i);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (cond.equals(value)) {
+                    // isNeedToSkip = isNeedToSkip || true;
+                    return false;
+                }
+            }
+        }
+        return isNeedToSkip;
+    }
+
 	private boolean isNeedToSkip(JSONArray next_cond, String value) {
 		boolean isNeedToSkip = false;
 		if (value.contains("|")) {
 			// for values which contain pipes
 			// like checklist and location
-			String[] values = value.split("|");
+			String[] values = value.split("\\|");
 			for (int i = 0; i < next_cond.length(); i++) {
 				try {
 					String cond = next_cond.getString(i);
@@ -3217,10 +3256,21 @@ public class OneQuestionOneView extends FragmentActivity {
 								View v = ref_inner_layout.getChildAt(i);
 								String className = v.getClass().getName()
 										.toString();
-								if (className.equals("android.widget.CheckBox")) {
-									CheckBox cb = (CheckBox) v;
-									if (cb.isChecked())
-										count++;
+								if (className.equals("com.xavey.android.layout.CheckboxLayout")) {
+                                    CheckboxLayout checkBoxWrapper = (CheckboxLayout) v;
+                                    for (int d = 0; d < checkBoxWrapper.getChildCount(); d++) {
+                                        LinearLayout checkBoxLine = null;
+                                        View cbLineLayoutChild = checkBoxWrapper.getChildAt(d);
+                                        if (cbLineLayoutChild.getClass().getName()
+                                                .equals("android.widget.LinearLayout")) {
+                                            checkBoxLine = (LinearLayout) checkBoxWrapper
+                                                    .getChildAt(d);
+                                            CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
+                                            if (cb.isChecked()) {
+                                                count++;
+                                            }
+                                        }
+                                    }
 								}
 							}
 						}
@@ -3282,7 +3332,17 @@ public class OneQuestionOneView extends FragmentActivity {
                         if (isNeedToSkip)
                             newPosition++;
                     }
-					else {
+                    else if (nextConditionType.equals("not_involve")){
+                        // isNeedToSkip = false;
+                        String value_from_ref_layout = jsonReader
+                                .readValueFromLayout(ref_layout);
+                        isNeedToSkip = isNeedToSkipNotInvolve(next_cond,
+                                value_from_ref_layout);
+                        if (isNeedToSkip)
+                            newPosition++;
+                        // isNeedToSkip = false; // to break from while loop
+                    }
+                    else {
 						// isNeedToSkip = false;
 						String value_from_ref_layout = jsonReader
 								.readValueFromLayout(ref_layout);
@@ -3635,7 +3695,9 @@ public class OneQuestionOneView extends FragmentActivity {
 			navigator.addLast(range);
 		used_field_ids.addLast(currentFieldID);
 		vPager.setCurrentItem(newPosition);
-		currentPosition = newPosition;
+        if(currentPosition<newPosition) {
+            currentPosition = newPosition;
+        }
 		previousIndex = currentPosition;
 		// hide keyboard
 		LinearLayout nextLayout_ = layoutList.get(newPosition);
@@ -3693,7 +3755,7 @@ public class OneQuestionOneView extends FragmentActivity {
         if (recordingLayout != null) {
             AudioRecordingManager currentRecording = (AudioRecordingManager) recordingLayout
                     .getTag(R.id.recording_manager);
-            if((Boolean)(recordingLayout.getTag(R.id.recorder_auto))) {
+            if(recordingLayout.getTag(R.id.recorder_auto)!=null && ((Boolean)(recordingLayout.getTag(R.id.recorder_auto)))) {
                 currentRecording.startRecording();
             }
         }

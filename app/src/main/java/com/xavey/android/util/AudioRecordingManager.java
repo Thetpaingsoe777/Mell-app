@@ -19,16 +19,15 @@ import com.xavey.android.model.Audio;
 
 public class AudioRecordingManager {
 	Activity activity_;
-	
-	private static final String AUDIO_RECORDER_FILE_EXT_3GP = ".3gp";
 	private static final String AUDIO_RECORDER_FILE_EXT_MP4 = ".mp4";
+	private static final String AUDIO_RECORDER_FILE_EXT_M4A = ".m4a";
 	private static final String AUDIO_RECORDER_FOLDER = "AudioRecorder";
 	private MediaRecorder recorder = null;
-	private int currentFormat = 0;
+	private int currentFormat = 1;
 	private int output_formats[] = { MediaRecorder.OutputFormat.MPEG_4,
 			MediaRecorder.OutputFormat.THREE_GPP };
 	private String file_exts[] = { AUDIO_RECORDER_FILE_EXT_MP4,
-			AUDIO_RECORDER_FILE_EXT_3GP };
+			AUDIO_RECORDER_FILE_EXT_M4A };
 	XaveyDBHelper dbHelper = new XaveyDBHelper(activity_);
 	
 	Button btnStart;

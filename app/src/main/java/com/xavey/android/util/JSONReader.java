@@ -56,6 +56,7 @@ import com.xavey.android.layout.CheckboxLayout;
 import com.xavey.android.layout.MatrixCheckListLayout;
 import com.xavey.android.layout.MatrixNumberLayout;
 import com.xavey.android.layout.MatrixOptionLayout;
+import com.xavey.android.layout.MatrixTextLayout;
 import com.xavey.android.layout.RadioGroupLayout;
 import com.xavey.android.model.Audio;
 import com.xavey.android.model.Document;
@@ -1306,7 +1307,7 @@ public class JSONReader {
 						JSONArray matrix_values = (JSONArray) fields
 								.get("matrix_values");
 
-						MatrixNumberLayout theMatrixLayout = new MatrixNumberLayout(
+                        MatrixTextLayout theMatrixLayout = new MatrixTextLayout(
 								activity);
 						theMatrixLayout.initLayout(h_values_list,
 								v_values_list, matrix_values);
@@ -3813,7 +3814,7 @@ public class JSONReader {
 			for (int y = 0; y < linearLayout.getChildCount(); y++) {
 				Class<?> subClass = (Class<?>) linearLayout.getChildAt(y)
 						.getClass();
-				if (subClass.getName().equals("android.widget.RadioGroup")) {
+				if (subClass.getName().equals("com.xavey.android.layout.RadioGroupLayout")) {
 					// radio
 					RadioGroup radioGroup = (RadioGroup) linearLayout
 							.getChildAt(y);
@@ -3839,13 +3840,22 @@ public class JSONReader {
 					TextView textView = (TextView) linearLayout.getChildAt(z);
 					// following if else is just to categorize the
 					// textView
-				} else if (subClass.getName().equals("android.widget.CheckBox")) {
-					CheckBox checkBox = (CheckBox) linearLayout.getChildAt(z);
-					if (checkBox.isChecked()) {
-						String value = checkBox.getTag().toString();
-						// checkedValues.put(value);
-						checkedValues += "|" + value;
-					}
+				} else if (subClass.getName().equals("com.xavey.android.layout.CheckboxLayout")) {
+					CheckboxLayout checkBoxWrapper = (CheckboxLayout) linearLayout.getChildAt(z);
+                    for (int d = 0; d < checkBoxWrapper.getChildCount(); d++) {
+                        LinearLayout checkBoxLine = null;
+                        View cbLineLayoutChild = checkBoxWrapper.getChildAt(d);
+                        if (cbLineLayoutChild.getClass().getName()
+                                .equals("android.widget.LinearLayout")) {
+                            checkBoxLine = (LinearLayout) checkBoxWrapper
+                                    .getChildAt(d);
+                            CheckBox cb = getCheckBoxFromCheckBoxLine(checkBoxLine);
+                            if (cb.isChecked()) {
+                                String value = cb.getText().toString();
+                                checkedValues += "|" + value;
+                            }
+                        }
+                    }
 				}
 			}
 			if (checkedValues.length() > 0)
@@ -3879,6 +3889,34 @@ public class JSONReader {
 			}
 			return latitude + "|" + longitude;
 		} else if (linearLayout.getTag(R.id.layout_id).toString()
+                .equals("imageChecklistLayout")) {
+            // JSONArray checkedValues = new JSONArray();
+            String checkedValues = "";
+            String key = linearLayout.getTag(R.id.field_id).toString();
+            String field_label = linearLayout.getTag(R.id.field_label_id)
+                    .toString();
+
+            for (int l = 0; l < linearLayout.getChildCount(); l++) {
+                Class<?> subClass = (Class<?>) linearLayout.getChildAt(l)
+                        .getClass();
+                if (subClass.getName().equals("android.widget.GridView")) {
+                    GridView gridView = (GridView) linearLayout
+                            .getChildAt(l);
+                    ArrayList<String> selectedValueList = (ArrayList<String>) gridView
+                            .getTag(R.id.selected_grid_values);
+                    for (String selectedValue : selectedValueList) {
+                        checkedValues += "|" + selectedValue;
+                    }
+                }
+            }
+            if (checkedValues.length() > 0){
+                checkedValues = checkedValues.substring(1); // <- it deletes
+            }
+            else {
+                checkedValues = "-";
+            }
+            return checkedValues;
+        }else if (linearLayout.getTag(R.id.layout_id).toString()
 				.equals("datetimeLayout")) {
 
 			String time = "";
@@ -3910,6 +3948,18 @@ public class JSONReader {
 		}
 		return "";
 	}
+
+    private CheckBox getCheckBoxFromCheckBoxLine(LinearLayout checkBoxLine) {
+        View view = null;
+        for (int i = 0; i < checkBoxLine.getChildCount(); i++) {
+            if (checkBoxLine.getChildAt(i).getClass().getName().toString()
+                    .equals("android.widget.CheckBox")) {
+                view = checkBoxLine.getChildAt(i);
+                break;
+            }
+        }
+        return (CheckBox) view;
+    }
 
 	private LinearLayout getInnerLayout(LinearLayout parrentLayout) {
 		LinearLayout innerLayout = null;

@@ -86,13 +86,15 @@ public class ImageAdapter extends BaseAdapter {
 		String image = map.get("image");
 
 		SyncImage syncImage = dbHelper.getSyncImageByImageID(image);
-		byte[] byteArray = syncImage.getImgByte();
-		BitmapDrawable bd = xaveyUtils
-				.convertByteArrayToBitmapDrawable(byteArray);
-		width = displayManager.getWidth(30);
-		height = displayManager.getHeigth(25);
-		bd.setBounds(0, 0, width, height);
-		holder.imageTitle.setCompoundDrawables(null, bd, null, null);
+        if(syncImage!=null) {
+            byte[] byteArray = syncImage.getImgByte();
+            BitmapDrawable bd = xaveyUtils
+                    .convertByteArrayToBitmapDrawable(byteArray);
+            width = displayManager.getWidth(30);
+            height = displayManager.getHeigth(25);
+            bd.setBounds(0, 0, width, height);
+            holder.imageTitle.setCompoundDrawables(null, bd, null, null);
+        }
 		holder.imageTitle.setText(label);
 		// holder.imageTitle.setTag(R.id.grid_item_value, value);
 		if (holder.isSelected) {

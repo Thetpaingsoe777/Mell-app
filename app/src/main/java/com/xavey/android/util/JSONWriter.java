@@ -271,7 +271,9 @@ public class JSONWriter {
 						horizontalLayout = writeHorizontalView(fields, docFields);
 						lL.addView(horizontalLayout);
 					}
-					else if (fields.get(key).equals("option") || fields.get(key).equals("checklist") || fields.get(key).equals("matrix_number") || fields.get(key).equals("matrix_option") || fields.get(key).equals("matrix_checklist")) {
+					else if (fields.get(key).equals("option") || fields.get(key).equals("checklist") ||
+                                fields.get(key).equals("matrix_number") || fields.get(key).equals("matrix_option") ||
+                                    fields.get(key).equals("matrix_checklist") || fields.get(key).equals("matrix_text") || fields.get(key).equals("matrix_number")) {
 						/*horizontalLayout = new LinearLayout(activity);
 						horizontalLayout.setBackgroundColor(Color.WHITE);
 						horizontalLayout
